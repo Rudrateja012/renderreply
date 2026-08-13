@@ -1,5 +1,5 @@
-// GLOBAL NATIVE HTML ONCLICK HANDLERS FOR 100% GUARANTEED BROWSER EXECUTION
-window.switchStoreTab = function(tabName, btnEl) {
+// GLOBAL NATIVE HANDLERS FOR DIRECT / INLINE BROWSER CALLS
+window.switchStoreTab = function (tabName, btnEl) {
   if (!tabName) return;
 
   const allNavBtns = document.querySelectorAll('.store-subnav-btn');
@@ -24,7 +24,7 @@ window.switchStoreTab = function(tabName, btnEl) {
   });
 };
 
-window.switchMainTab = function(tabName, linkEl) {
+window.switchMainTab = function (tabName, linkEl) {
   if (!tabName) return;
 
   const navItems = document.querySelectorAll('.nav-item');
@@ -48,7 +48,8 @@ window.switchMainTab = function(tabName, linkEl) {
     }
   });
 };
-window.openProductStudio = function() {
+
+window.openProductStudio = function () {
   const backdrop = document.getElementById('modal-product-backdrop');
   if (backdrop) {
     backdrop.classList.add('active');
@@ -58,7 +59,7 @@ window.openProductStudio = function() {
   }
 };
 
-window.closeProductStudio = function() {
+window.closeProductStudio = function () {
   const backdrop = document.getElementById('modal-product-backdrop');
   if (backdrop) {
     backdrop.classList.remove('active');
@@ -66,6 +67,18 @@ window.closeProductStudio = function() {
     backdrop.style.opacity = '0';
     backdrop.style.pointerEvents = 'none';
   }
+};
+
+// Global fallback stubs to prevent unhandled ReferenceErrors
+window.editProductItem = function (id) {
+  const backdrop = document.getElementById('modal-product-backdrop');
+  if (backdrop) {
+    window.openProductStudio();
+  }
+};
+
+window.deleteProductItem = function (id) {
+  // Handled dynamically via storeProducts array in initApp
 };
 
 function initApp() {
@@ -94,33 +107,27 @@ function initApp() {
       <svg viewBox="0 0 310 135" style="width: 100%; height: 100%;">
         ${fillColor ? `
         <defs>
-          <linearGradient id="chartFillGrad" x1="0" y1="0" x2="0" y2="1">
+          <linearGradient id="chartFillGrad_${Math.random().toString(36).substr(2, 9)}" x1="0" y1="0" x2="0" y2="1">
             <stop offset="0%" stop-color="${strokeColor}" stop-opacity="0.18"/>
             <stop offset="100%" stop-color="${strokeColor}" stop-opacity="0.0"/>
           </linearGradient>
         </defs>` : ''}
         
-        <!-- Horizontal Dotted Grid Lines -->
         <line x1="30" y1="30" x2="290" y2="30" stroke="#e2e8f0" stroke-width="1" stroke-dasharray="3 3" />
         <line x1="30" y1="90" x2="290" y2="90" stroke="#e2e8f0" stroke-width="1" stroke-dasharray="3 3" />
         
-        <!-- Y-Axis Labels -->
         <text x="20" y="34" font-size="10" font-weight="600" fill="#94a3b8" text-anchor="end">${yTop}</text>
         <text x="20" y="94" font-size="10" font-weight="600" fill="#94a3b8" text-anchor="end">${yBottom}</text>
 
-        <!-- Shaded Area (if any) -->
         ${fillColor && areaD ? `<path d="${areaD}" fill="url(#chartFillGrad)" />` : ''}
 
-        <!-- Graph Line -->
         <path d="${pathD}" fill="none" stroke="${strokeColor}" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
 
-        <!-- Nodes -->
         ${xCoords.map((x, i) => {
           const y = (points && points[i] !== undefined) ? points[i] : 90;
           return `<circle cx="${x}" cy="${y}" r="4" fill="#ffffff" stroke="${strokeColor}" stroke-width="2.2"/>`;
         }).join('')}
 
-        <!-- X-Axis Labels -->
         ${xLabels.map((lbl, i) => `
           <text x="${xCoords[i]}" y="116" font-size="10" font-weight="600" fill="#94a3b8" text-anchor="middle">${lbl}</text>
         `).join('')}
@@ -128,7 +135,7 @@ function initApp() {
     `;
   }
 
-  // DUMMY DATA FOR EACH TIME RANGE
+  // DATA FOR TIME RANGES
   const DASHBOARD_DATA = {
     '7 Days': {
       followers: '0',
@@ -310,70 +317,74 @@ function initApp() {
       if (el) el.innerHTML = '<span class="skeleton skeleton-text"></span>';
     });
 
-    chartReplies.innerHTML = '<span class="skeleton skeleton-chart"></span>';
-    chartFollowers.innerHTML = '<span class="skeleton skeleton-chart"></span>';
-    chartLeads.innerHTML = '<span class="skeleton skeleton-chart"></span>';
+    if (chartReplies) chartReplies.innerHTML = '<span class="skeleton skeleton-chart"></span>';
+    if (chartFollowers) chartFollowers.innerHTML = '<span class="skeleton skeleton-chart"></span>';
+    if (chartLeads) chartLeads.innerHTML = '<span class="skeleton skeleton-chart"></span>';
   }
 
-  // 2. LOAD DASHBOARD DATA FUNCTION WITH SKELETON LOADING TRANSITION
+  // 2. LOAD DASHBOARD DATA FUNCTION
   function loadDashboardData(range = '7 Days') {
     currentRange = range;
     showSkeletonLoading();
 
     setTimeout(() => {
       if (!isConnected) {
-        // Disconnected State UI
         Object.values(statIds).forEach(el => {
-          if (el) el.textContent = '';
+          if (el) el.textContent = '0';
         });
 
-        chartReplies.innerHTML = `
-          <div class="chart-empty-state">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#94a3b8" stroke-width="2"><path d="M18 20V10M12 20V4M6 20v-6" stroke-linecap="round"/></svg>
-            <span>No activity data available.</span>
-          </div>`;
+        if (chartReplies) {
+          chartReplies.innerHTML = `
+            <div class="chart-empty-state">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#94a3b8" stroke-width="2"><path d="M18 20V10M12 20V4M6 20v-6" stroke-linecap="round"/></svg>
+              <span>No activity data available.</span>
+            </div>`;
+        }
 
-        chartFollowers.innerHTML = `
-          <div class="chart-empty-state">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#94a3b8" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-            <span>No growth data available.</span>
-          </div>`;
+        if (chartFollowers) {
+          chartFollowers.innerHTML = `
+            <div class="chart-empty-state">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#94a3b8" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+              <span>No growth data available.</span>
+            </div>`;
+        }
 
-        chartLeads.innerHTML = createChartSvg({
-          yTop: '0', yBottom: '0',
-          xLabels: ['6', '7', '8', '9', '10', '11', '12'],
-          points: [90, 90, 90, 90, 90, 90, 90],
-          strokeColor: '#8b5cf6'
-        });
+        if (chartLeads) {
+          chartLeads.innerHTML = createChartSvg({
+            yTop: '0', yBottom: '0',
+            xLabels: ['6', '7', '8', '9', '10', '11', '12'],
+            points: [90, 90, 90, 90, 90, 90, 90],
+            strokeColor: '#8b5cf6'
+          });
+        }
         return;
       }
 
       const data = DASHBOARD_DATA[range] || DASHBOARD_DATA['7 Days'];
 
-      // Populate metrics
-      statIds.followers.textContent = data.followers;
-      statIds.following.textContent = data.following;
-      statIds.views.textContent = data.views;
-      statIds.comments.textContent = data.comments;
-      statIds.replies.textContent = data.replies;
-      statIds.sentToday.textContent = data.sentToday;
-      statIds.activeRules.textContent = data.activeRules;
-      statIds.leads.textContent = data.leads;
+      if (statIds.followers) statIds.followers.textContent = data.followers;
+      if (statIds.following) statIds.following.textContent = data.following;
+      if (statIds.views) statIds.views.textContent = data.views;
+      if (statIds.comments) statIds.comments.textContent = data.comments;
+      if (statIds.replies) statIds.replies.textContent = data.replies;
+      if (statIds.sentToday) statIds.sentToday.textContent = data.sentToday;
+      if (statIds.activeRules) statIds.activeRules.textContent = data.activeRules;
+      if (statIds.leads) statIds.leads.textContent = data.leads;
 
-      // Update chart subtitles
       if (subReplies) subReplies.textContent = data.repliesSubtitle;
       if (subFollowers) subFollowers.textContent = data.followersSubtitle;
       if (subLeads) subLeads.textContent = data.leadsSubtitle;
 
-      // Populate SVG Charts
-      chartReplies.innerHTML = data.repliesSvg;
-      chartFollowers.innerHTML = data.followersSvg;
-      chartLeads.innerHTML = data.leadsSvg;
-    }, 600);
+      if (chartReplies) chartReplies.innerHTML = data.repliesSvg;
+      if (chartFollowers) chartFollowers.innerHTML = data.followersSvg;
+      if (chartLeads) chartLeads.innerHTML = data.leadsSvg;
+    }, 400);
   }
 
   // 3. TOGGLE CONNECTION STATE
   function updateConnectionUI() {
+    if (!accountInfoContainer || !accountActionContainer) return;
+
     if (isConnected) {
       accountInfoContainer.innerHTML = `
         <div class="account-icon">R</div>
@@ -383,40 +394,32 @@ function initApp() {
         </div>`;
 
       accountActionContainer.innerHTML = `<button class="btn btn-disconnect" id="btn-disconnect-modal">Disconnect</button>`;
-      
+
       const newDisconnectBtn = document.getElementById('btn-disconnect-modal');
-      newDisconnectBtn.addEventListener('click', handleDisconnectClick);
+      if (newDisconnectBtn) {
+        newDisconnectBtn.addEventListener('click', handleDisconnectClick);
+      }
     } else {
       accountInfoContainer.innerHTML = `<span class="disconnected-text">No Instagram accounts connected.</span>`;
       accountActionContainer.innerHTML = `<button class="btn btn-primary" id="btn-connect-modal">Connect Instagram</button>`;
 
       const connectBtn = document.getElementById('btn-connect-modal');
-      connectBtn.addEventListener('click', () => {
-        openModal(
-          'Connect Instagram Account',
-          'Would you like to connect your Instagram account (@render6457) to resume automation rules?',
-          () => {
-            isConnected = true;
-            updateConnectionUI();
-            loadDashboardData(currentRange);
-            showToast('Instagram account connected successfully!');
-          }
-        );
-      });
+      if (connectBtn) {
+        connectBtn.addEventListener('click', () => {
+          isConnected = true;
+          updateConnectionUI();
+          loadDashboardData(currentRange);
+          showToast('Instagram account connected successfully!');
+        });
+      }
     }
   }
 
   function handleDisconnectClick() {
-    openModal(
-      'Disconnect Account?',
-      'Are you sure you want to disconnect @render6457? Active automations will be paused.',
-      () => {
-        isConnected = false;
-        updateConnectionUI();
-        loadDashboardData(currentRange);
-        showToast('Disconnected account @render6457');
-      }
-    );
+    isConnected = false;
+    updateConnectionUI();
+    loadDashboardData(currentRange);
+    showToast('Disconnected account @render6457');
   }
 
   // 4. TAB NAVIGATION WITH RELOAD ANIMATION
@@ -449,6 +452,7 @@ function initApp() {
 
   // 5. TOAST NOTIFICATION UTILITY
   function showToast(msg) {
+    if (!toast || !toastMessage) return;
     toastMessage.textContent = msg;
     toast.classList.add('show');
     setTimeout(() => {
@@ -458,6 +462,7 @@ function initApp() {
 
   // 6. MODAL UTILITY
   function openModal(title, text, onConfirm) {
+    if (!modalContainer || !modalTitle || !modalContent) return;
     modalTitle.textContent = title;
     modalContent.textContent = text;
     modalContainer.classList.add('active');
@@ -465,22 +470,24 @@ function initApp() {
     const handleConfirm = () => {
       if (onConfirm) onConfirm();
       closeModal();
-      modalConfirm.removeEventListener('click', handleConfirm);
+      if (modalConfirm) modalConfirm.removeEventListener('click', handleConfirm);
     };
 
-    modalConfirm.onclick = handleConfirm;
+    if (modalConfirm) modalConfirm.onclick = handleConfirm;
   }
 
   function closeModal() {
-    modalContainer.classList.remove('active');
+    if (modalContainer) modalContainer.classList.remove('active');
   }
 
-  modalCancel.addEventListener('click', closeModal);
-  modalContainer.addEventListener('click', (e) => {
-    if (e.target === modalContainer) closeModal();
-  });
+  if (modalCancel) modalCancel.addEventListener('click', closeModal);
+  if (modalContainer) {
+    modalContainer.addEventListener('click', (e) => {
+      if (e.target === modalContainer) closeModal();
+    });
+  }
 
-  // 7. TIME RANGE PICKER CLICK LISTENERS
+  // 7. TIME RANGE PICKER LISTENERS
   const timeBtns = document.querySelectorAll('.time-range-btn');
   timeBtns.forEach(btn => {
     btn.addEventListener('click', () => {
@@ -493,7 +500,7 @@ function initApp() {
     });
   });
 
-  // 8. REFRESH BUTTON CLICK HANDLER
+  // 8. REFRESH BUTTON CLICK HANDLERS
   const refreshBtns = document.querySelectorAll('.btn-refresh');
   refreshBtns.forEach(btn => {
     btn.addEventListener('click', () => {
@@ -522,7 +529,7 @@ function initApp() {
     });
   }
 
-  // BROWSER TAB STOREFRONT OVERLAY HANDLERS (CREATOR DIGITAL STOREFRONT)
+  // BROWSER TAB STOREFRONT OVERLAY HANDLERS
   if (btnOpenBrowserOverlay && browserOverlay) {
     btnOpenBrowserOverlay.addEventListener('click', () => {
       browserOverlay.classList.add('active');
@@ -560,7 +567,9 @@ function initApp() {
   const btnCopyLink = document.getElementById('btn-copy-link');
   if (btnCopyLink) {
     btnCopyLink.addEventListener('click', () => {
-      navigator.clipboard.writeText('https://renderreply.com/p/render6457');
+      if (navigator.clipboard) {
+        navigator.clipboard.writeText('https://renderreply.com/p/render6457');
+      }
       showToast('Bio Link URL copied to clipboard!');
     });
   }
@@ -573,14 +582,6 @@ function initApp() {
     });
   }
 
-  // STOREFRONT PREVIEW OVERLAY BUTTON HANDLER
-  if (btnOpenBrowserOverlay && browserOverlay) {
-    btnOpenBrowserOverlay.addEventListener('click', () => {
-      browserOverlay.classList.add('active');
-      showToast('Opening Creator Storefront live preview...');
-    });
-  }
-
   // PRODUCT STUDIO FULL PAGE EDITOR LOGIC
   const modalProductBackdrop = document.getElementById('modal-product-backdrop');
   const btnAddAmazonProd = document.getElementById('btn-add-amazon-prod');
@@ -588,7 +589,6 @@ function initApp() {
   const btnCancelProductModal = document.getElementById('btn-cancel-product-modal');
   const formProductModal = document.getElementById('form-product-modal');
 
-  // Photo Upload & Preview elements
   const inputProdFiles = document.getElementById('modal-prod-files');
   const inputProdPhoto = document.getElementById('modal-prod-photo');
   const modalProdGallery = document.getElementById('modal-prod-gallery');
@@ -607,14 +607,23 @@ function initApp() {
   function renderGallery() {
     if (!modalProdGallery) return;
     modalProdGallery.innerHTML = '';
-    
+
     uploadedPhotos.forEach((url, idx) => {
       const item = document.createElement('div');
       item.className = `gallery-thumb-item ${url === currentPhotoUrl ? 'active' : ''}`;
       item.innerHTML = `
         <img src="${url}" alt="Photo ${idx + 1}">
-        ${uploadedPhotos.length > 1 ? `<button type="button" class="gallery-thumb-remove" title="Remove photo" onclick="event.stopPropagation(); removeGalleryPhoto(${idx});">✕</button>` : ''}
+        ${uploadedPhotos.length > 1 ? `<button type="button" class="gallery-thumb-remove" title="Remove photo">✕</button>` : ''}
       `;
+
+      const removeBtn = item.querySelector('.gallery-thumb-remove');
+      if (removeBtn) {
+        removeBtn.addEventListener('click', (e) => {
+          e.stopPropagation();
+          window.removeGalleryPhoto(idx);
+        });
+      }
+
       item.addEventListener('click', () => {
         currentPhotoUrl = url;
         if (inputProdPhoto) inputProdPhoto.value = url;
@@ -639,44 +648,17 @@ function initApp() {
   };
 
   function openProductModal() {
-    if (modalProductBackdrop) {
-      modalProductBackdrop.classList.add('active');
-      renderGallery();
-    }
+    window.openProductStudio();
+    renderGallery();
   }
 
   function closeProductModal() {
-    if (modalProductBackdrop) {
-      modalProductBackdrop.classList.remove('active');
-    }
+    window.closeProductStudio();
   }
 
   if (btnAddAmazonProd) {
     btnAddAmazonProd.addEventListener('click', openProductModal);
   }
-
-  document.addEventListener('click', (e) => {
-    const editBtn = e.target.closest('.btn-edit-prod');
-    if (editBtn) {
-      const card = editBtn.closest('div[style*="background: #ffffff"]');
-      if (card) {
-        const titleEl = card.querySelector('div[style*="font-weight: 800"]');
-        const imgEl = card.querySelector('img');
-        if (titleEl) {
-          document.getElementById('modal-prod-title').value = titleEl.textContent.trim();
-        }
-        if (imgEl && imgEl.src) {
-          currentPhotoUrl = imgEl.src;
-          if (!uploadedPhotos.includes(imgEl.src)) {
-            uploadedPhotos.unshift(imgEl.src);
-          }
-          if (inputProdPhoto) inputProdPhoto.value = imgEl.src;
-          if (livePreviewImg) livePreviewImg.src = imgEl.src;
-        }
-      }
-      openProductModal();
-    }
-  });
 
   if (btnCloseProductModal) {
     btnCloseProductModal.addEventListener('click', closeProductModal);
@@ -686,7 +668,6 @@ function initApp() {
     btnCancelProductModal.addEventListener('click', closeProductModal);
   }
 
-  // Handle Multiple Image File Uploads
   if (inputProdFiles) {
     inputProdFiles.addEventListener('change', (e) => {
       const files = Array.from(e.target.files);
@@ -708,7 +689,6 @@ function initApp() {
     });
   }
 
-  // Handle Custom URL input
   if (inputProdPhoto) {
     inputProdPhoto.addEventListener('change', () => {
       const val = inputProdPhoto.value.trim();
@@ -723,26 +703,9 @@ function initApp() {
     });
   }
 
-  // Initial gallery render
   renderGallery();
 
-  // Handle Real-Time Input Preview Binding
-  function updateLivePreview() {
-    const titleVal = document.getElementById('modal-prod-title').value.trim() || 'Product Title';
-    const priceVal = document.getElementById('modal-prod-price').value.trim() || '19.99';
-    const oldPriceVal = document.getElementById('modal-prod-oldprice').value.trim();
-    const ctaVal = document.getElementById('modal-prod-cta').value.trim() || 'Instant Access';
-    const descVal = document.getElementById('modal-prod-desc').value.trim() || 'Product Description overview...';
-
-    if (livePreviewImg) livePreviewImg.src = currentPhotoUrl;
-    if (livePreviewTitle) livePreviewTitle.textContent = titleVal;
-    if (livePreviewDesc) livePreviewDesc.textContent = descVal;
-    if (livePreviewPrice) livePreviewPrice.textContent = (priceVal.toLowerCase() === 'free' || priceVal === '0') ? 'FREE' : (priceVal.startsWith('$') ? priceVal : `$${priceVal}`);
-    if (livePreviewOldPrice) livePreviewOldPrice.textContent = oldPriceVal ? (oldPriceVal.startsWith('$') ? oldPriceVal : `$${oldPriceVal}`) : '';
-    if (livePreviewCta) livePreviewCta.textContent = ctaVal;
-  }
-
-  // PRODUCTS REGISTRY & DEDICATED PRODUCT DETAIL VIEW HANDLERS
+  // PRODUCTS REGISTRY
   const storeProducts = [
     {
       id: 'prod-1',
@@ -786,9 +749,29 @@ function initApp() {
     }
   ];
 
+  window.editProductItem = function (id) {
+    const prod = storeProducts.find(p => p.id === id);
+    if (prod) {
+      if (document.getElementById('modal-prod-title')) document.getElementById('modal-prod-title').value = prod.title;
+      if (document.getElementById('modal-prod-price')) document.getElementById('modal-prod-price').value = prod.price.replace('$', '');
+      if (document.getElementById('modal-prod-desc')) document.getElementById('modal-prod-desc').value = prod.desc;
+    }
+    openProductModal();
+  };
+
+  window.deleteProductItem = function (id) {
+    const idx = storeProducts.findIndex(p => p.id === id);
+    if (idx !== -1) {
+      const removed = storeProducts.splice(idx, 1);
+      renderStoreProductsAndSyncPreview();
+      showToast(`Removed "${removed[0]?.title || 'Product'}" from catalog`);
+    }
+  };
+
   function renderStoreProductsAndSyncPreview() {
     const builderContainer = document.getElementById('builder-products-container');
-    const phoneProdList = document.getElementById('phone-prod-list-el');
+    const unifiedProdGrid = document.getElementById('unified-prod-grid-el');
+    const ecomGrid = document.querySelector('.ecom-products-grid');
 
     if (builderContainer) {
       builderContainer.innerHTML = '';
@@ -805,10 +788,10 @@ function initApp() {
               <div class="prod-name">${prod.title}</div>
               <div class="prod-price ${prod.price === 'FREE' ? 'free' : ''}">${prod.price}</div>
             </div>
-            <div class="prod-meta">${prod.rating || '5.0 ★ (Active)'}</div>
+            <div class="prod-meta">${prod.rating || '5.0 (Active)'}</div>
             <div class="prod-actions">
-              <button class="btn btn-edit-prod-item" data-id="${index}">Edit Details</button>
-              <button class="btn btn-delete-prod-item" data-id="${index}">Delete</button>
+              <button type="button" class="btn btn-edit-prod-item" data-id="${prod.id}">Edit Details</button>
+              <button type="button" class="btn btn-delete-prod-item" data-id="${prod.id}">Delete</button>
             </div>
           </div>
         `;
@@ -837,27 +820,87 @@ function initApp() {
         unifiedProdGrid.appendChild(unifiedCard);
       });
     }
-  };
+
+    if (ecomGrid) {
+      ecomGrid.innerHTML = '';
+      storeProducts.forEach(prod => {
+        const ecomCard = document.createElement('div');
+        ecomCard.className = 'ecom-product-card';
+        ecomCard.style.cursor = 'pointer';
+        ecomCard.innerHTML = `
+          <div class="ecom-card-banner">
+            <img src="${prod.photos[0]}" alt="${prod.title}" class="ecom-card-photo">
+          </div>
+          <div class="ecom-card-body">
+            <div class="ecom-rating-row">
+              <div class="star-rating-row">
+                <svg class="star-icon" viewBox="0 0 24 24" width="13" height="13" fill="#f59e0b" stroke="none"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+                <svg class="star-icon" viewBox="0 0 24 24" width="13" height="13" fill="#f59e0b" stroke="none"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+                <svg class="star-icon" viewBox="0 0 24 24" width="13" height="13" fill="#f59e0b" stroke="none"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+                <svg class="star-icon" viewBox="0 0 24 24" width="13" height="13" fill="#f59e0b" stroke="none"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+                <svg class="star-icon" viewBox="0 0 24 24" width="13" height="13" fill="#f59e0b" stroke="none"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+              </div>
+              <span style="color: var(--text-secondary);">${prod.rating ? prod.rating.replace('customer reviews', 'reviews') : '5.0'}</span>
+            </div>
+            <div class="ecom-prod-title">${prod.title}</div>
+            <div class="ecom-prod-desc">${prod.desc}</div>
+            <div class="ecom-price-row">
+              <div>
+                <span class="ecom-price-tag" style="${prod.price === 'FREE' ? 'color: #10b981;' : ''}">${prod.price}</span>
+                ${prod.oldPrice ? `<span class="ecom-price-old">${prod.oldPrice}</span>` : ''}
+              </div>
+              <button class="btn-ecom-buy" style="background: linear-gradient(135deg, #6366f1, #4f46e5); color: #fff; font-weight: 800;">${prod.cta}</button>
+            </div>
+          </div>
+        `;
+        ecomCard.addEventListener('click', (e) => {
+          if (!e.target.classList.contains('btn-ecom-buy')) {
+            openProductDetail(prod);
+          }
+        });
+        ecomGrid.appendChild(ecomCard);
+      });
+    }
+
+    // SYNC TO PHONE MOCKUP PREVIEW (#dsp-prod-list)
+    const dspList = document.getElementById('dsp-prod-list');
+    if (dspList) {
+      dspList.innerHTML = '';
+      const colors = [
+        'linear-gradient(135deg,#1e3a5f,#2563eb)',
+        'linear-gradient(135deg,#3b1f6a,#7c3aed)',
+        'linear-gradient(135deg,#1f3a3a,#059669)',
+        'linear-gradient(135deg,#4a1d24,#e11d48)'
+      ];
+      storeProducts.forEach((prod, index) => {
+        const row = document.createElement('div');
+        row.className = 'dsp-prod-row';
+        row.dataset.prodId = prod.id;
+        const isFree = prod.price === 'FREE' || prod.price === '$0.00' || prod.price === '0';
+        const photo = (prod.photos && prod.photos[0]) ? prod.photos[0] : '';
+        const fallbackBg = colors[index % colors.length];
+
+        row.innerHTML = `
+          ${photo ? `<img src="${photo}" class="dsp-prod-img" alt="${prod.title}" style="object-fit:cover;">` : `<div class="dsp-prod-img" style="background:${fallbackBg};"></div>`}
+          <div class="dsp-prod-info">
+            <div class="dsp-prod-name">${prod.title}</div>
+            <div class="dsp-prod-price ${isFree ? 'free' : ''}">${prod.price}</div>
+          </div>
+        `;
+        dspList.appendChild(row);
+      });
+    }
+    window.storeProductsRef = storeProducts;
+  }
+
 
   renderStoreProductsAndSyncPreview();
 
-  document.addEventListener('click', (e) => {
-    const deleteBtn = e.target.closest('.btn-delete-prod-item');
-    if (deleteBtn) {
-      const idx = parseInt(deleteBtn.getAttribute('data-id'), 10);
-      if (!isNaN(idx) && idx >= 0 && idx < storeProducts.length) {
-        const removed = storeProducts.splice(idx, 1);
-        renderStoreProductsAndSyncPreview();
-        showToast(`Removed "${removed[0]?.title || 'Product'}" from storefront catalog`);
-      }
-    }
-  });
-
-  // SUBMIT NEW PRODUCT FORM
+  // FORM PRODUCT MODAL SUBMIT
   if (formProductModal) {
     formProductModal.addEventListener('submit', (e) => {
       e.preventDefault();
-      
+
       const title = document.getElementById('modal-prod-title').value.trim();
       let priceVal = document.getElementById('modal-prod-price').value.trim();
       let oldPriceVal = document.getElementById('modal-prod-oldprice').value.trim();
@@ -866,7 +909,6 @@ function initApp() {
 
       if (!title || !priceVal || !desc) return;
 
-      // Format Price
       let formattedPrice = priceVal;
       if (priceVal.toLowerCase() === 'free' || priceVal === '0') {
         formattedPrice = 'FREE';
@@ -883,9 +925,6 @@ function initApp() {
         ctaText = formattedPrice === 'FREE' ? 'Download Now' : 'Instant Access';
       }
 
-      const finalPhoto = currentPhotoUrl;
-
-      // Create Product Object
       const newProdObj = {
         id: `prod-${Date.now()}`,
         title: title,
@@ -893,54 +932,18 @@ function initApp() {
         oldPrice: formattedOldPrice,
         desc: desc,
         cta: ctaText,
-        rating: '5.0 ★ (New Product)',
-        photos: uploadedPhotos.length > 0 ? [...uploadedPhotos] : [finalPhoto]
+        rating: '5.0 (New Product)',
+        photos: uploadedPhotos.length > 0 ? [...uploadedPhotos] : [currentPhotoUrl]
       };
 
       storeProducts.push(newProdObj);
       renderStoreProductsAndSyncPreview();
-
-      // ADD ITEM TO BROWSER OVERLAY E-COMMERCE GRID
-      const ecomGrid = document.querySelector('.ecom-products-grid');
-      if (ecomGrid) {
-        const newCard = document.createElement('div');
-        newCard.className = 'ecom-product-card';
-        newCard.style.cursor = 'pointer';
-        newCard.innerHTML = `
-          <div class="ecom-card-banner">
-            <img src="${finalPhoto}" alt="${title}" class="ecom-card-photo">
-          </div>
-          <div class="ecom-card-body">
-            <div class="ecom-rating-row">
-              ★★★★★ <span style="color: var(--text-secondary);">5.0 (Just added)</span>
-            </div>
-            <div class="ecom-prod-title">${title}</div>
-            <div class="ecom-prod-desc">${desc}</div>
-            <div class="ecom-price-row">
-              <div>
-                <span class="ecom-price-tag" style="${formattedPrice === 'FREE' ? 'color: #10b981;' : ''}">${formattedPrice}</span>
-                ${formattedOldPrice ? `<span class="ecom-price-old">${formattedOldPrice}</span>` : ''}
-              </div>
-              <button class="btn-ecom-buy" style="background: linear-gradient(135deg, #6366f1, #4f46e5); color: #fff; font-weight: 800;" onclick="event.stopPropagation(); showToast('Product added to Store Cart! Proceeding to checkout...');">${ctaText}</button>
-            </div>
-          </div>
-        `;
-        newCard.addEventListener('click', (e) => {
-          if (!e.target.classList.contains('btn-ecom-buy')) {
-            openProductDetail(newProdObj);
-          }
-        });
-        ecomGrid.appendChild(newCard);
-      }
-
-      // Close Studio Editor
       closeProductModal();
       showToast(`Published "${title}" (${formattedPrice}) to Creator Storefront!`);
     });
   }
 
-
-
+  // PRODUCT DETAIL VIEW HANDLERS
   let activeDetailProduct = null;
   let activePhotoIdx = 0;
 
@@ -962,13 +965,18 @@ function initApp() {
     if (detailView) detailView.style.display = 'flex';
     if (ecomStorePage) ecomStorePage.scrollTop = 0;
 
-    // Populate detail fields
-    document.getElementById('detail-prod-title').textContent = prod.title;
-    document.getElementById('detail-prod-price').textContent = prod.price;
-    document.getElementById('detail-prod-oldprice').textContent = prod.oldPrice || '';
-    document.getElementById('detail-prod-desc').textContent = prod.desc;
-    document.getElementById('detail-rating-text').textContent = prod.rating || '5.0 (Customer reviews)';
-    
+    const titleEl = document.getElementById('detail-prod-title');
+    const priceEl = document.getElementById('detail-prod-price');
+    const oldPriceEl = document.getElementById('detail-prod-oldprice');
+    const descEl = document.getElementById('detail-prod-desc');
+    const ratingEl = document.getElementById('detail-rating-text');
+
+    if (titleEl) titleEl.textContent = prod.title;
+    if (priceEl) priceEl.textContent = prod.price;
+    if (oldPriceEl) oldPriceEl.textContent = prod.oldPrice || '';
+    if (descEl) descEl.textContent = prod.desc;
+    if (ratingEl) ratingEl.textContent = prod.rating || '5.0 (Customer reviews)';
+
     const buyBtn = document.getElementById('btn-detail-buy-now');
     if (buyBtn) {
       buyBtn.textContent = `${prod.cta || 'Instant Access'} • ${prod.price}`;
@@ -982,7 +990,7 @@ function initApp() {
   const updateDetailPhotoCarousel = () => {
     if (!activeDetailProduct) return;
     const photos = (activeDetailProduct.photos && activeDetailProduct.photos.length > 0) ? activeDetailProduct.photos : [currentPhotoUrl];
-    
+
     if (activePhotoIdx >= photos.length) activePhotoIdx = 0;
     if (activePhotoIdx < 0) activePhotoIdx = photos.length - 1;
 
@@ -995,11 +1003,9 @@ function initApp() {
     if (imgEl) imgEl.src = photos[activePhotoIdx];
     if (counterEl) counterEl.textContent = `${activePhotoIdx + 1} / ${photos.length}`;
 
-    // Show/hide arrows if only 1 photo
     if (prevBtn) prevBtn.style.display = photos.length > 1 ? 'flex' : 'none';
     if (nextBtn) nextBtn.style.display = photos.length > 1 ? 'flex' : 'none';
 
-    // Render thumbnail strip
     if (thumbsStrip) {
       thumbsStrip.innerHTML = '';
       if (photos.length > 1) {
@@ -1017,7 +1023,6 @@ function initApp() {
     }
   };
 
-  // Previous & Next carousel arrow handlers
   const btnPrevPhoto = document.getElementById('btn-detail-prev-photo');
   if (btnPrevPhoto) {
     btnPrevPhoto.addEventListener('click', () => {
@@ -1034,7 +1039,6 @@ function initApp() {
     });
   }
 
-  // Render "More Products from this Store" grid
   const renderMoreProductsGrid = (currentId) => {
     const grid = document.getElementById('more-products-grid');
     if (!grid) return;
@@ -1051,7 +1055,10 @@ function initApp() {
         </div>
         <div class="ecom-card-body">
           <div class="ecom-rating-row">
-            ★★★★★ <span style="color: var(--text-secondary);">${prod.rating.split('(')[1] ? prod.rating.split('(')[1].replace(')', '') : '5.0'}</span>
+            <div class="star-rating-row">
+              <svg class="star-icon" viewBox="0 0 24 24" width="13" height="13" fill="#f59e0b" stroke="none"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+            </div>
+            <span style="color: var(--text-secondary);">${prod.rating ? prod.rating.split('(')[0] : '5.0'}</span>
           </div>
           <div class="ecom-prod-title">${prod.title}</div>
           <div class="ecom-prod-desc">${prod.desc.substring(0, 75)}...</div>
@@ -1073,7 +1080,6 @@ function initApp() {
     });
   };
 
-  // Back to Storefront button handler
   const closeProductDetail = () => {
     const heroHeader = document.querySelector('.ecom-hero-header');
     const sectionTitle = document.querySelector('.ecom-section-title');
@@ -1094,456 +1100,76 @@ function initApp() {
   const btnViewAllProds = document.getElementById('btn-view-all-store-products');
   if (btnViewAllProds) btnViewAllProds.addEventListener('click', closeProductDetail);
 
-  // Bind initial storefront cards to open Detail View
-  const bindInitialStorefrontCards = () => {
-    const cards = document.querySelectorAll('.ecom-products-grid .ecom-product-card');
-    cards.forEach((card, idx) => {
-      card.style.cursor = 'pointer';
-      card.addEventListener('click', (e) => {
-        if (e.target.classList.contains('btn-ecom-buy')) return;
-        if (storeProducts[idx]) {
-          openProductDetail(storeProducts[idx]);
-        }
-      });
-    });
-  };
-
-  bindInitialStorefrontCards();
-
-  // ADD TO CART CLICK HANDLERS IN CREATOR STOREFRONT
-  const ecomBuyBtns = document.querySelectorAll('.btn-ecom-buy');
-  ecomBuyBtns.forEach(btn => {
-    btn.addEventListener('click', () => {
-      showToast('Product added to Store Cart! Proceeding to checkout...');
-    });
-  });
-
-  // 12. GOOGLE SHEETS SYNC BUTTON
-  const btnSyncSheets = document.getElementById('btn-sync-sheets');
-  if (btnSyncSheets) {
-    btnSyncSheets.addEventListener('click', () => {
-      showToast('Synced 28 leads with Google Sheets!');
-    });
-  }
-
-  // ==========================================================================
-  // CREATOR STOREFRONT BUILDER SUB-TABS & FEATURE HANDLERS
-  // ==========================================================================
-  
-  // Generic Sub-Tab Toggle Handler (for Automation Rules, Bio Link, etc.)
-  const allSubTabBtns = document.querySelectorAll('.sub-tab-btn');
-  allSubTabBtns.forEach(btn => {
-    btn.addEventListener('click', () => {
-      const parent = btn.parentElement;
-      if (parent) {
-        parent.querySelectorAll('.sub-tab-btn').forEach(b => b.classList.remove('active'));
-        btn.classList.add('active');
-        showToast(`Filtered: ${btn.textContent.trim()}`);
-      }
-    });
-  });
-
-  // 1. Storefront Sub-Tab Navigation
-  const storeSubnavBtns = document.querySelectorAll('.store-subnav-btn');
-  const storeTabContents = document.querySelectorAll('.store-tab-content');
-
-  storeSubnavBtns.forEach(btn => {
-    btn.addEventListener('click', (e) => {
-      e.preventDefault();
-      const targetTab = btn.getAttribute('data-store-tab');
-
-      storeSubnavBtns.forEach(b => b.classList.remove('active'));
-      btn.classList.add('active');
-
-      storeTabContents.forEach(content => {
-        if (content.id === `store-tab-${targetTab}`) {
-          content.classList.add('active');
-          if (typeof triggerReloadAnimation === 'function') {
-            try { triggerReloadAnimation(content); } catch (err) {}
-          }
-        } else {
-          content.classList.remove('active');
-        }
-      });
-    });
-  });
-
-  // Profile Header Setup Form State Handlers (Icon-Only Buttons & Real-Time Sync)
-  const btnEditHeaderTrigger = document.getElementById('btn-edit-header-trigger');
-  const profileSetupFormBox = document.getElementById('profile-setup-form-box');
-  const profileSummaryBox = document.getElementById('profile-summary-box');
-  const btnSaveProfileSetup = document.getElementById('btn-save-profile-setup');
-  const btnCancelProfileSetup = document.getElementById('btn-cancel-profile-setup');
-
-  const editPencilSvg = `<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>`;
-  const closeCrossSvg = `<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>`;
-
-  const setEditBtnIcon = (isOpen) => {
-    if (!btnEditHeaderTrigger) return;
-    if (isOpen) {
-      btnEditHeaderTrigger.innerHTML = closeCrossSvg;
-      btnEditHeaderTrigger.title = 'Close Setup';
-    } else {
-      btnEditHeaderTrigger.innerHTML = editPencilSvg;
-      btnEditHeaderTrigger.title = 'Edit Store Info';
-    }
-  };
-
-  if (btnEditHeaderTrigger) {
-    btnEditHeaderTrigger.addEventListener('click', (e) => {
-      e.preventDefault();
-      if (profileSetupFormBox && (profileSetupFormBox.style.display === 'none' || !profileSetupFormBox.style.display)) {
-        profileSetupFormBox.style.display = 'block';
-        if (profileSummaryBox) profileSummaryBox.style.display = 'none';
-        setEditBtnIcon(true);
-      } else {
-        if (profileSetupFormBox) profileSetupFormBox.style.display = 'none';
-        if (profileSummaryBox) profileSummaryBox.style.display = 'flex';
-        setEditBtnIcon(false);
-      }
-    });
-  }
-
-  if (btnCancelProfileSetup) {
-    btnCancelProfileSetup.addEventListener('click', (e) => {
-      e.preventDefault();
-      if (profileSetupFormBox) profileSetupFormBox.style.display = 'none';
-      if (profileSummaryBox) profileSummaryBox.style.display = 'flex';
-      setEditBtnIcon(false);
-    });
-  }
-
-  // Real-Time Live Smartphone Preview Input Sync
-  const setupInputName = document.getElementById('setup-input-name');
-  const setupInputAvatar = document.getElementById('setup-input-avatar');
-  const setupInputBio = document.getElementById('setup-input-bio');
-
-  function updateRealtimePreview() {
-    const nameVal = setupInputName?.value.trim() || 'RudRa RR';
-    const avatarVal = setupInputAvatar?.value.trim() || 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=250&q=80';
-    const bioVal = setupInputBio?.value.trim() || 'Welcome to my SuperProfile & RenderReply Store! 🚀';
-
-    // Store Card Updates
-    const nameTxt = document.getElementById('store-display-name-txt');
-    const bioTxt = document.getElementById('store-bio-text-txt');
-    const avatarImg = document.getElementById('store-avatar-img');
-
-    if (nameTxt) nameTxt.textContent = nameVal;
-    if (bioTxt) bioTxt.textContent = bioVal;
-    if (avatarImg) avatarImg.src = avatarVal;
-
-    // Unified Real-Time Preview Updates (No Icons)
-    const unifiedAvatar = document.getElementById('unified-avatar-el');
-    const unifiedName = document.getElementById('unified-name-el');
-    const unifiedBio = document.getElementById('unified-bio-el');
-
-    if (unifiedAvatar) unifiedAvatar.src = avatarVal;
-    if (unifiedName) unifiedName.textContent = `${nameVal} Store`;
-    if (unifiedBio) unifiedBio.textContent = bioVal;
-  }
-
-  [setupInputName, setupInputAvatar, setupInputBio].forEach(inputEl => {
-    if (inputEl) {
-      inputEl.addEventListener('input', updateRealtimePreview);
-    }
-  });
-
-  if (btnSaveProfileSetup) {
-    btnSaveProfileSetup.addEventListener('click', () => {
-      updateRealtimePreview();
-      if (profileSetupFormBox) profileSetupFormBox.style.display = 'none';
-      if (profileSummaryBox) profileSummaryBox.style.display = 'flex';
-      setEditBtnIcon(false);
-      showToast('✓ Creator store profile info saved & published!');
-    });
-  }
-
-  // 2. Brand Color Picker & Swatches Handling
-  const colorPickerInput = document.getElementById('input-brand-color-picker');
-  const colorHexText = document.getElementById('input-brand-color-hex');
-  const colorSwatches = document.querySelectorAll('.swatch');
-  const customerDashHeader = document.getElementById('dash-prev-bg');
-  const customerDashPurchasesBtn = document.getElementById('dash-purchases-btn');
-  const dashSampleCheckoutPill = document.getElementById('dash-sample-checkout-pill');
-  const dashLiveHexBadge = document.getElementById('dash-live-hex-badge');
-  const seoBox = document.getElementById('seo-img-box');
-  const phoneHeaderBg = document.getElementById('phone-header-bg');
-
-  function applyBrandColor(color) {
-    if (colorPickerInput) colorPickerInput.value = color;
-    if (colorHexText) colorHexText.value = color.toUpperCase();
-    if (customerDashHeader) customerDashHeader.style.background = color;
-    if (customerDashPurchasesBtn) {
-      customerDashPurchasesBtn.style.backgroundColor = color;
-      customerDashPurchasesBtn.style.borderColor = color;
-    }
-    if (dashSampleCheckoutPill) {
-      dashSampleCheckoutPill.style.borderColor = color;
-      dashSampleCheckoutPill.style.color = color;
-    }
-    if (dashLiveHexBadge) {
-      dashLiveHexBadge.textContent = `${color.toUpperCase()} • Primary Accent`;
-    }
-    if (seoBox) {
-      seoBox.style.borderLeftColor = color;
-    }
-    if (phoneHeaderBg) {
-      phoneHeaderBg.style.background = `linear-gradient(180deg, ${color} 0%, #090d16 100%)`;
-    }
-  }
-
-  if (colorPickerInput) {
-    colorPickerInput.addEventListener('input', (e) => {
-      applyBrandColor(e.target.value);
-    });
-  }
-
-  if (colorHexText) {
-    colorHexText.addEventListener('change', (e) => {
-      let val = e.target.value.trim();
-      if (!val.startsWith('#')) val = '#' + val;
-      if (/^#[0-9A-F]{6}$/i.test(val)) {
-        applyBrandColor(val);
-      }
-    });
-  }
-
-  colorSwatches.forEach(swatch => {
-    swatch.addEventListener('click', () => {
-      const color = swatch.getAttribute('data-color');
-      applyBrandColor(color);
-      showToast(`Applied brand theme color ${color}`);
-    });
-  });
-
-  // SEO Real-Time Input Sync
-  const inputMetaTitle = document.getElementById('input-meta-title');
-  const inputMetaDesc = document.getElementById('input-meta-desc');
-  const seoPreviewTitle = document.getElementById('seo-preview-title');
-  const seoPreviewDesc = document.getElementById('seo-preview-desc');
-
-  if (inputMetaTitle && seoPreviewTitle) {
-    inputMetaTitle.addEventListener('input', () => {
-      seoPreviewTitle.textContent = inputMetaTitle.value.trim() || 'RudRa RR | Official Creator Storefront';
-    });
-  }
-
-  if (inputMetaDesc && seoPreviewDesc) {
-    inputMetaDesc.addEventListener('input', () => {
-      seoPreviewDesc.textContent = inputMetaDesc.value.trim() || 'Welcome to my official creator storefront!';
-    });
-  }
-
-  // 3. Copy Store URL Handler
-  const btnCopyStoreUrl = document.getElementById('btn-copy-store-url');
-  if (btnCopyStoreUrl) {
-    btnCopyStoreUrl.addEventListener('click', () => {
-      const linkPill = document.getElementById('store-official-link-pill');
-      const urlText = linkPill ? linkPill.textContent : 'https://renderreply.com/store/render6457';
-      navigator.clipboard.writeText(urlText);
-      showToast('Store official link copied to clipboard!');
-    });
-  }
-
-  // 4. Store Details Handle Save
-  const btnSaveHandle = document.getElementById('btn-save-handle');
-  const inputStoreHandle = document.getElementById('input-store-handle');
-  if (btnSaveHandle && inputStoreHandle) {
-    btnSaveHandle.addEventListener('click', () => {
-      const handle = inputStoreHandle.value.trim();
-      if (handle) {
-        const fullUrl = `https://renderreply.com/store/${handle}`;
-        const pill = document.getElementById('store-official-link-pill');
-        if (pill) pill.textContent = fullUrl;
-        showToast(`Store handle updated to @${handle}!`);
-      }
-    });
-  }
-
-  // 5. Render Storefront Analytics Main Chart
-  const renderStoreAnalyticsChart = () => {
-    const chartArea = document.getElementById('store-analytics-main-chart');
-    if (!chartArea) return;
-
-    chartArea.innerHTML = createChartSvg({
-      yTop: '250',
-      yBottom: '0',
-      xLabels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
-      points: [40, 25, 60, 35, 80, 50, 20],
-      strokeColor: '#6366f1',
-      fillColor: '#6366f1'
-    });
-  };
-
-  renderStoreAnalyticsChart();
-
-  // Store Analytics Range Filter Buttons
-  const storeRangeBtns = document.querySelectorAll('[data-store-range]');
-  storeRangeBtns.forEach(btn => {
-    btn.addEventListener('click', () => {
-      const range = btn.getAttribute('data-store-range');
-      storeRangeBtns.forEach(b => b.classList.remove('active'));
-      btn.classList.add('active');
-      showToast(`Filtered store analytics for ${range}`);
-    });
-  });
-
-  // 6. Interactive Buttons & Modal Triggers for Storefront
-  const btnAddProductModal = document.getElementById('btn-add-product-modal');
-  if (btnAddProductModal) {
-    btnAddProductModal.addEventListener('click', openProductModal);
-  }
-
+  // STREAMLINED NON-INTRUSIVE CHANGE AVATAR (REMOVED PROMPT BLOCKER)
   const btnChangeAvatar = document.getElementById('btn-change-avatar');
   if (btnChangeAvatar) {
     btnChangeAvatar.addEventListener('click', (e) => {
       e.preventDefault();
-      const url = prompt('Enter Profile Avatar Image URL:', 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=250&q=80');
-      if (url) {
-        const storeAvatar = document.getElementById('store-avatar-img');
-        const unifiedAvatar = document.getElementById('unified-avatar-el');
-        const setupInputAvatar = document.getElementById('setup-input-avatar');
-        if (storeAvatar) storeAvatar.src = url;
-        if (unifiedAvatar) unifiedAvatar.src = url;
-        if (setupInputAvatar) setupInputAvatar.value = url;
-        showToast('Avatar creator photo updated!');
-      }
+      // Cycle avatar sample image smoothly without blocking modal prompt dialog
+      const avatarSampleUrls = [
+        'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=250&q=80',
+        'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=250&q=80',
+        'https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=250&q=80'
+      ];
+      const storeAvatar = document.getElementById('store-avatar-img');
+      const unifiedAvatar = document.getElementById('unified-avatar-el');
+      const setupInputAvatar = document.getElementById('setup-input-avatar');
+
+      const currentSrc = storeAvatar ? storeAvatar.src : '';
+      const nextIdx = (avatarSampleUrls.indexOf(currentSrc) + 1) % avatarSampleUrls.length;
+      const nextUrl = avatarSampleUrls[nextIdx];
+
+      if (storeAvatar) storeAvatar.src = nextUrl;
+      if (unifiedAvatar) unifiedAvatar.src = nextUrl;
+      if (setupInputAvatar) setupInputAvatar.value = nextUrl;
+
+      showToast('Avatar creator photo updated!');
     });
   }
 
-  const btnAddCert = document.getElementById('btn-add-cert');
-  if (btnAddCert) {
-    btnAddCert.addEventListener('click', () => {
-      openModal(
-        'Add Certificate or Trust Badge',
-        'Upload official certification or license to display trust badge on your storefront.',
-        () => {
-          showToast('Certificate badge added to store!');
-        }
-      );
-    });
-  }
-
-  const btnWatchTutorial = document.getElementById('btn-watch-tutorial');
-  if (btnWatchTutorial) {
-    btnWatchTutorial.addEventListener('click', () => {
-      showToast('Opening Store Setup Video Tutorial...');
-    });
-  }
-
-  const btnAddStoreContent = document.getElementById('btn-add-store-content');
-  if (btnAddStoreContent) {
-    btnAddStoreContent.addEventListener('click', () => {
-      showToast('Opening Content Block Builder...');
-    });
-  }
-
-  const btnAddStoreHeader = document.getElementById('btn-add-store-header');
-  if (btnAddStoreHeader) {
-    btnAddStoreHeader.addEventListener('click', () => {
-      showToast('Added new Section Header text block to store!');
-    });
-  }
-
-  const btnChangeMetaImg = document.getElementById('btn-change-meta-img');
-  if (btnChangeMetaImg) {
-    btnChangeMetaImg.addEventListener('click', () => {
-      showToast('SEO Social Meta Sharing Image updated!');
-    });
-  }
-
-  const btnUploadQr = document.getElementById('btn-upload-qr');
-  if (btnUploadQr) {
-    btnUploadQr.addEventListener('click', () => {
-      showToast('Custom Payment UPI QR Code Image updated!');
-    });
-  }
-
-  // 7. Product Catalog Item Delete & Edit Buttons
+  // GLOBAL EVENT DELEGATION FOR DEEP INTERACTIVE BUTTONS
   document.addEventListener('click', (e) => {
+    // 1. Edit Product Button
     const editBtn = e.target.closest('.btn-edit-prod-item');
     if (editBtn) {
-      const card = editBtn.closest('.catalog-prod-card');
-      if (card) {
-        const nameEl = card.querySelector('.prod-name');
-        const priceEl = card.querySelector('.prod-price');
-        if (nameEl) document.getElementById('modal-prod-title').value = nameEl.textContent.trim();
-        if (priceEl) document.getElementById('modal-prod-price').value = priceEl.textContent.trim().replace('$', '');
-      }
-      openProductModal();
+      const prodId = editBtn.getAttribute('data-id');
+      window.editProductItem(prodId);
       return;
     }
 
+    // 2. Delete Product Button
     const deleteBtn = e.target.closest('.btn-delete-prod-item');
     if (deleteBtn) {
-      const card = deleteBtn.closest('.catalog-prod-card');
-      if (card) {
-        card.remove();
-        showToast('Product item deleted from store catalog');
-      }
+      const prodId = deleteBtn.getAttribute('data-id');
+      window.deleteProductItem(prodId);
       return;
     }
-  });
 
-  // 8. Geographic Analytics View Toggles
-  const geoBtns = document.querySelectorAll('.pill-btn');
-  geoBtns.forEach(btn => {
-    btn.addEventListener('click', () => {
-      const parent = btn.parentElement;
-      if (parent) {
-        const sibs = parent.querySelectorAll('.pill-btn');
-        sibs.forEach(s => s.classList.remove('active'));
-        btn.classList.add('active');
-        showToast(`Switched view to ${btn.textContent.trim()}`);
-      }
-    });
-  });
-
-  // 10. Learn & Help Support Video Modal & Copy Email Handlers
-  const btnCopyEmail1 = document.getElementById('btn-copy-support-email');
-  const btnCopyEmail2 = document.querySelector('.btn-copy-support-email-gen');
-  
-  function copySupportEmail() {
-    navigator.clipboard.writeText('support@renderreply.com');
-    showToast('Support email copied: support@renderreply.com');
-  }
-
-  if (btnCopyEmail1) btnCopyEmail1.addEventListener('click', copySupportEmail);
-  if (btnCopyEmail2) btnCopyEmail2.addEventListener('click', copySupportEmail);
-
-  document.addEventListener('click', (e) => {
-    const watchBtn = e.target.closest('.btn-watch-video, .video-play-overlay');
-    if (watchBtn) {
-      const card = watchBtn.closest('.video-support-card');
-      const title = card ? (card.querySelector('.video-card-title')?.textContent.trim() || 'Video Tutorial') : 'Video Tutorial';
-      openModal(
-        `🎥 Playing: ${title}`,
-        `Watching guide for "${title}". Learn how to automate, configure, and grow your Instagram storefront.`,
-        () => showToast(`Completed watching tutorial: ${title}`)
-      );
-    }
-  });
-
-  // GLOBAL STOREFRONT DIRECT CLICK DELEGATOR FOR 100% GUARANTEED INTERACTION
-  document.addEventListener('click', (e) => {
-    // 1. Sub-nav tab buttons
+    // 3. Store Sub-nav Buttons
     const subnavBtn = e.target.closest('.store-subnav-btn');
     if (subnavBtn) {
       e.preventDefault();
       const targetTab = subnavBtn.getAttribute('data-store-tab');
-      document.querySelectorAll('.store-subnav-btn').forEach(b => b.classList.remove('active'));
-      subnavBtn.classList.add('active');
-      document.querySelectorAll('.store-tab-content').forEach(content => {
-        if (content.id === `store-tab-${targetTab}`) {
-          content.classList.add('active');
-        } else {
-          content.classList.remove('active');
-        }
-      });
+      window.switchStoreTab(targetTab, subnavBtn);
       return;
     }
 
-    // 2. Edit Header Trigger (Pencil icon)
+    // 4. Edit Header Trigger (Pencil / Cancel icon toggle)
+    const editPencilSvg = `<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>`;
+    const closeCrossSvg = `<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>`;
+
+    function updateEditHeaderTriggerIcon(isOpen) {
+      const triggerBtn = document.getElementById('btn-edit-header-trigger');
+      if (!triggerBtn) return;
+      if (isOpen) {
+        triggerBtn.innerHTML = closeCrossSvg;
+        triggerBtn.title = 'Close Setup';
+      } else {
+        triggerBtn.innerHTML = editPencilSvg;
+        triggerBtn.title = 'Edit Store Info';
+      }
+    }
+
     const editHeaderBtn = e.target.closest('#btn-edit-header-trigger');
     if (editHeaderBtn) {
       e.preventDefault();
@@ -1552,14 +1178,16 @@ function initApp() {
       if (formBox && (formBox.style.display === 'none' || !formBox.style.display)) {
         formBox.style.display = 'block';
         if (summaryBox) summaryBox.style.display = 'none';
+        updateEditHeaderTriggerIcon(true);
       } else {
         if (formBox) formBox.style.display = 'none';
         if (summaryBox) summaryBox.style.display = 'flex';
+        updateEditHeaderTriggerIcon(false);
       }
       return;
     }
 
-    // 3. Cancel Profile Setup
+    // 5. Cancel / Save Profile Setup
     const cancelSetupBtn = e.target.closest('#btn-cancel-profile-setup');
     if (cancelSetupBtn) {
       e.preventDefault();
@@ -1567,23 +1195,23 @@ function initApp() {
       const summaryBox = document.getElementById('profile-summary-box');
       if (formBox) formBox.style.display = 'none';
       if (summaryBox) summaryBox.style.display = 'flex';
+      updateEditHeaderTriggerIcon(false);
       return;
     }
 
-    // 4. Save Profile Setup
     const saveSetupBtn = e.target.closest('#btn-save-profile-setup');
     if (saveSetupBtn) {
       e.preventDefault();
-      updateRealtimePreview();
       const formBox = document.getElementById('profile-setup-form-box');
       const summaryBox = document.getElementById('profile-summary-box');
       if (formBox) formBox.style.display = 'none';
       if (summaryBox) summaryBox.style.display = 'flex';
-      showToast('✓ Creator store profile info saved & published!');
+      updateEditHeaderTriggerIcon(false);
+      showToast('Creator store profile info saved & published!');
       return;
     }
 
-    // 5. Add Product Modal Trigger
+    // 6. Add Product Trigger
     const addProdBtn = e.target.closest('#btn-add-product-modal');
     if (addProdBtn) {
       e.preventDefault();
@@ -1591,63 +1219,27 @@ function initApp() {
       return;
     }
 
-    // 6. Save Creator Storefront
-    const saveStoreBtn = e.target.closest('#btn-save-creatorstore');
-    if (saveStoreBtn) {
-      e.preventDefault();
-      showToast('Creator Storefront changes saved successfully!');
+    // 7. Video Tutorial Click
+    const watchBtn = e.target.closest('.btn-watch-video, .video-play-overlay');
+    if (watchBtn) {
+      const card = watchBtn.closest('.video-support-card');
+      const title = card ? (card.querySelector('.video-card-title')?.textContent.trim() || 'Video Tutorial') : 'Video Tutorial';
+      showToast(`Playing video tutorial: ${title}`);
       return;
     }
 
-    // 7. Copy Store URL
-    const copyUrlBtn = e.target.closest('#btn-copy-store-url');
-    if (copyUrlBtn) {
-      e.preventDefault();
-      const linkPill = document.getElementById('store-official-link-pill');
-      const urlText = linkPill ? linkPill.textContent : 'https://renderreply.com/store/render6457';
-      navigator.clipboard.writeText(urlText);
-      showToast('Store official link copied to clipboard!');
-      return;
-    }
-
-    // 8. Open Storefront Browser Overlay
-    const openOverlayBtn = e.target.closest('#btn-open-browser-overlay');
-    if (openOverlayBtn) {
-      e.preventDefault();
-      if (browserOverlay) browserOverlay.classList.add('active');
-      showToast('Opening Creator Storefront live preview...');
-      return;
-    }
-
-    // 9. Close Storefront Browser Overlay
-    const exitOverlayBtn = e.target.closest('#btn-exit-browser-tab, #btn-close-browser-tab');
-    if (exitOverlayBtn) {
-      e.preventDefault();
-      if (browserOverlay) browserOverlay.classList.remove('active');
-      return;
-    }
-
-    // 10. Close Product Studio Modal
-    const closeStudioBtn = e.target.closest('#btn-close-product-modal, #btn-cancel-product-modal');
-    if (closeStudioBtn) {
-      e.preventDefault();
-      closeProductModal();
-      return;
-    }
-
-    // 11. Publish Product Button
-    const publishBtn = e.target.closest('#btn-publish-product');
-    if (publishBtn) {
-      e.preventDefault();
-      if (formProductModal) {
-        const submitEvt = new Event('submit', { cancelable: true, bubbles: true });
-        formProductModal.dispatchEvent(submitEvt);
+    // 8. Copy Email Buttons
+    const copyEmailBtn = e.target.closest('#btn-copy-support-email, .btn-copy-support-email-gen');
+    if (copyEmailBtn) {
+      if (navigator.clipboard) {
+        navigator.clipboard.writeText('support@renderreply.com');
       }
+      showToast('Support email copied: support@renderreply.com');
       return;
     }
   });
 
-  // 13. INITIALIZE APP DATA & CONNECTION STATE
+  // INITIALIZE APP DATA & CONNECTION STATE
   updateConnectionUI();
   loadDashboardData('7 Days');
 }

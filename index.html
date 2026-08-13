@@ -5,7 +5,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>RenderReply - Instagram Automation Dashboard</title>
-  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="./styles.css">
 </head>
 
 <body>
@@ -161,7 +161,13 @@
             <div class="stat-value" id="stat-active-rules">1</div>
           </div>
           <div class="stat-card">
-            <div class="stat-label">Captured Leads ↗</div>
+            <div class="stat-label">
+              Captured Leads
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+                style="margin-left: 2px;">
+                <path d="M7 17L17 7M17 7H7M17 7V17" />
+              </svg>
+            </div>
             <div class="stat-value" id="stat-captured-leads">0</div>
           </div>
         </div>
@@ -268,7 +274,7 @@
 
               <div class="msg-bubble bot">
                 <span class="msg-tag">RenderReply Bot • Automated Trigger</span>
-                Hey Alex! 👋 Here are our membership options and subscription tiers:
+                Hey Alex! Here are our membership options and subscription tiers:
                 https://renderreply.com/p/render6457
               </div>
             </div>
@@ -328,17 +334,40 @@
               </div>
 
               <div class="rule-action-badges">
-                <span class="rule-badge">✉ DM</span>
-                <span class="rule-badge">🔗 Link</span>
+                <span class="rule-badge">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" />
+                    <polyline points="22,6 12,13 2,6" />
+                  </svg>
+                  DM
+                </span>
+                <span class="rule-badge">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71" />
+                    <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71" />
+                  </svg>
+                  Link
+                </span>
               </div>
-              <button class="rule-more-btn">⋮</button>
+              <button class="rule-more-btn" aria-label="Rule options">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                  <circle cx="12" cy="5" r="1" />
+                  <circle cx="12" cy="12" r="1" />
+                  <circle cx="12" cy="19" r="1" />
+                </svg>
+              </button>
             </div>
           </div>
 
           <div class="rule-card">
             <div class="rule-thumb-header" style="background: linear-gradient(135deg, #ec4899, #831843);">
-              <div style="color: #fff; text-align: center; font-weight: 800; font-size: 13px;">
-                📸 STORY MENTION AUTO-REPLY
+              <div
+                style="color: #fff; text-align: center; font-weight: 800; font-size: 13px; display: flex; align-items: center; justify-content: center; gap: 6px;">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z" />
+                  <circle cx="12" cy="13" r="4" />
+                </svg>
+                STORY MENTION AUTO-REPLY
               </div>
             </div>
             <div class="rule-card-body">
@@ -357,17 +386,49 @@
               </div>
 
               <div class="rule-action-badges">
-                <span class="rule-badge">✉ Instant DM</span>
-                <span class="rule-badge">🎁 Coupon Code</span>
+                <span class="rule-badge">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" />
+                    <polyline points="22,6 12,13 2,6" />
+                  </svg>
+                  Instant DM
+                </span>
+                <span class="rule-badge">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <polyline points="20 12 20 22 4 22 4 12" />
+                    <rect x="2" y="7" width="20" height="5" />
+                    <line x1="12" y1="22" x2="12" y2="7" />
+                    <path d="M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7z" />
+                    <path d="M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z" />
+                  </svg>
+                  Coupon Code
+                </span>
               </div>
-              <button class="rule-more-btn">⋮</button>
+              <button class="rule-more-btn" aria-label="Rule options">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                  <circle cx="12" cy="5" r="1" />
+                  <circle cx="12" cy="12" r="1" />
+                  <circle cx="12" cy="19" r="1" />
+                </svg>
+              </button>
             </div>
           </div>
 
           <div class="rule-card">
             <div class="rule-thumb-header" style="background: linear-gradient(135deg, #059669, #064e3b);">
-              <div style="color: #fff; text-align: center; font-weight: 800; font-size: 13px;">
-                🎬 REEL VIRAL GUIDE BOT
+              <div
+                style="color: #fff; text-align: center; font-weight: 800; font-size: 13px; display: flex; align-items: center; justify-content: center; gap: 6px;">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <rect x="2" y="2" width="20" height="20" rx="2.18" ry="2.18" />
+                  <line x1="7" y1="2" x2="7" y2="22" />
+                  <line x1="17" y1="2" x2="17" y2="22" />
+                  <line x1="2" y1="12" x2="22" y2="12" />
+                  <line x1="2" y1="7" x2="7" y2="7" />
+                  <line x1="2" y1="17" x2="7" y2="17" />
+                  <line x1="17" y1="17" x2="22" y2="17" />
+                  <line x1="17" y1="7" x2="22" y2="7" />
+                </svg>
+                REEL VIRAL GUIDE BOT
               </div>
             </div>
             <div class="rule-card-body">
@@ -386,10 +447,29 @@
               </div>
 
               <div class="rule-action-badges">
-                <span class="rule-badge">✉ DM Link</span>
-                <span class="rule-badge">📊 Lead Capture</span>
+                <span class="rule-badge">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" />
+                    <polyline points="22,6 12,13 2,6" />
+                  </svg>
+                  DM Link
+                </span>
+                <span class="rule-badge">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <line x1="18" y1="20" x2="18" y2="10" />
+                    <line x1="12" y1="20" x2="12" y2="4" />
+                    <line x1="6" y1="20" x2="6" y2="14" />
+                  </svg>
+                  Lead Capture
+                </span>
               </div>
-              <button class="rule-more-btn">⋮</button>
+              <button class="rule-more-btn" aria-label="Rule options">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                  <circle cx="12" cy="5" r="1" />
+                  <circle cx="12" cy="12" r="1" />
+                  <circle cx="12" cy="19" r="1" />
+                </svg>
+              </button>
             </div>
           </div>
         </div>
@@ -418,7 +498,14 @@
             <div class="template-body">
               <div class="template-category-row">
                 <span class="cat-pill" style="color: #6366f1;">Sales</span>
-                <span class="cat-insta">📷 Instagram</span>
+                <span class="cat-insta">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <rect x="2" y="2" width="20" height="20" rx="5" ry="5" />
+                    <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" />
+                    <line x1="17.5" y1="6.5" x2="17.51" y2="6.5" />
+                  </svg>
+                  Instagram
+                </span>
               </div>
               <div class="template-card-title">Pricing Plans Template</div>
               <div class="template-card-text">Directly send pricing options and subscription tiers to users who ask
@@ -439,7 +526,14 @@
             <div class="template-body">
               <div class="template-category-row">
                 <span class="cat-pill" style="color: #3b82f6;">Booking</span>
-                <span class="cat-insta">📷 Instagram</span>
+                <span class="cat-insta">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <rect x="2" y="2" width="20" height="20" rx="5" ry="5" />
+                    <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" />
+                    <line x1="17.5" y1="6.5" x2="17.51" y2="6.5" />
+                  </svg>
+                  Instagram
+                </span>
               </div>
               <div class="template-card-title">Strategy Call Audit Template</div>
               <div class="template-card-text">Send a direct link for users to book a free 1-on-1 strategy call.</div>
@@ -459,7 +553,14 @@
             <div class="template-body">
               <div class="template-category-row">
                 <span class="cat-pill" style="color: #10b981;">Lead Generation</span>
-                <span class="cat-insta">📷 Instagram</span>
+                <span class="cat-insta">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <rect x="2" y="2" width="20" height="20" rx="5" ry="5" />
+                    <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" />
+                    <line x1="17.5" y1="6.5" x2="17.51" y2="6.5" />
+                  </svg>
+                  Instagram
+                </span>
               </div>
               <div class="template-card-title">Free Checklist PDF Template</div>
               <div class="template-card-text">Automatically send a cheat sheet or checklist PDF link to drive audience
@@ -480,7 +581,14 @@
             <div class="template-body">
               <div class="template-category-row">
                 <span class="cat-pill" style="color: #8b5cf6;">Booking</span>
-                <span class="cat-insta">📷 Instagram</span>
+                <span class="cat-insta">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <rect x="2" y="2" width="20" height="20" rx="5" ry="5" />
+                    <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" />
+                    <line x1="17.5" y1="6.5" x2="17.51" y2="6.5" />
+                  </svg>
+                  Instagram
+                </span>
               </div>
               <div class="template-card-title">Webinar Registration Template</div>
               <div class="template-card-text">Register commenters for your upcoming live training or masterclass via DM.
@@ -501,7 +609,14 @@
             <div class="template-body">
               <div class="template-category-row">
                 <span class="cat-pill" style="color: #f59e0b;">Sales</span>
-                <span class="cat-insta">📷 Instagram</span>
+                <span class="cat-insta">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <rect x="2" y="2" width="20" height="20" rx="5" ry="5" />
+                    <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" />
+                    <line x1="17.5" y1="6.5" x2="17.51" y2="6.5" />
+                  </svg>
+                  Instagram
+                </span>
               </div>
               <div class="template-card-title">Store Link Template</div>
               <div class="template-card-text">Automatically send the link to your online shop when someone comments
@@ -522,7 +637,14 @@
             <div class="template-body">
               <div class="template-category-row">
                 <span class="cat-pill" style="color: #3b82f6;">Booking</span>
-                <span class="cat-insta">📷 Instagram</span>
+                <span class="cat-insta">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <rect x="2" y="2" width="20" height="20" rx="5" ry="5" />
+                    <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" />
+                    <line x1="17.5" y1="6.5" x2="17.51" y2="6.5" />
+                  </svg>
+                  Instagram
+                </span>
               </div>
               <div class="template-card-title">Live Demo Booking Template</div>
               <div class="template-card-text">Automate booking calendar link delivery directly to DMs of people
@@ -543,7 +665,14 @@
             <div class="template-body">
               <div class="template-category-row">
                 <span class="cat-pill" style="color: #10b981;">Sales</span>
-                <span class="cat-insta">📷 Instagram</span>
+                <span class="cat-insta">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <rect x="2" y="2" width="20" height="20" rx="5" ry="5" />
+                    <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" />
+                    <line x1="17.5" y1="6.5" x2="17.51" y2="6.5" />
+                  </svg>
+                  Instagram
+                </span>
               </div>
               <div class="template-card-title">Exclusive Discount Template</div>
               <div class="template-card-text">Auto-send a discount code and checkout button to users who comment
@@ -564,7 +693,14 @@
             <div class="template-body">
               <div class="template-category-row">
                 <span class="cat-pill" style="color: #a855f7;">Engagement</span>
-                <span class="cat-insta">📷 Instagram</span>
+                <span class="cat-insta">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <rect x="2" y="2" width="20" height="20" rx="5" ry="5" />
+                    <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" />
+                    <line x1="17.5" y1="6.5" x2="17.51" y2="6.5" />
+                  </svg>
+                  Instagram
+                </span>
               </div>
               <div class="template-card-title">Giveaway Entry Template</div>
               <div class="template-card-text">Enter commenters into a giveaway and automatically send confirmation
@@ -585,7 +721,14 @@
             <div class="template-body">
               <div class="template-category-row">
                 <span class="cat-pill" style="color: #6366f1;">Lead Generation</span>
-                <span class="cat-insta">📷 Instagram</span>
+                <span class="cat-insta">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <rect x="2" y="2" width="20" height="20" rx="5" ry="5" />
+                    <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" />
+                    <line x1="17.5" y1="6.5" x2="17.51" y2="6.5" />
+                  </svg>
+                  Instagram
+                </span>
               </div>
               <div class="template-card-title">Free Ebook Template</div>
               <div class="template-card-text">Automatically send a download button to anyone who comments 'GUIDE' on
@@ -687,7 +830,12 @@
 
           <div class="preview-container">
             <div class="preview-header-label">
-              📱 Real-Time Live Device Preview
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                style="margin-right: 6px;">
+                <rect x="5" y="2" width="14" height="20" rx="2" ry="2" />
+                <line x1="12" y1="18" x2="12.01" y2="18" />
+              </svg>
+              Real-Time Live Device Preview
             </div>
 
             <div class="phone-mockup">
@@ -730,45 +878,93 @@
           </div>
         </header>
 
-        <!-- LIVE BANNER CARD -->
-        <div class="bio-link-banner">
-          <div class="banner-left">
-            <div class="banner-status">
-              <span class="dot-green"></span> Live Creator Storefront Active
+        <!-- PREMIUM LIVE STATUS BAR -->
+        <div class="store-status-bar">
+          <div class="status-bar-left">
+            <div class="store-live-name-row">
+              <span class="dot-green pulsing"></span>
+              <span class="status-live-title">Live Store</span>
+              <span class="status-online-pill">Online</span>
             </div>
-            <div class="banner-subtitle">Paste your custom link into your Instagram Bio section.</div>
+            <div class="store-url-row">
+              <div class="link-url-pill compact">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+                  <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71" />
+                  <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71" />
+                </svg>
+                <span id="store-official-link-pill">renderreply.com/store/render6457</span>
+              </div>
+              <button class="btn btn-outline btn-xs" id="btn-copy-store-url">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <rect x="9" y="9" width="13" height="13" rx="2" ry="2" />
+                  <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" />
+                </svg>
+                Copy
+              </button>
+              <button class="btn btn-outline btn-xs" id="btn-store-qr-code">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/>
+                </svg>
+                QR Code
+              </button>
+            </div>
           </div>
-          <div class="banner-right-actions">
-            <div class="link-url-pill">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
-                <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71" />
-                <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71" />
+
+          <div class="status-bar-metrics">
+            <div class="status-metric-item">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#6366f1" stroke-width="2">
+                <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/>
+                <path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/>
               </svg>
-              <span id="store-official-link-pill">https://renderreply.com/store/render6457</span>
+              <div>
+                <div class="metric-num">1,148</div>
+                <div class="metric-lbl">Visitors Today</div>
+              </div>
             </div>
-            <button class="btn btn-outline" id="btn-copy-store-url">
-              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                stroke-linecap="round" stroke-linejoin="round">
-                <rect x="9" y="9" width="13" height="13" rx="2" ry="2" />
-                <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" />
+            <div class="status-metric-sep"></div>
+            <div class="status-metric-item">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#6366f1" stroke-width="2">
+                <circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/>
+                <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/>
               </svg>
-              Copy
-            </button>
+              <div>
+                <div class="metric-num">42</div>
+                <div class="metric-lbl">Orders Today</div>
+              </div>
+            </div>
+            <div class="status-metric-sep"></div>
+            <div class="status-metric-item">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="2">
+                <polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/>
+              </svg>
+              <div>
+                <div class="metric-num" style="color:#10b981;">4.9%</div>
+                <div class="metric-lbl">Conversion Rate</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="status-bar-actions">
             <button class="btn btn-outline" id="btn-open-browser-overlay">
-              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                stroke-linecap="round" stroke-linejoin="round">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/>
+              </svg>
+              Preview Store
+            </button>
+            <button class="btn btn-primary btn-pill" id="btn-open-store-external">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                 <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
                 <polyline points="15 3 21 3 21 9" />
                 <line x1="10" y1="14" x2="21" y2="3" />
               </svg>
-              Preview
+              Open Store
             </button>
           </div>
         </div>
 
-        <!-- STORE SUB-NAV BAR (Replaces static catalog) -->
+        <!-- STORE SUB-NAV BAR -->
         <div class="store-subnav">
-          <button class="store-subnav-btn active" data-store-tab="builder-dashboard" onclick="switchStoreTab('builder-dashboard', this)">
+          <button class="store-subnav-btn active" data-store-tab="builder-dashboard">
             <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
               <rect x="3" y="3" width="7" height="7" />
               <rect x="14" y="3" width="7" height="7" />
@@ -777,7 +973,7 @@
             </svg>
             Builder Dashboard
           </button>
-          <button class="store-subnav-btn" data-store-tab="store-settings" onclick="switchStoreTab('store-settings', this)">
+          <button class="store-subnav-btn" data-store-tab="store-settings">
             <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
               <circle cx="12" cy="12" r="3" />
               <path
@@ -785,7 +981,7 @@
             </svg>
             Store Settings
           </button>
-          <button class="store-subnav-btn" data-store-tab="detailed-analytics" onclick="switchStoreTab('detailed-analytics', this)">
+          <button class="store-subnav-btn" data-store-tab="detailed-analytics">
             <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
               <line x1="18" y1="20" x2="18" y2="10" />
               <line x1="12" y1="20" x2="12" y2="4" />
@@ -793,14 +989,14 @@
             </svg>
             Detailed Analytics
           </button>
-          <button class="store-subnav-btn" data-store-tab="payment-options" onclick="switchStoreTab('payment-options', this)">
+          <button class="store-subnav-btn" data-store-tab="payment-options">
             <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
               <rect x="1" y="4" width="22" height="16" rx="2" ry="2" />
               <line x1="1" y1="10" x2="23" y2="10" />
             </svg>
             Payment Options
           </button>
-          <button class="store-subnav-btn" data-store-tab="learn-help" onclick="switchStoreTab('learn-help', this)">
+          <button class="store-subnav-btn" data-store-tab="learn-help">
             <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
               <path d="M12 14l9-5-9-5-9 5 9 5z" />
               <path d="M12 14v7" />
@@ -812,56 +1008,72 @@
 
         <!-- TAB CONTENT 1: BUILDER DASHBOARD -->
         <div id="store-tab-builder-dashboard" class="store-tab-content active">
-          <!-- Split Layout: Form & Catalog on Left, Live Phone Mockup on Right -->
           <div class="store-builder-layout">
             <div class="store-builder-left">
 
-              <!-- 1. HEADER & PROFILE CARD -->
-              <div class="form-card" id="profile-header-config-card">
+              <!-- STORE OVERVIEW CARD -->
+              <div class="form-card store-overview-card" id="profile-header-config-card">
                 <div class="form-card-header-flex">
                   <div>
-                    <h2 class="form-card-title">Profile Header Configuration</h2>
-                    <p class="form-card-sub">Customize how your store header appears to audience visitors.</p>
+                    <h2 class="form-card-title">Store Overview</h2>
                   </div>
-                  <button class="btn btn-outline btn-icon-square" id="btn-edit-header-trigger" title="Edit Store Info">
-                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <button class="btn btn-outline btn-edit-store-cta" id="btn-edit-header-trigger" title="Edit Store Info">
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                       <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
                       <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
                     </svg>
+                    Edit Store
                   </button>
                 </div>
 
-                <!-- INITIAL / SETUP FORM STATE (Shown when entering info) -->
+                <!-- SETUP FORM STATE -->
                 <div class="store-profile-setup-box" id="profile-setup-form-box" style="display: none;">
                   <div class="setup-form-banner">
-                    <div class="setup-badge">⚡ Setup Mode</div>
+                    <div class="setup-badge">
+                      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                        stroke-width="2.5">
+                        <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2" />
+                      </svg>
+                      Setup Mode
+                    </div>
                     <h3 class="setup-heading">Enter Your Store & Creator Info</h3>
-                    <p class="setup-sub">Enter your creator details, bio, channel logo, and official social handles to build your store header.</p>
+                    <p class="setup-sub">Enter your creator details, bio, channel logo, and official social handles to
+                      build your store header.</p>
                   </div>
-                  
+
                   <div class="setup-form-grid">
                     <div class="form-group">
                       <label class="form-label">Creator / Store Display Name</label>
-                      <input type="text" class="form-input" id="setup-input-name" value="RudRa RR" placeholder="e.g. RudRa RR">
+                      <input type="text" class="form-input" id="setup-input-name" value="RudRa RR"
+                        placeholder="e.g. RudRa RR">
                     </div>
-                    
+
                     <div class="form-group">
                       <label class="form-label">Profile Avatar Image URL</label>
-                      <input type="text" class="form-input" id="setup-input-avatar" value="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=250&q=80" placeholder="https://...">
+                      <input type="text" class="form-input" id="setup-input-avatar"
+                        value="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=250&q=80"
+                        placeholder="https://...">
                     </div>
 
                     <div class="form-group full-width">
                       <label class="form-label">Store Bio / Headline</label>
-                      <textarea class="form-textarea" id="setup-input-bio" rows="2" placeholder="Welcome to my official store...">Welcome to my SuperProfile & RenderReply Store! 🚀</textarea>
+                      <textarea class="form-textarea" id="setup-input-bio" rows="2"
+                        placeholder="Welcome to my official store...">Welcome to my SuperProfile & RenderReply Store!</textarea>
                     </div>
 
                     <div class="form-group">
                       <label class="form-label">Instagram Handle</label>
                       <div class="social-input-wrapper">
                         <span class="soc-input-icon insta">
-                          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
+                          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2">
+                            <rect x="2" y="2" width="20" height="20" rx="5" ry="5" />
+                            <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" />
+                            <line x1="17.5" y1="6.5" x2="17.51" y2="6.5" />
+                          </svg>
                         </span>
-                        <input type="text" class="form-input" id="setup-input-insta" value="@rudra_rr" placeholder="@username">
+                        <input type="text" class="form-input" id="setup-input-insta" value="@rudra_rr"
+                          placeholder="@username">
                       </div>
                     </div>
 
@@ -869,9 +1081,13 @@
                       <label class="form-label">YouTube Channel</label>
                       <div class="social-input-wrapper">
                         <span class="soc-input-icon yt">
-                          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
+                          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                            <path
+                              d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z" />
+                          </svg>
                         </span>
-                        <input type="text" class="form-input" id="setup-input-yt" value="youtube.com/@rudra_rr" placeholder="youtube.com/@channel">
+                        <input type="text" class="form-input" id="setup-input-yt" value="youtube.com/@rudra_rr"
+                          placeholder="youtube.com/@channel">
                       </div>
                     </div>
 
@@ -879,17 +1095,23 @@
                       <label class="form-label">X / Twitter Handle</label>
                       <div class="social-input-wrapper">
                         <span class="soc-input-icon tw">
-                          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+                          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                            <path
+                              d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
+                          </svg>
                         </span>
-                        <input type="text" class="form-input" id="setup-input-tw" value="@rudra_rr" placeholder="@username">
+                        <input type="text" class="form-input" id="setup-input-tw" value="@rudra_rr"
+                          placeholder="@username">
                       </div>
                     </div>
                   </div>
 
                   <div class="setup-actions">
-                    <button class="btn btn-primary btn-pill" id="btn-save-profile-setup">✓ Save & Publish Store Info</button>
+                    <button class="btn btn-primary btn-pill" id="btn-save-profile-setup">Save & Publish Store
+                      Info</button>
                     <button class="btn btn-outline btn-icon-square" id="btn-cancel-profile-setup" title="Close Setup">
-                      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                        stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
                         <line x1="18" y1="6" x2="6" y2="18"></line>
                         <line x1="6" y1="6" x2="18" y2="18"></line>
                       </svg>
@@ -900,10 +1122,14 @@
                 <!-- CONFIGURED LIVE PROFILE DISPLAY -->
                 <div class="store-profile-summary-box" id="profile-summary-box">
                   <div class="store-avatar-wrapper">
-                    <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=250&q=80" alt="Content Creator Avatar" class="store-avatar-preview-img" id="store-avatar-img">
+                    <img
+                      src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=250&q=80"
+                      alt="Content Creator Avatar" class="store-avatar-preview-img" id="store-avatar-img">
                     <button class="avatar-upload-badge" id="btn-change-avatar" title="Change Creator Image">
-                      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-                        <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path>
+                      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                        stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z">
+                        </path>
                         <circle cx="12" cy="13" r="4"></circle>
                       </svg>
                     </button>
@@ -911,133 +1137,307 @@
                   <div class="store-profile-info">
                     <div class="store-user-title-row">
                       <span class="store-display-name" id="store-display-name-txt">RudRa RR</span>
-                      <span class="store-verified-pill">✓ Verified Store</span>
+                      <span class="store-verified-pill">
+                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                          stroke-width="3">
+                          <polyline points="20 6 9 17 4 12" />
+                        </svg>
+                        Verified Store
+                      </span>
                     </div>
-                    <p class="store-bio-text" id="store-bio-text-txt">Welcome to my SuperProfile & RenderReply Store! 🚀</p>
-                    
-                    <!-- OFFICIAL BRAND ICONS ONLY (NO TEXT LABELS) -->
+                    <div class="store-creator-role">Digital Creator</div>
+                    <p class="store-bio-text" id="store-bio-text-txt">Welcome to my SuperProfile &amp; RenderReply Store!
+                    </p>
+
                     <div class="official-social-icons-row" id="store-social-icons-container">
-                      <a href="https://instagram.com" target="_blank" class="official-social-btn insta" title="Instagram (@rudra_rr)" data-tooltip="Instagram">
-                        <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <a href="https://instagram.com" target="_blank" rel="noopener" class="official-social-btn insta"
+                        title="Instagram (@rudra_rr)">
+                        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor"
+                          stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                           <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
                           <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
                           <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
                         </svg>
                       </a>
-                      <a href="https://youtube.com" target="_blank" class="official-social-btn youtube" title="YouTube Channel" data-tooltip="YouTube">
-                        <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
-                          <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
+                      <a href="https://youtube.com" target="_blank" rel="noopener" class="official-social-btn youtube"
+                        title="YouTube Channel">
+                        <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor">
+                          <path
+                            d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z" />
                         </svg>
                       </a>
-                      <a href="https://x.com" target="_blank" class="official-social-btn twitter" title="X / Twitter (@rudra_rr)" data-tooltip="𝕏 Twitter">
-                        <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor">
-                          <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
+                      <a href="https://x.com" target="_blank" rel="noopener" class="official-social-btn twitter"
+                        title="X / Twitter (@rudra_rr)">
+                        <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor">
+                          <path
+                            d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
                         </svg>
                       </a>
                     </div>
+                  </div>
+                  <div class="store-profile-completion-col">
+                    <div class="profile-completion-ring-widget">
+                      <svg viewBox="0 0 36 36" class="completion-ring-svg">
+                        <circle cx="18" cy="18" r="15.9" fill="none" stroke="#e2e8f0" stroke-width="3"/>
+                        <circle cx="18" cy="18" r="15.9" fill="none" stroke="#6366f1" stroke-width="3"
+                          stroke-dasharray="85 15" stroke-linecap="round"
+                          transform="rotate(-90 18 18)"/>
+                      </svg>
+                      <span class="completion-ring-text">85%</span>
+                    </div>
+                    <span class="completion-ring-label">Profile Complete</span>
+                  </div>
+                </div>
+
+                <!-- PROFILE STATS ROW -->
+                <div class="profile-stats-row">
+                  <div class="profile-stat">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#6366f1" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+                    <div class="pstat-val">24.3K</div>
+                    <div class="pstat-lbl">Followers</div>
+                  </div>
+                  <div class="profile-stat">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#6366f1" stroke-width="2"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
+                    <div class="pstat-val" id="pstat-products-count">8</div>
+                    <div class="pstat-lbl">Products</div>
+                  </div>
+                  <div class="profile-stat">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#6366f1" stroke-width="2"><polyline points="20 12 20 22 4 22 4 12"/><rect x="2" y="7" width="20" height="5"/><line x1="12" y1="22" x2="12" y2="7"/></svg>
+                    <div class="pstat-val">1,204</div>
+                    <div class="pstat-lbl">Total Sales</div>
+                  </div>
+                  <div class="profile-stat">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="2"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/></svg>
+                    <div class="pstat-val" style="color:#10b981;">4.8%</div>
+                    <div class="pstat-lbl">Conversion</div>
+                  </div>
+                  <div class="profile-stat">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#f59e0b"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" fill="#f59e0b"/></svg>
+                    <div class="pstat-val" style="color:#f59e0b;">4.9</div>
+                    <div class="pstat-lbl">Store Rating</div>
                   </div>
                 </div>
               </div>
 
-              <!-- 2. ACTIONS TOOLBAR & CATALOG -->
-              <div class="form-card">
-                <div class="catalog-actions-bar" style="justify-content: flex-end;">
-                  <button class="btn btn-secondary btn-pill" id="btn-add-product-modal" onclick="openProductStudio()">+ Add Product</button>
+              <!-- PRODUCT CATALOG CARD -->
+              <div class="form-card catalog-premium-card">
+                <div class="catalog-premium-header">
+                  <div class="catalog-header-left">
+                    <h2 class="form-card-title">Products <span class="catalog-count-pill" id="catalog-count-pill">3</span></h2>
+                  </div>
+                  <div class="catalog-header-controls">
+                    <div class="catalog-search-box">
+                      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+                      </svg>
+                      <input type="text" class="catalog-search-input" id="catalog-search-input" placeholder="Search products...">
+                    </div>
+                    <button class="btn btn-outline btn-xs" id="btn-catalog-filter">
+                      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"/>
+                      </svg>
+                      Filter
+                    </button>
+                    <button class="btn btn-outline btn-xs" id="btn-catalog-sort">
+                      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/>
+                        <line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/>
+                      </svg>
+                      Sort
+                    </button>
+                    <button class="btn btn-primary btn-pill btn-catalog-add" id="btn-add-product-modal">
+                      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                        <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
+                      </svg>
+                      Add Product
+                    </button>
+                  </div>
                 </div>
 
                 <div class="catalog-grid" id="builder-products-container">
-                  <!-- Product 1 -->
-                  <div class="catalog-prod-card">
-                    <div class="catalog-img-wrapper">
-                      <img
-                        src="https://images.unsplash.com/photo-1517694712202-14dd9538aa97?auto=format&fit=crop&w=600&q=80"
-                        alt="Java Roadmap">
-                      <span class="prod-badge-tag">Digital Guide</span>
-                    </div>
-                    <div class="catalog-prod-body">
-                      <div class="prod-title-price">
-                        <div class="prod-name">Java Full-Stack Developer Roadmap PDF</div>
-                        <div class="prod-price">$19.99</div>
-                      </div>
-                      <div class="prod-meta">5.0 ★ (64 Reviews) • 210 Sales</div>
-                      <div class="prod-actions">
-                        <button class="btn btn-edit-prod-item" data-id="prod-1" onclick="editProductItem('prod-1')">Edit Details</button>
-                        <button class="btn btn-delete-prod-item" data-id="prod-1" onclick="deleteProductItem('prod-1')">Delete</button>
-                      </div>
-                    </div>
-                  </div>
+                  <!-- Rendered via JS -->
+                </div>
 
-                  <!-- Product 2 -->
-                  <div class="catalog-prod-card">
-                    <div class="catalog-img-wrapper">
-                      <img
-                        src="https://images.unsplash.com/photo-1551836022-d5d88e9218df?auto=format&fit=crop&w=600&q=80"
-                        alt="Strategy Session">
-                      <span class="prod-badge-tag">1-on-1 Call</span>
-                    </div>
-                    <div class="catalog-prod-body">
-                      <div class="prod-title-price">
-                        <div class="prod-name">1-on-1 Instagram Strategy Session</div>
-                        <div class="prod-price">$49.00</div>
-                      </div>
-                      <div class="prod-meta">4.9 ★ (28 Reviews) • 98 Sales</div>
-                      <div class="prod-actions">
-                        <button class="btn btn-edit-prod-item" data-id="prod-2" onclick="editProductItem('prod-2')">Edit Details</button>
-                        <button class="btn btn-delete-prod-item" data-id="prod-2" onclick="deleteProductItem('prod-2')">Delete</button>
-                      </div>
-                    </div>
-                  </div>
-
-                  <!-- Product 3 -->
-                  <div class="catalog-prod-card">
-                    <div class="catalog-img-wrapper">
-                      <img
-                        src="https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=600&q=80"
-                        alt="Presets Bundle">
-                      <span class="prod-badge-tag">Lead Magnet</span>
-                    </div>
-                    <div class="catalog-prod-body">
-                      <div class="prod-title-price">
-                        <div class="prod-name">Instagram Automation Preset Bundle</div>
-                        <div class="prod-price free">FREE</div>
-                      </div>
-                      <div class="prod-meta">5.0 ★ (112 Reviews) • 540 Downloads</div>
-                      <div class="prod-actions">
-                        <button class="btn btn-edit-prod-item" data-id="prod-3" onclick="editProductItem('prod-3')">Edit Details</button>
-                        <button class="btn btn-delete-prod-item" data-id="prod-3" onclick="deleteProductItem('prod-3')">Delete</button>
-                      </div>
-                    </div>
-                  </div>
+                <div class="catalog-view-all-row">
+                  <button class="btn btn-outline btn-sm" id="btn-view-all-products">View All Products</button>
                 </div>
               </div>
 
             </div>
 
-            <!-- RIGHT PANEL: UNIFIED LIVE STOREFRONT REAL-TIME PREVIEW (SUITS BOTH LAPTOP & MOBILE, NO ICONS) -->
-            <div class="store-builder-right">
-              <div class="preview-header-label">
-                Live Storefront Real-Time Preview
-              </div>
+            <!-- MIDDLE COLUMN: QUICK CUSTOMIZE -->
+            <div class="store-builder-mid">
+              <div class="form-card quick-customize-panel">
+                <div class="qc-header">
+                  <h3 class="qc-title">Quick Customize</h3>
+                  <button class="qc-reset-btn" id="btn-qc-reset">Reset</button>
+                </div>
 
-              <!-- UNIFIED RESPONSIVE STOREFRONT PREVIEW CARD -->
-              <div class="unified-storefront-preview">
-                <!-- CREATOR STOREFRONT HEADER CARD -->
-                <div class="unified-store-header-card">
-                  <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=250&q=80" alt="Avatar" class="unified-avatar-img" id="unified-avatar-el">
-                  <div class="unified-header-meta">
-                    <div class="unified-name-row">
-                      <span class="unified-user-name" id="unified-name-el">RudRa RR Store</span>
-                      <span class="unified-verified-pill">✓ Verified Creator Store</span>
-                    </div>
-                    <div class="unified-handle-sub">@render6457 • Official Creator Storefront</div>
-                    <p class="unified-user-bio" id="unified-bio-el">Welcome to my SuperProfile & RenderReply Store! 🚀</p>
+                <div class="qc-section">
+                  <div class="qc-label">Theme Color</div>
+                  <div class="qc-color-swatches">
+                    <button class="qc-swatch" data-qc-color="#6366f1" style="background:#6366f1;" title="Indigo"></button>
+                    <button class="qc-swatch" data-qc-color="#3b82f6" style="background:#3b82f6;" title="Blue"></button>
+                    <button class="qc-swatch" data-qc-color="#10b981" style="background:#10b981;" title="Emerald"></button>
+                    <button class="qc-swatch" data-qc-color="#f43f5e" style="background:#f43f5e;" title="Rose"></button>
+                    <button class="qc-swatch" data-qc-color="#f59e0b" style="background:#f59e0b;" title="Amber"></button>
+                    <button class="qc-swatch active" data-qc-color="#0f172a" style="background:#0f172a;" title="Dark"></button>
+                    <button class="qc-swatch qc-swatch-custom" data-qc-color="custom">Custom</button>
                   </div>
                 </div>
 
-                <!-- FEATURED PRODUCTS & SERVICES SECTION -->
-                <div class="unified-sec-title">Featured Products & Services</div>
-                <div class="unified-prod-grid" id="unified-prod-grid-el">
-                  <!-- Dynamically rendered via JS without icons -->
+                <div class="qc-section">
+                  <div class="qc-label">Button Style</div>
+                  <div class="qc-btn-group" id="qc-btn-style-group">
+                    <button class="qc-option-btn active" data-style="rounded">Rounded</button>
+                    <button class="qc-option-btn" data-style="square">Square</button>
+                    <button class="qc-option-btn" data-style="pill">Pill</button>
+                  </div>
+                </div>
+
+                <div class="qc-section">
+                  <div class="qc-label">Store Theme</div>
+                  <div class="qc-btn-group" id="qc-theme-group">
+                    <button class="qc-option-btn active" data-theme="light">
+                      <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/></svg>
+                      Light
+                    </button>
+                    <button class="qc-option-btn" data-theme="dark">
+                      <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+                      Dark
+                    </button>
+                    <button class="qc-option-btn" data-theme="auto">
+                      <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+                      Auto
+                    </button>
+                  </div>
+                </div>
+
+                <div class="qc-section">
+                  <div class="qc-label">Font Style</div>
+                  <select class="form-select qc-font-select" id="qc-font-select">
+                    <option value="inter" selected>Inter (Default)</option>
+                    <option value="plus-jakarta">Plus Jakarta Sans</option>
+                    <option value="poppins">Poppins</option>
+                    <option value="roboto">Roboto</option>
+                    <option value="outfit">Outfit</option>
+                  </select>
+                </div>
+
+                <div class="qc-section">
+                  <div class="qc-label">Layout Style</div>
+                  <div class="qc-layout-group" id="qc-layout-group">
+                    <button class="qc-layout-card active" data-layout="classic">
+                      <div class="qc-layout-preview classic-preview">
+                        <div class="lp-img"></div>
+                        <div class="lp-lines"><div></div><div></div><div></div></div>
+                      </div>
+                      <span>Classic</span>
+                    </button>
+                    <button class="qc-layout-card" data-layout="modern">
+                      <div class="qc-layout-preview modern-preview">
+                        <div class="lp-img wide"></div>
+                        <div class="lp-lines"><div></div><div></div></div>
+                      </div>
+                      <span>Modern</span>
+                    </button>
+                  </div>
+                </div>
+
+                <button class="btn btn-primary btn-pill qc-apply-btn" id="btn-qc-apply">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+                  Apply to Store
+                </button>
+                <div class="qc-sync-note">Changes reflect instantly in preview</div>
+              </div>
+            </div>
+
+            <!-- RIGHT COLUMN: LIVE STORE PREVIEW (PHONE) -->
+            <div class="store-builder-right">
+              <div class="live-preview-panel-header">
+                <div class="lpp-left">
+                  <span class="dot-green pulsing"></span>
+                  Live Store Preview
+                </div>
+                <div class="lpp-right">
+                  <button class="lpp-device-btn active" id="btn-lpp-mobile" title="Mobile View">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg>
+                  </button>
+                  <button class="lpp-device-btn" id="btn-lpp-tablet" title="Tablet View">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="2" width="16" height="20" rx="2" ry="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg>
+                  </button>
+                  <button class="lpp-device-btn lpp-refresh" id="btn-lpp-refresh" title="Refresh Preview">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>
+                  </button>
+                </div>
+              </div>
+
+              <!-- PHONE FRAME WRAPPER -->
+              <div class="phone-frame-wrapper">
+                <div class="phone-frame">
+                  <div class="phone-notch"></div>
+                  <div class="phone-screen">
+                    <!-- DARK STORE PREVIEW -->
+                    <div class="dark-store-preview">
+                      <div class="dsp-header">
+                        <div class="dsp-nav">
+                          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.7)" stroke-width="2"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+                          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.7)" stroke-width="2"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
+                        </div>
+                        <div class="dsp-hero">
+                          <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=250&q=80" class="dsp-avatar" id="dsp-avatar-el" alt="">
+                          <div class="dsp-name" id="dsp-name-el">RudRa RR</div>
+                          <div class="dsp-role">Digital Creator</div>
+                          <div class="dsp-bio" id="dsp-bio-el">Building premium Instagram businesses and automation systems.</div>
+                          <div class="dsp-socials">
+                            <span class="dsp-social-icon">
+                              <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="rgba(255,255,255,0.8)" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
+                            </span>
+                            <span class="dsp-social-icon">
+                              <svg viewBox="0 0 24 24" width="14" height="14" fill="rgba(255,255,255,0.8)"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
+                            </span>
+                            <span class="dsp-social-icon">
+                              <svg viewBox="0 0 24 24" width="13" height="13" fill="rgba(255,255,255,0.8)"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+                            </span>
+                            <span class="dsp-social-icon">
+                              <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="rgba(255,255,255,0.8)" stroke-width="2"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
+                            </span>
+                            <span class="dsp-social-icon">
+                              <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="rgba(255,255,255,0.8)" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+                            </span>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="dsp-body">
+                        <div class="dsp-section-title">Featured Products</div>
+                        <div class="dsp-prod-list" id="dsp-prod-list">
+                          <div class="dsp-prod-row">
+                            <div class="dsp-prod-img" style="background: linear-gradient(135deg,#1e3a5f,#2563eb);"></div>
+                            <div class="dsp-prod-info">
+                              <div class="dsp-prod-name">Java Full Stack Roadmap PDF</div>
+                              <div class="dsp-prod-price">$19.99</div>
+                            </div>
+                          </div>
+                          <div class="dsp-prod-row">
+                            <div class="dsp-prod-img" style="background: linear-gradient(135deg,#3b1f6a,#7c3aed);"></div>
+                            <div class="dsp-prod-info">
+                              <div class="dsp-prod-name">1-on-1 Instagram Strategy Session</div>
+                              <div class="dsp-prod-price">$49.00</div>
+                            </div>
+                          </div>
+                          <div class="dsp-prod-row">
+                            <div class="dsp-prod-img" style="background: linear-gradient(135deg,#1f3a3a,#059669);"></div>
+                            <div class="dsp-prod-info">
+                              <div class="dsp-prod-name">Instagram Automation Preset Bundle</div>
+                              <div class="dsp-prod-price free">FREE</div>
+                            </div>
+                          </div>
+                        </div>
+                        <button class="dsp-view-all-btn">View All Products</button>
+                        <div class="dsp-powered">Powered by RenderReply Store</div>
+                      </div>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
@@ -1046,11 +1446,11 @@
 
         <!-- TAB CONTENT 2: STORE SETTINGS -->
         <div id="store-tab-store-settings" class="store-tab-content">
-          <!-- SECTION TITLE BAR -->
           <div class="settings-section-header">
             <div>
               <h2 class="settings-title">Storefront Settings & Brand Customization</h2>
-              <p class="settings-subtitle">Manage your official handle, brand theme color, SEO metadata, and tracking integrations.</p>
+              <p class="settings-subtitle">Manage your official handle, brand theme color, SEO metadata, and tracking
+                integrations.</p>
             </div>
             <span class="settings-status-badge">
               <span class="dot-green"></span> Configurations Active
@@ -1064,12 +1464,13 @@
               <div class="form-card settings-card-enhanced">
                 <div class="card-badge-pill">BRAND & HANDLE</div>
                 <h2 class="form-card-title">Official Link & Theme Color</h2>
-                
+
                 <div class="form-group" style="margin-top: 16px;">
                   <label class="form-label">Store Handle (URL Slug)</label>
                   <div class="input-with-btn">
                     <div class="prefix-url">renderreply.com/store/</div>
-                    <input type="text" class="form-input" id="input-store-handle" value="render6457" placeholder="yourname">
+                    <input type="text" class="form-input" id="input-store-handle" value="render6457"
+                      placeholder="yourname">
                     <button class="btn btn-outline" id="btn-save-handle">Save Handle</button>
                   </div>
                   <span class="form-hint">This is the link your followers click in your Instagram bio.</span>
@@ -1078,18 +1479,25 @@
                 <div class="form-group" style="margin-top: 20px;">
                   <label class="form-label">Brand Primary Theme Color</label>
                   <div class="color-picker-row">
-                    <input type="color" id="input-brand-color-picker" value="#6366F1" class="color-input" title="Choose color">
-                    <input type="text" class="form-input color-hex-text" id="input-brand-color-hex" value="#6366F1" placeholder="#6366F1">
+                    <input type="color" id="input-brand-color-picker" value="#6366F1" class="color-input"
+                      title="Choose color">
+                    <input type="text" class="form-input color-hex-text" id="input-brand-color-hex" value="#6366F1"
+                      placeholder="#6366F1">
                     <div class="color-swatches">
-                      <span class="swatch" style="background: #6366f1;" data-color="#6366f1" title="Indigo Accent"></span>
+                      <span class="swatch" style="background: #6366f1;" data-color="#6366f1"
+                        title="Indigo Accent"></span>
                       <span class="swatch" style="background: #3b82f6;" data-color="#3b82f6" title="Royal Blue"></span>
-                      <span class="swatch" style="background: #10b981;" data-color="#10b981" title="Emerald Green"></span>
-                      <span class="swatch" style="background: #f59e0b;" data-color="#f59e0b" title="Amber Orange"></span>
+                      <span class="swatch" style="background: #10b981;" data-color="#10b981"
+                        title="Emerald Green"></span>
+                      <span class="swatch" style="background: #f59e0b;" data-color="#f59e0b"
+                        title="Amber Orange"></span>
                       <span class="swatch" style="background: #f43f5e;" data-color="#f43f5e" title="Rose Pink"></span>
-                      <span class="swatch" style="background: #0f172a;" data-color="#0f172a" title="Midnight Black"></span>
+                      <span class="swatch" style="background: #0f172a;" data-color="#0f172a"
+                        title="Midnight Black"></span>
                     </div>
                   </div>
-                  <span class="form-hint">Sets the primary accent for buttons, checkout flows, and customer portals.</span>
+                  <span class="form-hint">Sets the primary accent for buttons, checkout flows, and customer
+                    portals.</span>
                 </div>
               </div>
 
@@ -1098,30 +1506,41 @@
                 <div class="card-badge-pill">SEO & SOCIAL SHARING</div>
                 <h2 class="form-card-title">Search & Meta Optimization</h2>
 
-                <!-- Google / Social Search Result Live Card -->
                 <div class="seo-live-preview-card">
                   <div class="seo-preview-header">
-                    <span class="seo-preview-icon">🔍</span>
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <circle cx="11" cy="11" r="8" />
+                      <line x1="21" y1="21" x2="16.65" y2="16.65" />
+                    </svg>
                     <span>Search Result & Link Card Preview</span>
                   </div>
                   <div class="seo-meta-box" id="seo-img-box">
                     <div class="seo-preview-url">https://store.renderreply.com/render6457</div>
                     <div class="seo-preview-heading" id="seo-preview-title">RudRa RR | Official Creator Storefront</div>
-                    <div class="seo-preview-snippet" id="seo-preview-desc">Welcome to my official creator storefront! Access digital products, 1-on-1 strategy calls, and automation templates.</div>
+                    <div class="seo-preview-snippet" id="seo-preview-desc">Welcome to my official creator storefront!
+                      Access digital products, 1-on-1 strategy calls, and automation templates.</div>
                   </div>
-                  <button class="btn btn-outline btn-sm" id="btn-change-meta-img" style="margin-top: 12px; width: 100%;">
-                    📷 Update Social Sharing Meta Image
+                  <button class="btn btn-outline btn-sm" id="btn-change-meta-img"
+                    style="margin-top: 12px; width: 100%;">
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                      style="margin-right: 4px;">
+                      <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z" />
+                      <circle cx="12" cy="13" r="4" />
+                    </svg>
+                    Update Social Sharing Meta Image
                   </button>
                 </div>
 
                 <div class="form-group" style="margin-top: 18px;">
                   <label class="form-label">Meta Page Title</label>
-                  <input type="text" class="form-input" id="input-meta-title" value="RudRa RR | Official Creator Storefront">
+                  <input type="text" class="form-input" id="input-meta-title"
+                    value="RudRa RR | Official Creator Storefront">
                 </div>
 
                 <div class="form-group">
                   <label class="form-label">Meta Page Description</label>
-                  <textarea class="form-textarea" id="input-meta-desc" rows="3">Welcome to my official creator storefront! Access digital products, 1-on-1 strategy calls, and automation templates.</textarea>
+                  <textarea class="form-textarea" id="input-meta-desc"
+                    rows="3">Welcome to my official creator storefront! Access digital products, 1-on-1 strategy calls, and automation templates.</textarea>
                 </div>
               </div>
 
@@ -1169,7 +1588,8 @@
               <div class="form-card settings-card-enhanced">
                 <div class="card-badge-pill">ANALYTICS</div>
                 <h2 class="form-card-title">Tracking & Retargeting Pixels</h2>
-                <p class="form-card-sub">Connect your pixel IDs to track ad conversions and build custom retargeting audiences.</p>
+                <p class="form-card-sub">Connect your pixel IDs to track ad conversions and build custom retargeting
+                  audiences.</p>
 
                 <div class="form-grid-2col" style="margin-top: 16px;">
                   <div class="form-group" style="margin: 0;">
@@ -1201,7 +1621,13 @@
 
                 <div class="cert-list" style="margin-top: 14px;">
                   <div class="cert-item">
-                    <div class="cert-badge-icon">🎖️</div>
+                    <div class="cert-badge-icon">
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                        stroke-width="2">
+                        <circle cx="12" cy="8" r="7" />
+                        <polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88" />
+                      </svg>
+                    </div>
                     <div class="cert-details">
                       <div class="cert-name">Verified Instagram Automation Specialist</div>
                       <div class="cert-issuer">RenderReply Platform Certification</div>
@@ -1213,48 +1639,71 @@
 
             </div>
 
-            <!-- RIGHT COL: WORLD-CLASS BRAND THEME SHOWCASE LIVE PREVIEW CARD -->
+            <!-- RIGHT COL: BRAND THEME SHOWCASE -->
             <div class="settings-right-col">
               <div class="brand-theme-live-card" id="customer-dash-preview">
                 <div class="brand-preview-top-bar">
                   <span class="preview-title-tag">
-                    <span class="preview-sparkle">🎨</span> Brand Theme Live Showcase
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                      style="margin-right: 4px;">
+                      <circle cx="13.5" cy="6.5" r=".5" />
+                      <circle cx="17.5" cy="10.5" r=".5" />
+                      <circle cx="8.5" cy="7.5" r=".5" />
+                      <circle cx="6.5" cy="12.5" r=".5" />
+                      <path
+                        d="M12 2C6.49 2 2 6.49 2 12s4.49 10 10 10c1.38 0 2.5-1.12 2.5-2.5 0-.61-.23-1.21-.64-1.67-.38-.45-.6-.97-.6-1.57 0-1.29 1.05-2.34 2.34-2.34H17c2.76 0 5-2.24 5-5 0-4.42-4.03-8-10-8z" />
+                    </svg>
+                    Brand Theme Live Showcase
                   </span>
                   <span class="preview-live-indicator">
                     <span class="dot-green"></span> Dynamic Sync
                   </span>
                 </div>
 
-                <!-- DYNAMIC ACCENT HEADER BANNER -->
-                <div class="dash-prev-header" id="dash-prev-bg" style="background: linear-gradient(135deg, #6366F1 0%, #4F46E5 100%);">
+                <div class="dash-prev-header" id="dash-prev-bg"
+                  style="background: linear-gradient(135deg, #6366F1 0%, #4F46E5 100%);">
                   <div class="brand-preview-inner-card">
                     <div class="brand-avatar-box">R</div>
                     <div class="brand-store-name">RudRa RR Store</div>
-                    <div class="brand-verified-pill">✓ Verified Creator Store</div>
-                    
+                    <div class="brand-verified-pill">
+                      <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                        stroke-width="3">
+                        <polyline points="20 6 9 17 4 12" />
+                      </svg>
+                      Verified Creator Store
+                    </div>
+
                     <div class="brand-accent-code-pill" id="dash-live-hex-badge">
                       #6366F1 • Primary Accent
                     </div>
                   </div>
                 </div>
 
-                <!-- LIVE INTERACTIVE BUTTON PREVIEWS -->
                 <div class="brand-prev-body">
                   <div class="brand-section-label">LIVE BUTTON & ACCENT PREVIEW</div>
-                  
+
                   <div class="brand-preview-actions">
-                    <button class="btn-brand-demo-primary" id="dash-purchases-btn" style="background-color: #6366F1; border-color: #6366F1;">
+                    <button class="btn-brand-demo-primary" id="dash-purchases-btn"
+                      style="background-color: #6366F1; border-color: #6366F1;">
                       Purchases & Instant Access
                     </button>
-                    
-                    <div class="brand-checkout-sample-pill" id="dash-sample-checkout-pill" style="border-color: #6366F1; color: #6366F1;">
-                      <span>⚡ Instant Checkout</span>
+
+                    <div class="brand-checkout-sample-pill" id="dash-sample-checkout-pill"
+                      style="border-color: #6366F1; color: #6366F1;">
+                      <span style="display: flex; align-items: center; gap: 4px;">
+                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                          stroke-width="2.5">
+                          <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2" />
+                        </svg>
+                        Instant Checkout
+                      </span>
                       <strong>$19.99</strong>
                     </div>
                   </div>
 
                   <div class="brand-preview-footer-note">
-                    ✨ Your customer checkout screens, invoices, and email receipts update automatically with this theme color.
+                    Your customer checkout screens, invoices, and email receipts update automatically with this theme
+                    color.
                   </div>
                 </div>
               </div>
@@ -1264,11 +1713,11 @@
 
         <!-- TAB CONTENT 3: DETAILED ANALYTICS -->
         <div id="store-tab-detailed-analytics" class="store-tab-content">
-          <!-- TIME RANGE PICKER & REFRESH BAR -->
           <div class="analytics-filter-header">
             <div>
               <h2 class="analytics-sec-title">Store Traffic & Conversions Analytics</h2>
-              <p class="analytics-sec-sub">Track visitors, product link clicks, CTR, geographic location, and device types.</p>
+              <p class="analytics-sec-sub">Track visitors, product link clicks, CTR, geographic location, and device
+                types.</p>
             </div>
             <div class="time-range-picker">
               <button class="time-range-btn active" data-store-range="7 Days">Last 7 Days</button>
@@ -1278,7 +1727,6 @@
             </div>
           </div>
 
-          <!-- 4 SUMMARY METRICS CARDS -->
           <div class="store-stats-grid">
             <div class="store-stat-card analytics-shaded-card">
               <div class="stat-top-row">
@@ -1326,7 +1774,6 @@
               </div>
             </div>
 
-            <!-- Presentation Only Watermark Banner -->
             <div class="example-data-watermark">
               <div class="watermark-bold">This is example Data</div>
               <div class="watermark-sub">No activity in selected time range.</div>
@@ -1353,7 +1800,6 @@
               </div>
             </div>
 
-            <!-- Presentation Watermark -->
             <div class="example-data-watermark">
               <div class="watermark-bold">This is example Data</div>
               <div class="watermark-sub">No activity in selected time range.</div>
@@ -1361,10 +1807,9 @@
 
             <div class="geo-analytics-box" id="geo-analytics-container">
               <div class="geo-map-visual">
-                <!-- SVG World Map Graphic -->
                 <svg viewBox="0 0 800 350" style="width: 100%; height: 200px; opacity: 0.85;">
-                  <path d="M150 150 Q 200 100 250 160 T 350 200 T 450 150 T 600 220" stroke="#cbd5e1" stroke-width="2" fill="none" stroke-dasharray="4 4" />
-                  <!-- Pin circles for top countries -->
+                  <path d="M150 150 Q 200 100 250 160 T 350 200 T 450 150 T 600 220" stroke="#cbd5e1" stroke-width="2"
+                    fill="none" stroke-dasharray="4 4" />
                   <circle cx="210" cy="140" r="8" fill="#6366f1" opacity="0.8" />
                   <circle cx="210" cy="140" r="16" fill="#6366f1" opacity="0.2" />
                   <circle cx="560" cy="190" r="7" fill="#10b981" opacity="0.8" />
@@ -1376,7 +1821,7 @@
 
               <div class="geo-country-list">
                 <div class="country-row">
-                  <span class="c-flag">🇺🇸</span>
+                  <span class="country-code-pill">US</span>
                   <span class="c-name">United States</span>
                   <div class="c-bar-bg">
                     <div class="c-bar-fill" style="width: 42%; background: #6366f1;"></div>
@@ -1384,7 +1829,7 @@
                   <span class="c-val">520 Views (42%)</span>
                 </div>
                 <div class="country-row">
-                  <span class="c-flag">🇮🇳</span>
+                  <span class="country-code-pill">IN</span>
                   <span class="c-name">India</span>
                   <div class="c-bar-bg">
                     <div class="c-bar-fill" style="width: 28%; background: #10b981;"></div>
@@ -1392,7 +1837,7 @@
                   <span class="c-val">347 Views (28%)</span>
                 </div>
                 <div class="country-row">
-                  <span class="c-flag">🇬🇧</span>
+                  <span class="country-code-pill">GB</span>
                   <span class="c-name">United Kingdom</span>
                   <div class="c-bar-bg">
                     <div class="c-bar-fill" style="width: 14%; background: #f59e0b;"></div>
@@ -1400,7 +1845,7 @@
                   <span class="c-val">173 Views (14%)</span>
                 </div>
                 <div class="country-row">
-                  <span class="c-flag">🇩🇪</span>
+                  <span class="country-code-pill">DE</span>
                   <span class="c-name">Germany</span>
                   <div class="c-bar-bg">
                     <div class="c-bar-fill" style="width: 9%; background: #ec4899;"></div>
@@ -1408,7 +1853,7 @@
                   <span class="c-val">111 Views (9%)</span>
                 </div>
                 <div class="country-row">
-                  <span class="c-flag">🌐</span>
+                  <span class="country-code-pill">WW</span>
                   <span class="c-name">Others</span>
                   <div class="c-bar-bg">
                     <div class="c-bar-fill" style="width: 7%; background: #94a3b8;"></div>
@@ -1419,13 +1864,12 @@
             </div>
           </div>
 
-          <!-- TOP PERFORMING HIGHLIGHTS & REFERRERS / DEVICES GRID -->
+          <!-- TOP REFERRERS & DEVICES -->
           <div class="two-card-grid" style="margin-top: 20px;">
-            <!-- TOP REFERRERS DONUT -->
             <div class="form-card analytics-shaded-card rel-card-box">
               <h3 class="chart-box-title">Top Traffic Referrers</h3>
               <div class="chart-box-sub">Where visitor traffic is originating from.</div>
-              
+
               <div class="example-data-watermark">
                 <div class="watermark-bold">This is example Data</div>
                 <div class="watermark-sub">No activity in selected time range.</div>
@@ -1435,26 +1879,32 @@
                 <div class="donut-svg-wrapper">
                   <svg viewBox="0 0 100 100" style="width: 130px; height: 130px;">
                     <circle cx="50" cy="50" r="38" stroke="#e2e8f0" stroke-width="14" fill="none" />
-                    <circle cx="50" cy="50" r="38" stroke="#6366f1" stroke-width="14" fill="none" stroke-dasharray="130 240" stroke-dashoffset="0" />
-                    <circle cx="50" cy="50" r="38" stroke="#10b981" stroke-width="14" fill="none" stroke-dasharray="60 240" stroke-dashoffset="-130" />
-                    <circle cx="50" cy="50" r="38" stroke="#f59e0b" stroke-width="14" fill="none" stroke-dasharray="40 240" stroke-dashoffset="-190" />
+                    <circle cx="50" cy="50" r="38" stroke="#6366f1" stroke-width="14" fill="none"
+                      stroke-dasharray="130 240" stroke-dashoffset="0" />
+                    <circle cx="50" cy="50" r="38" stroke="#10b981" stroke-width="14" fill="none"
+                      stroke-dasharray="60 240" stroke-dashoffset="-130" />
+                    <circle cx="50" cy="50" r="38" stroke="#f59e0b" stroke-width="14" fill="none"
+                      stroke-dasharray="40 240" stroke-dashoffset="-190" />
                   </svg>
                   <div class="donut-center-text">Traffic</div>
                 </div>
                 <div class="donut-legend-list">
-                  <div class="d-leg-item"><span class="d-dot" style="background: #6366f1;"></span> Instagram DM Automation (52%)</div>
-                  <div class="d-leg-item"><span class="d-dot" style="background: #10b981;"></span> Organic Instagram Bio (25%)</div>
-                  <div class="d-leg-item"><span class="d-dot" style="background: #f59e0b;"></span> Twitter/X & YouTube (15%)</div>
-                  <div class="d-leg-item"><span class="d-dot" style="background: #e2e8f0;"></span> Direct & Web (8%)</div>
+                  <div class="d-leg-item"><span class="d-dot" style="background: #6366f1;"></span> Instagram DM
+                    Automation (52%)</div>
+                  <div class="d-leg-item"><span class="d-dot" style="background: #10b981;"></span> Organic Instagram Bio
+                    (25%)</div>
+                  <div class="d-leg-item"><span class="d-dot" style="background: #f59e0b;"></span> Twitter/X & YouTube
+                    (15%)</div>
+                  <div class="d-leg-item"><span class="d-dot" style="background: #e2e8f0;"></span> Direct & Web (8%)
+                  </div>
                 </div>
               </div>
             </div>
 
-            <!-- TOP DEVICES DONUT -->
             <div class="form-card analytics-shaded-card rel-card-box">
               <h3 class="chart-box-title">Top Devices</h3>
               <div class="chart-box-sub">Breakdown of smartphones vs desktops vs tablets.</div>
-              
+
               <div class="example-data-watermark">
                 <div class="watermark-bold">This is example Data</div>
                 <div class="watermark-sub">No activity in selected time range.</div>
@@ -1464,26 +1914,32 @@
                 <div class="donut-svg-wrapper">
                   <svg viewBox="0 0 100 100" style="width: 130px; height: 130px;">
                     <circle cx="50" cy="50" r="38" stroke="#e2e8f0" stroke-width="14" fill="none" />
-                    <circle cx="50" cy="50" r="38" stroke="#ec4899" stroke-width="14" fill="none" stroke-dasharray="185 240" stroke-dashoffset="0" />
-                    <circle cx="50" cy="50" r="38" stroke="#3b82f6" stroke-width="14" fill="none" stroke-dasharray="45 240" stroke-dashoffset="-185" />
-                    <circle cx="50" cy="50" r="38" stroke="#8b5cf6" stroke-width="14" fill="none" stroke-dasharray="10 240" stroke-dashoffset="-230" />
+                    <circle cx="50" cy="50" r="38" stroke="#ec4899" stroke-width="14" fill="none"
+                      stroke-dasharray="185 240" stroke-dashoffset="0" />
+                    <circle cx="50" cy="50" r="38" stroke="#3b82f6" stroke-width="14" fill="none"
+                      stroke-dasharray="45 240" stroke-dashoffset="-185" />
+                    <circle cx="50" cy="50" r="38" stroke="#8b5cf6" stroke-width="14" fill="none"
+                      stroke-dasharray="10 240" stroke-dashoffset="-230" />
                   </svg>
                   <div class="donut-center-text">Devices</div>
                 </div>
                 <div class="donut-legend-list">
-                  <div class="d-leg-item"><span class="d-dot" style="background: #ec4899;"></span> Mobile Smartphones (78%)</div>
-                  <div class="d-leg-item"><span class="d-dot" style="background: #3b82f6;"></span> Desktop Browsers (18%)</div>
-                  <div class="d-leg-item"><span class="d-dot" style="background: #8b5cf6;"></span> Tablets & iPad (4%)</div>
+                  <div class="d-leg-item"><span class="d-dot" style="background: #ec4899;"></span> Mobile Smartphones
+                    (78%)</div>
+                  <div class="d-leg-item"><span class="d-dot" style="background: #3b82f6;"></span> Desktop Browsers
+                    (18%)</div>
+                  <div class="d-leg-item"><span class="d-dot" style="background: #8b5cf6;"></span> Tablets & iPad (4%)
+                  </div>
                 </div>
               </div>
             </div>
           </div>
 
-          <!-- SOCIAL CONNECTS PERFORMANCE TABLE -->
+          <!-- SOCIAL CONNECTS TABLE -->
           <div class="form-card analytics-shaded-card rel-card-box" style="margin-top: 20px;">
             <h3 class="chart-box-title">Social Connects Analytics</h3>
             <div class="chart-box-sub">Performance metrics for connected social platforms on your store profile.</div>
-            
+
             <div class="example-data-watermark">
               <div class="watermark-bold">This is example Data</div>
               <div class="watermark-sub">No activity in selected time range.</div>
@@ -1500,25 +1956,59 @@
               </thead>
               <tbody>
                 <tr>
-                  <td><span class="soc-icon insta">📷</span> Instagram (@render6457)</td>
+                  <td>
+                    <span class="soc-icon insta">
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                        stroke-width="2">
+                        <rect x="2" y="2" width="20" height="20" rx="5" ry="5" />
+                        <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" />
+                        <line x1="17.5" y1="6.5" x2="17.51" y2="6.5" />
+                      </svg>
+                    </span>
+                    Instagram (@render6457)
+                  </td>
                   <td>1,120 Views</td>
                   <td>410 Clicks</td>
                   <td><span class="tag-badge green">36.6% CTR</span></td>
                 </tr>
                 <tr>
-                  <td><span class="soc-icon fb">📘</span> Facebook Page</td>
+                  <td>
+                    <span class="soc-icon fb">
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z" />
+                      </svg>
+                    </span>
+                    Facebook Page
+                  </td>
                   <td>340 Views</td>
                   <td>98 Clicks</td>
                   <td><span class="tag-badge blue">28.8% CTR</span></td>
                 </tr>
                 <tr>
-                  <td><span class="soc-icon mail">✉️</span> Email Direct Contact</td>
+                  <td>
+                    <span class="soc-icon mail">
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                        stroke-width="2">
+                        <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" />
+                        <polyline points="22,6 12,13 2,6" />
+                      </svg>
+                    </span>
+                    Email Direct Contact
+                  </td>
                   <td>190 Views</td>
                   <td>45 Clicks</td>
                   <td><span class="tag-badge purple">23.6% CTR</span></td>
                 </tr>
                 <tr>
-                  <td><span class="soc-icon twitter">𝕏</span> Twitter / X Profile</td>
+                  <td>
+                    <span class="soc-icon twitter">
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+                        <path
+                          d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
+                      </svg>
+                    </span>
+                    Twitter / X Profile
+                  </td>
                   <td>110 Views</td>
                   <td>28 Clicks</td>
                   <td><span class="tag-badge amber">25.4% CTR</span></td>
@@ -1664,14 +2154,14 @@
                 </div>
                 <div class="form-group">
                   <label class="form-label">Custom Payment QR Code Image</label>
-                  <button class="btn btn-outline btn-block" id="btn-upload-qr">📤 Upload Custom QR Image</button>
+                  <button class="btn btn-outline btn-block" id="btn-upload-qr">Upload Custom QR Image</button>
                 </div>
               </div>
             </div>
 
           </div>
 
-          <!-- CHECKOUT SETTINGS & AUTOMATION -->
+          <!-- CHECKOUT SETTINGS -->
           <div class="form-card" style="margin-top: 20px;">
             <h2 class="form-card-title">Instant Checkout & Automation Rules</h2>
 
@@ -1711,7 +2201,7 @@
                   Infrastructure.
                 </div>
                 <div style="font-size: 12px; color: #64748b; margin-top: 8px;">
-                  Platform URL: <a href="https://renderreply.com" target="_blank"
+                  Platform URL: <a href="https://renderreply.com" target="_blank" rel="noopener"
                     style="color: #6366f1; text-decoration: none; font-weight: 700;">https://renderreply.com</a> •
                   Handle: @render6457
                 </div>
@@ -1725,34 +2215,49 @@
         <div id="store-tab-learn-help" class="store-tab-content">
           <div class="learn-help-header">
             <div>
-              <h2 class="learn-sec-title">🎓 Learn & Help Center</h2>
-              <p class="learn-sec-sub">Watch step-by-step video tutorials and get direct email support to get the most out of your store.</p>
+              <h2 class="learn-sec-title">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                  style="margin-right: 6px;">
+                  <path d="M12 14l9-5-9-5-9 5 9 5z" />
+                  <path d="M12 14v7" />
+                  <path d="M5.5 11.5v4.5a6.5 6.5 0 0 0 13 0v-4.5" />
+                </svg>
+                Learn & Help Center
+              </h2>
+              <p class="learn-sec-sub">Watch step-by-step video tutorials and get direct email support to get the most
+                out of your store.</p>
             </div>
             <a href="mailto:support@renderreply.com" class="btn btn-primary btn-pill">
-              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
-                <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
-                <polyline points="22,6 12,13 2,6"/>
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"
+                style="margin-right: 4px;">
+                <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" />
+                <polyline points="22,6 12,13 2,6" />
               </svg>
               Contact Support Email
             </a>
           </div>
 
-          <!-- 4 VIDEO SUPPORT CARDS NAMED AFTER NAV BAR FEATURES -->
           <div class="video-tutorials-grid">
-            
+
             <!-- Video 1: Dashboard -->
             <div class="video-support-card" data-video-src="https://www.youtube.com/embed/dQw4w9WgXcQ">
               <div class="video-thumb-container">
-                <img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=600&q=80" alt="Dashboard Tutorial">
+                <img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=600&q=80"
+                  alt="Dashboard Tutorial">
                 <div class="video-play-overlay">
-                  <div class="video-play-btn">▶</div>
+                  <div class="video-play-btn">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                      <polygon points="5 3 19 12 5 21 5 3" />
+                    </svg>
+                  </div>
                 </div>
                 <span class="video-duration-badge">3m 45s</span>
                 <span class="video-feature-tag">Dashboard</span>
               </div>
               <div class="video-card-body">
                 <h3 class="video-card-title">Dashboard & Analytics Masterclass</h3>
-                <p class="video-card-sub">Learn how to track real-time visitors, conversion rates, and CTR analytics for your store.</p>
+                <p class="video-card-sub">Learn how to track real-time visitors, conversion rates, and CTR analytics for
+                  your store.</p>
                 <div class="video-card-footer">
                   <button class="btn btn-outline btn-sm btn-watch-video">Watch Tutorial (3m)</button>
                   <span class="video-views-meta">1.4k views</span>
@@ -1763,16 +2268,22 @@
             <!-- Video 2: Live Inbox -->
             <div class="video-support-card" data-video-src="https://www.youtube.com/embed/dQw4w9WgXcQ">
               <div class="video-thumb-container">
-                <img src="https://images.unsplash.com/photo-1534536281715-e28d76689b4d?auto=format&fit=crop&w=600&q=80" alt="Live Inbox Tutorial">
+                <img src="https://images.unsplash.com/photo-1534536281715-e28d76689b4d?auto=format&fit=crop&w=600&q=80"
+                  alt="Live Inbox Tutorial">
                 <div class="video-play-overlay">
-                  <div class="video-play-btn">▶</div>
+                  <div class="video-play-btn">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                      <polygon points="5 3 19 12 5 21 5 3" />
+                    </svg>
+                  </div>
                 </div>
                 <span class="video-duration-badge">4m 12s</span>
                 <span class="video-feature-tag">Live Inbox</span>
               </div>
               <div class="video-card-body">
                 <h3 class="video-card-title">Live Inbox & DM Automation Setup</h3>
-                <p class="video-card-sub">Set up keyword triggers, automated DM replies, and manage customer conversations in real-time.</p>
+                <p class="video-card-sub">Set up keyword triggers, automated DM replies, and manage customer
+                  conversations in real-time.</p>
                 <div class="video-card-footer">
                   <button class="btn btn-outline btn-sm btn-watch-video">Watch Tutorial (4m)</button>
                   <span class="video-views-meta">2.8k views</span>
@@ -1783,16 +2294,22 @@
             <!-- Video 3: Bio Link Page -->
             <div class="video-support-card" data-video-src="https://www.youtube.com/embed/dQw4w9WgXcQ">
               <div class="video-thumb-container">
-                <img src="https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=600&q=80" alt="Bio Link Tutorial">
+                <img src="https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=600&q=80"
+                  alt="Bio Link Tutorial">
                 <div class="video-play-overlay">
-                  <div class="video-play-btn">▶</div>
+                  <div class="video-play-btn">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                      <polygon points="5 3 19 12 5 21 5 3" />
+                    </svg>
+                  </div>
                 </div>
                 <span class="video-duration-badge">2m 50s</span>
                 <span class="video-feature-tag">Bio Link Page</span>
               </div>
               <div class="video-card-body">
                 <h3 class="video-card-title">Bio Link Page Setup & Customization</h3>
-                <p class="video-card-sub">Customize mobile layouts, header banners, brand colors, and add direct social media links.</p>
+                <p class="video-card-sub">Customize mobile layouts, header banners, brand colors, and add direct social
+                  media links.</p>
                 <div class="video-card-footer">
                   <button class="btn btn-outline btn-sm btn-watch-video">Watch Tutorial (2m)</button>
                   <span class="video-views-meta">3.1k views</span>
@@ -1803,16 +2320,22 @@
             <!-- Video 4: Creator Storefront -->
             <div class="video-support-card" data-video-src="https://www.youtube.com/embed/dQw4w9WgXcQ">
               <div class="video-thumb-container">
-                <img src="https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=600&q=80" alt="Creator Storefront Tutorial">
+                <img src="https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=600&q=80"
+                  alt="Creator Storefront Tutorial">
                 <div class="video-play-overlay">
-                  <div class="video-play-btn">▶</div>
+                  <div class="video-play-btn">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                      <polygon points="5 3 19 12 5 21 5 3" />
+                    </svg>
+                  </div>
                 </div>
                 <span class="video-duration-badge">5m 10s</span>
                 <span class="video-feature-tag">Creator Storefront</span>
               </div>
               <div class="video-card-body">
                 <h3 class="video-card-title">Creator Storefront & Digital Products</h3>
-                <p class="video-card-sub">Publish digital ebooks, 1-on-1 strategy sessions, and configure automatic payment collection.</p>
+                <p class="video-card-sub">Publish digital ebooks, 1-on-1 strategy sessions, and configure automatic
+                  payment collection.</p>
                 <div class="video-card-footer">
                   <button class="btn btn-outline btn-sm btn-watch-video">Watch Tutorial (5m)</button>
                   <span class="video-views-meta">4.5k views</span>
@@ -1822,40 +2345,66 @@
 
           </div>
 
-          <!-- BOTTOM SUPPORT & HELP CONTACT INFO CARD -->
           <div class="form-card help-contact-card" style="margin-top: 24px;">
             <div class="help-contact-inner">
               <div class="help-contact-icon">
                 <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                  <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
-                  <polyline points="22,6 12,13 2,6"/>
+                  <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" />
+                  <polyline points="22,6 12,13 2,6" />
                 </svg>
               </div>
               <div class="help-contact-content">
                 <h3 class="help-contact-title">Need Extra Help or Custom Support?</h3>
-                <p class="help-contact-desc">Our dedicated technical support team is here to help you set up your store, troubleshoot DM rules, or integrate custom domains.</p>
-                
+                <p class="help-contact-desc">Our dedicated technical support team is here to help you set up your store,
+                  troubleshoot DM rules, or integrate custom domains.</p>
+
                 <div class="help-contact-badges">
                   <div class="help-badge-item">
-                    <span class="hb-icon">✉️</span>
+                    <span class="hb-icon">
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                        stroke-width="2">
+                        <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" />
+                        <polyline points="22,6 12,13 2,6" />
+                      </svg>
+                    </span>
                     <span class="hb-text">Support Email: <strong>support@renderreply.com</strong></span>
                   </div>
                   <div class="help-badge-item">
-                    <span class="hb-icon">⚡</span>
+                    <span class="hb-icon">
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                        stroke-width="2">
+                        <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2" />
+                      </svg>
+                    </span>
                     <span class="hb-text">Avg Response Time: <strong>&lt; 15 minutes</strong></span>
                   </div>
                   <div class="help-badge-item">
-                    <span class="hb-icon">💬</span>
+                    <span class="hb-icon">
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                        stroke-width="2">
+                        <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
+                      </svg>
+                    </span>
                     <span class="hb-text">24/7 Priority Desk</span>
                   </div>
                 </div>
 
                 <div class="help-contact-actions">
                   <a href="mailto:support@renderreply.com" class="btn btn-primary btn-pill">
-                    ✉ Send Email to support@renderreply.com
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                      style="margin-right: 4px;">
+                      <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" />
+                      <polyline points="22,6 12,13 2,6" />
+                    </svg>
+                    Send Email to support@renderreply.com
                   </a>
                   <button class="btn btn-outline btn-pill" id="btn-copy-support-email">
-                    📋 Copy Email Address
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                      style="margin-right: 4px;">
+                      <rect x="9" y="9" width="13" height="13" rx="2" ry="2" />
+                      <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" />
+                    </svg>
+                    Copy Email Address
                   </button>
                 </div>
               </div>
@@ -1873,16 +2422,33 @@
           </div>
           <div class="header-actions">
             <button class="btn btn-refresh">Refresh</button>
-            <button class="btn btn-pill" id="btn-sync-sheets">🟢 Google Sheets Connected</button>
-            <button class="btn btn-pill" id="btn-export-csv">↓ Export CSV</button>
+            <button class="btn btn-pill" id="btn-sync-sheets">
+              <span class="dot-green"
+                style="display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: #10b981; margin-right: 6px;"></span>
+              Google Sheets Connected
+            </button>
+            <button class="btn btn-pill" id="btn-export-csv">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                style="margin-right: 4px;">
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                <polyline points="7 10 12 15 17 10" />
+                <line x1="12" y1="15" x2="12" y2="3" />
+              </svg>
+              Export CSV
+            </button>
           </div>
         </header>
 
         <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-bottom: 24px;">
           <div class="stat-card" style="border-left: 4px solid #10b981;">
             <div class="stat-label">Google Sheets Sync</div>
-            <div style="font-size: 14px; font-weight: 800; color: var(--color-green-text); margin-top: 4px;">✓ Live
-              Auto-Sync Active</div>
+            <div
+              style="font-size: 14px; font-weight: 800; color: var(--color-green-text); margin-top: 4px; display: flex; align-items: center; gap: 4px;">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
+                <polyline points="20 6 9 17 4 12" />
+              </svg>
+              Live Auto-Sync Active
+            </div>
           </div>
           <div class="stat-card" style="border-left: 4px solid #3b82f6;">
             <div class="stat-label">Zapier / Webhooks</div>
@@ -1895,7 +2461,6 @@
           </div>
         </div>
 
-        <!-- RECENT ACTIVITY LIST -->
         <div class="form-card" style="margin-bottom: 24px;">
           <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px;">
             <h2 class="form-card-title">Recent Captured Leads</h2>
@@ -1903,10 +2468,10 @@
           </div>
 
           <div style="display: flex; flex-direction: column; gap: 10px;" id="leads-list-container">
-            <!-- Lead 1 -->
             <div class="rule-item-card" style="border-left: 4px solid #6366f1;">
               <div class="rule-title-group">
-                <span class="rule-trigger-word" style="background: rgba(99, 102, 241, 0.1); color: #6366f1;">@alex_creator</span>
+                <span class="rule-trigger-word"
+                  style="background: rgba(99, 102, 241, 0.1); color: #6366f1;">@alex_creator</span>
                 <span class="rule-desc-text">Alex Rivera • alex.rivera@example.com</span>
               </div>
               <div class="rule-meta">
@@ -1914,10 +2479,10 @@
                 <span style="font-size: 11px; color: var(--text-secondary);">2 mins ago</span>
               </div>
             </div>
-            <!-- Lead 2 -->
             <div class="rule-item-card" style="border-left: 4px solid #10b981;">
               <div class="rule-title-group">
-                <span class="rule-trigger-word" style="background: rgba(16, 185, 129, 0.1); color: #10b981;">@dev_sarah</span>
+                <span class="rule-trigger-word"
+                  style="background: rgba(16, 185, 129, 0.1); color: #10b981;">@dev_sarah</span>
                 <span class="rule-desc-text">Sarah Chen • sarah.dev@techlabs.io</span>
               </div>
               <div class="rule-meta">
@@ -1925,10 +2490,10 @@
                 <span style="font-size: 11px; color: var(--text-secondary);">14 mins ago</span>
               </div>
             </div>
-            <!-- Lead 3 -->
             <div class="rule-item-card" style="border-left: 4px solid #f59e0b;">
               <div class="rule-title-group">
-                <span class="rule-trigger-word" style="background: rgba(245, 158, 11, 0.1); color: #f59e0b;">@marcus_fit</span>
+                <span class="rule-trigger-word"
+                  style="background: rgba(245, 158, 11, 0.1); color: #f59e0b;">@marcus_fit</span>
                 <span class="rule-desc-text">Marcus Vance • marcus@fitgrowth.com</span>
               </div>
               <div class="rule-meta">
@@ -1968,13 +2533,25 @@
               </div>
 
               <div class="rule-action-badges" style="margin-bottom: 12px;">
-                <span class="rule-badge">✉ DM</span>
+                <span class="rule-badge">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" />
+                    <polyline points="22,6 12,13 2,6" />
+                  </svg>
+                  DM
+                </span>
               </div>
 
               <div style="font-size: 13px; font-weight: 800; color: var(--text-primary);">
                 0 leads
               </div>
-              <button class="rule-more-btn">⋮</button>
+              <button class="rule-more-btn" aria-label="Rule options">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                  <circle cx="12" cy="5" r="1" />
+                  <circle cx="12" cy="12" r="1" />
+                  <circle cx="12" cy="19" r="1" />
+                </svg>
+              </button>
             </div>
           </div>
         </div>
@@ -1987,7 +2564,14 @@
           </svg>
           <input type="text" class="search-input" id="search-leads-input"
             placeholder="Search leads by name, email, phone, campaign...">
-          <button style="background: transparent; border: none; cursor: pointer; color: var(--text-muted);">⋮</button>
+          <button style="background: transparent; border: none; cursor: pointer; color: var(--text-muted);"
+            aria-label="Filters">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+              <circle cx="12" cy="5" r="1" />
+              <circle cx="12" cy="12" r="1" />
+              <circle cx="12" cy="19" r="1" />
+            </svg>
+          </button>
         </div>
 
         <!-- EMPTY STATE -->
@@ -2006,27 +2590,49 @@
       <section id="learn-help-view" class="tab-view">
         <header class="view-header">
           <div class="header-title-group">
-            <h1 class="view-title">🎓 Learn & Help Center</h1>
-            <p class="view-subtitle">Watch video tutorials for all main features and contact priority support anytime.</p>
+            <h1 class="view-title">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                style="margin-right: 6px;">
+                <path d="M12 14l9-5-9-5-9 5 9 5z" />
+                <path d="M12 14v7" />
+                <path d="M5.5 11.5v4.5a6.5 6.5 0 0 0 13 0v-4.5" />
+              </svg>
+              Learn & Help Center
+            </h1>
+            <p class="view-subtitle">Watch video tutorials for all main features and contact priority support anytime.
+            </p>
           </div>
           <div class="header-actions">
-            <a href="mailto:support@renderreply.com" class="btn btn-primary btn-pill">✉ Contact Email Support</a>
+            <a href="mailto:support@renderreply.com" class="btn btn-primary btn-pill">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                style="margin-right: 4px;">
+                <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" />
+                <polyline points="22,6 12,13 2,6" />
+              </svg>
+              Contact Email Support
+            </a>
           </div>
         </header>
 
-        <!-- 4 VIDEO CARDS -->
         <div class="video-tutorials-grid">
-          
           <div class="video-support-card">
             <div class="video-thumb-container">
-              <img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=600&q=80" alt="Dashboard Tutorial">
-              <div class="video-play-overlay"><div class="video-play-btn">▶</div></div>
+              <img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=600&q=80"
+                alt="Dashboard Tutorial">
+              <div class="video-play-overlay">
+                <div class="video-play-btn">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                    <polygon points="5 3 19 12 5 21 5 3" />
+                  </svg>
+                </div>
+              </div>
               <span class="video-duration-badge">3m 45s</span>
               <span class="video-feature-tag">Dashboard</span>
             </div>
             <div class="video-card-body">
               <h3 class="video-card-title">Dashboard & Analytics Masterclass</h3>
-              <p class="video-card-sub">Learn how to track real-time visitors, conversion rates, and CTR analytics for your store.</p>
+              <p class="video-card-sub">Learn how to track real-time visitors, conversion rates, and CTR analytics for
+                your store.</p>
               <div class="video-card-footer">
                 <button class="btn btn-outline btn-sm btn-watch-video">Watch Tutorial (3m)</button>
                 <span class="video-views-meta">1.4k views</span>
@@ -2036,14 +2642,22 @@
 
           <div class="video-support-card">
             <div class="video-thumb-container">
-              <img src="https://images.unsplash.com/photo-1534536281715-e28d76689b4d?auto=format&fit=crop&w=600&q=80" alt="Live Inbox Tutorial">
-              <div class="video-play-overlay"><div class="video-play-btn">▶</div></div>
+              <img src="https://images.unsplash.com/photo-1534536281715-e28d76689b4d?auto=format&fit=crop&w=600&q=80"
+                alt="Live Inbox Tutorial">
+              <div class="video-play-overlay">
+                <div class="video-play-btn">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                    <polygon points="5 3 19 12 5 21 5 3" />
+                  </svg>
+                </div>
+              </div>
               <span class="video-duration-badge">4m 12s</span>
               <span class="video-feature-tag">Live Inbox</span>
             </div>
             <div class="video-card-body">
               <h3 class="video-card-title">Live Inbox & DM Automation Setup</h3>
-              <p class="video-card-sub">Set up keyword triggers, automated DM replies, and manage customer conversations in real-time.</p>
+              <p class="video-card-sub">Set up keyword triggers, automated DM replies, and manage customer conversations
+                in real-time.</p>
               <div class="video-card-footer">
                 <button class="btn btn-outline btn-sm btn-watch-video">Watch Tutorial (4m)</button>
                 <span class="video-views-meta">2.8k views</span>
@@ -2053,14 +2667,22 @@
 
           <div class="video-support-card">
             <div class="video-thumb-container">
-              <img src="https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=600&q=80" alt="Bio Link Tutorial">
-              <div class="video-play-overlay"><div class="video-play-btn">▶</div></div>
+              <img src="https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=600&q=80"
+                alt="Bio Link Tutorial">
+              <div class="video-play-overlay">
+                <div class="video-play-btn">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                    <polygon points="5 3 19 12 5 21 5 3" />
+                  </svg>
+                </div>
+              </div>
               <span class="video-duration-badge">2m 50s</span>
               <span class="video-feature-tag">Bio Link Page</span>
             </div>
             <div class="video-card-body">
               <h3 class="video-card-title">Bio Link Page Setup & Customization</h3>
-              <p class="video-card-sub">Customize mobile layouts, header banners, brand colors, and add direct social media links.</p>
+              <p class="video-card-sub">Customize mobile layouts, header banners, brand colors, and add direct social
+                media links.</p>
               <div class="video-card-footer">
                 <button class="btn btn-outline btn-sm btn-watch-video">Watch Tutorial (2m)</button>
                 <span class="video-views-meta">3.1k views</span>
@@ -2070,57 +2692,87 @@
 
           <div class="video-support-card">
             <div class="video-thumb-container">
-              <img src="https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=600&q=80" alt="Creator Storefront Tutorial">
-              <div class="video-play-overlay"><div class="video-play-btn">▶</div></div>
+              <img src="https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=600&q=80"
+                alt="Creator Storefront Tutorial">
+              <div class="video-play-overlay">
+                <div class="video-play-btn">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                    <polygon points="5 3 19 12 5 21 5 3" />
+                  </svg>
+                </div>
+              </div>
               <span class="video-duration-badge">5m 10s</span>
               <span class="video-feature-tag">Creator Storefront</span>
             </div>
             <div class="video-card-body">
               <h3 class="video-card-title">Creator Storefront & Digital Products</h3>
-              <p class="video-card-sub">Publish digital ebooks, 1-on-1 strategy sessions, and configure automatic payment collection.</p>
+              <p class="video-card-sub">Publish digital ebooks, 1-on-1 strategy sessions, and configure automatic
+                payment collection.</p>
               <div class="video-card-footer">
                 <button class="btn btn-outline btn-sm btn-watch-video">Watch Tutorial (5m)</button>
                 <span class="video-views-meta">4.5k views</span>
               </div>
             </div>
           </div>
-
         </div>
 
-        <!-- SUPPORT CONTACT CARD AT BOTTOM -->
         <div class="form-card help-contact-card" style="margin-top: 24px;">
           <div class="help-contact-inner">
             <div class="help-contact-icon">
               <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
-                <polyline points="22,6 12,13 2,6"/>
+                <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" />
+                <polyline points="22,6 12,13 2,6" />
               </svg>
             </div>
             <div class="help-contact-content">
               <h3 class="help-contact-title">Need Technical Support or Store Integration Help?</h3>
-              <p class="help-contact-desc">Reach out directly to our engineering & support team for assistance with store customization or API tokens.</p>
-              
+              <p class="help-contact-desc">Reach out directly to our engineering & support team for assistance with
+                store customization or API tokens.</p>
+
               <div class="help-contact-badges">
                 <div class="help-badge-item">
-                  <span class="hb-icon">✉️</span>
+                  <span class="hb-icon">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" />
+                      <polyline points="22,6 12,13 2,6" />
+                    </svg>
+                  </span>
                   <span class="hb-text">Support Email: <strong>support@renderreply.com</strong></span>
                 </div>
                 <div class="help-badge-item">
-                  <span class="hb-icon">⚡</span>
+                  <span class="hb-icon">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2" />
+                    </svg>
+                  </span>
                   <span class="hb-text">Avg Response Time: <strong>&lt; 15 minutes</strong></span>
                 </div>
                 <div class="help-badge-item">
-                  <span class="hb-icon">💬</span>
+                  <span class="hb-icon">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
+                    </svg>
+                  </span>
                   <span class="hb-text">24/7 Priority Support Desk</span>
                 </div>
               </div>
 
               <div class="help-contact-actions">
                 <a href="mailto:support@renderreply.com" class="btn btn-primary btn-pill">
-                  ✉ Send Email to support@renderreply.com
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                    style="margin-right: 4px;">
+                    <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" />
+                    <polyline points="22,6 12,13 2,6" />
+                  </svg>
+                  Send Email to support@renderreply.com
                 </a>
                 <button class="btn btn-outline btn-pill btn-copy-support-email-gen">
-                  📋 Copy Email Address
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                    style="margin-right: 4px;">
+                    <rect x="9" y="9" width="13" height="13" rx="2" ry="2" />
+                    <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" />
+                  </svg>
+                  Copy Email Address
                 </button>
               </div>
             </div>
@@ -2131,7 +2783,7 @@
     </main>
   </div>
 
-  <!-- FULL REAL BROWSER TAB OVERLAY (CREATOR DIGITAL STOREFRONT) -->
+  <!-- FULL REAL BROWSER TAB OVERLAY -->
   <div class="browser-tab-overlay" id="browser-storefront-overlay">
     <div class="browser-nav-bar">
       <div class="browser-controls">
@@ -2141,159 +2793,118 @@
       </div>
 
       <div class="browser-address-bar">
-        <span style="color: #10b981;">🔒</span> https://store.renderreply.com/render6457
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="2.2"
+          style="margin-right: 4px;">
+          <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
+          <path d="M7 11V7a5 5 0 0 1 10 0v4" />
+        </svg>
+        https://store.renderreply.com/render6457
       </div>
 
       <button class="browser-close-btn" id="btn-exit-browser-tab">
-        <span>✕</span> Exit Storefront Mode
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+          style="margin-right: 4px;">
+          <line x1="18" y1="6" x2="6" y2="18" />
+          <line x1="6" y1="6" x2="18" y2="18" />
+        </svg>
+        Exit Storefront Mode
       </button>
     </div>
 
-    <!-- FULL E-COMMERCE CREATOR STOREFRONT PAGE CONTENT -->
+    <!-- STOREFRONT OVERLAY CONTENT -->
     <div class="ecom-store-page">
-      <!-- HERO HEADER -->
       <div class="ecom-hero-header">
         <div class="ecom-hero-left">
           <div class="ecom-creator-avatar">R</div>
           <div>
             <div class="ecom-creator-title">
-              RudRa RR Store <span
-                style="color: #6366f1; font-size: 13px; background: rgba(99, 102, 241, 0.1); padding: 3px 10px; border-radius: 12px; border: 1px solid rgba(99, 102, 241, 0.25); font-weight: 700;">✓
-                Verified Creator Store</span>
+              RudRa RR Store
+              <span
+                style="color: #6366f1; font-size: 13px; background: rgba(99, 102, 241, 0.1); padding: 3px 10px; border-radius: 12px; border: 1px solid rgba(99, 102, 241, 0.25); font-weight: 700; display: inline-flex; align-items: center; gap: 4px;">
+                <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
+                  <polyline points="20 6 9 17 4 12" />
+                </svg>
+                Verified Creator Store
+              </span>
             </div>
             <div class="ecom-creator-handle">@render6457 • Official Creator Storefront</div>
-            <p class="ecom-creator-bio">
-              Helping creators & developers automate Instagram, sell digital products & scale leads.
-            </p>
+            <p class="ecom-creator-bio">Helping creators & developers automate Instagram, sell digital products & scale
+              leads.</p>
           </div>
         </div>
         <div class="ecom-cart-badge" id="btn-ecom-cart">
-          🛒 Store Cart (1) • $19.99
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+            style="margin-right: 4px;">
+            <circle cx="9" cy="21" r="1" />
+            <circle cx="20" cy="21" r="1" />
+            <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6" />
+          </svg>
+          Store Cart (1) • $19.99
         </div>
       </div>
 
-      <!-- PRODUCTS SECTION -->
-      <div class="ecom-section-title">
-        Featured Products & Services
-      </div>
+      <div class="ecom-section-title">Featured Products & Services</div>
 
       <div class="ecom-products-grid">
-        <!-- PRODUCT 1 -->
-        <div class="ecom-product-card">
-          <div class="ecom-card-banner">
-            <img src="https://images.unsplash.com/photo-1517694712202-14dd9538aa97?auto=format&fit=crop&w=600&q=80"
-              alt="Java Roadmap" class="ecom-card-photo">
-          </div>
-          <div class="ecom-card-body">
-            <div class="ecom-rating-row">
-              ★★★★★ <span style="color: var(--text-secondary);">5.0 (64 reviews)</span>
-            </div>
-            <div class="ecom-prod-title">Java Full-Stack Developer Roadmap PDF</div>
-            <div class="ecom-prod-desc">
-              Comprehensive guide from Java core syntax to microservices, Spring Boot, and cloud deployment.
-            </div>
-            <div class="ecom-price-row">
-              <div>
-                <span class="ecom-price-tag">$19.99</span>
-                <span class="ecom-price-old">$39.99</span>
-              </div>
-              <button class="btn-ecom-buy"
-                style="background: linear-gradient(135deg, #6366f1, #4f46e5); color: #fff; font-weight: 800;">Instant
-                Access</button>
-            </div>
-          </div>
-        </div>
-
-        <!-- PRODUCT 2 -->
-        <div class="ecom-product-card">
-          <div class="ecom-card-banner">
-            <img src="https://images.unsplash.com/photo-1551836022-d5d88e9218df?auto=format&fit=crop&w=600&q=80"
-              alt="Strategy Session" class="ecom-card-photo">
-          </div>
-          <div class="ecom-card-body">
-            <div class="ecom-rating-row">
-              ★★★★★ <span style="color: var(--text-secondary);">4.9 (28 reviews)</span>
-            </div>
-            <div class="ecom-prod-title">1-on-1 Instagram Strategy Session</div>
-            <div class="ecom-prod-desc">
-              30-minute private call to audit your Instagram DM automation funnel and scale lead generation.
-            </div>
-            <div class="ecom-price-row">
-              <div>
-                <span class="ecom-price-tag">$49.00</span>
-                <span class="ecom-price-old">$99.00</span>
-              </div>
-              <button class="btn-ecom-buy"
-                style="background: linear-gradient(135deg, #06b6d4, #0891b2); color: #fff; font-weight: 800;">Book
-                Session</button>
-            </div>
-          </div>
-        </div>
-
-        <!-- PRODUCT 3 -->
-        <div class="ecom-product-card">
-          <div class="ecom-card-banner">
-            <img src="https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=600&q=80"
-              alt="Presets Bundle" class="ecom-card-photo">
-          </div>
-          <div class="ecom-card-body">
-            <div class="ecom-rating-row">
-              ★★★★★ <span style="color: var(--text-secondary);">5.0 (112 reviews)</span>
-            </div>
-            <div class="ecom-prod-title">Instagram Automation Preset Bundle</div>
-            <div class="ecom-prod-desc">
-              Pre-configured comment triggers, DM copy templates, and Bio link presets ready to import.
-            </div>
-            <div class="ecom-price-row">
-              <div>
-                <span class="ecom-price-tag" style="color: #10b981;">FREE</span>
-                <span class="ecom-price-old">$19.99</span>
-              </div>
-              <button class="btn-ecom-buy"
-                style="background: linear-gradient(135deg, #10b981, #059669); color: #fff; font-weight: 800;">Download
-                Now</button>
-            </div>
-          </div>
-        </div>
+        <!-- Products populated via JS -->
       </div>
 
       <!-- TRUST BADGES BAR -->
       <div id="ecom-trust-bar"
         style="background: #ffffff; border: 1px solid var(--border-color); border-radius: var(--border-radius-md); padding: 20px; display: flex; justify-content: space-around; align-items: center; text-align: center;">
         <div>
-          <div style="font-size: 14px; font-weight: 800;">🔒 256-Bit SSL Encrypted</div>
+          <div
+            style="font-size: 14px; font-weight: 800; display: flex; align-items: center; justify-content: center; gap: 6px;">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#6366f1" stroke-width="2">
+              <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
+              <path d="M7 11V7a5 5 0 0 1 10 0v4" />
+            </svg>
+            256-Bit SSL Encrypted
+          </div>
           <div style="font-size: 11px; color: var(--text-secondary);">RenderReply Buyer Protection</div>
         </div>
         <div style="width: 1px; height: 24px; background: var(--border-color);"></div>
         <div>
-          <div style="font-size: 14px; font-weight: 800;">⚡ Instant Automated Delivery</div>
+          <div
+            style="font-size: 14px; font-weight: 800; display: flex; align-items: center; justify-content: center; gap: 6px;">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="2">
+              <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2" />
+            </svg>
+            Instant Automated Delivery
+          </div>
           <div style="font-size: 11px; color: var(--text-secondary);">PDF & Links sent to your Email & DM</div>
         </div>
         <div style="width: 1px; height: 24px; background: var(--border-color);"></div>
         <div>
-          <div style="font-size: 14px; font-weight: 800;">⭐ Verified Creator Store</div>
+          <div
+            style="font-size: 14px; font-weight: 800; display: flex; align-items: center; justify-content: center; gap: 6px;">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#f59e0b" stroke-width="2">
+              <polygon
+                points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
+            </svg>
+            Verified Creator Store
+          </div>
           <div style="font-size: 11px; color: var(--text-secondary);">100% Quality Guaranteed</div>
         </div>
       </div>
 
       <!-- DEDICATED FULL PRODUCT DETAIL PAGE VIEW -->
       <div id="ecom-product-detail-view" style="display: none; flex-direction: column; gap: 32px;">
-        <!-- BACK BUTTON HEADER -->
         <div>
           <button type="button" class="btn btn-outline" id="btn-back-to-storefront"
             style="padding: 8px 18px; border: 1px solid #cbd5e1; font-weight: 700; background: #fff; display: inline-flex; align-items: center; gap: 6px;">
-            ← Back to Storefront
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+              <line x1="19" y1="12" x2="5" y2="12" />
+              <polyline points="12 19 5 12 12 5" />
+            </svg>
+            Back to Storefront
           </button>
         </div>
 
-        <!-- TWO COLUMN PRODUCT SHOWCASE -->
         <div
           style="display: grid; grid-template-columns: 1fr 1fr; gap: 36px; background: #ffffff; border: 1px solid var(--border-color); border-radius: 20px; padding: 32px; box-shadow: var(--shadow-sm);">
-
-          <!-- LEFT COLUMN: IMAGE DISPLAY WITH CAROUSEL ARROWS -->
           <div>
             <div class="detail-main-img-box">
-              <!-- CAROUSEL PREVIOUS / NEXT ARROW BUTTONS -->
               <button type="button" class="gallery-nav-arrow left" id="btn-detail-prev-photo"
                 title="Previous photo">‹</button>
               <button type="button" class="gallery-nav-arrow right" id="btn-detail-next-photo"
@@ -2303,24 +2914,42 @@
               <span class="detail-img-counter" id="detail-img-counter">1 / 1</span>
             </div>
 
-            <!-- THUMBNAIL INDICATORS STRIP -->
             <div class="gallery-thumbs-container" id="detail-thumbs-strip"
-              style="margin-top: 16px; justify-content: center;">
-              <!-- Dynamic thumbnail photos -->
-            </div>
+              style="margin-top: 16px; justify-content: center;"></div>
           </div>
 
-          <!-- RIGHT COLUMN: PRODUCT INFO & CHECKOUT ACTION -->
           <div style="display: flex; flex-direction: column; gap: 18px;">
-            <div style="color: #f59e0b; font-size: 13px; font-weight: 700;">
-              ★★★★★ <span style="color: var(--text-secondary); margin-left: 4px;" id="detail-rating-text">5.0 (64
-                customer reviews)</span>
+            <div
+              style="color: #f59e0b; font-size: 13px; font-weight: 700; display: flex; align-items: center; gap: 4px;"
+              id="detail-rating-container">
+              <div class="star-rating-row">
+                <svg class="star-icon" viewBox="0 0 24 24" width="13" height="13" fill="#f59e0b" stroke="none">
+                  <polygon
+                    points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
+                </svg>
+                <svg class="star-icon" viewBox="0 0 24 24" width="13" height="13" fill="#f59e0b" stroke="none">
+                  <polygon
+                    points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
+                </svg>
+                <svg class="star-icon" viewBox="0 0 24 24" width="13" height="13" fill="#f59e0b" stroke="none">
+                  <polygon
+                    points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
+                </svg>
+                <svg class="star-icon" viewBox="0 0 24 24" width="13" height="13" fill="#f59e0b" stroke="none">
+                  <polygon
+                    points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
+                </svg>
+                <svg class="star-icon" viewBox="0 0 24 24" width="13" height="13" fill="#f59e0b" stroke="none">
+                  <polygon
+                    points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
+                </svg>
+              </div>
+              <span style="color: var(--text-secondary); margin-left: 4px;" id="detail-rating-text">5.0 (64 customer
+                reviews)</span>
             </div>
 
             <h1 style="font-size: 26px; font-weight: 900; color: var(--text-primary); line-height: 1.25;"
-              id="detail-prod-title">
-              Product Title
-            </h1>
+              id="detail-prod-title">Product Title</h1>
 
             <div
               style="display: flex; align-items: baseline; gap: 12px; border-bottom: 1px solid var(--border-color); padding-bottom: 16px;">
@@ -2336,7 +2965,11 @@
 
             <div
               style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px; padding: 14px 18px; display: flex; align-items: center; gap: 12px;">
-              <div style="font-size: 20px;">🛡️</div>
+              <div style="font-size: 20px; color: #6366f1;">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+                </svg>
+              </div>
               <div>
                 <div style="font-size: 13px; font-weight: 800; color: #0f172a;">RenderReply Instant Automated Delivery
                 </div>
@@ -2354,17 +2987,23 @@
           </div>
         </div>
 
-        <!-- MORE PRODUCTS FROM THIS STORE SECTION -->
         <div style="margin-top: 20px;">
           <div
             style="font-size: 20px; font-weight: 800; color: var(--text-primary); margin-bottom: 20px; display: flex; align-items: center; justify-content: space-between;">
             <span>More Products from this Store</span>
-            <span style="font-size: 13px; color: #6366f1; cursor: pointer; font-weight: 700;"
-              id="btn-view-all-store-products">View All Products →</span>
+            <span
+              style="font-size: 13px; color: #6366f1; cursor: pointer; font-weight: 700; display: inline-flex; align-items: center; gap: 4px;"
+              id="btn-view-all-store-products">
+              View All Products
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                <line x1="5" y1="12" x2="19" y2="12" />
+                <polyline points="12 5 19 12 12 19" />
+              </svg>
+            </span>
           </div>
 
           <div class="ecom-products-grid" id="more-products-grid">
-            <!-- Dynamically populated related products cards -->
+            <!-- Dynamically populated related products -->
           </div>
         </div>
 
@@ -2374,7 +3013,6 @@
 
   <!-- FULL PAGE PRODUCT STUDIO EDITOR OVERLAY -->
   <div class="full-page-editor-backdrop" id="modal-product-backdrop">
-    <!-- TOP NAVIGATION BAR -->
     <div class="editor-nav-bar">
       <div style="display: flex; align-items: center; gap: 20px;">
         <button type="button" class="btn btn-outline" id="btn-close-product-modal"
@@ -2406,18 +3044,15 @@
       </div>
     </div>
 
-    <!-- MAIN STUDIO CONTENT -->
     <div
       style="max-width: 1200px; width: 100%; margin: 32px auto; padding: 0 24px; display: grid; grid-template-columns: 1.2fr 1fr; gap: 36px; align-items: start;">
 
-      <!-- LEFT COLUMN: PRODUCT FORM EDITORS -->
       <form id="form-product-modal"
         style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 16px; padding: 28px; display: flex; flex-direction: column; gap: 20px; box-shadow: 0 1px 3px rgba(0,0,0,0.04);">
         <h2
           style="font-size: 18px; font-weight: 800; color: #0f172a; margin: 0; padding-bottom: 12px; border-bottom: 1px solid #f1f5f9;">
           Product Details</h2>
 
-        <!-- MULTIPLE PHOTO UPLOAD -->
         <div class="form-group" style="margin: 0;">
           <label class="form-label"
             style="font-weight: 700; display: flex; justify-content: space-between; align-items: center;">
@@ -2425,7 +3060,6 @@
             <span style="font-size: 12px; color: #64748b; font-weight: 500;">Multiple images supported</span>
           </label>
 
-          <!-- FILE UPLOAD DROPBOX FOR MULTIPLE PHOTOS -->
           <div
             style="border: 2px dashed #cbd5e1; border-radius: 12px; padding: 24px; text-align: center; background: #f8fafc; cursor: pointer; position: relative; transition: border-color 0.2s;"
             id="photo-dropzone">
@@ -2443,16 +3077,13 @@
               PNG, WEBP)</div>
           </div>
 
-          <!-- PHOTO URL & MULTI GALLERY THUMBNAILS CONTAINER -->
           <div style="margin-top: 12px; display: flex; flex-direction: column; gap: 10px;">
             <input type="text" class="form-input" id="modal-prod-photo" placeholder="Or paste image URL (https://...)"
               value="https://images.unsplash.com/photo-1517694712202-14dd9538aa97?auto=format&fit=crop&w=600&q=80">
 
             <div style="font-size: 12px; font-weight: 700; color: #64748b;">Uploaded Product Photo Gallery (Click to set
               primary cover photo):</div>
-            <div class="gallery-thumbs-container" id="modal-prod-gallery">
-              <!-- Dynamically populated thumbnails -->
-            </div>
+            <div class="gallery-thumbs-container" id="modal-prod-gallery"></div>
           </div>
         </div>
 
@@ -2489,7 +3120,6 @@
         </div>
       </form>
 
-      <!-- RIGHT COLUMN: REAL-TIME STOREFRONT CARD PREVIEW -->
       <div>
         <div
           style="font-size: 14px; font-weight: 800; color: #0f172a; margin-bottom: 12px; display: flex; align-items: center; justify-content: space-between;">
@@ -2504,7 +3134,29 @@
           </div>
           <div class="ecom-card-body">
             <div class="ecom-rating-row">
-              ★★★★★ <span style="color: var(--text-secondary);">5.0 (New Product)</span>
+              <div class="star-rating-row">
+                <svg class="star-icon" viewBox="0 0 24 24" width="13" height="13" fill="#f59e0b" stroke="none">
+                  <polygon
+                    points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
+                </svg>
+                <svg class="star-icon" viewBox="0 0 24 24" width="13" height="13" fill="#f59e0b" stroke="none">
+                  <polygon
+                    points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
+                </svg>
+                <svg class="star-icon" viewBox="0 0 24 24" width="13" height="13" fill="#f59e0b" stroke="none">
+                  <polygon
+                    points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
+                </svg>
+                <svg class="star-icon" viewBox="0 0 24 24" width="13" height="13" fill="#f59e0b" stroke="none">
+                  <polygon
+                    points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
+                </svg>
+                <svg class="star-icon" viewBox="0 0 24 24" width="13" height="13" fill="#f59e0b" stroke="none">
+                  <polygon
+                    points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
+                </svg>
+              </div>
+              <span style="color: var(--text-secondary);">5.0 (New Product)</span>
             </div>
             <div class="ecom-prod-title" id="live-preview-title">Java Full-Stack Developer Roadmap PDF</div>
             <div class="ecom-prod-desc" id="live-preview-desc">Comprehensive guide from Java core syntax to
@@ -2542,7 +3194,471 @@
     </div>
   </div>
 
-  <script src="app.js"></script>
+  <script src="./app.js"></script>
+
+  <!-- QUICK CUSTOMIZE PANEL & LIVE PREVIEW SYNC LOGIC -->
+  <script>
+  (function () {
+    'use strict';
+
+    /* ======================================================================
+       1. QUICK CUSTOMIZE PANEL INTERACTIVITY
+       ====================================================================== */
+
+    /* ---- THEME COLOR SWATCHES ---- */
+    document.querySelectorAll('.qc-swatch[data-qc-color]').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        document.querySelectorAll('.qc-swatch').forEach(function (s) { s.classList.remove('active'); });
+        this.classList.add('active');
+        var color = this.getAttribute('data-qc-color');
+        if (color && color !== 'custom') { applyAccentColor(color); }
+      });
+    });
+
+    /* ---- BUTTON STYLE TOGGLE ---- */
+    document.querySelectorAll('#qc-btn-style-group .qc-option-btn').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        document.querySelectorAll('#qc-btn-style-group .qc-option-btn').forEach(function (b) { b.classList.remove('active'); });
+        this.classList.add('active');
+        var style = this.getAttribute('data-style');
+        applyButtonStyle(style);
+      });
+    });
+
+    /* ---- STORE THEME TOGGLE ---- */
+    document.querySelectorAll('#qc-theme-group .qc-option-btn').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        document.querySelectorAll('#qc-theme-group .qc-option-btn').forEach(function (b) { b.classList.remove('active'); });
+        this.classList.add('active');
+        var theme = this.getAttribute('data-theme');
+        applyStoreTheme(theme);
+      });
+    });
+
+    /* ---- FONT STYLE SELECT ---- */
+    var fontSelect = document.getElementById('qc-font-select');
+    if (fontSelect) {
+      fontSelect.addEventListener('change', function () {
+        var fontMap = {
+          'inter': 'Inter, sans-serif',
+          'plus-jakarta': "'Plus Jakarta Sans', sans-serif",
+          'poppins': 'Poppins, sans-serif',
+          'roboto': 'Roboto, sans-serif',
+          'outfit': 'Outfit, sans-serif'
+        };
+        var selectedFont = fontMap[this.value] || 'Inter, sans-serif';
+        var phoneScreen = document.querySelector('.phone-screen');
+        if (phoneScreen) { phoneScreen.style.fontFamily = selectedFont; }
+      });
+    }
+
+    /* ---- LAYOUT CARD TOGGLE ---- */
+    document.querySelectorAll('#qc-layout-group .qc-layout-card').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        document.querySelectorAll('#qc-layout-group .qc-layout-card').forEach(function (b) { b.classList.remove('active'); });
+        this.classList.add('active');
+        var layout = this.getAttribute('data-layout');
+        applyLayoutStyle(layout);
+      });
+    });
+
+    /* ---- APPLY TO STORE BUTTON ---- */
+    var applyBtn = document.getElementById('btn-qc-apply');
+    if (applyBtn) {
+      applyBtn.addEventListener('click', function () {
+        var activeSwatch = document.querySelector('.qc-swatch.active[data-qc-color]');
+        if (activeSwatch) {
+          var color = activeSwatch.getAttribute('data-qc-color');
+          if (color && color !== 'custom') {
+            var picker = document.getElementById('input-brand-color-picker');
+            var hexInput = document.getElementById('input-brand-color-hex');
+            if (picker) { picker.value = color; picker.dispatchEvent(new Event('input', { bubbles: true })); }
+            if (hexInput) { hexInput.value = color; hexInput.dispatchEvent(new Event('input', { bubbles: true })); }
+          }
+        }
+        var originalHTML = applyBtn.innerHTML;
+        applyBtn.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg> Applied to Live Store!';
+        applyBtn.style.background = 'linear-gradient(135deg, #10b981, #059669)';
+        setTimeout(function () {
+          applyBtn.innerHTML = originalHTML;
+          applyBtn.style.background = '';
+        }, 1800);
+      });
+    }
+
+    /* ---- RESET BUTTON ---- */
+    var resetBtn = document.getElementById('btn-qc-reset');
+    if (resetBtn) {
+      resetBtn.addEventListener('click', function () {
+        var defaultColor = '#6366f1';
+        document.querySelectorAll('.qc-swatch').forEach(function (s) { s.classList.remove('active'); });
+        var dflt = document.querySelector('.qc-swatch[data-qc-color="' + defaultColor + '"]');
+        if (dflt) { dflt.classList.add('active'); }
+        applyAccentColor(defaultColor);
+        applyButtonStyle('rounded');
+        applyStoreTheme('dark');
+        applyLayoutStyle('classic');
+
+        ['qc-btn-style-group', 'qc-theme-group'].forEach(function (gid) {
+          var grp = document.getElementById(gid);
+          if (!grp) return;
+          grp.querySelectorAll('.qc-option-btn').forEach(function (b) { b.classList.remove('active'); });
+          var first = grp.querySelector('.qc-option-btn');
+          if (first) { first.classList.add('active'); }
+        });
+        document.querySelectorAll('#qc-layout-group .qc-layout-card').forEach(function (b) { b.classList.remove('active'); });
+        var firstLayout = document.querySelector('#qc-layout-group .qc-layout-card');
+        if (firstLayout) { firstLayout.classList.add('active'); }
+        var fontSel = document.getElementById('qc-font-select');
+        if (fontSel) {
+          fontSel.value = 'inter';
+          fontSel.dispatchEvent(new Event('change'));
+        }
+      });
+    }
+
+    /* ---- DEVICE PREVIEW TOGGLE ---- */
+    document.querySelectorAll('.lpp-device-btn').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        if (this.id === 'btn-lpp-refresh') {
+          this.style.transition = 'transform 0.4s ease';
+          this.style.transform = 'rotate(360deg)';
+          var self = this;
+          setTimeout(function () { self.style.transform = ''; }, 450);
+          return;
+        }
+        document.querySelectorAll('.lpp-device-btn:not(.lpp-refresh)').forEach(function (b) { b.classList.remove('active'); });
+        this.classList.add('active');
+        var phoneFrame = document.querySelector('.phone-frame');
+        if (phoneFrame) {
+          if (this.id === 'btn-lpp-tablet') {
+            phoneFrame.style.width = '270px';
+          } else {
+            phoneFrame.style.width = '235px';
+          }
+        }
+      });
+    });
+
+    /* ======================================================================
+       2. HELPER FUNCTIONS FOR LIVE PREVIEW STYLING
+       ====================================================================== */
+    function applyAccentColor(color) {
+      document.documentElement.style.setProperty('--store-accent', color);
+      var dspHeader = document.querySelector('.dsp-header');
+      if (dspHeader) {
+        var darker = shadeColor(color, -25);
+        dspHeader.style.background = 'linear-gradient(160deg, ' + color + ' 0%, ' + darker + ' 100%)';
+      }
+      document.querySelectorAll('.dsp-view-all-btn').forEach(function (el) { el.style.background = color; });
+      document.querySelectorAll('.btn-catalog-add').forEach(function (el) { el.style.background = 'linear-gradient(135deg, ' + color + ', ' + shadeColor(color, -15) + ')'; });
+    }
+
+    function applyButtonStyle(style) {
+      var radiusMap = { 'rounded': '8px', 'square': '2px', 'pill': '9999px' };
+      var rad = radiusMap[style] || '8px';
+      document.querySelectorAll('.dsp-view-all-btn, .dsp-social-icon').forEach(function (el) {
+        el.style.borderRadius = rad;
+      });
+    }
+
+    function applyStoreTheme(theme) {
+      var dsp = document.querySelector('.dark-store-preview');
+      var dspBody = document.querySelector('.dsp-body');
+      var dspHeader = document.querySelector('.dsp-header');
+      var dspName = document.getElementById('dsp-name-el');
+      var dspRole = document.querySelector('.dsp-role');
+      var dspBio = document.getElementById('dsp-bio-el');
+      var dspSecTitle = document.querySelector('.dsp-section-title');
+
+      if (!dsp) return;
+
+      if (theme === 'light') {
+        if (dspHeader) dspHeader.style.background = 'linear-gradient(160deg, #ffffff 0%, #f1f5f9 100%)';
+        if (dspBody) dspBody.style.background = '#f8fafc';
+        if (dspName) dspName.style.color = '#0f172a';
+        if (dspRole) dspRole.style.color = '#64748b';
+        if (dspBio) dspBio.style.color = '#475569';
+        if (dspSecTitle) dspSecTitle.style.color = '#0f172a';
+        document.querySelectorAll('.dsp-social-icon').forEach(function (ic) {
+          ic.style.background = '#e2e8f0';
+          var svg = ic.querySelector('svg');
+          if (svg) { svg.style.stroke = '#0f172a'; svg.style.fill = 'none'; }
+        });
+      } else {
+        /* Dark / Auto mode */
+        var activeSwatch = document.querySelector('.qc-swatch.active[data-qc-color]');
+        var color = (activeSwatch && activeSwatch.getAttribute('data-qc-color') !== 'custom') ? activeSwatch.getAttribute('data-qc-color') : '#6366f1';
+        if (dspHeader) dspHeader.style.background = 'linear-gradient(160deg, ' + color + ' 0%, ' + shadeColor(color, -25) + ' 100%)';
+        if (dspBody) dspBody.style.background = '#f8fafc';
+        if (dspName) dspName.style.color = '#ffffff';
+        if (dspRole) dspRole.style.color = 'rgba(255,255,255,0.65)';
+        if (dspBio) dspBio.style.color = 'rgba(255,255,255,0.65)';
+        if (dspSecTitle) dspSecTitle.style.color = '#1e293b';
+        document.querySelectorAll('.dsp-social-icon').forEach(function (ic) {
+          ic.style.background = 'rgba(255,255,255,0.12)';
+          var svg = ic.querySelector('svg');
+          if (svg) { svg.style.stroke = 'rgba(255,255,255,0.8)'; }
+        });
+      }
+    }
+
+    function applyLayoutStyle(layout) {
+      var list = document.getElementById('dsp-prod-list');
+      if (!list) return;
+      if (layout === 'modern') {
+        list.style.display = 'grid';
+        list.style.gridTemplateColumns = '1fr 1fr';
+        list.style.gap = '8px';
+        document.querySelectorAll('#dsp-prod-list .dsp-prod-row').forEach(function (r) {
+          r.style.flexDirection = 'column';
+          r.style.alignItems = 'flex-start';
+          r.style.textAlign = 'center';
+        });
+      } else {
+        list.style.display = 'flex';
+        list.style.flexDirection = 'column';
+        list.style.gap = '8px';
+        document.querySelectorAll('#dsp-prod-list .dsp-prod-row').forEach(function (r) {
+          r.style.flexDirection = 'row';
+          r.style.alignItems = 'center';
+          r.style.textAlign = 'left';
+        });
+      }
+    }
+
+    /* ======================================================================
+       3. PROFILE & BIO REAL-TIME SYNC TO PHONE PREVIEW
+       ====================================================================== */
+    function syncProfileToPreview() {
+      var nameInput = document.getElementById('setup-input-name');
+      var bioInput = document.getElementById('setup-input-bio');
+      var avatarInput = document.getElementById('setup-input-avatar');
+      var dspName = document.getElementById('dsp-name-el');
+      var dspBio = document.getElementById('dsp-bio-el');
+      var dspAvatar = document.getElementById('dsp-avatar-el');
+
+      if (nameInput && dspName) {
+        nameInput.addEventListener('input', function () {
+          dspName.textContent = this.value || 'RudRa RR';
+          var nameTxt = document.getElementById('store-display-name-txt');
+          if (nameTxt) nameTxt.textContent = this.value || 'RudRa RR';
+        });
+      }
+      if (bioInput && dspBio) {
+        bioInput.addEventListener('input', function () {
+          dspBio.textContent = this.value || 'Welcome to my official store!';
+          var bioTxt = document.getElementById('store-bio-text-txt');
+          if (bioTxt) bioTxt.textContent = this.value || 'Welcome to my official store!';
+        });
+      }
+      if (avatarInput && dspAvatar) {
+        avatarInput.addEventListener('input', function () {
+          if (this.value) {
+            dspAvatar.src = this.value;
+            var avImg = document.getElementById('store-avatar-img');
+            if (avImg) avImg.src = this.value;
+          }
+        });
+      }
+    }
+    setTimeout(syncProfileToPreview, 400);
+
+    /* ======================================================================
+       4. CATALOG LIVE SEARCH, FILTER & SORT INTERACTIVITY
+       ====================================================================== */
+    var catalogSearch = document.getElementById('catalog-search-input');
+    if (catalogSearch) {
+      catalogSearch.addEventListener('input', filterAndSortProducts);
+    }
+
+    /* FILTER BUTTON & DROPDOWN */
+    var filterBtn = document.getElementById('btn-catalog-filter');
+    var activeFilterTag = 'all';
+
+    if (filterBtn) {
+      /* Inject filter dropdown menu if not present */
+      var filterMenu = document.createElement('div');
+      filterMenu.id = 'catalog-filter-dropdown';
+      filterMenu.className = 'catalog-dropdown-menu';
+      filterMenu.style.cssText = 'display:none; position:absolute; right:110px; top:44px; background:#ffffff; border:1px solid #e2e8f0; border-radius:10px; box-shadow:0 10px 25px rgba(0,0,0,0.1); z-index:100; min-width:160px; padding:6px 0; font-size:12px;';
+      filterMenu.innerHTML = `
+        <div class="cdrop-item active" data-filter="all" style="padding:7px 14px; cursor:pointer; font-weight:700; color:#6366f1;">All Products</div>
+        <div class="cdrop-item" data-filter="guide" style="padding:7px 14px; cursor:pointer; font-weight:500;">Digital Guides ($)</div>
+        <div class="cdrop-item" data-filter="free" style="padding:7px 14px; cursor:pointer; font-weight:500;">Lead Magnets (FREE)</div>
+        <div class="cdrop-item" data-filter="session" style="padding:7px 14px; cursor:pointer; font-weight:500;">Strategy Sessions</div>
+      `;
+      var parentHeader = filterBtn.closest('.catalog-header-controls');
+      if (parentHeader) {
+        parentHeader.style.position = 'relative';
+        parentHeader.appendChild(filterMenu);
+      }
+
+      filterBtn.addEventListener('click', function (e) {
+        e.stopPropagation();
+        var sortMenu = document.getElementById('catalog-sort-dropdown');
+        if (sortMenu) sortMenu.style.display = 'none';
+        filterMenu.style.display = filterMenu.style.display === 'none' ? 'block' : 'none';
+      });
+
+      filterMenu.querySelectorAll('.cdrop-item').forEach(function (item) {
+        item.addEventListener('click', function (e) {
+          e.stopPropagation();
+          filterMenu.querySelectorAll('.cdrop-item').forEach(function (i) { i.style.fontWeight = '500'; i.style.color = ''; });
+          this.style.fontWeight = '700';
+          this.style.color = '#6366f1';
+          activeFilterTag = this.getAttribute('data-filter');
+          filterMenu.style.display = 'none';
+          filterAndSortProducts();
+        });
+      });
+    }
+
+    /* SORT BUTTON & DROPDOWN */
+    var sortBtn = document.getElementById('btn-catalog-sort');
+    var activeSortType = 'default';
+
+    if (sortBtn) {
+      var sortMenu = document.createElement('div');
+      sortMenu.id = 'catalog-sort-dropdown';
+      sortMenu.className = 'catalog-dropdown-menu';
+      sortMenu.style.cssText = 'display:none; position:absolute; right:60px; top:44px; background:#ffffff; border:1px solid #e2e8f0; border-radius:10px; box-shadow:0 10px 25px rgba(0,0,0,0.1); z-index:100; min-width:160px; padding:6px 0; font-size:12px;';
+      sortMenu.innerHTML = `
+        <div class="cdrop-sort-item active" data-sort="default" style="padding:7px 14px; cursor:pointer; font-weight:700; color:#6366f1;">Default Order</div>
+        <div class="cdrop-sort-item" data-sort="low-high" style="padding:7px 14px; cursor:pointer; font-weight:500;">Price: Low to High</div>
+        <div class="cdrop-sort-item" data-sort="high-low" style="padding:7px 14px; cursor:pointer; font-weight:500;">Price: High to Low</div>
+        <div class="cdrop-sort-item" data-sort="name-az" style="padding:7px 14px; cursor:pointer; font-weight:500;">Title: A to Z</div>
+      `;
+      var parentControls = sortBtn.closest('.catalog-header-controls');
+      if (parentControls) {
+        parentControls.style.position = 'relative';
+        parentControls.appendChild(sortMenu);
+      }
+
+      sortBtn.addEventListener('click', function (e) {
+        e.stopPropagation();
+        var fMenu = document.getElementById('catalog-filter-dropdown');
+        if (fMenu) fMenu.style.display = 'none';
+        sortMenu.style.display = sortMenu.style.display === 'none' ? 'block' : 'none';
+      });
+
+      sortMenu.querySelectorAll('.cdrop-sort-item').forEach(function (item) {
+        item.addEventListener('click', function (e) {
+          e.stopPropagation();
+          sortMenu.querySelectorAll('.cdrop-sort-item').forEach(function (i) { i.style.fontWeight = '500'; i.style.color = ''; });
+          this.style.fontWeight = '700';
+          this.style.color = '#6366f1';
+          activeSortType = this.getAttribute('data-sort');
+          sortMenu.style.display = 'none';
+          filterAndSortProducts();
+        });
+      });
+    }
+
+    /* Close dropdowns when clicking outside */
+    document.addEventListener('click', function () {
+      var fMenu = document.getElementById('catalog-filter-dropdown');
+      var sMenu = document.getElementById('catalog-sort-dropdown');
+      if (fMenu) fMenu.style.display = 'none';
+      if (sMenu) sMenu.style.display = 'none';
+    });
+
+    /* MASTER FILTER AND SORT FUNCTION */
+    function filterAndSortProducts() {
+      var searchVal = (document.getElementById('catalog-search-input')?.value || '').toLowerCase().trim();
+
+      /* Builder Grid Cards */
+      var cards = Array.from(document.querySelectorAll('#builder-products-container .catalog-prod-card'));
+      var dspRows = Array.from(document.querySelectorAll('#dsp-prod-list .dsp-prod-row'));
+
+      cards.forEach(function (card, index) {
+        var name = card.querySelector('.prod-name')?.textContent.toLowerCase() || '';
+        var price = card.querySelector('.prod-price')?.textContent.toLowerCase() || '';
+
+        var matchesSearch = !searchVal || name.includes(searchVal);
+        var matchesFilter = true;
+        if (activeFilterTag === 'free') matchesFilter = price.includes('free');
+        if (activeFilterTag === 'guide') matchesFilter = !price.includes('free') && !name.includes('session');
+        if (activeFilterTag === 'session') matchesFilter = name.includes('session') || name.includes('strategy');
+
+        var isVisible = matchesSearch && matchesFilter;
+        card.style.display = isVisible ? '' : 'none';
+
+        if (dspRows[index]) {
+          dspRows[index].style.display = isVisible ? '' : 'none';
+        }
+      });
+
+      /* Re-sort visible cards */
+      if (activeSortType !== 'default') {
+        var grid = document.getElementById('builder-products-container');
+        var dspList = document.getElementById('dsp-prod-list');
+
+        cards.sort(function (a, b) {
+          var nameA = a.querySelector('.prod-name')?.textContent.toLowerCase() || '';
+          var nameB = b.querySelector('.prod-name')?.textContent.toLowerCase() || '';
+          var priceA = parsePriceNum(a.querySelector('.prod-price')?.textContent);
+          var priceB = parsePriceNum(b.querySelector('.prod-price')?.textContent);
+
+          if (activeSortType === 'low-high') return priceA - priceB;
+          if (activeSortType === 'high-low') return priceB - priceA;
+          if (activeSortType === 'name-az') return nameA.localeCompare(nameB);
+          return 0;
+        });
+
+        if (grid) { cards.forEach(function (c) { grid.appendChild(c); }); }
+
+        if (dspList) {
+          dspRows.sort(function (a, b) {
+            var nameA = a.querySelector('.dsp-prod-name')?.textContent.toLowerCase() || '';
+            var nameB = b.querySelector('.dsp-prod-name')?.textContent.toLowerCase() || '';
+            var priceA = parsePriceNum(a.querySelector('.dsp-prod-price')?.textContent);
+            var priceB = parsePriceNum(b.querySelector('.dsp-prod-price')?.textContent);
+
+            if (activeSortType === 'low-high') return priceA - priceB;
+            if (activeSortType === 'high-low') return priceB - priceA;
+            if (activeSortType === 'name-az') return nameA.localeCompare(nameB);
+            return 0;
+          });
+          dspRows.forEach(function (r) { dspList.appendChild(r); });
+        }
+      }
+
+      syncProductCount();
+    }
+
+    function parsePriceNum(str) {
+      if (!str) return 0;
+      if (str.toLowerCase().includes('free')) return 0;
+      var num = parseFloat(str.replace(/[^0-9.]/g, ''));
+      return isNaN(num) ? 0 : num;
+    }
+
+    function syncProductCount() {
+      var visible = Array.from(document.querySelectorAll('#builder-products-container .catalog-prod-card')).filter(function (c) {
+        return c.style.display !== 'none';
+      }).length;
+      var pill = document.getElementById('catalog-count-pill');
+      if (pill) { pill.textContent = visible; }
+      var pstatProd = document.getElementById('pstat-products-count');
+      if (pstatProd) { pstatProd.textContent = visible; }
+    }
+
+    /* Helper hex shade utility */
+    function shadeColor(hex, percent) {
+      hex = hex.replace('#', '');
+      if (hex.length === 3) { hex = hex.split('').map(function (c) { return c + c; }).join(''); }
+      var r = parseInt(hex.substring(0, 2), 16);
+      var g = parseInt(hex.substring(2, 4), 16);
+      var b = parseInt(hex.substring(4, 6), 16);
+      r = Math.min(255, Math.max(0, r + Math.round(2.55 * percent)));
+      g = Math.min(255, Math.max(0, g + Math.round(2.55 * percent)));
+      b = Math.min(255, Math.max(0, b + Math.round(2.55 * percent)));
+      return '#' + [r, g, b].map(function (v) { return v.toString(16).padStart(2, '0'); }).join('');
+    }
+
+  })();
+  </script>
 </body>
 
 </html>
