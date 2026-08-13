@@ -48,6 +48,25 @@ window.switchMainTab = function(tabName, linkEl) {
     }
   });
 };
+window.openProductStudio = function() {
+  const backdrop = document.getElementById('modal-product-backdrop');
+  if (backdrop) {
+    backdrop.classList.add('active');
+    backdrop.style.display = 'flex';
+    backdrop.style.opacity = '1';
+    backdrop.style.pointerEvents = 'auto';
+  }
+};
+
+window.closeProductStudio = function() {
+  const backdrop = document.getElementById('modal-product-backdrop');
+  if (backdrop) {
+    backdrop.classList.remove('active');
+    backdrop.style.display = 'none';
+    backdrop.style.opacity = '0';
+    backdrop.style.pointerEvents = 'none';
+  }
+};
 
 function initApp() {
   // APP STATE

@@ -942,7 +942,7 @@
               <!-- 2. ACTIONS TOOLBAR & CATALOG -->
               <div class="form-card">
                 <div class="catalog-actions-bar" style="justify-content: flex-end;">
-                  <button class="btn btn-secondary btn-pill" id="btn-add-product-modal">+ Add Product</button>
+                  <button class="btn btn-secondary btn-pill" id="btn-add-product-modal" onclick="openProductStudio()">+ Add Product</button>
                 </div>
 
                 <div class="catalog-grid" id="builder-products-container">
@@ -961,8 +961,8 @@
                       </div>
                       <div class="prod-meta">5.0 ★ (64 Reviews) • 210 Sales</div>
                       <div class="prod-actions">
-                        <button class="btn btn-edit-prod-item" data-id="1">Edit Details</button>
-                        <button class="btn btn-delete-prod-item" data-id="1">Delete</button>
+                        <button class="btn btn-edit-prod-item" data-id="prod-1" onclick="editProductItem('prod-1')">Edit Details</button>
+                        <button class="btn btn-delete-prod-item" data-id="prod-1" onclick="deleteProductItem('prod-1')">Delete</button>
                       </div>
                     </div>
                   </div>
@@ -982,8 +982,8 @@
                       </div>
                       <div class="prod-meta">4.9 ★ (28 Reviews) • 98 Sales</div>
                       <div class="prod-actions">
-                        <button class="btn btn-edit-prod-item" data-id="2">Edit Details</button>
-                        <button class="btn btn-delete-prod-item" data-id="2">Delete</button>
+                        <button class="btn btn-edit-prod-item" data-id="prod-2" onclick="editProductItem('prod-2')">Edit Details</button>
+                        <button class="btn btn-delete-prod-item" data-id="prod-2" onclick="deleteProductItem('prod-2')">Delete</button>
                       </div>
                     </div>
                   </div>
@@ -1003,8 +1003,8 @@
                       </div>
                       <div class="prod-meta">5.0 ★ (112 Reviews) • 540 Downloads</div>
                       <div class="prod-actions">
-                        <button class="btn btn-edit-prod-item" data-id="3">Edit Details</button>
-                        <button class="btn btn-delete-prod-item" data-id="3">Delete</button>
+                        <button class="btn btn-edit-prod-item" data-id="prod-3" onclick="editProductItem('prod-3')">Edit Details</button>
+                        <button class="btn btn-delete-prod-item" data-id="prod-3" onclick="deleteProductItem('prod-3')">Delete</button>
                       </div>
                     </div>
                   </div>
