@@ -742,9 +742,8 @@
       <section id="biolink-view" class="tab-view">
         <header class="view-header">
           <div class="header-title-group">
-            <h1 class="view-title">Bio Link Page Builder</h1>
-            <p class="view-subtitle">Design a high-converting profile landing page with real-time smartphone preview.
-            </p>
+            <h1 class="view-title">Bio Link Page</h1>
+            <p class="view-subtitle">Design a high-converting profile landing page with real-time performance analytics.</p>
           </div>
           <div class="header-actions">
             <button class="btn btn-outline" id="btn-save-biolink">
@@ -796,61 +795,523 @@
         </div>
 
         <!-- SUB TABS -->
-        <div class="sub-tabs">
-          <button class="sub-tab-btn active">Content & Links</button>
-          <button class="sub-tab-btn">Appearance & Design</button>
+        <div class="sub-tabs biolink-subtabs">
+          <button class="sub-tab-btn active" data-biolink-tab="activity">Activity & Analytics</button>
+          <button class="sub-tab-btn" data-biolink-tab="content">Content & Links</button>
+          <button class="sub-tab-btn" data-biolink-tab="appearance">Appearance & Design</button>
         </div>
 
-        <!-- BUILDER GRID -->
-        <div class="biolink-grid">
-          <div class="form-column">
-            <div class="form-card">
-              <h2 class="form-card-title">Profile Customization</h2>
-
-              <div class="form-group">
-                <label class="form-label">Custom Page Title</label>
-                <input type="text" class="form-input" id="input-page-title"
-                  value="RudRa RR | Full-Stack & Automation Creator">
-              </div>
-
-              <div class="form-group">
-                <label class="form-label">Biography Description</label>
-                <textarea class="form-textarea"
-                  id="input-bio-desc">Helping creators & developers automate Instagram, sell digital products & scale leads.</textarea>
-              </div>
-            </div>
-
-            <div class="form-card">
-              <h2 class="form-card-title">Featured Links</h2>
-              <div style="font-size: 13px; color: var(--text-secondary); margin-bottom: 16px;">Add dynamic action
-                buttons to your Instagram bio landing page.</div>
-              <button class="btn btn-primary btn-pill" id="btn-add-link">+ Add New Link Button</button>
+        <!-- SUB TAB 1: ACTIVITY & ANALYTICS VIEW -->
+        <div id="biolink-tab-activity" class="biolink-tab-content active">
+          <!-- TOP HEADER BAR -->
+          <div class="biolink-activity-header">
+            <h2 class="biolink-activity-title">Activity</h2>
+            <div class="biolink-dropdown-wrapper">
+              <button class="biolink-dropdown-btn" id="biolink-timerange-btn">
+                <span>Last 7 days</span>
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+              </button>
             </div>
           </div>
 
-          <div class="preview-container">
-            <div class="preview-header-label">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                style="margin-right: 6px;">
-                <rect x="5" y="2" width="14" height="20" rx="2" ry="2" />
-                <line x1="12" y1="18" x2="12.01" y2="18" />
-              </svg>
-              Real-Time Live Device Preview
+          <!-- 4 METRICS KPI GRID -->
+          <div class="biolink-kpi-grid">
+            <div class="biolink-kpi-card">
+              <div class="kpi-card-top">
+                <div class="kpi-icon-bg green">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="2">
+                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/>
+                  </svg>
+                </div>
+                <div class="kpi-info-icon" title="Total page visits">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#94a3b8" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+                </div>
+              </div>
+              <div class="kpi-card-val">0</div>
+              <div class="kpi-card-lbl">Visits</div>
             </div>
 
-            <div class="phone-mockup">
-              <div class="phone-island"></div>
-              <div class="phone-screen">
-                <div class="phone-avatar">R</div>
-                <div class="phone-handle">@render6457</div>
-                <p class="phone-bio" id="preview-phone-bio">Helping creators automate Instagram & convert followers into
-                  leads.</p>
-
-                <div class="phone-links-list" id="preview-phone-links">
-                  <a class="phone-link-btn" href="#">Pricing Plans & Packages</a>
-                  <a class="phone-link-btn" href="#">Book 1-on-1 Strategy Call</a>
-                  <a class="phone-link-btn" href="#">Download Free Checklist PDF</a>
+            <div class="biolink-kpi-card">
+              <div class="kpi-card-top">
+                <div class="kpi-icon-bg purple">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#8b5cf6" stroke-width="2">
+                    <path d="M3 3l7 18 3-7 7-3L3 3z"/>
+                  </svg>
                 </div>
+                <div class="kpi-info-icon" title="Total link clicks">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#94a3b8" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+                </div>
+              </div>
+              <div class="kpi-card-val">0</div>
+              <div class="kpi-card-lbl">Clicks</div>
+            </div>
+
+            <div class="biolink-kpi-card">
+              <div class="kpi-card-top">
+                <div class="kpi-icon-bg cyan">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#06b6d4" stroke-width="2">
+                    <circle cx="12" cy="12" r="9"/><path d="M12 3v9h9"/>
+                  </svg>
+                </div>
+                <div class="kpi-info-icon" title="Click-Through Rate">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#94a3b8" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+                </div>
+              </div>
+              <div class="kpi-card-val">0%</div>
+              <div class="kpi-card-lbl">CTR</div>
+            </div>
+
+            <div class="biolink-kpi-card">
+              <div class="kpi-card-top">
+                <div class="kpi-icon-bg orange">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#f97316" stroke-width="2">
+                    <circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>
+                  </svg>
+                </div>
+                <div class="kpi-info-icon" title="Average time to click">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#94a3b8" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+                </div>
+              </div>
+              <div class="kpi-card-val">0s</div>
+              <div class="kpi-card-lbl">Time to click</div>
+            </div>
+          </div>
+
+          <!-- BAR CHART CARD (ROW 2) -->
+          <div class="biolink-card biolink-chart-card">
+            <div class="biolink-card-header">
+              <div class="biolink-chart-legend-row">
+                <span class="chart-title-sm">Last 7 days</span>
+                <div class="legend-pills-row">
+                  <span class="legend-pill green"><span class="pill-dot"></span> Unique Visits</span>
+                  <span class="legend-pill purple"><span class="pill-dot"></span> Total Visits</span>
+                  <span class="legend-pill grey"><span class="pill-dot"></span> Total Clicks</span>
+                  <span class="legend-pill cyan"><span class="pill-dot"></span> Unique Clicks</span>
+                </div>
+              </div>
+            </div>
+            <div class="biolink-card-body relative-chart-body">
+              <div class="biolink-watermark-overlay">
+                <div class="watermark-bold">This is example Data!</div>
+                <div class="watermark-sub">No activity in selected time range.</div>
+              </div>
+              <svg viewBox="0 0 800 220" class="biolink-barchart-svg">
+                <!-- Grid Lines -->
+                <line x1="40" y1="30" x2="780" y2="30" stroke="#f1f5f9" stroke-width="1.5" />
+                <line x1="40" y1="70" x2="780" y2="70" stroke="#f1f5f9" stroke-width="1.5" />
+                <line x1="40" y1="110" x2="780" y2="110" stroke="#f1f5f9" stroke-width="1.5" />
+                <line x1="40" y1="150" x2="780" y2="150" stroke="#f1f5f9" stroke-width="1.5" />
+                <line x1="40" y1="190" x2="780" y2="190" stroke="#e2e8f0" stroke-width="1.5" />
+
+                <!-- Y-Axis Labels -->
+                <text x="25" y="34" font-size="11" fill="#94a3b8" text-anchor="end">5</text>
+                <text x="25" y="74" font-size="11" fill="#94a3b8" text-anchor="end">4</text>
+                <text x="25" y="114" font-size="11" fill="#94a3b8" text-anchor="end">3</text>
+                <text x="25" y="154" font-size="11" fill="#94a3b8" text-anchor="end">2</text>
+                <text x="25" y="194" font-size="11" fill="#94a3b8" text-anchor="end">0</text>
+
+                <!-- Dec 13 Sample Bars -->
+                <rect x="655" y="30" width="16" height="160" rx="3" fill="#d1fae5" opacity="0.85"/>
+                <rect x="674" y="55" width="16" height="135" rx="3" fill="#ede9fe" opacity="0.85"/>
+
+                <!-- Dec 14 Sample Bars -->
+                <rect x="735" y="90" width="16" height="100" rx="3" fill="#d1fae5" opacity="0.85"/>
+                <rect x="754" y="90" width="16" height="100" rx="3" fill="#ede9fe" opacity="0.85"/>
+
+                <!-- X-Axis Dates -->
+                <text x="120" y="212" font-size="11" fill="#94a3b8" text-anchor="middle">Dec 08</text>
+                <text x="220" y="212" font-size="11" fill="#94a3b8" text-anchor="middle">Dec 09</text>
+                <text x="320" y="212" font-size="11" fill="#94a3b8" text-anchor="middle">Dec 10</text>
+                <text x="420" y="212" font-size="11" fill="#94a3b8" text-anchor="middle">Dec 11</text>
+                <text x="520" y="212" font-size="11" fill="#94a3b8" text-anchor="middle">Dec 12</text>
+                <text x="665" y="212" font-size="11" fill="#94a3b8" text-anchor="middle">Dec 13</text>
+                <text x="745" y="212" font-size="11" fill="#94a3b8" text-anchor="middle">Dec 14</text>
+              </svg>
+            </div>
+          </div>
+
+          <!-- TOP LOCATIONS CARD (ROW 3) -->
+          <div class="biolink-card biolink-locations-card">
+            <div class="biolink-card-header flex-between">
+              <div class="card-header-left">
+                <span class="biolink-card-title">Top Locations</span>
+              </div>
+              <div class="card-header-right-pills">
+                <div class="pill-group">
+                  <button class="pill-btn active">Map</button>
+                  <button class="pill-btn">List</button>
+                </div>
+                <div class="pill-group">
+                  <button class="pill-btn active">Total</button>
+                  <button class="pill-btn">Unique</button>
+                </div>
+              </div>
+            </div>
+
+            <div class="locations-filter-bar flex-between">
+              <div class="pill-group compact">
+                <button class="pill-btn active">Country</button>
+                <button class="pill-btn">City</button>
+              </div>
+              <div class="table-col-labels">
+                <span>Visits</span>
+                <span>Clicks</span>
+                <span>CTR</span>
+              </div>
+            </div>
+
+            <div class="biolink-card-body relative-chart-body map-body">
+              <div class="biolink-watermark-overlay">
+                <div class="watermark-bold">This is example Data!</div>
+                <div class="watermark-sub">No activity in selected time range.</div>
+              </div>
+              <!-- WORLD MAP VECTOR -->
+              <svg viewBox="0 0 800 340" class="world-map-svg">
+                <!-- Soft Continents path representation -->
+                <path d="M150,90 Q180,60 250,80 T300,140 T220,200 T120,150 Z" fill="#e2e8f0" opacity="0.6"/>
+                <path d="M260,220 Q310,240 330,290 T280,330 T240,260 Z" fill="#e2e8f0" opacity="0.6"/>
+                <path d="M420,80 Q480,60 540,90 T510,170 T430,130 Z" fill="#e2e8f0" opacity="0.6"/>
+                <path d="M450,180 Q520,200 540,280 T460,310 Z" fill="#e2e8f0" opacity="0.6"/>
+                <path d="M550,70 Q680,60 740,110 T680,200 T580,140 Z" fill="#e2e8f0" opacity="0.6"/>
+                <path d="M660,240 Q740,250 750,300 T650,310 Z" fill="#e2e8f0" opacity="0.6"/>
+                
+                <!-- INDIA PIN POINT -->
+                <circle cx="610" cy="180" r="6" fill="#2563eb" opacity="0.9"/>
+                <circle cx="610" cy="180" r="12" fill="#3b82f6" opacity="0.3"/>
+              </svg>
+            </div>
+          </div>
+
+          <!-- TOP PERFORMING HIGHLIGHTS CARD (ROW 4) -->
+          <div class="biolink-card">
+            <div class="biolink-card-header flex-between">
+              <span class="biolink-card-title">Top Performing Highlights</span>
+              <div class="pill-group">
+                <button class="pill-btn active">Total</button>
+                <button class="pill-btn">Unique</button>
+              </div>
+            </div>
+
+            <div class="biolink-card-body relative-chart-body padding-box">
+              <div class="biolink-watermark-overlay">
+                <div class="watermark-bold">This is example Data!</div>
+                <div class="watermark-sub">No activity in selected time range.</div>
+              </div>
+
+              <div class="list-item-row">
+                <div class="item-left">
+                  <div class="item-icon-circle"></div>
+                  <span class="item-title">Buy my merch</span>
+                </div>
+                <div class="item-right-stats">
+                  <span>98 Views</span>
+                  <span>51 Clicks</span>
+                  <span>52.04% CTR</span>
+                </div>
+              </div>
+
+              <div class="list-item-row">
+                <div class="item-left">
+                  <div class="item-icon-circle"></div>
+                  <span class="item-title">Official Facebook</span>
+                </div>
+                <div class="item-right-stats">
+                  <span>98 Views</span>
+                  <span>19 Clicks</span>
+                  <span>19.39% CTR</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- TOP PERFORMING BLOCKS CARD (ROW 5) -->
+          <div class="biolink-card">
+            <div class="biolink-card-header flex-between">
+              <span class="biolink-card-title">Top Performing Blocks</span>
+              <div class="pill-group">
+                <button class="pill-btn active">Total</button>
+                <button class="pill-btn">Unique</button>
+              </div>
+            </div>
+
+            <div class="biolink-card-body relative-chart-body padding-box">
+              <div class="biolink-watermark-overlay">
+                <div class="watermark-bold">This is example Data!</div>
+                <div class="watermark-sub">No activity in selected time range.</div>
+              </div>
+
+              <div class="list-item-row">
+                <div class="item-left">
+                  <span class="item-title">Buy my merch</span>
+                </div>
+                <div class="item-right-stats">
+                  <span>98 Views</span>
+                  <span>51 Clicks</span>
+                  <span>0% CTR</span>
+                </div>
+              </div>
+
+              <div class="list-item-row">
+                <div class="item-left">
+                  <span class="item-title">Official Facebook</span>
+                </div>
+                <div class="item-right-stats">
+                  <span>95 Views</span>
+                  <span>19 Clicks</span>
+                  <span>0% CTR</span>
+                </div>
+              </div>
+
+              <div class="list-item-row">
+                <div class="item-left">
+                  <span class="item-title">Checkout my exclusive content</span>
+                </div>
+                <div class="item-right-stats">
+                  <span>76 Views</span>
+                  <span>12 Clicks</span>
+                  <span>0% CTR</span>
+                </div>
+              </div>
+
+              <div class="list-item-row">
+                <div class="item-left">
+                  <span class="item-title">Twitter</span>
+                </div>
+                <div class="item-right-stats">
+                  <span>46 Views</span>
+                  <span>5 Clicks</span>
+                  <span>0% CTR</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- TOP REFERRERS DONUT CARD (ROW 6) -->
+          <div class="biolink-card">
+            <div class="biolink-card-header flex-between">
+              <span class="biolink-card-title">Top Referrers</span>
+              <div class="card-header-right-pills">
+                <div class="pill-group">
+                  <button class="pill-btn active">Chart</button>
+                  <button class="pill-btn">List</button>
+                </div>
+                <div class="pill-group">
+                  <button class="pill-btn active">Total</button>
+                  <button class="pill-btn">Unique</button>
+                </div>
+                <div class="table-col-labels" style="margin-left: 12px;">
+                  <span>Visits</span>
+                  <span>Clicks</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="biolink-card-body relative-chart-body padding-box flex-center-donut">
+              <div class="biolink-watermark-overlay">
+                <div class="watermark-bold">This is example Data!</div>
+                <div class="watermark-sub">No activity in selected time range.</div>
+              </div>
+
+              <div class="donut-chart-flex">
+                <svg viewBox="0 0 200 200" class="donut-svg">
+                  <!-- Donut slices -->
+                  <circle cx="100" cy="100" r="70" fill="none" stroke="#fed7aa" stroke-width="40" stroke-dasharray="130 310" transform="rotate(-90 100 100)"/>
+                  <circle cx="100" cy="100" r="70" fill="none" stroke="#fca5a5" stroke-width="40" stroke-dasharray="175 265" transform="rotate(15 100 100)"/>
+                  <circle cx="100" cy="100" r="70" fill="none" stroke="#bfdbfe" stroke-width="40" stroke-dasharray="130 310" transform="rotate(160 100 100)"/>
+                  
+                  <!-- Percentage Labels inside donut -->
+                  <text x="80" y="85" font-size="12" font-weight="700" fill="#475569">30%</text>
+                  <text x="115" y="145" font-size="12" font-weight="700" fill="#475569">40%</text>
+                  <text x="65" y="135" font-size="12" font-weight="700" fill="#475569">30%</text>
+                </svg>
+
+                <div class="donut-legend-col">
+                  <div class="legend-item"><span class="dot-color blue"></span> Organic</div>
+                  <div class="legend-item"><span class="dot-color peach"></span> Instagram</div>
+                  <div class="legend-item"><span class="dot-color yellow"></span> Twitter</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- TOP DEVICES DONUT CARD (ROW 7) -->
+          <div class="biolink-card">
+            <div class="biolink-card-header flex-between">
+              <span class="biolink-card-title">Top Devices</span>
+              <div class="card-header-right-pills">
+                <div class="pill-group">
+                  <button class="pill-btn active">Chart</button>
+                  <button class="pill-btn">List</button>
+                </div>
+                <div class="pill-group">
+                  <button class="pill-btn active">Total</button>
+                  <button class="pill-btn">Unique</button>
+                </div>
+                <div class="table-col-labels" style="margin-left: 12px;">
+                  <span>Visits</span>
+                  <span>Clicks</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="biolink-card-body relative-chart-body padding-box flex-center-donut">
+              <div class="biolink-watermark-overlay">
+                <div class="watermark-bold">This is example Data!</div>
+                <div class="watermark-sub">No activity in selected time range.</div>
+              </div>
+
+              <div class="donut-chart-flex">
+                <svg viewBox="0 0 200 200" class="donut-svg">
+                  <!-- Donut slices -->
+                  <circle cx="100" cy="100" r="70" fill="none" stroke="#fef08a" stroke-width="40" stroke-dasharray="115 325" transform="rotate(-90 100 100)"/>
+                  <circle cx="100" cy="100" r="70" fill="none" stroke="#fca5a5" stroke-width="40" stroke-dasharray="175 265" transform="rotate(5 100 100)"/>
+                  <circle cx="100" cy="100" r="70" fill="none" stroke="#bfdbfe" stroke-width="40" stroke-dasharray="150 290" transform="rotate(150 100 100)"/>
+
+                  <text x="75" y="130" font-size="12" font-weight="700" fill="#475569">26%</text>
+                  <text x="115" y="145" font-size="12" font-weight="700" fill="#475569">40%</text>
+                </svg>
+
+                <div class="donut-legend-col">
+                  <div class="legend-item"><span class="dot-color blue"></span> Mobile</div>
+                  <div class="legend-item"><span class="dot-color peach"></span> Desktop</div>
+                  <div class="legend-item"><span class="dot-color yellow"></span> Tablet</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- SOCIAL CONNECTS CARD (ROW 8) -->
+          <div class="biolink-card">
+            <div class="biolink-card-header">
+              <span class="biolink-card-title">Social Connects</span>
+            </div>
+
+            <div class="biolink-card-body relative-chart-body padding-box">
+              <div class="biolink-watermark-overlay">
+                <div class="watermark-bold">This is example Data!</div>
+                <div class="watermark-sub">No activity in selected time range.</div>
+              </div>
+
+              <div class="list-item-row">
+                <div class="item-left">
+                  <span class="item-title">Instagram</span>
+                </div>
+                <div class="item-right-stats">
+                  <span>12 Unique clicks</span>
+                  <span>32 Total clicks</span>
+                </div>
+              </div>
+
+              <div class="list-item-row">
+                <div class="item-left">
+                  <span class="item-title">Facebook</span>
+                </div>
+                <div class="item-right-stats">
+                  <span>14 Unique clicks</span>
+                  <span>26 Total clicks</span>
+                </div>
+              </div>
+
+              <div class="list-item-row">
+                <div class="item-left">
+                  <span class="item-title">Email</span>
+                </div>
+                <div class="item-right-stats">
+                  <span>52 Unique clicks</span>
+                  <span>19 Total clicks</span>
+                </div>
+              </div>
+
+              <div class="list-item-row">
+                <div class="item-left">
+                  <span class="item-title">Twitter</span>
+                </div>
+                <div class="item-right-stats">
+                  <span>6 Unique clicks</span>
+                  <span>10 Total clicks</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- SUB TAB 2: CONTENT & LINKS BUILDER VIEW -->
+        <div id="biolink-tab-content" class="biolink-tab-content">
+          <div class="biolink-grid">
+            <div class="form-column">
+              <div class="form-card">
+                <h2 class="form-card-title">Profile Customization</h2>
+
+                <div class="form-group">
+                  <label class="form-label">Custom Page Title</label>
+                  <input type="text" class="form-input" id="input-page-title"
+                    value="RudRa RR | Full-Stack & Automation Creator">
+                </div>
+
+                <div class="form-group">
+                  <label class="form-label">Biography Description</label>
+                  <textarea class="form-textarea"
+                    id="input-bio-desc">Helping creators & developers automate Instagram, sell digital products & scale leads.</textarea>
+                </div>
+              </div>
+
+              <div class="form-card">
+                <h2 class="form-card-title">Featured Links</h2>
+                <div style="font-size: 13px; color: var(--text-secondary); margin-bottom: 16px;">Add dynamic action
+                  buttons to your Instagram bio landing page.</div>
+                <button class="btn btn-primary btn-pill" id="btn-add-link">+ Add New Link Button</button>
+              </div>
+            </div>
+
+            <div class="preview-container">
+              <div class="preview-header-label">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                  style="margin-right: 6px;">
+                  <rect x="5" y="2" width="14" height="20" rx="2" ry="2" />
+                  <line x1="12" y1="18" x2="12.01" y2="18" />
+                </svg>
+                Real-Time Live Device Preview
+              </div>
+
+              <div class="phone-mockup">
+                <div class="phone-island"></div>
+                <div class="phone-screen">
+                  <div class="phone-avatar">R</div>
+                  <div class="phone-handle">@render6457</div>
+                  <p class="phone-bio" id="preview-phone-bio">Helping creators automate Instagram & convert followers into
+                    leads.</p>
+
+                  <div class="phone-links-list" id="preview-phone-links">
+                    <a class="phone-link-btn" href="#">Pricing Plans & Packages</a>
+                    <a class="phone-link-btn" href="#">Book 1-on-1 Strategy Call</a>
+                    <a class="phone-link-btn" href="#">Download Free Checklist PDF</a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- SUB TAB 3: APPEARANCE & DESIGN VIEW -->
+        <div id="biolink-tab-appearance" class="biolink-tab-content">
+          <div class="form-card" style="max-width: 680px; margin-top: 10px;">
+            <h2 class="form-card-title">Theme & Design Settings</h2>
+            <p style="font-size: 13px; color: var(--text-secondary); margin-bottom: 20px;">Customize color schemes, background styles, and button aesthetics for your bio link profile page.</p>
+
+            <div class="form-group">
+              <label class="form-label">Background Theme</label>
+              <div style="display: flex; gap: 12px; margin-top: 8px;">
+                <div style="width: 60px; height: 60px; border-radius: 12px; background: #ffffff; border: 2px solid #6366f1; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 700; color: #6366f1;">Light</div>
+                <div style="width: 60px; height: 60px; border-radius: 12px; background: #0f172a; border: 1px solid #e2e8f0; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 700; color: #ffffff;">Dark</div>
+                <div style="width: 60px; height: 60px; border-radius: 12px; background: linear-gradient(135deg, #6366f1, #a855f7); border: 1px solid #e2e8f0; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 700; color: #ffffff;">Gradient</div>
+              </div>
+            </div>
+
+            <div class="form-group" style="margin-top: 20px;">
+              <label class="form-label">Button Style</label>
+              <div style="display: flex; gap: 12px; margin-top: 8px;">
+                <button class="btn btn-outline btn-pill" style="padding: 10px 20px;">Rounded Pill</button>
+                <button class="btn btn-outline" style="border-radius: 8px; padding: 10px 20px;">Soft Rectangle</button>
               </div>
             </div>
           </div>
@@ -887,21 +1348,21 @@
               <span class="status-online-pill">Online</span>
             </div>
             <div class="store-url-row">
-              <div class="link-url-pill compact">
+              <div class="link-url-pill compact" style="max-width: none; overflow: visible;">
                 <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
                   <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71" />
                   <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71" />
                 </svg>
-                <span id="store-official-link-pill">renderreply.com/store/render6457</span>
+                <span id="store-official-link-pill" style="white-space: nowrap; font-weight: 700; color: #0f172a;">renderreply.com/store/rajeev</span>
               </div>
-              <button class="btn btn-outline btn-xs" id="btn-copy-store-url">
+              <button class="btn btn-outline btn-xs" id="btn-copy-store-url" title="Copy Store URL">
                 <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                   <rect x="9" y="9" width="13" height="13" rx="2" ry="2" />
                   <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" />
                 </svg>
                 Copy
               </button>
-              <button class="btn btn-outline btn-xs" id="btn-store-qr-code">
+              <button class="btn btn-outline btn-xs" id="btn-store-qr-code" title="View Store QR Code">
                 <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                   <rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/>
                 </svg>
@@ -1573,10 +2034,12 @@
                           <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=250&q=80" id="cs-logo-img" alt="Store Logo">
                         </div>
                         <div class="cs-upload-action">
-                          <button class="btn btn-outline btn-sm cs-btn-change" id="cs-btn-change-logo">
+                          <input type="file" id="cs-file-logo" accept="image/*" style="display:none;">
+                          <button class="btn btn-outline btn-sm cs-btn-change" id="cs-btn-change-logo" title="Upload Store Logo">
                             <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                              <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
-                              <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+                              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                              <polyline points="17 8 12 3 7 8"/>
+                              <line x1="12" y1="3" x2="12" y2="15"/>
                             </svg>
                             Change Logo
                           </button>
@@ -1592,14 +2055,16 @@
                         <span class="cs-field-hint">This will appear in browser tab.</span>
                       </div>
                       <div class="cs-upload-control">
-                        <div class="cs-favicon-preview">
+                        <div class="cs-favicon-preview" id="cs-favicon-box">
                           <span>R</span>
                         </div>
                         <div class="cs-upload-action">
-                          <button class="btn btn-outline btn-sm cs-btn-change" id="cs-btn-change-favicon">
+                          <input type="file" id="cs-file-favicon" accept="image/*" style="display:none;">
+                          <button class="btn btn-outline btn-sm cs-btn-change" id="cs-btn-change-favicon" title="Upload Favicon">
                             <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                              <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
-                              <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+                              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                              <polyline points="17 8 12 3 7 8"/>
+                              <line x1="12" y1="3" x2="12" y2="15"/>
                             </svg>
                             Change Favicon
                           </button>
@@ -1726,11 +2191,13 @@
                       <span class="cs-field-hint">Recommended size: 1600x600px.</span>
                     </div>
                     <div class="cs-banner-preview-box">
-                      <div class="cs-banner-gradient-preview"></div>
-                      <button class="btn btn-outline btn-sm cs-btn-change" id="cs-btn-change-banner">
+                      <div class="cs-banner-gradient-preview" id="cs-banner-preview-graphic"></div>
+                      <input type="file" id="cs-file-banner" accept="image/*" style="display:none;">
+                      <button class="btn btn-outline btn-sm cs-btn-change" id="cs-btn-change-banner" title="Upload Hero Banner">
                         <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                          <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
-                          <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+                          <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                          <polyline points="17 8 12 3 7 8"/>
+                          <line x1="12" y1="3" x2="12" y2="15"/>
                         </svg>
                         Change Banner
                       </button>
@@ -1764,7 +2231,7 @@
                 </div>
 
                 <div class="cs-card">
-                  <h3 class="cs-card-section-title" style="margin-bottom: 12px;">Hero Banner Artwork Presets</h3>
+                  <h3 class="cs-card-section-title" style="margin-bottom: 12px;">Hero Banner Artwork & Presets</h3>
                   <div class="cs-banner-swatches">
                     <button class="cs-banner-swatch active" data-banner="sunset" style="background: linear-gradient(180deg, #1e1b4b 0%, #311042 45%, #0f172a 100%);">
                       Sunset Palms
@@ -1778,6 +2245,12 @@
                     <button class="cs-banner-swatch" data-banner="rose" style="background: linear-gradient(135deg, #831843 0%, #be185d 100%);">
                       Vibrant Rose
                     </button>
+                    <button class="cs-banner-swatch" data-banner="darkneon" style="background: linear-gradient(180deg, #09090b 0%, #27272a 100%);">
+                      Dark Neon
+                    </button>
+                    <button class="cs-banner-swatch" data-banner="gold" style="background: linear-gradient(135deg, #78350f 0%, #d97706 100%);">
+                      Golden Luxury
+                    </button>
                   </div>
                 </div>
               </div>
@@ -1787,7 +2260,7 @@
                 <div class="cs-panel-header">
                   <div>
                     <h2 class="cs-panel-title">Store Appearance & Themes</h2>
-                    <p class="cs-panel-subtitle">Select color palettes, typography fonts, button styles, and light/dark modes.</p>
+                    <p class="cs-panel-subtitle">Select color palettes, typography fonts, button styles, and product section themes.</p>
                   </div>
                 </div>
 
@@ -1802,6 +2275,47 @@
                     <button class="cs-color-swatch" data-color="#f59e0b" style="background: #f59e0b;" title="Amber Orange"></button>
                     <button class="cs-color-swatch" data-color="#0f172a" style="background: #0f172a;" title="Midnight Slate"></button>
                     <input type="color" class="cs-color-picker-input" id="cs-custom-color-picker" value="#4f46e5" title="Choose Custom Color">
+                  </div>
+                </div>
+
+                <!-- Product Card Styling Features -->
+                <div class="cs-card">
+                  <h3 class="cs-card-section-title" style="margin-bottom: 12px;">Product Card Styling & Colors</h3>
+                  <div class="cs-form-grid-2">
+                    <div class="cs-field-group">
+                      <label class="cs-field-label" for="cs-picker-prod-bg">Product Card Background</label>
+                      <div class="color-picker-row">
+                        <input type="color" class="color-input" id="cs-picker-prod-bg" value="#ffffff">
+                        <input type="text" class="cs-input" id="cs-txt-prod-bg" value="#ffffff" style="max-width: 110px;">
+                      </div>
+                    </div>
+
+                    <div class="cs-field-group">
+                      <label class="cs-field-label" for="cs-picker-prod-price">Product Price Tag Color</label>
+                      <div class="color-picker-row">
+                        <input type="color" class="color-input" id="cs-picker-prod-price" value="#10b981">
+                        <input type="text" class="cs-input" id="cs-txt-prod-price" value="#10b981" style="max-width: 110px;">
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="cs-form-grid-2" style="margin-top: 14px;">
+                    <div class="cs-field-group">
+                      <label class="cs-field-label" for="cs-picker-prod-title">Product Title Text Color</label>
+                      <div class="color-picker-row">
+                        <input type="color" class="color-input" id="cs-picker-prod-title" value="#0f172a">
+                        <input type="text" class="cs-input" id="cs-txt-prod-title" value="#0f172a" style="max-width: 110px;">
+                      </div>
+                    </div>
+
+                    <div class="cs-field-group">
+                      <label class="cs-field-label" for="cs-select-prod-shadow">Product Elevation Shadow</label>
+                      <select class="cs-select" id="cs-select-prod-shadow">
+                        <option value="subtle" selected>Subtle Soft Shadow</option>
+                        <option value="flat">Flat Clean Border</option>
+                        <option value="floating">Floating Deep Elevation</option>
+                      </select>
+                    </div>
                   </div>
                 </div>
 
@@ -2211,10 +2725,15 @@
           <div class="analytics-filter-header">
             <div>
               <h2 class="analytics-sec-title">Store Traffic & Conversions Analytics</h2>
-              <p class="analytics-sec-sub">Track visitors, product link clicks, CTR, geographic location, and device
-                types.</p>
+              <p class="analytics-sec-sub">Track visitors, product link clicks, CTR, geographic location, and device types.</p>
             </div>
             <div class="time-range-picker">
+              <button class="btn-reload-analytics" id="btn-analytics-reload" title="Refresh Live Data">
+                <svg class="reload-icon" viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M23 4v6h-6"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/>
+                </svg>
+                Reload Data
+              </button>
               <button class="time-range-btn active" data-store-range="7 Days">Last 7 Days</button>
               <button class="time-range-btn" data-store-range="30 Days">30 Days</button>
               <button class="time-range-btn" data-store-range="90 Days">90 Days</button>
@@ -2222,486 +2741,442 @@
             </div>
           </div>
 
-          <div class="store-stats-grid">
-            <div class="store-stat-card analytics-shaded-card">
-              <div class="stat-top-row">
-                <span class="stat-title">Total Views</span>
-              </div>
-              <div class="stat-num" id="store-stat-views">1,240</div>
-              <div class="stat-trend positive">+18.4% vs last period</div>
-            </div>
-
-            <div class="store-stat-card analytics-shaded-card">
-              <div class="stat-top-row">
-                <span class="stat-title">Product Clicks</span>
-              </div>
-              <div class="stat-num" id="store-stat-clicks">482</div>
-              <div class="stat-trend positive">+24.1% vs last period</div>
-            </div>
-
-            <div class="store-stat-card analytics-shaded-card">
-              <div class="stat-top-row">
-                <span class="stat-title">Click-Through Rate (CTR)</span>
-              </div>
-              <div class="stat-num" id="store-stat-ctr">38.8%</div>
-              <div class="stat-trend positive">+5.2% average</div>
-            </div>
-
-            <div class="store-stat-card analytics-shaded-card">
-              <div class="stat-top-row">
-                <span class="stat-title">Time Spent (Avg)</span>
-              </div>
-              <div class="stat-num" id="store-stat-time">2m 45s</div>
-              <div class="stat-trend positive">High Engagement</div>
-            </div>
+          <!-- DEMO DATA DISCLAIMER BANNER -->
+          <div class="analytics-demo-banner">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+              <circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/>
+            </svg>
+            <span>Demo Analytics Data — Simulated preview graph & metrics for store performance visualization.</span>
           </div>
 
-          <!-- MAIN VISITS & CLICKS CHART -->
-          <div class="form-card analytics-shaded-card rel-card-box" style="margin-top: 20px;">
-            <div class="form-card-header-flex">
-              <div>
-                <h3 class="chart-box-title">Store Traffic & Activity Over Time</h3>
-                <div class="chart-box-sub">Unique Visits vs Product Clicks over selected date range.</div>
+          <!-- 3-CARD ANALYTICS DASHBOARD LAYOUT -->
+          <div class="analytics-dashboard-3col">
+
+            <!-- CARD 1: Store Traffic & Activity Over Time -->
+            <div class="analytics-card" id="analytics-traffic-card">
+              <div class="analytics-card-header">
+                <div>
+                  <h3 class="analytics-card-title">Store Traffic & Activity Over Time</h3>
+                  <p class="analytics-card-sub">Unique Visits vs Product Clicks over selected date range.</p>
+                </div>
+                <div class="chart-legend-row">
+                  <span class="legend-item"><span class="legend-dot purple"></span>Unique Visits</span>
+                  <span class="legend-item"><span class="legend-dot green"></span>Product Clicks</span>
+                </div>
               </div>
-              <div class="chart-legend-row">
-                <span class="legend-dot" style="background: #6366f1;"></span> Unique Visits
-                <span class="legend-dot" style="background: #10b981; margin-left: 12px;"></span> Product Clicks
-              </div>
-            </div>
 
-            <div class="example-data-watermark">
-              <div class="watermark-bold">This is example Data</div>
-              <div class="watermark-sub">No activity in selected time range.</div>
-            </div>
+              <!-- Interactive Chart Container -->
+              <div class="analytics-chart-wrapper" id="store-traffic-chart-box">
+                <!-- SVG Line & Bar Combo Chart -->
+                <svg viewBox="0 0 540 240" class="traffic-combo-chart-svg" id="traffic-chart-svg">
+                  <!-- Gradient fill under line -->
+                  <defs>
+                    <linearGradient id="purpleAreaGrad" x1="0" y1="0" x2="0" y2="1">
+                      <stop offset="0%" stop-color="#6366f1" stop-opacity="0.25"/>
+                      <stop offset="100%" stop-color="#6366f1" stop-opacity="0.0"/>
+                    </linearGradient>
+                  </defs>
 
-            <div class="store-chart-area" id="store-analytics-main-chart">
-              <!-- Rendered dynamically via JS -->
-            </div>
-          </div>
+                  <!-- Product Clicks Vertical Bars -->
+                  <rect x="25" y="140" width="10" height="60" rx="3" fill="#818cf8" opacity="0.85" id="bar-0"/>
+                  <rect x="60" y="130" width="10" height="70" rx="3" fill="#818cf8" opacity="0.85" id="bar-1"/>
+                  <rect x="95" y="125" width="10" height="75" rx="3" fill="#818cf8" opacity="0.85" id="bar-2"/>
+                  <rect x="130" y="130" width="10" height="70" rx="3" fill="#818cf8" opacity="0.85" id="bar-3"/>
+                  <rect x="165" y="105" width="10" height="95" rx="3" fill="#6366f1" opacity="0.95" id="bar-4"/>
+                  <rect x="200" y="135" width="10" height="65" rx="3" fill="#818cf8" opacity="0.85" id="bar-5"/>
+                  <rect x="235" y="140" width="10" height="60" rx="3" fill="#818cf8" opacity="0.85" id="bar-6"/>
+                  <rect x="270" y="100" width="10" height="100" rx="3" fill="#6366f1" opacity="0.95" id="bar-7"/>
+                  <rect x="305" y="135" width="10" height="65" rx="3" fill="#818cf8" opacity="0.85" id="bar-8"/>
+                  <rect x="340" y="130" width="10" height="70" rx="3" fill="#818cf8" opacity="0.85" id="bar-9"/>
+                  <rect x="375" y="95" width="10" height="105" rx="3" fill="#6366f1" opacity="0.95" id="bar-10"/>
+                  <rect x="410" y="130" width="10" height="70" rx="3" fill="#818cf8" opacity="0.85" id="bar-11"/>
+                  <rect x="445" y="145" width="10" height="55" rx="3" fill="#818cf8" opacity="0.85" id="bar-12"/>
+                  <rect x="480" y="105" width="10" height="95" rx="3" fill="#6366f1" opacity="0.95" id="bar-13"/>
+                  <rect x="515" y="140" width="10" height="60" rx="3" fill="#818cf8" opacity="0.85" id="bar-14"/>
 
-          <!-- GEOGRAPHIC & LOCATIONS ANALYTICS -->
-          <div class="form-card analytics-shaded-card rel-card-box" style="margin-top: 20px;">
-            <div class="form-card-header-flex">
-              <div>
-                <h3 class="chart-box-title">Top Locations</h3>
-                <div class="chart-box-sub">Visitor distribution by country and major cities.</div>
-              </div>
-              <div class="pill-toggle-group">
-                <button class="pill-btn active" id="btn-geo-map">Map</button>
-                <button class="pill-btn" id="btn-geo-list">List</button>
-                <span style="border-right: 1px solid var(--border-color); margin: 0 4px;"></span>
-                <button class="pill-btn active" id="btn-geo-country">Country</button>
-                <button class="pill-btn" id="btn-geo-city">City</button>
-              </div>
-            </div>
+                  <!-- Shaded Area Path -->
+                  <path id="chart-area-path" d="M 25 105 L 60 118 L 95 125 L 130 115 L 165 60 L 200 102 L 235 110 L 270 45 L 305 100 L 340 48 L 375 45 L 410 88 L 445 120 L 480 140 L 515 80 L 515 200 L 25 200 Z" fill="url(#purpleAreaGrad)"/>
 
-            <div class="example-data-watermark">
-              <div class="watermark-bold">This is example Data</div>
-              <div class="watermark-sub">No activity in selected time range.</div>
-            </div>
+                  <!-- Unique Visits Line Path -->
+                  <path id="chart-line-path" d="M 25 105 L 60 118 L 95 125 L 130 115 L 165 60 L 200 102 L 235 110 L 270 45 L 305 100 L 340 48 L 375 45 L 410 88 L 445 120 L 480 140 L 515 80" fill="none" stroke="#6366f1" stroke-width="2.5" stroke-linecap="round"/>
 
-            <div class="geo-analytics-box" id="geo-analytics-container">
-              <div class="geo-map-visual">
-                <svg viewBox="0 0 800 350" style="width: 100%; height: 200px; opacity: 0.85;">
-                  <path d="M150 150 Q 200 100 250 160 T 350 200 T 450 150 T 600 220" stroke="#cbd5e1" stroke-width="2"
-                    fill="none" stroke-dasharray="4 4" />
-                  <circle cx="210" cy="140" r="8" fill="#6366f1" opacity="0.8" />
-                  <circle cx="210" cy="140" r="16" fill="#6366f1" opacity="0.2" />
-                  <circle cx="560" cy="190" r="7" fill="#10b981" opacity="0.8" />
-                  <circle cx="560" cy="190" r="14" fill="#10b981" opacity="0.2" />
-                  <circle cx="390" cy="130" r="6" fill="#f59e0b" opacity="0.8" />
-                  <circle cx="430" cy="150" r="5" fill="#ec4899" opacity="0.8" />
+                  <!-- Line Data Circles -->
+                  <circle cx="25" cy="105" r="4" fill="#ffffff" stroke="#6366f1" stroke-width="2"/>
+                  <circle cx="60" cy="118" r="4" fill="#ffffff" stroke="#6366f1" stroke-width="2"/>
+                  <circle cx="95" cy="125" r="4" fill="#ffffff" stroke="#6366f1" stroke-width="2"/>
+                  <circle cx="130" cy="115" r="4" fill="#ffffff" stroke="#6366f1" stroke-width="2"/>
+                  
+                  <!-- Highlighted Point Oct 12 -->
+                  <circle cx="165" cy="60" r="5" fill="#ffffff" stroke="#4f46e5" stroke-width="3" class="chart-point-active"/>
+                  <text id="txt-peak-1" x="165" y="48" font-size="11" font-weight="800" fill="#0f172a" text-anchor="middle">165</text>
+
+                  <circle cx="200" cy="102" r="4" fill="#ffffff" stroke="#6366f1" stroke-width="2"/>
+                  <circle cx="235" cy="110" r="4" fill="#ffffff" stroke="#6366f1" stroke-width="2"/>
+                  
+                  <!-- Highlighted Point Oct 14 -->
+                  <circle cx="270" cy="45" r="5" fill="#ffffff" stroke="#4f46e5" stroke-width="3"/>
+                  <text id="txt-peak-2" x="270" y="33" font-size="11" font-weight="800" fill="#0f172a" text-anchor="middle">185</text>
+
+                  <circle cx="305" cy="100" r="4" fill="#ffffff" stroke="#6366f1" stroke-width="2"/>
+                  
+                  <!-- Highlighted Point Oct 16 -->
+                  <circle cx="340" cy="48" r="5" fill="#ffffff" stroke="#4f46e5" stroke-width="3"/>
+                  <text id="txt-peak-3" x="340" y="36" font-size="11" font-weight="800" fill="#0f172a" text-anchor="middle">181</text>
+
+                  <!-- Highlighted Point Oct 18 -->
+                  <circle cx="375" cy="45" r="5" fill="#ffffff" stroke="#4f46e5" stroke-width="3"/>
+                  <text id="txt-peak-4" x="375" y="33" font-size="11" font-weight="800" fill="#0f172a" text-anchor="middle">185</text>
+
+                  <circle cx="410" cy="88" r="4" fill="#ffffff" stroke="#6366f1" stroke-width="2"/>
+                  <circle cx="445" cy="120" r="4" fill="#ffffff" stroke="#6366f1" stroke-width="2"/>
+                  <circle cx="480" cy="140" r="4" fill="#ffffff" stroke="#6366f1" stroke-width="2"/>
+                  <circle cx="515" cy="80" r="4" fill="#ffffff" stroke="#6366f1" stroke-width="2"/>
                 </svg>
-              </div>
 
-              <div class="geo-country-list">
-                <div class="country-row">
-                  <span class="country-code-pill">US</span>
-                  <span class="c-name">United States</span>
-                  <div class="c-bar-bg">
-                    <div class="c-bar-fill" style="width: 42%; background: #6366f1;"></div>
-                  </div>
-                  <span class="c-val">520 Views (42%)</span>
+                <!-- Floating Tooltip Box matching user screenshot -->
+                <div class="chart-popover-tooltip" id="chart-popover-tooltip">
+                  <div class="popover-date" id="popover-date-lbl">Oct 12:</div>
+                  <div class="popover-row">Unique Visits <strong id="popover-visits-val">165</strong></div>
+                  <div class="popover-row">Product Clicks <strong id="popover-clicks-val">70</strong></div>
                 </div>
-                <div class="country-row">
-                  <span class="country-code-pill">IN</span>
-                  <span class="c-name">India</span>
-                  <div class="c-bar-bg">
-                    <div class="c-bar-fill" style="width: 28%; background: #10b981;"></div>
-                  </div>
-                  <span class="c-val">347 Views (28%)</span>
-                </div>
-                <div class="country-row">
-                  <span class="country-code-pill">GB</span>
-                  <span class="c-name">United Kingdom</span>
-                  <div class="c-bar-bg">
-                    <div class="c-bar-fill" style="width: 14%; background: #f59e0b;"></div>
-                  </div>
-                  <span class="c-val">173 Views (14%)</span>
-                </div>
-                <div class="country-row">
-                  <span class="country-code-pill">DE</span>
-                  <span class="c-name">Germany</span>
-                  <div class="c-bar-bg">
-                    <div class="c-bar-fill" style="width: 9%; background: #ec4899;"></div>
-                  </div>
-                  <span class="c-val">111 Views (9%)</span>
-                </div>
-                <div class="country-row">
-                  <span class="country-code-pill">WW</span>
-                  <span class="c-name">Others</span>
-                  <div class="c-bar-bg">
-                    <div class="c-bar-fill" style="width: 7%; background: #94a3b8;"></div>
-                  </div>
-                  <span class="c-val">89 Views (7%)</span>
-                </div>
-              </div>
-            </div>
-          </div>
 
-          <!-- TOP REFERRERS & DEVICES -->
-          <div class="two-card-grid" style="margin-top: 20px;">
-            <div class="form-card analytics-shaded-card rel-card-box">
-              <h3 class="chart-box-title">Top Traffic Referrers</h3>
-              <div class="chart-box-sub">Where visitor traffic is originating from.</div>
-
-              <div class="example-data-watermark">
-                <div class="watermark-bold">This is example Data</div>
-                <div class="watermark-sub">No activity in selected time range.</div>
-              </div>
-
-              <div class="donut-chart-flex">
-                <div class="donut-svg-wrapper">
-                  <svg viewBox="0 0 100 100" style="width: 130px; height: 130px;">
-                    <circle cx="50" cy="50" r="38" stroke="#e2e8f0" stroke-width="14" fill="none" />
-                    <circle cx="50" cy="50" r="38" stroke="#6366f1" stroke-width="14" fill="none"
-                      stroke-dasharray="130 240" stroke-dashoffset="0" />
-                    <circle cx="50" cy="50" r="38" stroke="#10b981" stroke-width="14" fill="none"
-                      stroke-dasharray="60 240" stroke-dashoffset="-130" />
-                    <circle cx="50" cy="50" r="38" stroke="#f59e0b" stroke-width="14" fill="none"
-                      stroke-dasharray="40 240" stroke-dashoffset="-190" />
-                  </svg>
-                  <div class="donut-center-text">Traffic</div>
-                </div>
-                <div class="donut-legend-list">
-                  <div class="d-leg-item"><span class="d-dot" style="background: #6366f1;"></span> Instagram DM
-                    Automation (52%)</div>
-                  <div class="d-leg-item"><span class="d-dot" style="background: #10b981;"></span> Organic Instagram Bio
-                    (25%)</div>
-                  <div class="d-leg-item"><span class="d-dot" style="background: #f59e0b;"></span> Twitter/X & YouTube
-                    (15%)</div>
-                  <div class="d-leg-item"><span class="d-dot" style="background: #e2e8f0;"></span> Direct & Web (8%)
-                  </div>
+                <!-- X Axis Labels -->
+                <div class="chart-xaxis-row" id="chart-xaxis-row">
+                  <span>Oct 08</span>
+                  <span>Oct 10</span>
+                  <span>Oct 12</span>
+                  <span>Oct 14</span>
+                  <span>Oct 16</span>
+                  <span>Oct 18</span>
+                  <span>Oct 20</span>
+                  <span>Oct 22</span>
                 </div>
               </div>
             </div>
 
-            <div class="form-card analytics-shaded-card rel-card-box">
-              <h3 class="chart-box-title">Top Devices</h3>
-              <div class="chart-box-sub">Breakdown of smartphones vs desktops vs tablets.</div>
-
-              <div class="example-data-watermark">
-                <div class="watermark-bold">This is example Data</div>
-                <div class="watermark-sub">No activity in selected time range.</div>
+            <!-- CARD 2: Top Performing Product Links Table (Real Uploaded Creator Products) -->
+            <div class="analytics-card">
+              <div class="analytics-card-header">
+                <div>
+                  <h3 class="analytics-card-title">Top Performing Product Links</h3>
+                  <p class="analytics-card-sub">Real performance metrics for your store items.</p>
+                </div>
               </div>
 
-              <div class="donut-chart-flex">
-                <div class="donut-svg-wrapper">
-                  <svg viewBox="0 0 100 100" style="width: 130px; height: 130px;">
-                    <circle cx="50" cy="50" r="38" stroke="#e2e8f0" stroke-width="14" fill="none" />
-                    <circle cx="50" cy="50" r="38" stroke="#ec4899" stroke-width="14" fill="none"
-                      stroke-dasharray="185 240" stroke-dashoffset="0" />
-                    <circle cx="50" cy="50" r="38" stroke="#3b82f6" stroke-width="14" fill="none"
-                      stroke-dasharray="45 240" stroke-dashoffset="-185" />
-                    <circle cx="50" cy="50" r="38" stroke="#8b5cf6" stroke-width="14" fill="none"
-                      stroke-dasharray="10 240" stroke-dashoffset="-230" />
-                  </svg>
-                  <div class="donut-center-text">Devices</div>
+              <div class="analytics-table-container">
+                <table class="analytics-product-table">
+                  <thead>
+                    <tr>
+                      <th style="text-align: left;">Product</th>
+                      <th>Clicks</th>
+                      <th>CTR</th>
+                      <th>Conversion rate</th>
+                    </tr>
+                  </thead>
+                  <tbody id="analytics-products-tbody">
+                    <!-- Real Item 1 -->
+                    <tr>
+                      <td>
+                        <div class="prod-table-cell">
+                          <img src="https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?auto=format&fit=crop&w=80&q=80" alt="Java PDF" class="prod-thumb">
+                          <div>
+                            <div class="prod-title-text" title="Java Full Stack Roadmap PDF">Java Full Stack Roadmap PDF</div>
+                            <div class="prod-price-text">$19.99</div>
+                          </div>
+                        </div>
+                      </td>
+                      <td class="cell-num t-clicks">336</td>
+                      <td class="cell-num t-ctr">12.0%</td>
+                      <td class="cell-num t-conv">7.03%</td>
+                    </tr>
+                    <!-- Real Item 2 -->
+                    <tr>
+                      <td>
+                        <div class="prod-table-cell">
+                          <img src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=80&q=80" alt="Session" class="prod-thumb">
+                          <div>
+                            <div class="prod-title-text" title="1-on-1 Instagram Strategy Session">1-on-1 Instagram Strategy...</div>
+                            <div class="prod-price-text">$49.00</div>
+                          </div>
+                        </div>
+                      </td>
+                      <td class="cell-num t-clicks">229</td>
+                      <td class="cell-num t-ctr">8.3%</td>
+                      <td class="cell-num t-conv">5.03%</td>
+                    </tr>
+                    <!-- Real Item 3 -->
+                    <tr>
+                      <td>
+                        <div class="prod-table-cell">
+                          <img src="https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=80&q=80" alt="Bundle" class="prod-thumb">
+                          <div>
+                            <div class="prod-title-text" title="Instagram Automation Preset Bundle">Instagram Automation Preset...</div>
+                            <div class="prod-price-text" style="color:#10b981;">FREE</div>
+                          </div>
+                        </div>
+                      </td>
+                      <td class="cell-num t-clicks">153</td>
+                      <td class="cell-num t-ctr">4.0%</td>
+                      <td class="cell-num t-conv">6.63%</td>
+                    </tr>
+                    <!-- Real Item 4 -->
+                    <tr>
+                      <td>
+                        <div class="prod-table-cell">
+                          <img src="https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&w=80&q=80" alt="Masterclass" class="prod-thumb">
+                          <div>
+                            <div class="prod-title-text" title="Viral Reels Growth Masterclass">Viral Reels Growth Master...</div>
+                            <div class="prod-price-text">$29.99</div>
+                          </div>
+                        </div>
+                      </td>
+                      <td class="cell-num t-clicks">76</td>
+                      <td class="cell-num t-ctr">14.8%</td>
+                      <td class="cell-num t-conv">20.02%</td>
+                    </tr>
+                    <!-- Real Item 5 -->
+                    <tr>
+                      <td>
+                        <div class="prod-table-cell">
+                          <img src="https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=80&q=80" alt="Blueprint" class="prod-thumb">
+                          <div>
+                            <div class="prod-title-text" title="AI DM Automation Blueprint">AI DM Automation Blueprint</div>
+                            <div class="prod-price-text">$39.00</div>
+                          </div>
+                        </div>
+                      </td>
+                      <td class="cell-num t-clicks">43</td>
+                      <td class="cell-num t-ctr">8.9%</td>
+                      <td class="cell-num t-conv">10.09%</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            <!-- CARD 3: Geographic & Device Stack -->
+            <div class="analytics-card-stack">
+              <!-- Top Box: Geographic Traffic (Clean Country List Breakdown) -->
+              <div class="analytics-card">
+                <div class="analytics-card-header" style="margin-bottom: 12px;">
+                  <div>
+                    <h3 class="analytics-card-title">Geographic Traffic</h3>
+                  </div>
                 </div>
-                <div class="donut-legend-list">
-                  <div class="d-leg-item"><span class="d-dot" style="background: #ec4899;"></span> Mobile Smartphones
-                    (78%)</div>
-                  <div class="d-leg-item"><span class="d-dot" style="background: #3b82f6;"></span> Desktop Browsers
-                    (18%)</div>
-                  <div class="d-leg-item"><span class="d-dot" style="background: #8b5cf6;"></span> Tablets & iPad (4%)
+
+                <!-- Country Traffic Progress List -->
+                <div class="geo-country-bars" id="geo-country-bars" style="margin-top: 4px;">
+                  <div class="geo-country-row">
+                    <span class="geo-code-pill us">US</span>
+                    <span class="geo-c-name">United States</span>
+                    <div class="geo-bar-track">
+                      <div class="geo-bar-fill" id="geo-bar-us" style="width: 42%; background: #4f46e5;"></div>
+                    </div>
+                    <span class="geo-c-val" id="geo-val-us">520 (42%)</span>
+                  </div>
+                  <div class="geo-country-row">
+                    <span class="geo-code-pill in">IN</span>
+                    <span class="geo-c-name">India</span>
+                    <div class="geo-bar-track">
+                      <div class="geo-bar-fill" id="geo-bar-in" style="width: 28%; background: #10b981;"></div>
+                    </div>
+                    <span class="geo-c-val" id="geo-val-in">347 (28%)</span>
+                  </div>
+                  <div class="geo-country-row">
+                    <span class="geo-code-pill gb">GB</span>
+                    <span class="geo-c-name">United Kingdom</span>
+                    <div class="geo-bar-track">
+                      <div class="geo-bar-fill" id="geo-bar-uk" style="width: 14%; background: #f59e0b;"></div>
+                    </div>
+                    <span class="geo-c-val" id="geo-val-uk">173 (14%)</span>
+                  </div>
+                  <div class="geo-country-row">
+                    <span class="geo-flag-pill de">DE</span>
+                    <span class="geo-c-name">Germany</span>
+                    <div class="geo-bar-track">
+                      <div class="geo-bar-fill" id="geo-bar-de" style="width: 9%; background: #ec4899;"></div>
+                    </div>
+                    <span class="geo-c-val" id="geo-val-de">111 (9%)</span>
                   </div>
                 </div>
               </div>
+
+              <!-- Bottom Box: Device Breakdown -->
+              <div class="analytics-card">
+                <h3 class="analytics-card-title" style="margin-bottom: 12px;">Device Breakdown</h3>
+                <div class="device-donut-row">
+                  <div class="donut-chart-box">
+                    <svg viewBox="0 0 100 100" class="device-donut-svg">
+                      <circle id="donut-seg-mobile" cx="50" cy="50" r="34" stroke="#4f46e5" stroke-width="15" fill="none" stroke-dasharray="130 214" stroke-dashoffset="0"/>
+                      <circle id="donut-seg-desktop" cx="50" cy="50" r="34" stroke="#10b981" stroke-width="15" fill="none" stroke-dasharray="60 214" stroke-dashoffset="-130"/>
+                      <circle id="donut-seg-tablet" cx="50" cy="50" r="34" stroke="#06b6d4" stroke-width="15" fill="none" stroke-dasharray="24 214" stroke-dashoffset="-190"/>
+                    </svg>
+                  </div>
+                  <div class="donut-legend-col">
+                    <div class="donut-leg-item"><span class="donut-dot purple"></span><span id="lbl-mob-pct">Mobile (60%)</span></div>
+                    <div class="donut-leg-item"><span class="donut-dot green"></span><span id="lbl-desk-pct">Desktop (28%)</span></div>
+                    <div class="donut-leg-item"><span class="donut-dot teal"></span><span id="lbl-tab-pct">Tablet (12%)</span></div>
+                  </div>
+                </div>
+                <div class="device-sync-footer" id="analytics-sync-timestamp">Data last synchronized: 2 mins ago.</div>
+              </div>
             </div>
-          </div>
-
-          <!-- SOCIAL CONNECTS TABLE -->
-          <div class="form-card analytics-shaded-card rel-card-box" style="margin-top: 20px;">
-            <h3 class="chart-box-title">Social Connects Analytics</h3>
-            <div class="chart-box-sub">Performance metrics for connected social platforms on your store profile.</div>
-
-            <div class="example-data-watermark">
-              <div class="watermark-bold">This is example Data</div>
-              <div class="watermark-sub">No activity in selected time range.</div>
-            </div>
-
-            <table class="social-analytics-table">
-              <thead>
-                <tr>
-                  <th>Social Platform</th>
-                  <th>Total Views</th>
-                  <th>Unique Clicks</th>
-                  <th>Conversion Rate</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td>
-                    <span class="soc-icon insta">
-                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                        stroke-width="2">
-                        <rect x="2" y="2" width="20" height="20" rx="5" ry="5" />
-                        <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" />
-                        <line x1="17.5" y1="6.5" x2="17.51" y2="6.5" />
-                      </svg>
-                    </span>
-                    Instagram (@render6457)
-                  </td>
-                  <td>1,120 Views</td>
-                  <td>410 Clicks</td>
-                  <td><span class="tag-badge green">36.6% CTR</span></td>
-                </tr>
-                <tr>
-                  <td>
-                    <span class="soc-icon fb">
-                      <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
-                        <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z" />
-                      </svg>
-                    </span>
-                    Facebook Page
-                  </td>
-                  <td>340 Views</td>
-                  <td>98 Clicks</td>
-                  <td><span class="tag-badge blue">28.8% CTR</span></td>
-                </tr>
-                <tr>
-                  <td>
-                    <span class="soc-icon mail">
-                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                        stroke-width="2">
-                        <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" />
-                        <polyline points="22,6 12,13 2,6" />
-                      </svg>
-                    </span>
-                    Email Direct Contact
-                  </td>
-                  <td>190 Views</td>
-                  <td>45 Clicks</td>
-                  <td><span class="tag-badge purple">23.6% CTR</span></td>
-                </tr>
-                <tr>
-                  <td>
-                    <span class="soc-icon twitter">
-                      <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
-                        <path
-                          d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
-                      </svg>
-                    </span>
-                    Twitter / X Profile
-                  </td>
-                  <td>110 Views</td>
-                  <td>28 Clicks</td>
-                  <td><span class="tag-badge amber">25.4% CTR</span></td>
-                </tr>
-              </tbody>
-            </table>
           </div>
         </div>
 
         <!-- TAB CONTENT 4: PAYMENT OPTIONS -->
         <div id="store-tab-payment-options" class="store-tab-content">
-          <div class="form-card">
-            <h2 class="form-card-title">Payment Gateways & Checkout Integration</h2>
-            <p class="form-card-sub">Enable seamless digital product sales with multi-currency payment providers.</p>
-          </div>
 
-          <div class="payment-methods-grid" style="margin-top: 20px;">
+          <!-- 2-COLUMN PAYMENT DASHBOARD LAYOUT (MATCHING USER SCREENSHOT) -->
+          <div class="payment-dashboard-2col">
 
-            <!-- STRIPE -->
-            <div class="form-card payment-gateway-card">
-              <div class="gateway-header">
-                <div class="gateway-title-row">
-                  <div class="gateway-icon stripe-icon">S</div>
+            <!-- LEFT COLUMN: Wallet Overview + Withdrawal Methods -->
+            <div class="payment-left-col">
+              
+              <!-- CARD 1: Wallet Overview -->
+              <div class="analytics-card payment-wallet-card">
+                <div class="analytics-card-header">
                   <div>
-                    <div class="gateway-name">Stripe Payments</div>
-                    <div class="gateway-sub">Accept Credit/Debit Cards, Apple Pay & Google Pay worldwide.</div>
+                    <h3 class="analytics-card-title">Wallet Overview</h3>
+                  </div>
+                  <button class="btn btn-outline btn-sm" id="btn-add-history">Add History</button>
+                </div>
+
+                <div class="wallet-balance-row">
+                  <div>
+                    <div class="balance-label">Total Wallet Balance</div>
+                    <div class="balance-val-main">$1,245.80</div>
+                  </div>
+                  <div class="wallet-action-box">
+                    <button class="btn-view-history-pill" id="btn-view-wallet-history">
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>
+                      </svg>
+                      View Add/Withdraw History
+                    </button>
                   </div>
                 </div>
-                <label class="switch">
-                  <input type="checkbox" id="toggle-stripe-active" checked>
-                  <span class="slider round"></span>
-                </label>
-              </div>
 
-              <div class="gateway-body">
-                <div class="form-group">
-                  <label class="form-label">Stripe Publishable Key</label>
-                  <input type="text" class="form-input" id="input-stripe-pub" value="pk_test_51Nx...8921">
-                </div>
-                <div class="form-group">
-                  <label class="form-label">Stripe Secret Key</label>
-                  <input type="password" class="form-input" id="input-stripe-secret" value="sk_test_51Nx...9921">
-                </div>
-                <div class="form-group">
-                  <label class="form-label">Default Checkout Currency</label>
-                  <select class="form-select" id="select-stripe-currency">
-                    <option value="USD">USD ($) - United States Dollar</option>
-                    <option value="INR">INR (₹) - Indian Rupee</option>
-                    <option value="EUR">EUR (€) - Euro</option>
-                    <option value="GBP">GBP (£) - British Pound</option>
-                  </select>
-                </div>
-              </div>
-            </div>
-
-            <!-- RAZORPAY -->
-            <div class="form-card payment-gateway-card">
-              <div class="gateway-header">
-                <div class="gateway-title-row">
-                  <div class="gateway-icon razorpay-icon">R</div>
+                <div class="wallet-sub-metrics">
                   <div>
-                    <div class="gateway-name">Razorpay India</div>
-                    <div class="gateway-sub">Support UPI, Netbanking, Cards & Wallet payments in India.</div>
+                    <div class="sub-metric-label">Available for Withdrawal</div>
+                    <div class="sub-metric-val available">$980.50</div>
+                  </div>
+                  <div>
+                    <div class="sub-metric-label">Pending Clearance</div>
+                    <div class="sub-metric-val pending">$265.30</div>
                   </div>
                 </div>
-                <label class="switch">
-                  <input type="checkbox" id="toggle-razorpay-active" checked>
-                  <span class="slider round"></span>
-                </label>
               </div>
 
-              <div class="gateway-body">
-                <div class="form-group">
-                  <label class="form-label">Razorpay Key ID</label>
-                  <input type="text" class="form-input" id="input-razorpay-id" value="rzp_test_90aX...112">
-                </div>
-                <div class="form-group">
-                  <label class="form-label">Razorpay Key Secret</label>
-                  <input type="password" class="form-input" id="input-razorpay-secret" value="rzp_sec_...8812">
-                </div>
-                <div class="toggle-row-card" style="margin-top: 10px; background: transparent; padding: 0;">
+              <!-- CARD 2: Withdrawal Methods (Configure for India Payouts) -->
+              <div class="analytics-card payment-methods-card" style="margin-top: 16px;">
+                <div class="analytics-card-header">
                   <div>
-                    <div class="toggle-title">UPI Auto-Collect</div>
-                    <div class="toggle-sub">Instant QR code generation on checkout screen.</div>
-                  </div>
-                  <label class="switch">
-                    <input type="checkbox" id="toggle-upi-collect" checked>
-                    <span class="slider round"></span>
-                  </label>
-                </div>
-              </div>
-            </div>
-
-            <!-- PAYPAL -->
-            <div class="form-card payment-gateway-card">
-              <div class="gateway-header">
-                <div class="gateway-title-row">
-                  <div class="gateway-icon paypal-icon">P</div>
-                  <div>
-                    <div class="gateway-name">PayPal Express</div>
-                    <div class="gateway-sub">Enable 1-Click PayPal balance and checkout options.</div>
+                    <h3 class="analytics-card-title">Withdrawal Methods (Configure for India Payouts)</h3>
                   </div>
                 </div>
-                <label class="switch">
-                  <input type="checkbox" id="toggle-paypal-active">
-                  <span class="slider round"></span>
-                </label>
-              </div>
 
-              <div class="gateway-body">
-                <div class="form-group">
-                  <label class="form-label">PayPal Client ID</label>
-                  <input type="text" class="form-input" id="input-paypal-id"
-                    placeholder="Client ID from PayPal Developer Portal">
-                </div>
-                <div class="form-group">
-                  <label class="form-label">PayPal Secret Key</label>
-                  <input type="password" class="form-input" id="input-paypal-secret" placeholder="Secret Key">
-                </div>
-              </div>
-            </div>
-
-            <!-- DIRECT UPI & QR -->
-            <div class="form-card payment-gateway-card">
-              <div class="gateway-header">
-                <div class="gateway-title-row">
-                  <div class="gateway-icon upi-icon">QR</div>
-                  <div>
-                    <div class="gateway-name">Direct UPI ID / QR Code</div>
-                    <div class="gateway-sub">Receive direct peer-to-peer UPI payments with zero fees.</div>
+                <div class="withdrawal-boxes-grid single-method">
+                  <!-- Linked Razorpay Account -->
+                  <div class="payout-method-box full-width">
+                    <div class="razorpay-link-row">
+                      <div class="payout-brand-badge rzp-badge">
+                        <div class="rzp-icon-box">⚡</div>
+                        <div>
+                          <div class="brand-name">Linked Razorpay Account</div>
+                        </div>
+                      </div>
+                      <div class="rzp-action-group">
+                        <span class="status-lbl-text">Configuration Status</span>
+                        <button class="btn btn-outline btn-sm" id="btn-rzp-login">Login</button>
+                      </div>
+                    </div>
                   </div>
                 </div>
-                <label class="switch">
-                  <input type="checkbox" id="toggle-direct-upi-active" checked>
-                  <span class="slider round"></span>
-                </label>
               </div>
 
-              <div class="gateway-body">
-                <div class="form-group">
-                  <label class="form-label">Your UPI ID (VPA)</label>
-                  <input type="text" class="form-input" id="input-upi-vpa" value="rudra@upi">
+            </div>
+
+            <!-- RIGHT COLUMN: Unified Transaction History (All Activities) -->
+            <div class="payment-right-col">
+              <div class="analytics-card txn-history-card">
+                <div class="analytics-card-header">
+                  <div>
+                    <h3 class="analytics-card-title">Unified Transaction History (All Activities)</h3>
+                  </div>
+                  <button class="btn btn-outline btn-sm" id="btn-txn-view-all">View All</button>
                 </div>
-                <div class="form-group">
-                  <label class="form-label">Custom Payment QR Code Image</label>
-                  <button class="btn btn-outline btn-block" id="btn-upload-qr">Upload Custom QR Image</button>
+
+                <div class="analytics-table-container">
+                  <table class="analytics-product-table txn-table">
+                    <thead>
+                      <tr>
+                        <th style="text-align: left;">Date</th>
+                        <th style="text-align: left;">Transaction ID</th>
+                        <th style="text-align: left;">Type</th>
+                        <th style="text-align: right;">Amount</th>
+                        <th style="text-align: center;">Status</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td>Oct 20, 2022</td>
+                        <td class="cell-txid">67300007547...</td>
+                        <td>Order Sale</td>
+                        <td class="cell-amount pos">✓ $980.50</td>
+                        <td style="text-align: center;"><span class="badge-status cleared">Cleared</span></td>
+                      </tr>
+                      <tr>
+                        <td>Oct 22, 2022</td>
+                        <td class="cell-txid">67300007547...</td>
+                        <td>Order Sale</td>
+                        <td class="cell-amount pos">✓ $980.50</td>
+                        <td style="text-align: center;"><span class="badge-status cleared">Cleared</span></td>
+                      </tr>
+                      <tr>
+                        <td>Oct 23, 2022</td>
+                        <td class="cell-txid">60380007982...</td>
+                        <td>Creator Fund</td>
+                        <td class="cell-amount">$265.30</td>
+                        <td style="text-align: center;"><span class="badge-status pending">Pending</span></td>
+                      </tr>
+                      <tr>
+                        <td>Oct 20, 2022</td>
+                        <td class="cell-txid">67300007547...</td>
+                        <td>Order Sale</td>
+                        <td class="cell-amount pos">✓ $980.50</td>
+                        <td style="text-align: center;"><span class="badge-status cleared">Cleared</span></td>
+                      </tr>
+                      <tr>
+                        <td>Oct 22, 2022</td>
+                        <td class="cell-txid">67300007547...</td>
+                        <td>Order Sale</td>
+                        <td class="cell-amount pos">✓ $980.50</td>
+                        <td style="text-align: center;"><span class="badge-status cleared">Cleared</span></td>
+                      </tr>
+                      <tr>
+                        <td>Oct 23, 2022</td>
+                        <td class="cell-txid">60380007982...</td>
+                        <td>Creator Fund</td>
+                        <td class="cell-amount">$265.30</td>
+                        <td style="text-align: center;"><span class="badge-status pending">Pending</span></td>
+                      </tr>
+                      <tr>
+                        <td>Oct 23, 2022</td>
+                        <td class="cell-txid">60380007982...</td>
+                        <td>Creator Fund</td>
+                        <td class="cell-amount">$265.30</td>
+                        <td style="text-align: center;"><span class="badge-status pending">Pending</span></td>
+                      </tr>
+                    </tbody>
+                  </table>
                 </div>
+
+                <div class="device-sync-footer" style="margin-top: 14px;">Data last synchronized: 2 mins ago.</div>
               </div>
             </div>
 
-          </div>
-
-          <!-- CHECKOUT SETTINGS -->
-          <div class="form-card" style="margin-top: 20px;">
-            <h2 class="form-card-title">Instant Checkout & Automation Rules</h2>
-
-            <div class="toggle-row-card">
-              <div>
-                <div class="toggle-title">Instant Digital File DM Delivery</div>
-                <div class="toggle-sub">Automatically send Instagram DM link with PDF/Product as soon as payment is
-                  confirmed.</div>
-              </div>
-              <label class="switch">
-                <input type="checkbox" id="toggle-instant-dm-deliver" checked>
-                <span class="slider round"></span>
-              </label>
-            </div>
-
-            <div class="toggle-row-card" style="margin-top: 12px;">
-              <div>
-                <div class="toggle-title">Automated Tax Invoice PDF</div>
-                <div class="toggle-sub">Email digital receipt & tax invoice to buyer automatically.</div>
-              </div>
-              <label class="switch">
-                <input type="checkbox" id="toggle-auto-invoice" checked>
-                <span class="slider round"></span>
-              </label>
-            </div>
-          </div>
-
-          <!-- TEAM & WEBSITE INFO CARD -->
-          <div class="form-card website-team-info-card"
-            style="margin-top: 20px; background: linear-gradient(135deg, #090d16, #1e293b); color: #fff;">
-            <div class="team-card-inner">
-              <div class="team-logo-badge">RenderReply</div>
-              <div>
-                <div style="font-size: 16px; font-weight: 800; color: #fff;">RenderReply Storefront Engine</div>
-                <div style="font-size: 13px; color: #94a3b8; margin-top: 4px;">
-                  Built by <strong>RudRa RR & Team</strong> • Official Instagram Automation & Monetization
-                  Infrastructure.
-                </div>
-                <div style="font-size: 12px; color: #64748b; margin-top: 8px;">
-                  Platform URL: <a href="https://renderreply.com" target="_blank" rel="noopener"
-                    style="color: #6366f1; text-decoration: none; font-weight: 700;">https://renderreply.com</a> •
-                  Handle: @render6457
-                </div>
-              </div>
-            </div>
           </div>
 
         </div>
@@ -3276,234 +3751,6 @@
       </section>
 
     </main>
-  </div>
-
-  <!-- FULL REAL BROWSER TAB OVERLAY -->
-  <div class="browser-tab-overlay" id="browser-storefront-overlay">
-    <div class="browser-nav-bar">
-      <div class="browser-controls">
-        <span class="browser-dot red" id="btn-close-browser-tab" title="Close Browser Tab"></span>
-        <span class="browser-dot yellow"></span>
-        <span class="browser-dot green"></span>
-      </div>
-
-      <div class="browser-address-bar">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="2.2"
-          style="margin-right: 4px;">
-          <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
-          <path d="M7 11V7a5 5 0 0 1 10 0v4" />
-        </svg>
-        https://store.renderreply.com/render6457
-      </div>
-
-      <button class="browser-close-btn" id="btn-exit-browser-tab">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
-          style="margin-right: 4px;">
-          <line x1="18" y1="6" x2="6" y2="18" />
-          <line x1="6" y1="6" x2="18" y2="18" />
-        </svg>
-        Exit Storefront Mode
-      </button>
-    </div>
-
-    <!-- STOREFRONT OVERLAY CONTENT -->
-    <div class="ecom-store-page">
-      <div class="ecom-hero-header">
-        <div class="ecom-hero-left">
-          <div class="ecom-creator-avatar">R</div>
-          <div>
-            <div class="ecom-creator-title">
-              RudRa RR Store
-              <span
-                style="color: #6366f1; font-size: 13px; background: rgba(99, 102, 241, 0.1); padding: 3px 10px; border-radius: 12px; border: 1px solid rgba(99, 102, 241, 0.25); font-weight: 700; display: inline-flex; align-items: center; gap: 4px;">
-                <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
-                  <polyline points="20 6 9 17 4 12" />
-                </svg>
-                Verified Creator Store
-              </span>
-            </div>
-            <div class="ecom-creator-handle">@render6457 • Official Creator Storefront</div>
-            <p class="ecom-creator-bio">Helping creators & developers automate Instagram, sell digital products & scale
-              leads.</p>
-          </div>
-        </div>
-        <div class="ecom-cart-badge" id="btn-ecom-cart">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-            style="margin-right: 4px;">
-            <circle cx="9" cy="21" r="1" />
-            <circle cx="20" cy="21" r="1" />
-            <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6" />
-          </svg>
-          Store Cart (1) • $19.99
-        </div>
-      </div>
-
-      <div class="ecom-section-title">Featured Products & Services</div>
-
-      <div class="ecom-products-grid">
-        <!-- Products populated via JS -->
-      </div>
-
-      <!-- TRUST BADGES BAR -->
-      <div id="ecom-trust-bar"
-        style="background: #ffffff; border: 1px solid var(--border-color); border-radius: var(--border-radius-md); padding: 20px; display: flex; justify-content: space-around; align-items: center; text-align: center;">
-        <div>
-          <div
-            style="font-size: 14px; font-weight: 800; display: flex; align-items: center; justify-content: center; gap: 6px;">
-            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#6366f1" stroke-width="2">
-              <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
-              <path d="M7 11V7a5 5 0 0 1 10 0v4" />
-            </svg>
-            256-Bit SSL Encrypted
-          </div>
-          <div style="font-size: 11px; color: var(--text-secondary);">RenderReply Buyer Protection</div>
-        </div>
-        <div style="width: 1px; height: 24px; background: var(--border-color);"></div>
-        <div>
-          <div
-            style="font-size: 14px; font-weight: 800; display: flex; align-items: center; justify-content: center; gap: 6px;">
-            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="2">
-              <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2" />
-            </svg>
-            Instant Automated Delivery
-          </div>
-          <div style="font-size: 11px; color: var(--text-secondary);">PDF & Links sent to your Email & DM</div>
-        </div>
-        <div style="width: 1px; height: 24px; background: var(--border-color);"></div>
-        <div>
-          <div
-            style="font-size: 14px; font-weight: 800; display: flex; align-items: center; justify-content: center; gap: 6px;">
-            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#f59e0b" stroke-width="2">
-              <polygon
-                points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
-            </svg>
-            Verified Creator Store
-          </div>
-          <div style="font-size: 11px; color: var(--text-secondary);">100% Quality Guaranteed</div>
-        </div>
-      </div>
-
-      <!-- DEDICATED FULL PRODUCT DETAIL PAGE VIEW -->
-      <div id="ecom-product-detail-view" style="display: none; flex-direction: column; gap: 32px;">
-        <div>
-          <button type="button" class="btn btn-outline" id="btn-back-to-storefront"
-            style="padding: 8px 18px; border: 1px solid #cbd5e1; font-weight: 700; background: #fff; display: inline-flex; align-items: center; gap: 6px;">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-              <line x1="19" y1="12" x2="5" y2="12" />
-              <polyline points="12 19 5 12 12 5" />
-            </svg>
-            Back to Storefront
-          </button>
-        </div>
-
-        <div
-          style="display: grid; grid-template-columns: 1fr 1fr; gap: 36px; background: #ffffff; border: 1px solid var(--border-color); border-radius: 20px; padding: 32px; box-shadow: var(--shadow-sm);">
-          <div>
-            <div class="detail-main-img-box">
-              <button type="button" class="gallery-nav-arrow left" id="btn-detail-prev-photo"
-                title="Previous photo">‹</button>
-              <button type="button" class="gallery-nav-arrow right" id="btn-detail-next-photo"
-                title="Next photo">›</button>
-
-              <img src="" alt="Product" class="detail-main-img" id="detail-active-img">
-              <span class="detail-img-counter" id="detail-img-counter">1 / 1</span>
-            </div>
-
-            <div class="gallery-thumbs-container" id="detail-thumbs-strip"
-              style="margin-top: 16px; justify-content: center;"></div>
-          </div>
-
-          <div style="display: flex; flex-direction: column; gap: 18px;">
-            <div
-              style="color: #f59e0b; font-size: 13px; font-weight: 700; display: flex; align-items: center; gap: 4px;"
-              id="detail-rating-container">
-              <div class="star-rating-row">
-                <svg class="star-icon" viewBox="0 0 24 24" width="13" height="13" fill="#f59e0b" stroke="none">
-                  <polygon
-                    points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
-                </svg>
-                <svg class="star-icon" viewBox="0 0 24 24" width="13" height="13" fill="#f59e0b" stroke="none">
-                  <polygon
-                    points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
-                </svg>
-                <svg class="star-icon" viewBox="0 0 24 24" width="13" height="13" fill="#f59e0b" stroke="none">
-                  <polygon
-                    points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
-                </svg>
-                <svg class="star-icon" viewBox="0 0 24 24" width="13" height="13" fill="#f59e0b" stroke="none">
-                  <polygon
-                    points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
-                </svg>
-                <svg class="star-icon" viewBox="0 0 24 24" width="13" height="13" fill="#f59e0b" stroke="none">
-                  <polygon
-                    points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
-                </svg>
-              </div>
-              <span style="color: var(--text-secondary); margin-left: 4px;" id="detail-rating-text">5.0 (64 customer
-                reviews)</span>
-            </div>
-
-            <h1 style="font-size: 26px; font-weight: 900; color: var(--text-primary); line-height: 1.25;"
-              id="detail-prod-title">Product Title</h1>
-
-            <div
-              style="display: flex; align-items: baseline; gap: 12px; border-bottom: 1px solid var(--border-color); padding-bottom: 16px;">
-              <span style="font-size: 28px; font-weight: 900; color: var(--text-primary);"
-                id="detail-prod-price">$19.99</span>
-              <span style="font-size: 16px; color: var(--text-secondary); text-decoration: line-through;"
-                id="detail-prod-oldprice">$39.99</span>
-            </div>
-
-            <p style="font-size: 14px; color: var(--text-secondary); line-height: 1.6;" id="detail-prod-desc">
-              Full product description overview goes here...
-            </p>
-
-            <div
-              style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px; padding: 14px 18px; display: flex; align-items: center; gap: 12px;">
-              <div style="font-size: 20px; color: #6366f1;">
-                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                  <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
-                </svg>
-              </div>
-              <div>
-                <div style="font-size: 13px; font-weight: 800; color: #0f172a;">RenderReply Instant Automated Delivery
-                </div>
-                <div style="font-size: 11px; color: #64748b;">PDF & Links sent instantly to your Email & Instagram DM
-                </div>
-              </div>
-            </div>
-
-            <div style="margin-top: 8px;">
-              <button type="button" class="btn btn-primary" id="btn-detail-buy-now"
-                style="width: 100%; padding: 14px; font-size: 16px; font-weight: 800; border-radius: var(--border-radius-pill); background: linear-gradient(135deg, #6366f1, #4f46e5); box-shadow: var(--shadow-md);">
-                Instant Access • $19.99
-              </button>
-            </div>
-          </div>
-        </div>
-
-        <div style="margin-top: 20px;">
-          <div
-            style="font-size: 20px; font-weight: 800; color: var(--text-primary); margin-bottom: 20px; display: flex; align-items: center; justify-content: space-between;">
-            <span>More Products from this Store</span>
-            <span
-              style="font-size: 13px; color: #6366f1; cursor: pointer; font-weight: 700; display: inline-flex; align-items: center; gap: 4px;"
-              id="btn-view-all-store-products">
-              View All Products
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-                <line x1="5" y1="12" x2="19" y2="12" />
-                <polyline points="12 5 19 12 12 19" />
-              </svg>
-            </span>
-          </div>
-
-          <div class="ecom-products-grid" id="more-products-grid">
-            <!-- Dynamically populated related products -->
-          </div>
-        </div>
-
-      </div>
-    </div>
   </div>
 
   <!-- FULL PAGE PRODUCT STUDIO EDITOR OVERLAY -->
@@ -4151,9 +4398,296 @@
       b = Math.min(255, Math.max(0, b + Math.round(2.55 * percent)));
       return '#' + [r, g, b].map(function (v) { return v.toString(16).padStart(2, '0'); }).join('');
     }
-
   })();
   </script>
+
+  <!-- QR CODE MODAL DIALOG -->
+  <div class="cs-qr-modal-backdrop" id="cs-qr-modal">
+    <div class="cs-qr-modal-card">
+      <button class="cs-qr-close-btn" id="cs-btn-close-qr">&times;</button>
+      <div class="cs-qr-header">
+        <div class="cs-qr-icon">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/>
+          </svg>
+        </div>
+        <h3 class="cs-qr-title">Storefront QR Code</h3>
+        <p class="cs-qr-sub">Scan with any smartphone camera to instantly open your creator storefront.</p>
+      </div>
+
+      <div class="cs-qr-code-box">
+        <img src="https://api.qrserver.com/v1/create-qr-code/?size=220x220&data=https://renderreply.com/store/rajeev" id="cs-qr-img" alt="Storefront QR Code">
+      </div>
+
+      <div class="cs-qr-url-pill" id="cs-qr-url-display">
+        renderreply.com/store/rajeev
+      </div>
+
+      <div class="cs-qr-actions">
+        <button class="btn btn-primary btn-pill" id="cs-btn-download-qr" style="width: 100%;">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="margin-right: 6px;">
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+            <polyline points="7 10 12 15 17 10"/>
+            <line x1="12" y1="15" x2="12" y2="3"/>
+          </svg>
+          Download QR Code
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- FULL INTERACTIVE LIVE PREVIEW STORE BROWSER OVERLAY MODAL -->
+  <div class="store-preview-modal-backdrop" id="store-preview-modal">
+    <div class="store-preview-browser-frame">
+      <!-- Simulated Browser Address Bar Header -->
+      <div class="store-preview-browser-header">
+        <div class="browser-dots">
+          <span class="dot red" id="spm-dot-close" title="Close Preview"></span>
+          <span class="dot yellow"></span>
+          <span class="dot green"></span>
+        </div>
+        <div class="browser-address-bar">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#64748b" stroke-width="2">
+            <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+            <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+          </svg>
+          <span id="spm-url-txt">https://renderreply.com/store/rajeev</span>
+        </div>
+        <button class="btn-close-browser-modal" id="btn-close-spm-modal" title="Close Preview">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+            <line x1="18" y1="6" x2="6" y2="18"/>
+            <line x1="6" y1="6" x2="18" y2="18"/>
+          </svg>
+        </button>
+      </div>
+
+      <!-- Live Store Preview Content Viewport -->
+      <div class="store-preview-content-viewport" id="spm-viewport">
+        <!-- Live Hero Header -->
+        <div class="spm-hero-banner" id="spm-hero-banner">
+          <div class="spm-hero-overlay"></div>
+
+          <!-- PAGE TOP BAR: LOGIN / SIGN UP & CUSTOMER ACCOUNT HUB -->
+          <div class="spm-page-top-bar">
+            <button class="btn btn-outline btn-xs spm-btn-auth" id="spm-btn-open-auth">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+                <circle cx="12" cy="7" r="4"/>
+              </svg>
+              Login / Sign Up
+            </button>
+            
+            <div class="spm-user-logged-in-box" id="spm-user-logged-in-box" style="display: none;">
+              <button class="spm-user-pill-btn" id="spm-btn-user-account">
+                <span class="user-avatar-dot">R</span>
+                <span class="user-email-text" id="spm-user-email-txt">rajeev@gmail.com</span>
+                <span class="orders-count-badge">3 Orders</span>
+              </button>
+              <button class="btn btn-outline btn-xs spm-btn-logout" id="spm-btn-logout" title="Log Out">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
+                  <polyline points="16 17 21 12 16 7"/>
+                  <line x1="21" y1="12" x2="9" y2="12"/>
+                </svg>
+              </button>
+            </div>
+          </div>
+
+          <div class="spm-creator-profile-card">
+            <div class="spm-avatar-wrapper">
+              <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=250&q=80" id="spm-avatar-img" class="spm-avatar" alt="Creator Avatar">
+              <span class="spm-verified-badge" id="spm-verified-badge" title="Verified Creator">✓</span>
+            </div>
+            <h1 class="spm-creator-name" id="spm-creator-name">Rajeev Sharma</h1>
+            <p class="spm-creator-bio" id="spm-creator-bio">Building premium Instagram businesses and automation systems.</p>
+            
+            <div class="spm-social-links-row" id="spm-socials-row">
+              <span class="spm-social-icon"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg></span>
+              <span class="spm-social-icon"><svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg></span>
+              <span class="spm-social-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></span>
+              <span class="spm-social-icon"><svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M19 3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14m-.5 15.5v-5.3a3.26 3.26 0 0 0-3.26-3.26c-.85 0-1.84.52-2.28 1.3v-1.11h-2.79v8.37h2.79v-4.93c0-.77.62-1.4 1.39-1.4a1.4 1.4 0 0 1 1.4 1.4v4.93h2.75M6.46 10.9v8.37H9.25V10.9H6.46M7.86 6.75a1.65 1.65 0 1 0 0 3.3 1.65 1.65 0 0 0 0-3.3z"/></svg></span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Store Products Container -->
+        <div class="spm-products-section">
+          <div class="spm-section-header">
+            <h2 class="spm-section-title">Store Products & Digital Downloads</h2>
+            <p class="spm-section-sub">Instant delivery via Instagram DM & Email.</p>
+          </div>
+
+          <div class="spm-products-grid" id="spm-products-grid">
+            <!-- Product Card 1 -->
+            <div class="spm-prod-card">
+              <div class="spm-prod-thumb-box">
+                <img src="https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?auto=format&fit=crop&w=400&q=80" alt="Java PDF" class="spm-prod-img">
+              </div>
+              <div class="spm-prod-details">
+                <h3 class="spm-prod-title">Java Full Stack Roadmap PDF</h3>
+                <p class="spm-prod-desc">Complete step-by-step 2026 Java Backend & Full Stack developer roadmap with code examples.</p>
+                <div class="spm-prod-footer">
+                  <span class="spm-prod-price">$19.99</span>
+                  <button class="btn spm-btn-buy" id="spm-cta-btn-1">Buy Instant PDF</button>
+                </div>
+              </div>
+            </div>
+
+            <!-- Product Card 2 -->
+            <div class="spm-prod-card">
+              <div class="spm-prod-thumb-box">
+                <img src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=400&q=80" alt="1-on-1 Session" class="spm-prod-img">
+              </div>
+              <div class="spm-prod-details">
+                <h3 class="spm-prod-title">1-on-1 Instagram Strategy Session</h3>
+                <p class="spm-prod-desc">60-minute private strategy call to audit your Instagram profile, reels, and DM automation funnel.</p>
+                <div class="spm-prod-footer">
+                  <span class="spm-prod-price">$49.00</span>
+                  <button class="btn spm-btn-buy" id="spm-cta-btn-2">Book 1-on-1 Call</button>
+                </div>
+              </div>
+            </div>
+
+            <!-- Product Card 3 -->
+            <div class="spm-prod-card">
+              <div class="spm-prod-thumb-box">
+                <img src="https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=400&q=80" alt="Automation Bundle" class="spm-prod-img">
+              </div>
+              <div class="spm-prod-details">
+                <h3 class="spm-prod-title">Instagram Automation Preset Bundle</h3>
+                <p class="spm-prod-desc">Ready-to-use Auto-DM comment reply presets, story trigger templates, and lead capture workflows.</p>
+                <div class="spm-prod-footer">
+                  <span class="spm-prod-price free">FREE</span>
+                  <button class="btn spm-btn-buy" id="spm-cta-btn-3">Download Free Bundle</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="spm-footer-badge">
+          Powered by <strong>RenderReply Creator Store Engine</strong>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CUSTOMER LOGIN & SIGN UP MODAL -->
+  <div class="store-preview-modal-backdrop auth-backdrop" id="store-auth-modal">
+    <div class="store-auth-card">
+      <div class="auth-card-header">
+        <div class="auth-title-group">
+          <h2 class="auth-title" id="auth-modal-title">Welcome to Storefront</h2>
+          <p class="auth-sub">Sign in to access your digital downloads & order history.</p>
+        </div>
+        <button class="btn-close-modal" id="btn-close-auth-modal">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </button>
+      </div>
+
+      <!-- Auth Tab Switcher -->
+      <div class="auth-tabs">
+        <button class="auth-tab-btn active" id="auth-tab-login">Login</button>
+        <button class="auth-tab-btn" id="auth-tab-signup">Sign Up</button>
+      </div>
+
+      <!-- Social Quick Login -->
+      <button class="btn btn-outline btn-block btn-social-google" id="btn-google-login" style="margin-top: 16px;">
+        <svg width="16" height="16" viewBox="0 0 24 24" style="margin-right: 8px;"><path fill="#4285F4" d="M23.745 12.27c0-.7-.06-1.4-.19-2.07H12v4.51h6.6c-.29 1.52-1.14 2.82-2.4 3.68v3.05h3.88c2.27-2.09 3.665-5.17 3.665-9.17z"/><path fill="#34A853" d="M12 24c3.24 0 5.95-1.08 7.93-2.91l-3.88-3.05c-1.08.72-2.45 1.16-4.05 1.16-3.12 0-5.77-2.1-6.72-4.93H1.27v3.15C3.25 21.3 7.31 24 12 24z"/><path fill="#FBBC05" d="M5.28 14.27c-.25-.72-.38-1.49-.38-2.27s.13-1.55.38-2.27V6.58H1.27C.46 8.2.0 10.04.0 12c0 1.96.46 3.8 1.27 5.42l4.01-3.15z"/><path fill="#EA4335" d="M12 4.75c1.77 0 3.35.61 4.6 1.8l3.42-3.42C17.95 1.19 15.24 0 12 0 7.31 0 3.25 2.7 1.27 6.58l4.01 3.15c.95-2.83 3.6-4.98 6.72-4.98z"/></svg>
+        Continue with Google
+      </button>
+
+      <div class="auth-divider"><span>OR CONTINUE WITH EMAIL</span></div>
+
+      <!-- Login Form -->
+      <form class="auth-form" id="form-customer-login">
+        <div class="form-group">
+          <label class="form-label">Email Address</label>
+          <input type="email" class="form-input" id="auth-input-email" value="rajeev@gmail.com" required placeholder="name@example.com">
+        </div>
+        <div class="form-group" style="margin-top: 12px;">
+          <label class="form-label">Password</label>
+          <input type="password" class="form-input" id="auth-input-password" value="••••••••" required placeholder="Enter password">
+        </div>
+        <button type="submit" class="btn btn-primary btn-block" style="margin-top: 18px;" id="btn-submit-auth">Sign In to Account</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- CUSTOMER ORDER HISTORY & DIGITAL DOWNLOADS DASHBOARD MODAL -->
+  <div class="store-preview-modal-backdrop orders-backdrop" id="customer-orders-modal">
+    <div class="customer-orders-card">
+      <div class="orders-card-header">
+        <div>
+          <h2 class="orders-title">My Orders & Digital Asset Downloads</h2>
+          <p class="orders-sub">Logged in as <strong id="orders-user-email-display">rajeev@gmail.com</strong></p>
+        </div>
+        <button class="btn-close-modal" id="btn-close-orders-modal">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </button>
+      </div>
+
+      <div class="orders-list-stack">
+        <!-- Order Item 1 -->
+        <div class="customer-order-item-box">
+          <div class="order-item-top">
+            <div class="order-id-badge">Order #RR-892401 • Oct 20, 2026</div>
+            <span class="delivery-status-tag dm-sent">✓ Sent via Instagram DM & Email</span>
+          </div>
+          <div class="order-product-row">
+            <img src="https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?auto=format&fit=crop&w=150&q=80" class="order-prod-thumb" alt="">
+            <div class="order-prod-info">
+              <div class="order-prod-name">Java Full Stack Roadmap PDF</div>
+              <div class="order-prod-price-text">$19.99 • Complete 2026 PDF Bundle</div>
+            </div>
+            <button class="btn btn-primary btn-sm btn-download-asset" onclick="showToast('Initiating instant PDF download...')">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" style="margin-right: 4px;"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+              Download PDF
+            </button>
+          </div>
+        </div>
+
+        <!-- Order Item 2 -->
+        <div class="customer-order-item-box">
+          <div class="order-item-top">
+            <div class="order-id-badge">Order #RR-892119 • Oct 18, 2026</div>
+            <span class="delivery-status-tag confirmed">✓ Booking Confirmed</span>
+          </div>
+          <div class="order-product-row">
+            <img src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=150&q=80" class="order-prod-thumb" alt="">
+            <div class="order-prod-info">
+              <div class="order-prod-name">1-on-1 Instagram Strategy Session</div>
+              <div class="order-prod-price-text">$49.00 • Private Strategy Call</div>
+            </div>
+            <button class="btn btn-outline btn-sm btn-download-asset" onclick="showToast('Opening Google Calendar booking link...')">
+              View Calendar
+            </button>
+          </div>
+        </div>
+
+        <!-- Order Item 3 -->
+        <div class="customer-order-item-box">
+          <div class="order-item-top">
+            <div class="order-id-badge">Order #RR-889021 • Oct 12, 2026</div>
+            <span class="delivery-status-tag dm-sent">✓ Sent via Instagram DM</span>
+          </div>
+          <div class="order-product-row">
+            <img src="https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=150&q=80" class="order-prod-thumb" alt="">
+            <div class="order-prod-info">
+              <div class="order-prod-name">Instagram Automation Preset Bundle</div>
+              <div class="order-prod-price-text">FREE • DM Preset Pack</div>
+            </div>
+            <button class="btn btn-primary btn-sm btn-download-asset" onclick="showToast('Downloading preset bundle zip...')">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" style="margin-right: 4px;"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+              Download ZIP
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="./app.js"></script>
 </body>
 
 </html>

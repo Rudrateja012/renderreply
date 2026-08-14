@@ -500,6 +500,42 @@ function initApp() {
     });
   });
 
+  // 7b. BIO LINK SUB-TAB SWITCHING & INTERACTIVE PILLS
+  const biolinkSubNavBtns = document.querySelectorAll('.biolink-subtabs .sub-tab-btn');
+  const biolinkTabContents = document.querySelectorAll('.biolink-tab-content');
+
+  biolinkSubNavBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      const targetTab = btn.getAttribute('data-biolink-tab');
+      if (!targetTab) return;
+
+      biolinkSubNavBtns.forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+
+      biolinkTabContents.forEach(content => {
+        if (content.id === `biolink-tab-${targetTab}`) {
+          content.classList.add('active');
+          content.style.display = 'block';
+        } else {
+          content.classList.remove('active');
+          content.style.display = 'none';
+        }
+      });
+    });
+  });
+
+  const biolinkPillBtns = document.querySelectorAll('.biolink-card .pill-btn');
+  biolinkPillBtns.forEach(pill => {
+    pill.addEventListener('click', () => {
+      const parentGroup = pill.closest('.pill-group');
+      if (parentGroup) {
+        parentGroup.querySelectorAll('.pill-btn').forEach(b => b.classList.remove('active'));
+        pill.classList.add('active');
+      }
+    });
+  });
+
+
   // 8. REFRESH BUTTON CLICK HANDLERS
   const refreshBtns = document.querySelectorAll('.btn-refresh');
   refreshBtns.forEach(btn => {
@@ -1127,6 +1163,31 @@ function initApp() {
     });
   }
 
+  // STORE SUB-NAV TAB SWITCHER FUNCTION
+  window.switchStoreTab = function(tabName, clickedBtn) {
+    const subnavBtns = document.querySelectorAll('.store-subnav-btn');
+    subnavBtns.forEach(btn => {
+      btn.classList.remove('active');
+      if (clickedBtn) {
+        if (btn === clickedBtn) btn.classList.add('active');
+      } else {
+        if (btn.getAttribute('data-store-tab') === tabName) btn.classList.add('active');
+      }
+    });
+
+    const tabContents = document.querySelectorAll('.store-tab-content');
+    tabContents.forEach(content => {
+      content.classList.remove('active');
+      content.style.display = 'none';
+    });
+
+    const targetContent = document.getElementById(`store-tab-${tabName}`);
+    if (targetContent) {
+      targetContent.classList.add('active');
+      targetContent.style.display = 'block';
+    }
+  };
+
   // GLOBAL EVENT DELEGATION FOR DEEP INTERACTIVE BUTTONS
   document.addEventListener('click', (e) => {
     // 1. Edit Product Button
@@ -1239,6 +1300,273 @@ function initApp() {
     }
   });
 
+  // 9. Detailed Analytics Time Range Buttons & Reload Interactivity
+  const rangeBtns = document.querySelectorAll('.time-range-btn[data-store-range]');
+  const reloadAnalyticsBtn = document.getElementById('btn-analytics-reload');
+  const analyticsCards = document.querySelectorAll('.analytics-card');
+  const syncTimestamp = document.getElementById('analytics-sync-timestamp');
+
+  // Analytics Datasets for 7 Days, 30 Days, 90 Days, Lifetime
+  const analyticsDatasets = {
+    '7 Days': {
+      peaks: [165, 185, 181, 185],
+      dates: ['Oct 08', 'Oct 10', 'Oct 12', 'Oct 14', 'Oct 16', 'Oct 18', 'Oct 20', 'Oct 22'],
+      popoverDate: 'Oct 12:',
+      popoverVisits: 165,
+      popoverClicks: 70,
+      linePath: 'M 25 105 L 60 118 L 95 125 L 130 115 L 165 60 L 200 102 L 235 110 L 270 45 L 305 100 L 340 48 L 375 45 L 410 88 L 445 120 L 480 140 L 515 80',
+      areaPath: 'M 25 105 L 60 118 L 95 125 L 130 115 L 165 60 L 200 102 L 235 110 L 270 45 L 305 100 L 340 48 L 375 45 L 410 88 L 445 120 L 480 140 L 515 80 L 515 200 L 25 200 Z',
+      barHeights: [60, 70, 75, 70, 95, 65, 60, 100, 65, 70, 105, 70, 55, 95, 60],
+      products: [
+        { clicks: 336, ctr: '12.0%', conv: '7.03%' },
+        { clicks: 229, ctr: '8.3%', conv: '5.03%' },
+        { clicks: 153, ctr: '4.0%', conv: '6.63%' },
+        { clicks: 76, ctr: '14.8%', conv: '20.02%' },
+        { clicks: 43, ctr: '8.9%', conv: '10.09%' }
+      ],
+      mobilePct: '60%',
+      deskPct: '28%',
+      tabPct: '12%',
+      geo: {
+        us: { val: '520 (42%)', pct: '42%' },
+        in: { val: '347 (28%)', pct: '28%' },
+        uk: { val: '173 (14%)', pct: '14%' },
+        de: { val: '111 (9%)', pct: '9%' }
+      }
+    },
+    '30 Days': {
+      peaks: [640, 720, 680, 810],
+      dates: ['Sep 24', 'Sep 30', 'Oct 06', 'Oct 12', 'Oct 18', 'Oct 24', 'Oct 30', 'Nov 05'],
+      popoverDate: 'Oct 18:',
+      popoverVisits: 810,
+      popoverClicks: 340,
+      linePath: 'M 25 120 L 60 90 L 95 100 L 130 80 L 165 40 L 200 70 L 235 85 L 270 30 L 305 60 L 340 35 L 375 25 L 410 65 L 445 90 L 480 75 L 515 50',
+      areaPath: 'M 25 120 L 60 90 L 95 100 L 130 80 L 165 40 L 200 70 L 235 85 L 270 30 L 305 60 L 340 35 L 375 25 L 410 65 L 445 90 L 480 75 L 515 50 L 515 200 L 25 200 Z',
+      barHeights: [75, 85, 90, 80, 110, 85, 75, 120, 80, 90, 125, 85, 70, 110, 80],
+      products: [
+        { clicks: 1420, ctr: '14.2%', conv: '8.15%' },
+        { clicks: 980, ctr: '9.6%', conv: '6.20%' },
+        { clicks: 640, ctr: '5.2%', conv: '7.80%' },
+        { clicks: 310, ctr: '16.4%', conv: '22.10%' },
+        { clicks: 185, ctr: '10.5%', conv: '12.40%' }
+      ],
+      mobilePct: '65%',
+      deskPct: '25%',
+      tabPct: '10%',
+      geo: {
+        us: { val: '2,140 (45%)', pct: '45%' },
+        in: { val: '1,380 (29%)', pct: '29%' },
+        uk: { val: '620 (13%)', pct: '13%' },
+        de: { val: '380 (8%)', pct: '8%' }
+      }
+    },
+    '90 Days': {
+      peaks: [1850, 2100, 1980, 2450],
+      dates: ['Aug 01', 'Aug 15', 'Sep 01', 'Sep 15', 'Oct 01', 'Oct 15', 'Nov 01', 'Nov 15'],
+      popoverDate: 'Sep 15:',
+      popoverVisits: 2450,
+      popoverClicks: 920,
+      linePath: 'M 25 140 L 60 110 L 95 120 L 130 95 L 165 45 L 200 80 L 235 90 L 270 35 L 305 75 L 340 40 L 375 30 L 410 80 L 445 105 L 480 85 L 515 60',
+      areaPath: 'M 25 140 L 60 110 L 95 120 L 130 95 L 165 45 L 200 80 L 235 90 L 270 35 L 305 75 L 340 40 L 375 30 L 410 80 L 445 105 L 480 85 L 515 60 L 515 200 L 25 200 Z',
+      barHeights: [85, 95, 100, 90, 120, 95, 85, 130, 90, 100, 135, 95, 80, 120, 90],
+      products: [
+        { clicks: 4280, ctr: '15.8%', conv: '9.40%' },
+        { clicks: 2940, ctr: '11.1%', conv: '7.15%' },
+        { clicks: 1890, ctr: '6.4%', conv: '8.90%' },
+        { clicks: 940, ctr: '18.2%', conv: '24.50%' },
+        { clicks: 560, ctr: '12.0%', conv: '14.10%' }
+      ],
+      mobilePct: '72%',
+      deskPct: '20%',
+      tabPct: '8%',
+      geo: {
+        us: { val: '6,480 (48%)', pct: '48%' },
+        in: { val: '3,650 (27%)', pct: '27%' },
+        uk: { val: '1,890 (14%)', pct: '14%' },
+        de: { val: '1,210 (9%)', pct: '9%' }
+      }
+    },
+    'Lifetime': {
+      peaks: [4200, 4800, 4600, 5600],
+      dates: ['Jan 2026', 'Mar 2026', 'May 2026', 'Jul 2026', 'Sep 2026', 'Nov 2026', 'Jan 2027', 'Mar 2027'],
+      popoverDate: 'Jul 2026:',
+      popoverVisits: 5600,
+      popoverClicks: 2150,
+      linePath: 'M 25 150 L 60 120 L 95 130 L 130 100 L 165 35 L 200 75 L 235 85 L 270 25 L 305 65 L 340 30 L 375 20 L 410 70 L 445 95 L 480 70 L 515 45',
+      areaPath: 'M 25 150 L 60 120 L 95 130 L 130 100 L 165 35 L 200 75 L 235 85 L 270 25 L 305 65 L 340 30 L 375 20 L 410 70 L 445 95 L 480 70 L 515 45 L 515 200 L 25 200 Z',
+      barHeights: [95, 105, 110, 100, 130, 105, 95, 140, 100, 110, 145, 105, 90, 130, 100],
+      products: [
+        { clicks: 12450, ctr: '18.4%', conv: '11.20%' },
+        { clicks: 8900, ctr: '13.5%', conv: '8.80%' },
+        { clicks: 5400, ctr: '7.9%', conv: '10.50%' },
+        { clicks: 2850, ctr: '21.0%', conv: '28.40%' },
+        { clicks: 1620, ctr: '14.2%', conv: '16.80%' }
+      ],
+      mobilePct: '75%',
+      deskPct: '18%',
+      tabPct: '7%',
+      geo: {
+        us: { val: '18,900 (50%)', pct: '50%' },
+        in: { val: '9,840 (26%)', pct: '26%' },
+        uk: { val: '5,290 (14%)', pct: '14%' },
+        de: { val: '3,410 (9%)', pct: '9%' }
+      }
+    }
+  };
+
+  let activeRange = '7 Days';
+
+  function applyAnalyticsDataset(rangeKey) {
+    activeRange = rangeKey;
+    const data = analyticsDatasets[rangeKey] || analyticsDatasets['7 Days'];
+
+    // Line & Area SVG paths
+    const linePath = document.getElementById('chart-line-path');
+    const areaPath = document.getElementById('chart-area-path');
+    if (linePath) linePath.setAttribute('d', data.linePath);
+    if (areaPath) areaPath.setAttribute('d', data.areaPath);
+
+    // Peak text callouts
+    const p1 = document.getElementById('txt-peak-1');
+    const p2 = document.getElementById('txt-peak-2');
+    const p3 = document.getElementById('txt-peak-3');
+    const p4 = document.getElementById('txt-peak-4');
+    if (p1 && data.peaks[0]) p1.textContent = data.peaks[0];
+    if (p2 && data.peaks[1]) p2.textContent = data.peaks[1];
+    if (p3 && data.peaks[2]) p3.textContent = data.peaks[2];
+    if (p4 && data.peaks[3]) p4.textContent = data.peaks[3];
+
+    // Popover tooltip values
+    const popDate = document.getElementById('popover-date-lbl');
+    const popVisits = document.getElementById('popover-visits-val');
+    const popClicks = document.getElementById('popover-clicks-val');
+    if (popDate) popDate.textContent = data.popoverDate;
+    if (popVisits) popVisits.textContent = data.popoverVisits;
+    if (popClicks) popClicks.textContent = data.popoverClicks;
+
+    // X-Axis dates
+    const xaxisRow = document.getElementById('chart-xaxis-row');
+    if (xaxisRow && data.dates) {
+      xaxisRow.innerHTML = data.dates.map(d => `<span>${d}</span>`).join('');
+    }
+
+    // Bar Heights
+    data.barHeights.forEach((h, idx) => {
+      const bar = document.getElementById(`bar-${idx}`);
+      if (bar) {
+        bar.setAttribute('height', h);
+        bar.setAttribute('y', 200 - h);
+      }
+    });
+
+    // Product Table Rows
+    const tbody = document.getElementById('analytics-products-tbody');
+    if (tbody && data.products) {
+      const rows = tbody.querySelectorAll('tr');
+      rows.forEach((row, idx) => {
+        const prodData = data.products[idx];
+        if (prodData) {
+          const clicksCell = row.querySelector('.t-clicks');
+          const ctrCell = row.querySelector('.t-ctr');
+          const convCell = row.querySelector('.t-conv');
+          if (clicksCell) clicksCell.textContent = prodData.clicks.toLocaleString();
+          if (ctrCell) ctrCell.textContent = prodData.ctr;
+          if (convCell) convCell.textContent = prodData.conv;
+        }
+      });
+    }
+
+    // Geographic Country Bars
+    if (data.geo) {
+      const bUs = document.getElementById('geo-bar-us');
+      const vUs = document.getElementById('geo-val-us');
+      const bIn = document.getElementById('geo-bar-in');
+      const vIn = document.getElementById('geo-val-in');
+      const bUk = document.getElementById('geo-bar-uk');
+      const vUk = document.getElementById('geo-val-uk');
+      const bDe = document.getElementById('geo-bar-de');
+      const vDe = document.getElementById('geo-val-de');
+
+      if (bUs && data.geo.us) { bUs.style.width = data.geo.us.pct; vUs.textContent = data.geo.us.val; }
+      if (bIn && data.geo.in) { bIn.style.width = data.geo.in.pct; vIn.textContent = data.geo.in.val; }
+      if (bUk && data.geo.uk) { bUk.style.width = data.geo.uk.pct; vUk.textContent = data.geo.uk.val; }
+      if (bDe && data.geo.de) { bDe.style.width = data.geo.de.pct; vDe.textContent = data.geo.de.val; }
+    }
+
+    // Device breakdown percentages
+    const mobLbl = document.getElementById('lbl-mob-pct');
+    const deskLbl = document.getElementById('lbl-desk-pct');
+    const tabLbl = document.getElementById('lbl-tab-pct');
+    if (mobLbl) mobLbl.textContent = `Mobile (${data.mobilePct})`;
+    if (deskLbl) deskLbl.textContent = `Desktop (${data.deskPct})`;
+    if (tabLbl) tabLbl.textContent = `Tablet (${data.tabPct})`;
+
+    if (syncTimestamp) syncTimestamp.textContent = 'Data last synchronized: Just now';
+  }
+
+  rangeBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      rangeBtns.forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      const range = btn.getAttribute('data-store-range');
+      applyAnalyticsDataset(range);
+      showToast(`Analytics data updated for: ${range}`);
+    });
+  });
+
+  if (reloadAnalyticsBtn) {
+    reloadAnalyticsBtn.addEventListener('click', () => {
+      reloadAnalyticsBtn.classList.add('is-spinning');
+      analyticsCards.forEach(card => card.classList.add('is-updating'));
+      showToast('Fetching latest live store analytics...');
+
+      setTimeout(() => {
+        reloadAnalyticsBtn.classList.remove('is-spinning');
+        analyticsCards.forEach(card => card.classList.remove('is-updating'));
+        applyAnalyticsDataset(activeRange);
+        showToast('Live analytics data refreshed successfully!');
+      }, 600);
+    });
+  }
+
+  // 10. Payment Options Handlers
+  const btnAddHist = document.getElementById('btn-add-history');
+  const btnViewWalletHist = document.getElementById('btn-view-wallet-history');
+  const btnSetUpiDef = document.getElementById('btn-set-upi-default');
+  const btnRzpLogin = document.getElementById('btn-rzp-login');
+  const btnTxnViewAll = document.getElementById('btn-txn-view-all');
+
+  if (btnAddHist) {
+    btnAddHist.addEventListener('click', () => {
+      showToast('Add new wallet history entry dialog opened');
+    });
+  }
+
+  if (btnViewWalletHist) {
+    btnViewWalletHist.addEventListener('click', () => {
+      showToast('Loading full wallet deposit & withdrawal logs...');
+    });
+  }
+
+  if (btnSetUpiDef) {
+    btnSetUpiDef.addEventListener('click', () => {
+      const upiVal = document.getElementById('input-payout-upi')?.value || 'VPA / UPI ID';
+      showToast(`Default payout VPA set to: ${upiVal}`);
+    });
+  }
+
+  if (btnRzpLogin) {
+    btnRzpLogin.addEventListener('click', () => {
+      showToast('Connecting to Razorpay Creator OAuth Portal...');
+    });
+  }
+
+  if (btnTxnViewAll) {
+    btnTxnViewAll.addEventListener('click', () => {
+      showToast('Showing all historical store transactions');
+    });
+  }
+
   // INITIALIZE CREATOR STORE SETTINGS HANDLERS
   initCreatorStoreSettings();
 
@@ -1287,22 +1615,67 @@ function initCreatorStoreSettings() {
   const handleSubtext = document.querySelector('.cs-handle-subtext');
   const copyHandleBtn = document.getElementById('cs-btn-copy-handle');
   const seoUrlTxt = document.getElementById('cs-seo-url-txt');
+  const topLinkPill = document.getElementById('store-official-link-pill');
+  const topCopyBtn = document.getElementById('btn-copy-store-url');
+  const topQrBtn = document.getElementById('btn-store-qr-code');
 
   if (handleInput) {
     handleInput.addEventListener('input', () => {
       const val = handleInput.value.trim() || 'rajeev';
       if (handleSubtext) handleSubtext.textContent = `renderreply.com/store/${val}`;
       if (seoUrlTxt) seoUrlTxt.textContent = `https://renderreply.com/store/${val}`;
+      if (topLinkPill) topLinkPill.textContent = `renderreply.com/store/${val}`;
+      const qrImg = document.getElementById('cs-qr-img');
+      const qrUrlDisp = document.getElementById('cs-qr-url-display');
+      if (qrImg) qrImg.src = `https://api.qrserver.com/v1/create-qr-code/?size=220x220&data=https://renderreply.com/store/${val}`;
+      if (qrUrlDisp) qrUrlDisp.textContent = `renderreply.com/store/${val}`;
     });
   }
-  if (copyHandleBtn) {
-    copyHandleBtn.addEventListener('click', () => {
+
+  function copyCurrentStoreLink() {
+    const handle = handleInput ? handleInput.value.trim() : 'rajeev';
+    const url = `https://renderreply.com/store/${handle}`;
+    if (navigator.clipboard) {
+      navigator.clipboard.writeText(url);
+    }
+    showToast(`Copied store link to clipboard: ${url}`);
+  }
+
+  if (copyHandleBtn) copyHandleBtn.addEventListener('click', copyCurrentStoreLink);
+  if (topCopyBtn) topCopyBtn.addEventListener('click', copyCurrentStoreLink);
+
+  // QR Code Modal Open / Close / Download
+  const qrModal = document.getElementById('cs-qr-modal');
+  const closeQrBtn = document.getElementById('cs-btn-close-qr');
+  const downloadQrBtn = document.getElementById('cs-btn-download-qr');
+
+  if (topQrBtn && qrModal) {
+    topQrBtn.addEventListener('click', () => {
+      qrModal.classList.add('active');
+    });
+  }
+
+  if (closeQrBtn && qrModal) {
+    closeQrBtn.addEventListener('click', () => {
+      qrModal.classList.remove('active');
+    });
+  }
+
+  if (qrModal) {
+    qrModal.addEventListener('click', (e) => {
+      if (e.target === qrModal) qrModal.classList.remove('active');
+    });
+  }
+
+  if (downloadQrBtn) {
+    downloadQrBtn.addEventListener('click', () => {
       const handle = handleInput ? handleInput.value.trim() : 'rajeev';
-      const url = `renderreply.com/store/${handle}`;
-      if (navigator.clipboard) {
-        navigator.clipboard.writeText(`https://${url}`);
-      }
-      showToast(`Copied store link: https://${url}`);
+      const a = document.createElement('a');
+      a.href = `https://api.qrserver.com/v1/create-qr-code/?size=400x400&data=https://renderreply.com/store/${handle}`;
+      a.download = `storefront-qr-${handle}.png`;
+      a.target = '_blank';
+      a.click();
+      showToast('QR Code download initiated!');
     });
   }
 
@@ -1318,23 +1691,56 @@ function initCreatorStoreSettings() {
     });
   }
 
-  // 5. Change Logo Avatar
+  // 5. Change Logo Avatar (Native File Upload + Fallback Cycle)
   const changeLogoBtn = document.getElementById('cs-btn-change-logo');
+  const fileLogoInput = document.getElementById('cs-file-logo');
   const logoImg = document.getElementById('cs-logo-img');
   const prevAvatar = document.getElementById('cs-prev-avatar');
-  if (changeLogoBtn) {
-    const demoAvatars = [
-      'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=250&q=80',
-      'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=250&q=80',
-      'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=250&q=80'
-    ];
-    let avatarIdx = 0;
+
+  if (changeLogoBtn && fileLogoInput) {
     changeLogoBtn.addEventListener('click', () => {
-      avatarIdx = (avatarIdx + 1) % demoAvatars.length;
-      const newSrc = demoAvatars[avatarIdx];
-      if (logoImg) logoImg.src = newSrc;
-      if (prevAvatar) prevAvatar.src = newSrc;
-      showToast('Store logo avatar updated!');
+      fileLogoInput.click();
+    });
+
+    fileLogoInput.addEventListener('change', (e) => {
+      const file = e.target.files && e.target.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = function (evt) {
+          const newSrc = evt.target.result;
+          if (logoImg) logoImg.src = newSrc;
+          if (prevAvatar) prevAvatar.src = newSrc;
+          syncAllStorePreviewFields();
+          showToast('Uploaded new store logo image!');
+        };
+        reader.readAsDataURL(file);
+      }
+    });
+  }
+
+  // Change Favicon File Upload
+  const changeFaviconBtn = document.getElementById('cs-btn-change-favicon');
+  const fileFaviconInput = document.getElementById('cs-file-favicon');
+  const faviconBox = document.getElementById('cs-favicon-box');
+
+  if (changeFaviconBtn && fileFaviconInput) {
+    changeFaviconBtn.addEventListener('click', () => {
+      fileFaviconInput.click();
+    });
+
+    fileFaviconInput.addEventListener('change', (e) => {
+      const file = e.target.files && e.target.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = function (evt) {
+          if (faviconBox) {
+            faviconBox.innerHTML = `<img src="${evt.target.result}" style="width:100%;height:100%;object-fit:cover;border-radius:10px;" alt="Favicon">`;
+          }
+          syncAllStorePreviewFields();
+          showToast('Uploaded new favicon icon!');
+        };
+        reader.readAsDataURL(file);
+      }
     });
   }
 
@@ -1354,15 +1760,20 @@ function initCreatorStoreSettings() {
         handleInput.value = 'rajeev';
         handleInput.dispatchEvent(new Event('input'));
       }
+      syncAllStorePreviewFields();
       showToast('Brand identity settings reset to defaults.');
     });
   }
 
-  // 7. HERO SECTION INTERACTIVITY
+  // 7. HERO SECTION INTERACTIVITY & BANNER FILE UPLOAD
   const heroTitleInput = document.getElementById('cs-hero-title-input');
   const heroSubInput = document.getElementById('cs-hero-sub-input');
   const heroCtaInput = document.getElementById('cs-hero-cta-input');
   const phoneViewBtn = document.querySelector('.cs-phone-view-btn');
+  const changeBannerBtn = document.getElementById('cs-btn-change-banner');
+  const fileBannerInput = document.getElementById('cs-file-banner');
+  const bannerPreviewGraphic = document.getElementById('cs-banner-preview-graphic');
+  const phoneHero = document.querySelector('.cs-phone-hero');
 
   if (heroTitleInput && namePrev) {
     heroTitleInput.addEventListener('input', () => {
@@ -1382,23 +1793,54 @@ function initCreatorStoreSettings() {
     });
   }
 
-  // Banner Swatches
+  if (changeBannerBtn && fileBannerInput) {
+    changeBannerBtn.addEventListener('click', () => {
+      fileBannerInput.click();
+    });
+
+    fileBannerInput.addEventListener('change', (e) => {
+      const file = e.target.files && e.target.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = function (evt) {
+          const bgUrl = `url('${evt.target.result}') center/cover no-repeat`;
+          if (bannerPreviewGraphic) bannerPreviewGraphic.style.background = bgUrl;
+          if (phoneHero) phoneHero.style.background = bgUrl;
+          syncAllStorePreviewFields();
+          showToast('Uploaded new hero banner image!');
+        };
+        reader.readAsDataURL(file);
+      }
+    });
+  }
+
+  // Banner Artwork Presets Mapping
+  const bannerPresetMap = {
+    sunset: 'linear-gradient(180deg, #1e1b4b 0%, #311042 45%, #0f172a 100%)',
+    cyber: 'linear-gradient(135deg, #059669 0%, #0284c7 100%)',
+    purple: 'linear-gradient(180deg, #1e1b4b 0%, #4c1d95 100%)',
+    rose: 'linear-gradient(135deg, #831843 0%, #be185d 100%)',
+    darkneon: 'linear-gradient(180deg, #09090b 0%, #27272a 100%)',
+    gold: 'linear-gradient(135deg, #78350f 0%, #d97706 100%)'
+  };
+
   const bannerSwatches = document.querySelectorAll('.cs-banner-swatch');
-  const phoneHero = document.querySelector('.cs-phone-hero');
   bannerSwatches.forEach(swatch => {
     swatch.addEventListener('click', () => {
       bannerSwatches.forEach(s => s.classList.remove('active'));
       swatch.classList.add('active');
-      const bg = swatch.style.background;
+      const bannerKey = swatch.getAttribute('data-banner');
+      const bg = bannerPresetMap[bannerKey] || swatch.style.background;
       if (phoneHero && bg) {
         phoneHero.style.background = bg;
-        showToast('Hero banner gradient updated on phone preview!');
+        if (bannerPreviewGraphic) bannerPreviewGraphic.style.background = bg;
+        syncAllStorePreviewFields();
+        showToast('Hero banner preset updated on phone preview!');
       }
     });
   });
 
-  // 8. STORE APPEARANCE INTERACTIVITY
-  // Accent Color Swatches
+  // 8. STORE APPEARANCE & PRODUCT CARD STYLING INTERACTIVITY
   const colorSwatches = document.querySelectorAll('.cs-color-swatch');
   const customColorPicker = document.getElementById('cs-custom-color-picker');
   const phoneVerifiedBadge = document.querySelector('.cs-phone-verified-badge');
@@ -1424,6 +1866,53 @@ function initCreatorStoreSettings() {
     customColorPicker.addEventListener('input', () => {
       colorSwatches.forEach(s => s.classList.remove('active'));
       updatePhoneAccentColor(customColorPicker.value);
+    });
+  }
+
+  // Product Card Customization Controls
+  const pickerProdBg = document.getElementById('cs-picker-prod-bg');
+  const txtProdBg = document.getElementById('cs-txt-prod-bg');
+  const pickerProdPrice = document.getElementById('cs-picker-prod-price');
+  const txtProdPrice = document.getElementById('cs-txt-prod-price');
+  const pickerProdTitle = document.getElementById('cs-picker-prod-title');
+  const txtProdTitle = document.getElementById('cs-txt-prod-title');
+  const selectProdShadow = document.getElementById('cs-select-prod-shadow');
+  const phoneProdItems = document.querySelectorAll('.cs-phone-prod-item');
+  const phoneProdPrices = document.querySelectorAll('.cs-phone-prod-price');
+  const phoneProdNames = document.querySelectorAll('.cs-phone-prod-name');
+
+  if (pickerProdBg) {
+    pickerProdBg.addEventListener('input', () => {
+      const val = pickerProdBg.value;
+      if (txtProdBg) txtProdBg.value = val;
+      phoneProdItems.forEach(item => item.style.background = val);
+    });
+  }
+
+  if (pickerProdPrice) {
+    pickerProdPrice.addEventListener('input', () => {
+      const val = pickerProdPrice.value;
+      if (txtProdPrice) txtProdPrice.value = val;
+      phoneProdPrices.forEach(item => item.style.color = val);
+    });
+  }
+
+  if (pickerProdTitle) {
+    pickerProdTitle.addEventListener('input', () => {
+      const val = pickerProdTitle.value;
+      if (txtProdTitle) txtProdTitle.value = val;
+      phoneProdNames.forEach(item => item.style.color = val);
+    });
+  }
+
+  if (selectProdShadow) {
+    selectProdShadow.addEventListener('change', () => {
+      const shadow = selectProdShadow.value;
+      phoneProdItems.forEach(item => {
+        item.classList.remove('shadow-subtle', 'shadow-flat', 'shadow-floating');
+        item.classList.add(`shadow-${shadow}`);
+      });
+      showToast(`Product card elevation set to ${shadow}!`);
     });
   }
 
@@ -1572,24 +2061,328 @@ function initCreatorStoreSettings() {
     });
   }
 
-  // 12. DEVICE VIEW TOGGLES (Mobile / Tablet)
-  const mobileBtn = document.getElementById('cs-btn-device-mobile');
-  const tabletBtn = document.getElementById('cs-btn-device-tablet');
-  const frameContainer = document.getElementById('cs-preview-frame-wrapper');
+  // 13. REAL-TIME PREVIEW STORE MODAL SYNC ENGINE
+  const spmModal = document.getElementById('store-preview-modal');
+  const btnOpenPreviewModal = document.getElementById('btn-open-browser-overlay');
+  const btnCloseSpmModal = document.getElementById('btn-close-spm-modal');
+  const spmDotClose = document.getElementById('spm-dot-close');
 
-  if (mobileBtn && tabletBtn && frameContainer) {
-    mobileBtn.addEventListener('click', () => {
-      mobileBtn.classList.add('active');
-      tabletBtn.classList.remove('active');
-      frameContainer.classList.remove('tablet-mode');
-    });
+  function syncAllStorePreviewFields() {
+    const nameVal = document.getElementById('cs-input-store-name')?.value || 'Rajeev Sharma';
+    const bioVal = document.getElementById('cs-input-store-bio')?.value || 'Building premium Instagram businesses and automation systems.';
+    const handleVal = document.getElementById('cs-input-store-handle')?.value?.trim() || 'rajeev';
+    
+    // Name & Bio
+    const spmName = document.getElementById('spm-creator-name');
+    const spmBio = document.getElementById('spm-creator-bio');
+    const dspName = document.getElementById('dsp-name-el');
+    const dspBio = document.getElementById('dsp-bio-el');
+    const spmUrl = document.getElementById('spm-url-txt');
 
-    tabletBtn.addEventListener('click', () => {
-      tabletBtn.classList.add('active');
-      mobileBtn.classList.remove('active');
-      frameContainer.classList.add('tablet-mode');
+    if (spmName) spmName.textContent = nameVal;
+    if (spmBio) spmBio.textContent = bioVal;
+    if (dspName) dspName.textContent = nameVal;
+    if (dspBio) dspBio.textContent = bioVal;
+    if (spmUrl) spmUrl.textContent = `https://renderreply.com/store/${handleVal}`;
+
+    // Avatar / Logo
+    const logoImgSrc = document.getElementById('cs-logo-img')?.src;
+    if (logoImgSrc) {
+      const spmAvatar = document.getElementById('spm-avatar-img');
+      const dspAvatar = document.getElementById('dsp-avatar-el');
+      if (spmAvatar) spmAvatar.src = logoImgSrc;
+      if (dspAvatar) dspAvatar.src = logoImgSrc;
+    }
+
+    // Hero Banner
+    const activeBannerSwatch = document.querySelector('.cs-banner-swatch.active');
+    const customBannerGraphic = document.getElementById('cs-banner-preview-graphic');
+    let bannerBg = customBannerGraphic?.style?.background;
+    
+    if (!bannerBg || bannerBg === 'none' || bannerBg === '') {
+      if (activeBannerSwatch) {
+        const bannerKey = activeBannerSwatch.getAttribute('data-banner');
+        bannerBg = bannerPresetMap[bannerKey] || activeBannerSwatch.style.background;
+      }
+    }
+
+    if (bannerBg) {
+      const spmHero = document.getElementById('spm-hero-banner');
+      const dspHero = document.querySelector('.dsp-hero');
+      if (spmHero) spmHero.style.background = bannerBg;
+      if (dspHero) dspHero.style.background = bannerBg;
+    }
+
+    // Product Card Theme Colors
+    const pBg = document.getElementById('cs-picker-prod-bg')?.value;
+    const pPrice = document.getElementById('cs-picker-prod-price')?.value;
+    const pTitle = document.getElementById('cs-picker-prod-title')?.value;
+
+    if (pBg) {
+      document.querySelectorAll('.spm-prod-card').forEach(card => card.style.background = pBg);
+    }
+    if (pPrice) {
+      document.querySelectorAll('.spm-prod-price').forEach(el => el.style.color = pPrice);
+    }
+    if (pTitle) {
+      document.querySelectorAll('.spm-prod-title').forEach(el => el.style.color = pTitle);
+    }
+
+    // Primary Accent Color
+    const activeColorSwatch = document.querySelector('.cs-color-swatch.active');
+    const accentCol = activeColorSwatch?.getAttribute('data-color') || document.getElementById('cs-custom-color-picker')?.value || '#4f46e5';
+    if (accentCol) {
+      const spmBadge = document.getElementById('spm-verified-badge');
+      if (spmBadge) spmBadge.style.background = accentCol;
+      document.querySelectorAll('.spm-btn-buy').forEach(btn => {
+        btn.style.background = `linear-gradient(135deg, ${accentCol}, #6366f1)`;
+      });
+    }
+  }
+
+  // Open Preview Store Modal
+  if (btnOpenPreviewModal && spmModal) {
+    btnOpenPreviewModal.addEventListener('click', (e) => {
+      e.preventDefault();
+      syncAllStorePreviewFields();
+      spmModal.classList.add('active');
+      showToast('Opening Live Storefront Preview Window...');
     });
   }
+
+  // Also hook external store open button
+  const btnOpenExternal = document.getElementById('btn-open-store-external');
+  if (btnOpenExternal && spmModal) {
+    btnOpenExternal.addEventListener('click', (e) => {
+      e.preventDefault();
+      syncAllStorePreviewFields();
+      spmModal.classList.add('active');
+      showToast('Opening Live Storefront...');
+    });
+  }
+
+  // Hook Bio Link Page Preview & Copy buttons
+  const btnPreviewBiolink = document.getElementById('btn-preview-biolink');
+  const spmUrlTxt = document.getElementById('spm-url-txt');
+  if (btnPreviewBiolink && spmModal) {
+    btnPreviewBiolink.addEventListener('click', (e) => {
+      e.preventDefault();
+      syncAllStorePreviewFields();
+      if (spmUrlTxt) spmUrlTxt.textContent = 'https://renderreply.com/p/render6457';
+      spmModal.classList.add('active');
+      showToast('Opening Live Bio Link Preview Window...');
+    });
+  }
+
+  const btnCopyLink = document.getElementById('btn-copy-link');
+  if (btnCopyLink) {
+    btnCopyLink.addEventListener('click', () => {
+      if (navigator.clipboard) {
+        navigator.clipboard.writeText('https://renderreply.com/p/render6457');
+      }
+      showToast('Bio Link copied: https://renderreply.com/p/render6457');
+    });
+  }
+
+  const btnSaveBiolink = document.getElementById('btn-save-biolink');
+  if (btnSaveBiolink) {
+    btnSaveBiolink.addEventListener('click', () => {
+      showToast('Bio Link Page configuration saved successfully!');
+    });
+  }
+
+  // Close Preview Store Modal
+  if (btnCloseSpmModal && spmModal) {
+    btnCloseSpmModal.addEventListener('click', () => {
+      spmModal.classList.remove('active');
+    });
+  }
+
+  if (spmDotClose && spmModal) {
+    spmDotClose.addEventListener('click', () => {
+      spmModal.classList.remove('active');
+    });
+  }
+
+  if (spmModal) {
+    spmModal.addEventListener('click', (e) => {
+      if (e.target === spmModal) spmModal.classList.remove('active');
+    });
+  }
+
+  // Attach live inputs to trigger syncAllStorePreviewFields
+  const syncInputIds = [
+    'cs-input-store-name',
+    'cs-input-store-bio',
+    'cs-input-store-handle',
+    'cs-hero-title-input',
+    'cs-hero-sub-input',
+    'cs-hero-cta-input',
+    'cs-picker-prod-bg',
+    'cs-picker-prod-price',
+    'cs-picker-prod-title',
+    'cs-custom-color-picker'
+  ];
+
+  syncInputIds.forEach(id => {
+    const el = document.getElementById(id);
+    if (el) {
+      el.addEventListener('input', syncAllStorePreviewFields);
+      el.addEventListener('change', syncAllStorePreviewFields);
+    }
+  });
+
+  // 14. CUSTOMER AUTHENTICATION & ORDER HISTORY DASHBOARD LOGIC
+  const storeAuthModal = document.getElementById('store-auth-modal');
+  const btnOpenAuth = document.getElementById('spm-btn-open-auth');
+  const btnEcomOpenAuth = document.getElementById('btn-ecom-open-auth');
+  const btnCloseAuth = document.getElementById('btn-close-auth-modal');
+  const authTabLogin = document.getElementById('auth-tab-login');
+  const authTabSignup = document.getElementById('auth-tab-signup');
+  const authModalTitle = document.getElementById('auth-modal-title');
+  const btnSubmitAuth = document.getElementById('btn-submit-auth');
+  const formCustomerLogin = document.getElementById('form-customer-login');
+  const btnGoogleLogin = document.getElementById('btn-google-login');
+
+  const customerOrdersModal = document.getElementById('customer-orders-modal');
+  const btnUserAccount = document.getElementById('spm-btn-user-account');
+  const btnEcomUserAccount = document.getElementById('ecom-btn-user-account');
+  const btnCloseOrders = document.getElementById('btn-close-orders-modal');
+  const btnLogout = document.getElementById('spm-btn-logout');
+  const btnEcomLogout = document.getElementById('ecom-btn-logout');
+
+  const userLoggedInBox = document.getElementById('spm-user-logged-in-box');
+  const ecomUserLoggedInBox = document.getElementById('ecom-user-logged-in-box');
+  const userEmailTxt = document.getElementById('spm-user-email-txt');
+  const ecomUserEmailTxt = document.getElementById('ecom-user-email-txt');
+  const ordersUserEmailDisp = document.getElementById('orders-user-email-display');
+
+  let currentAuthMode = 'login';
+  let loggedInCustomerEmail = null;
+
+  if (btnOpenAuth && storeAuthModal) {
+    btnOpenAuth.addEventListener('click', () => {
+      storeAuthModal.classList.add('active');
+    });
+  }
+
+  if (btnEcomOpenAuth && storeAuthModal) {
+    btnEcomOpenAuth.addEventListener('click', () => {
+      storeAuthModal.classList.add('active');
+    });
+  }
+
+  if (btnCloseAuth && storeAuthModal) {
+    btnCloseAuth.addEventListener('click', () => {
+      storeAuthModal.classList.remove('active');
+    });
+  }
+
+  if (storeAuthModal) {
+    storeAuthModal.addEventListener('click', (e) => {
+      if (e.target === storeAuthModal) storeAuthModal.classList.remove('active');
+    });
+  }
+
+  if (authTabLogin && authTabSignup) {
+    authTabLogin.addEventListener('click', () => {
+      currentAuthMode = 'login';
+      authTabLogin.classList.add('active');
+      authTabSignup.classList.remove('active');
+      if (authModalTitle) authModalTitle.textContent = 'Welcome Back to Storefront';
+      if (btnSubmitAuth) btnSubmitAuth.textContent = 'Sign In to Account';
+    });
+
+    authTabSignup.addEventListener('click', () => {
+      currentAuthMode = 'signup';
+      authTabSignup.classList.add('active');
+      authTabLogin.classList.remove('active');
+      if (authModalTitle) authModalTitle.textContent = 'Create Customer Account';
+      if (btnSubmitAuth) btnSubmitAuth.textContent = 'Create Account & Access Orders';
+    });
+  }
+
+  function handleSuccessfulLogin(email) {
+    loggedInCustomerEmail = email || 'rajeev@gmail.com';
+    if (userEmailTxt) userEmailTxt.textContent = loggedInCustomerEmail;
+    if (ecomUserEmailTxt) ecomUserEmailTxt.textContent = loggedInCustomerEmail;
+    if (ordersUserEmailDisp) ordersUserEmailDisp.textContent = loggedInCustomerEmail;
+
+    if (btnOpenAuth) btnOpenAuth.style.display = 'none';
+    if (btnEcomOpenAuth) btnEcomOpenAuth.style.display = 'none';
+    if (userLoggedInBox) userLoggedInBox.style.display = 'flex';
+    if (ecomUserLoggedInBox) ecomUserLoggedInBox.style.display = 'flex';
+    if (storeAuthModal) storeAuthModal.classList.remove('active');
+
+    showToast(`Logged in successfully as ${loggedInCustomerEmail}!`);
+  }
+
+  if (formCustomerLogin) {
+    formCustomerLogin.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const email = document.getElementById('auth-input-email')?.value || 'rajeev@gmail.com';
+      handleSuccessfulLogin(email);
+    });
+  }
+
+  if (btnGoogleLogin) {
+    btnGoogleLogin.addEventListener('click', () => {
+      handleSuccessfulLogin('rajeev.sharma@gmail.com');
+    });
+  }
+
+  // Open Orders & Downloads Dashboard
+  if (btnUserAccount && customerOrdersModal) {
+    btnUserAccount.addEventListener('click', () => {
+      customerOrdersModal.classList.add('active');
+    });
+  }
+
+  if (btnEcomUserAccount && customerOrdersModal) {
+    btnEcomUserAccount.addEventListener('click', () => {
+      customerOrdersModal.classList.add('active');
+    });
+  }
+
+  if (btnCloseOrders && customerOrdersModal) {
+    btnCloseOrders.addEventListener('click', () => {
+      customerOrdersModal.classList.remove('active');
+    });
+  }
+
+  if (customerOrdersModal) {
+    customerOrdersModal.addEventListener('click', (e) => {
+      if (e.target === customerOrdersModal) customerOrdersModal.classList.remove('active');
+    });
+  }
+
+  // Logout Handler
+  if (btnLogout) {
+    btnLogout.addEventListener('click', () => {
+      loggedInCustomerEmail = null;
+      if (userLoggedInBox) userLoggedInBox.style.display = 'none';
+      if (ecomUserLoggedInBox) ecomUserLoggedInBox.style.display = 'none';
+      if (btnOpenAuth) btnOpenAuth.style.display = 'inline-flex';
+      if (btnEcomOpenAuth) btnEcomOpenAuth.style.display = 'inline-flex';
+      if (customerOrdersModal) customerOrdersModal.classList.remove('active');
+      showToast('Logged out of customer account.');
+    });
+  }
+
+  if (btnEcomLogout) {
+    btnEcomLogout.addEventListener('click', () => {
+      loggedInCustomerEmail = null;
+      if (userLoggedInBox) userLoggedInBox.style.display = 'none';
+      if (ecomUserLoggedInBox) ecomUserLoggedInBox.style.display = 'none';
+      if (btnOpenAuth) btnOpenAuth.style.display = 'inline-flex';
+      if (btnEcomOpenAuth) btnEcomOpenAuth.style.display = 'inline-flex';
+      if (customerOrdersModal) customerOrdersModal.classList.remove('active');
+      showToast('Logged out of customer account.');
+    });
+  }
+
+  // Initial Sync
+  syncAllStorePreviewFields();
 }
 
 if (document.readyState === 'loading') {
