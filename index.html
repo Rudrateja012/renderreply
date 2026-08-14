@@ -1446,266 +1446,761 @@
 
         <!-- TAB CONTENT 2: STORE SETTINGS -->
         <div id="store-tab-store-settings" class="store-tab-content">
-          <div class="settings-section-header">
-            <div>
-              <h2 class="settings-title">Storefront Settings & Brand Customization</h2>
-              <p class="settings-subtitle">Manage your official handle, brand theme color, SEO metadata, and tracking
-                integrations.</p>
+          <div class="cs-settings-layout">
+            <!-- LEFT COLUMN: Sub-Sidebar Navigation -->
+            <div class="cs-settings-sidebar">
+              <button class="cs-sidebar-item active" data-cs-tab="brand-identity">
+                <div class="cs-sidebar-icon">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <rect x="3" y="3" width="18" height="18" rx="3"/>
+                    <path d="M7 7h10M7 12h10M7 17h6"/>
+                  </svg>
+                </div>
+                <div class="cs-sidebar-text">
+                  <span class="cs-sidebar-title">Brand Identity</span>
+                  <span class="cs-sidebar-sub">Logo, name, bio & social links</span>
+                </div>
+              </button>
+
+              <button class="cs-sidebar-item" data-cs-tab="hero-section">
+                <div class="cs-sidebar-icon">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <rect x="3" y="3" width="18" height="18" rx="2"/>
+                    <circle cx="8.5" cy="8.5" r="1.5"/>
+                    <polyline points="21 15 16 10 5 21"/>
+                  </svg>
+                </div>
+                <div class="cs-sidebar-text">
+                  <span class="cs-sidebar-title">Hero Section</span>
+                  <span class="cs-sidebar-sub">Banner, heading & subheading</span>
+                </div>
+              </button>
+
+              <button class="cs-sidebar-item" data-cs-tab="store-appearance">
+                <div class="cs-sidebar-icon">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
+                  </svg>
+                </div>
+                <div class="cs-sidebar-text">
+                  <span class="cs-sidebar-title">Store Appearance</span>
+                  <span class="cs-sidebar-sub">Colors, fonts & buttons</span>
+                </div>
+              </button>
+
+              <button class="cs-sidebar-item" data-cs-tab="layout-display">
+                <div class="cs-sidebar-icon">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <rect x="3" y="3" width="7" height="7"/>
+                    <rect x="14" y="3" width="7" height="7"/>
+                    <rect x="14" y="14" width="7" height="7"/>
+                    <rect x="3" y="14" width="7" height="7"/>
+                  </svg>
+                </div>
+                <div class="cs-sidebar-text">
+                  <span class="cs-sidebar-title">Layout & Display</span>
+                  <span class="cs-sidebar-sub">Sections, reorder & visibility</span>
+                </div>
+              </button>
+
+              <button class="cs-sidebar-item" data-cs-tab="seo-analytics">
+                <div class="cs-sidebar-icon">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+                  </svg>
+                </div>
+                <div class="cs-sidebar-text">
+                  <span class="cs-sidebar-title">SEO & Analytics</span>
+                  <span class="cs-sidebar-sub">Meta tags & tracking</span>
+                </div>
+              </button>
+
+              <button class="cs-sidebar-item" data-cs-tab="trust-certificates">
+                <div class="cs-sidebar-icon">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                  </svg>
+                </div>
+                <div class="cs-sidebar-text">
+                  <span class="cs-sidebar-title">Trust & Certificates</span>
+                  <span class="cs-sidebar-sub">Badges & trust signals</span>
+                </div>
+              </button>
+
+              <button class="cs-sidebar-item" data-cs-tab="advanced-settings">
+                <div class="cs-sidebar-icon">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="12" cy="12" r="3"/>
+                    <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+                  </svg>
+                </div>
+                <div class="cs-sidebar-text">
+                  <span class="cs-sidebar-title">Advanced Settings</span>
+                  <span class="cs-sidebar-sub">Custom code & features</span>
+                </div>
+              </button>
             </div>
-            <span class="settings-status-badge">
-              <span class="dot-green"></span> Configurations Active
-            </span>
-          </div>
 
-          <div class="settings-two-col-layout">
-            <div class="settings-left-col">
-
-              <!-- MODULE 1: STORE HANDLE & BRAND THEME -->
-              <div class="form-card settings-card-enhanced">
-                <div class="card-badge-pill">BRAND & HANDLE</div>
-                <h2 class="form-card-title">Official Link & Theme Color</h2>
-
-                <div class="form-group" style="margin-top: 16px;">
-                  <label class="form-label">Store Handle (URL Slug)</label>
-                  <div class="input-with-btn">
-                    <div class="prefix-url">renderreply.com/store/</div>
-                    <input type="text" class="form-input" id="input-store-handle" value="render6457"
-                      placeholder="yourname">
-                    <button class="btn btn-outline" id="btn-save-handle">Save Handle</button>
+            <!-- CENTER COLUMN: Settings Panels -->
+            <div class="cs-settings-main">
+              <!-- PANEL 1: Brand Identity -->
+              <div id="cs-panel-brand-identity" class="cs-settings-panel active">
+                <div class="cs-panel-header">
+                  <div>
+                    <h2 class="cs-panel-title">Brand Identity</h2>
+                    <p class="cs-panel-subtitle">Customize your store identity and how it appears to visitors.</p>
                   </div>
-                  <span class="form-hint">This is the link your followers click in your Instagram bio.</span>
-                </div>
-
-                <div class="form-group" style="margin-top: 20px;">
-                  <label class="form-label">Brand Primary Theme Color</label>
-                  <div class="color-picker-row">
-                    <input type="color" id="input-brand-color-picker" value="#6366F1" class="color-input"
-                      title="Choose color">
-                    <input type="text" class="form-input color-hex-text" id="input-brand-color-hex" value="#6366F1"
-                      placeholder="#6366F1">
-                    <div class="color-swatches">
-                      <span class="swatch" style="background: #6366f1;" data-color="#6366f1"
-                        title="Indigo Accent"></span>
-                      <span class="swatch" style="background: #3b82f6;" data-color="#3b82f6" title="Royal Blue"></span>
-                      <span class="swatch" style="background: #10b981;" data-color="#10b981"
-                        title="Emerald Green"></span>
-                      <span class="swatch" style="background: #f59e0b;" data-color="#f59e0b"
-                        title="Amber Orange"></span>
-                      <span class="swatch" style="background: #f43f5e;" data-color="#f43f5e" title="Rose Pink"></span>
-                      <span class="swatch" style="background: #0f172a;" data-color="#0f172a"
-                        title="Midnight Black"></span>
-                    </div>
-                  </div>
-                  <span class="form-hint">Sets the primary accent for buttons, checkout flows, and customer
-                    portals.</span>
-                </div>
-              </div>
-
-              <!-- MODULE 2: SEO & SOCIAL META DETAILS -->
-              <div class="form-card settings-card-enhanced">
-                <div class="card-badge-pill">SEO & SOCIAL SHARING</div>
-                <h2 class="form-card-title">Search & Meta Optimization</h2>
-
-                <div class="seo-live-preview-card">
-                  <div class="seo-preview-header">
+                  <button class="btn btn-outline btn-sm cs-btn-reset" id="cs-btn-reset-brand">
                     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                      <circle cx="11" cy="11" r="8" />
-                      <line x1="21" y1="21" x2="16.65" y2="16.65" />
+                      <polyline points="23 4 23 10 17 10"/>
+                      <path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/>
                     </svg>
-                    <span>Search Result & Link Card Preview</span>
-                  </div>
-                  <div class="seo-meta-box" id="seo-img-box">
-                    <div class="seo-preview-url">https://store.renderreply.com/render6457</div>
-                    <div class="seo-preview-heading" id="seo-preview-title">RudRa RR | Official Creator Storefront</div>
-                    <div class="seo-preview-snippet" id="seo-preview-desc">Welcome to my official creator storefront!
-                      Access digital products, 1-on-1 strategy calls, and automation templates.</div>
-                  </div>
-                  <button class="btn btn-outline btn-sm" id="btn-change-meta-img"
-                    style="margin-top: 12px; width: 100%;">
-                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                      style="margin-right: 4px;">
-                      <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z" />
-                      <circle cx="12" cy="13" r="4" />
-                    </svg>
-                    Update Social Sharing Meta Image
+                    Reset
                   </button>
                 </div>
 
-                <div class="form-group" style="margin-top: 18px;">
-                  <label class="form-label">Meta Page Title</label>
-                  <input type="text" class="form-input" id="input-meta-title"
-                    value="RudRa RR | Official Creator Storefront">
-                </div>
-
-                <div class="form-group">
-                  <label class="form-label">Meta Page Description</label>
-                  <textarea class="form-textarea" id="input-meta-desc"
-                    rows="3">Welcome to my official creator storefront! Access digital products, 1-on-1 strategy calls, and automation templates.</textarea>
-                </div>
-              </div>
-
-              <!-- MODULE 3: LAYOUT & CONTENT CONTROLS -->
-              <div class="form-card settings-card-enhanced">
-                <div class="card-badge-pill">PREFERENCES</div>
-                <h2 class="form-card-title">Layout & Display Controls</h2>
-
-                <div class="form-group" style="margin-top: 14px;">
-                  <label class="form-label">Storefront Catalog Layout</label>
-                  <select class="form-select" id="select-store-layout">
-                    <option value="dual" selected>Dual Grid Cards (E-Commerce Storefront)</option>
-                    <option value="single">Single Column (Optimized Mobile Bio Link)</option>
-                    <option value="minimal">Minimal List Tiers</option>
-                  </select>
-                </div>
-
-                <div class="toggle-row-card">
-                  <div>
-                    <div class="toggle-title">Sensitive Content Warning</div>
-                    <div class="toggle-sub">Require visitors to accept age disclaimer before opening storefront.</div>
-                  </div>
-                  <label class="switch">
-                    <input type="checkbox" id="toggle-sensitive-content">
-                    <span class="slider round"></span>
-                  </label>
-                </div>
-
-                <div class="toggle-row-card" style="margin-top: 12px;">
-                  <div>
-                    <div class="toggle-title">
-                      Hide RenderReply Footer Branding
-                      <span class="pro-badge">PRO</span>
+                <!-- Card 1: Logo & Favicon -->
+                <div class="cs-card">
+                  <div class="cs-upload-grid">
+                    <!-- Store Logo -->
+                    <div class="cs-upload-box">
+                      <div class="cs-upload-info">
+                        <label class="cs-field-label">Store Logo</label>
+                        <span class="cs-field-hint">This will appear on your store and in the header.</span>
+                      </div>
+                      <div class="cs-upload-control">
+                        <div class="cs-avatar-preview">
+                          <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=250&q=80" id="cs-logo-img" alt="Store Logo">
+                        </div>
+                        <div class="cs-upload-action">
+                          <button class="btn btn-outline btn-sm cs-btn-change" id="cs-btn-change-logo">
+                            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                              <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+                              <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+                            </svg>
+                            Change Logo
+                          </button>
+                          <span class="cs-upload-note">PNG, JPG or SVG. Max size 2MB.</span>
+                        </div>
+                      </div>
                     </div>
-                    <div class="toggle-sub">Remove 'Powered by RenderReply' footer attribution from store page.</div>
+
+                    <!-- Favicon -->
+                    <div class="cs-upload-box">
+                      <div class="cs-upload-info">
+                        <label class="cs-field-label">Favicon</label>
+                        <span class="cs-field-hint">This will appear in browser tab.</span>
+                      </div>
+                      <div class="cs-upload-control">
+                        <div class="cs-favicon-preview">
+                          <span>R</span>
+                        </div>
+                        <div class="cs-upload-action">
+                          <button class="btn btn-outline btn-sm cs-btn-change" id="cs-btn-change-favicon">
+                            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                              <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+                              <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+                            </svg>
+                            Change Favicon
+                          </button>
+                          <span class="cs-upload-note">PNG or ICO. Max size 1MB.</span>
+                        </div>
+                      </div>
+                    </div>
                   </div>
-                  <label class="switch">
-                    <input type="checkbox" id="toggle-hide-referral" checked>
-                    <span class="slider round"></span>
-                  </label>
+                </div>
+
+                <!-- Card 2: Store Name & Store Handle -->
+                <div class="cs-card">
+                  <div class="cs-form-grid-2">
+                    <!-- Store Name -->
+                    <div class="cs-field-group">
+                      <div class="cs-label-row">
+                        <label class="cs-field-label" for="cs-input-store-name">Store Name</label>
+                        <span class="cs-char-counter" id="cs-name-count">13/50</span>
+                      </div>
+                      <input type="text" class="cs-input" id="cs-input-store-name" value="Rajeev Sharma" maxlength="50">
+                    </div>
+
+                    <!-- Store Handle (URL) -->
+                    <div class="cs-field-group">
+                      <div class="cs-label-row">
+                        <label class="cs-field-label" for="cs-input-store-handle">Store Handle (URL)</label>
+                      </div>
+                      <div class="cs-handle-input-box">
+                        <input type="text" class="cs-input cs-handle-input" id="cs-input-store-handle" value="rajeev">
+                        <div class="cs-handle-subtext">renderreply.com/store/rajeev</div>
+                        <button class="btn btn-outline btn-xs cs-btn-copy" id="cs-btn-copy-handle">
+                          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"/>
+                            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>
+                          </svg>
+                          Copy
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- Store Bio -->
+                  <div class="cs-field-group" style="margin-top: 20px;">
+                    <div class="cs-label-row">
+                      <label class="cs-field-label" for="cs-input-store-bio">Store Bio</label>
+                      <span class="cs-char-counter" id="cs-bio-count">63/160</span>
+                    </div>
+                    <textarea class="cs-textarea" id="cs-input-store-bio" rows="2" maxlength="160">Building premium Instagram businesses and automation systems.</textarea>
+                  </div>
+
+                  <!-- Social Links -->
+                  <div class="cs-field-group" style="margin-top: 20px;">
+                    <label class="cs-field-label">Social Links</label>
+                    <div class="cs-social-pills-row">
+                      <!-- Instagram -->
+                      <div class="cs-social-pill">
+                        <span class="cs-soc-head insta">
+                          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <rect x="2" y="2" width="20" height="20" rx="5" ry="5"/>
+                            <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/>
+                            <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/>
+                          </svg>
+                          Instagram
+                        </span>
+                        <input type="text" class="cs-soc-val-input" id="cs-soc-insta" value="rajeev.sharma">
+                      </div>
+
+                      <!-- YouTube -->
+                      <div class="cs-social-pill">
+                        <span class="cs-soc-head youtube">
+                          <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
+                          </svg>
+                          YouTube
+                        </span>
+                        <input type="text" class="cs-soc-val-input" id="cs-soc-yt" value="@rajeevsharma">
+                      </div>
+
+                      <!-- X (Twitter) -->
+                      <div class="cs-social-pill">
+                        <span class="cs-soc-head twitter">
+                          <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
+                          </svg>
+                          X (Twitter)
+                        </span>
+                        <input type="text" class="cs-soc-val-input" id="cs-soc-tw" value="@rajeevsharma">
+                      </div>
+
+                      <!-- LinkedIn -->
+                      <div class="cs-social-pill">
+                        <span class="cs-soc-head linkedin">
+                          <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M19 3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14m-.5 15.5v-5.3a3.26 3.26 0 0 0-3.26-3.26c-.85 0-1.84.52-2.28 1.3v-1.11h-2.79v8.37h2.79v-4.93c0-.77.62-1.4 1.39-1.4a1.4 1.4 0 0 1 1.4 1.4v4.93h2.75M6.46 10.9v8.37H9.25V10.9H6.46M7.86 6.75a1.65 1.65 0 1 0 0 3.3 1.65 1.65 0 0 0 0-3.3z"/>
+                          </svg>
+                          LinkedIn
+                        </span>
+                        <input type="text" class="cs-soc-val-input" id="cs-soc-li" value="rajeev-sharma">
+                      </div>
+
+                      <!-- Add More Pill -->
+                      <button class="cs-add-pill-btn" id="cs-btn-add-social">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                          <line x1="12" y1="5" x2="12" y2="19"/>
+                          <line x1="5" y1="12" x2="19" y2="12"/>
+                        </svg>
+                        Add More
+                      </button>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Hero Section Card below Brand Identity -->
+                <div class="cs-card cs-card-hero-block">
+                  <div class="cs-panel-header compact">
+                    <div>
+                      <h3 class="cs-card-section-title">Hero Section</h3>
+                      <p class="cs-panel-subtitle">Customize the top banner section of your store.</p>
+                    </div>
+                  </div>
+                  <div class="cs-hero-banner-row">
+                    <div class="cs-hero-banner-meta">
+                      <label class="cs-field-label">Hero Banner Image</label>
+                      <span class="cs-field-hint">Recommended size: 1600x600px.</span>
+                    </div>
+                    <div class="cs-banner-preview-box">
+                      <div class="cs-banner-gradient-preview"></div>
+                      <button class="btn btn-outline btn-sm cs-btn-change" id="cs-btn-change-banner">
+                        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                          <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+                          <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+                        </svg>
+                        Change Banner
+                      </button>
+                    </div>
+                  </div>
                 </div>
               </div>
 
-              <!-- MODULE 4: MARKETING & TRACKING PIXELS -->
-              <div class="form-card settings-card-enhanced">
-                <div class="card-badge-pill">ANALYTICS</div>
-                <h2 class="form-card-title">Tracking & Retargeting Pixels</h2>
-                <p class="form-card-sub">Connect your pixel IDs to track ad conversions and build custom retargeting
-                  audiences.</p>
-
-                <div class="form-grid-2col" style="margin-top: 16px;">
-                  <div class="form-group" style="margin: 0;">
-                    <label class="form-label">Meta / Facebook Pixel ID</label>
-                    <input type="text" class="form-input" id="input-fb-pixel" placeholder="e.g. 123456789012345">
-                  </div>
-                  <div class="form-group" style="margin: 0;">
-                    <label class="form-label">Google Analytics GA4 ID</label>
-                    <input type="text" class="form-input" id="input-ga-id" placeholder="e.g. G-ABC123XYZ">
-                  </div>
-                </div>
-
-                <div class="form-group" style="margin-top: 14px;">
-                  <label class="form-label">Meta Conversions API Token</label>
-                  <input type="text" class="form-input" id="input-fb-token" placeholder="EAAG... token key">
-                </div>
-              </div>
-
-              <!-- MODULE 5: TRUST BADGES & LICENSES -->
-              <div class="form-card settings-card-enhanced">
-                <div class="form-card-header-flex">
+              <!-- PANEL 2: Hero Section Tab -->
+              <div id="cs-panel-hero-section" class="cs-settings-panel">
+                <div class="cs-panel-header">
                   <div>
-                    <div class="card-badge-pill">SECURITY</div>
-                    <h2 class="form-card-title">Trust Badges & Certifications</h2>
-                    <p class="form-card-sub">Display verified trust licenses to boost buyer conversion rates.</p>
+                    <h2 class="cs-panel-title">Hero Section Settings</h2>
+                    <p class="cs-panel-subtitle">Customize top banners, video introductions, and headline highlights.</p>
                   </div>
-                  <button class="btn btn-outline btn-sm" id="btn-add-cert">+ Add Badge</button>
                 </div>
 
-                <div class="cert-list" style="margin-top: 14px;">
-                  <div class="cert-item">
-                    <div class="cert-badge-icon">
-                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                        stroke-width="2">
-                        <circle cx="12" cy="8" r="7" />
-                        <polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88" />
-                      </svg>
-                    </div>
-                    <div class="cert-details">
-                      <div class="cert-name">Verified Instagram Automation Specialist</div>
-                      <div class="cert-issuer">RenderReply Platform Certification</div>
-                    </div>
-                    <span class="cert-status">Verified</span>
+                <div class="cs-card">
+                  <div class="cs-field-group">
+                    <label class="cs-field-label" for="cs-hero-title-input">Hero Title Headline</label>
+                    <input type="text" class="cs-input" id="cs-hero-title-input" value="Rajeev Sharma">
+                  </div>
+                  <div class="cs-field-group" style="margin-top: 16px;">
+                    <label class="cs-field-label" for="cs-hero-sub-input">Subheading Tagline</label>
+                    <input type="text" class="cs-input" id="cs-hero-sub-input" value="Building premium Instagram businesses and automation systems.">
+                  </div>
+                  <div class="cs-field-group" style="margin-top: 16px;">
+                    <label class="cs-field-label" for="cs-hero-cta-input">Main CTA Button Label</label>
+                    <input type="text" class="cs-input" id="cs-hero-cta-input" value="View All Products">
+                  </div>
+                </div>
+
+                <div class="cs-card">
+                  <h3 class="cs-card-section-title" style="margin-bottom: 12px;">Hero Banner Artwork Presets</h3>
+                  <div class="cs-banner-swatches">
+                    <button class="cs-banner-swatch active" data-banner="sunset" style="background: linear-gradient(180deg, #1e1b4b 0%, #311042 45%, #0f172a 100%);">
+                      Sunset Palms
+                    </button>
+                    <button class="cs-banner-swatch" data-banner="cyber" style="background: linear-gradient(135deg, #059669 0%, #0284c7 100%);">
+                      Cyber Cyan
+                    </button>
+                    <button class="cs-banner-swatch" data-banner="purple" style="background: linear-gradient(180deg, #1e1b4b 0%, #4c1d95 100%);">
+                      Deep Purple
+                    </button>
+                    <button class="cs-banner-swatch" data-banner="rose" style="background: linear-gradient(135deg, #831843 0%, #be185d 100%);">
+                      Vibrant Rose
+                    </button>
                   </div>
                 </div>
               </div>
 
+              <!-- PANEL 3: Store Appearance Tab -->
+              <div id="cs-panel-store-appearance" class="cs-settings-panel">
+                <div class="cs-panel-header">
+                  <div>
+                    <h2 class="cs-panel-title">Store Appearance & Themes</h2>
+                    <p class="cs-panel-subtitle">Select color palettes, typography fonts, button styles, and light/dark modes.</p>
+                  </div>
+                </div>
+
+                <!-- Color Accent Swatches -->
+                <div class="cs-card">
+                  <label class="cs-field-label" style="margin-bottom: 10px;">Primary Theme Accent Color</label>
+                  <div class="cs-theme-swatches-row">
+                    <button class="cs-color-swatch active" data-color="#4f46e5" style="background: #4f46e5;" title="Indigo"></button>
+                    <button class="cs-color-swatch" data-color="#2563eb" style="background: #2563eb;" title="Royal Blue"></button>
+                    <button class="cs-color-swatch" data-color="#10b981" style="background: #10b981;" title="Emerald Green"></button>
+                    <button class="cs-color-swatch" data-color="#f43f5e" style="background: #f43f5e;" title="Rose Red"></button>
+                    <button class="cs-color-swatch" data-color="#f59e0b" style="background: #f59e0b;" title="Amber Orange"></button>
+                    <button class="cs-color-swatch" data-color="#0f172a" style="background: #0f172a;" title="Midnight Slate"></button>
+                    <input type="color" class="cs-color-picker-input" id="cs-custom-color-picker" value="#4f46e5" title="Choose Custom Color">
+                  </div>
+                </div>
+
+                <!-- Font Selector & Button Styles -->
+                <div class="cs-card">
+                  <div class="cs-form-grid-2">
+                    <div class="cs-field-group">
+                      <label class="cs-field-label" for="cs-select-font">Typography Font</label>
+                      <select class="cs-select" id="cs-select-font">
+                        <option value="Inter" selected>Inter (Default)</option>
+                        <option value="Plus Jakarta Sans">Plus Jakarta Sans</option>
+                        <option value="Poppins">Poppins</option>
+                        <option value="Roboto">Roboto</option>
+                        <option value="Outfit">Outfit</option>
+                      </select>
+                    </div>
+
+                    <div class="cs-field-group">
+                      <label class="cs-field-label">Button Corner Curvature</label>
+                      <div class="cs-option-btn-group" id="cs-group-btn-style">
+                        <button class="cs-option-btn active" data-btn-style="rounded">Rounded</button>
+                        <button class="cs-option-btn" data-btn-style="square">Square</button>
+                        <button class="cs-option-btn" data-btn-style="pill">Pill</button>
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- Theme Mode -->
+                  <div class="cs-field-group" style="margin-top: 16px;">
+                    <label class="cs-field-label">Store Theme Mode</label>
+                    <div class="cs-option-btn-group" id="cs-group-theme-mode">
+                      <button class="cs-option-btn active" data-theme-mode="dark">Dark Theme</button>
+                      <button class="cs-option-btn" data-theme-mode="light">Light Theme</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- PANEL 4: Layout & Display Tab -->
+              <div id="cs-panel-layout-display" class="cs-settings-panel">
+                <div class="cs-panel-header">
+                  <div>
+                    <h2 class="cs-panel-title">Layout & Section Visibility</h2>
+                    <p class="cs-panel-subtitle">Choose catalog layout styles and toggle section visibility inside your store.</p>
+                  </div>
+                </div>
+
+                <!-- Layout Card Pickers -->
+                <div class="cs-card">
+                  <label class="cs-field-label" style="margin-bottom: 12px;">Store Catalog Layout</label>
+                  <div class="cs-layout-cards-grid">
+                    <button class="cs-layout-picker-card active" data-catalog-layout="dual">
+                      <div class="cs-lpc-title">Dual Grid Cards</div>
+                      <div class="cs-lpc-sub">E-commerce storefront layout</div>
+                    </button>
+                    <button class="cs-layout-picker-card" data-catalog-layout="single">
+                      <div class="cs-lpc-title">Single Column List</div>
+                      <div class="cs-lpc-sub">High-converting vertical list</div>
+                    </button>
+                    <button class="cs-layout-picker-card" data-catalog-layout="biolink">
+                      <div class="cs-lpc-title">Compact Bio Link</div>
+                      <div class="cs-lpc-sub">Minimal link in bio style</div>
+                    </button>
+                  </div>
+                </div>
+
+                <!-- Visibility Toggles -->
+                <div class="cs-card">
+                  <h3 class="cs-card-section-title" style="margin-bottom: 14px;">Section Visibility Toggles</h3>
+
+                  <div class="cs-toggle-row">
+                    <div>
+                      <div class="cs-toggle-title">Show Featured Products Grid</div>
+                      <div class="cs-toggle-sub">Display product cards and price tags on phone homepage.</div>
+                    </div>
+                    <label class="cs-switch">
+                      <input type="checkbox" id="cs-toggle-products" checked>
+                      <span class="cs-slider"></span>
+                    </label>
+                  </div>
+
+                  <div class="cs-toggle-row" style="margin-top: 14px;">
+                    <div>
+                      <div class="cs-toggle-title">Show Verified Creator Badge</div>
+                      <div class="cs-toggle-sub">Display blue verified checkmark on creator avatar.</div>
+                    </div>
+                    <label class="cs-switch">
+                      <input type="checkbox" id="cs-toggle-badge" checked>
+                      <span class="cs-slider"></span>
+                    </label>
+                  </div>
+
+                  <div class="cs-toggle-row" style="margin-top: 14px;">
+                    <div>
+                      <div class="cs-toggle-title">Show Social Media Icon Row</div>
+                      <div class="cs-toggle-sub">Display Instagram, YouTube, X, and LinkedIn circles.</div>
+                    </div>
+                    <label class="cs-switch">
+                      <input type="checkbox" id="cs-toggle-socials" checked>
+                      <span class="cs-slider"></span>
+                    </label>
+                  </div>
+
+                  <div class="cs-toggle-row" style="margin-top: 14px;">
+                    <div>
+                      <div class="cs-toggle-title">Show RenderReply Footer Branding</div>
+                      <div class="cs-toggle-sub">Display 'Powered by RenderReply Store' at footer.</div>
+                    </div>
+                    <label class="cs-switch">
+                      <input type="checkbox" id="cs-toggle-footer" checked>
+                      <span class="cs-slider"></span>
+                    </label>
+                  </div>
+                </div>
+              </div>
+
+              <!-- PANEL 5: SEO & Analytics Tab -->
+              <div id="cs-panel-seo-analytics" class="cs-settings-panel">
+                <div class="cs-panel-header">
+                  <div>
+                    <h2 class="cs-panel-title">SEO & Social Meta Analytics</h2>
+                    <p class="cs-panel-subtitle">Configure search preview snippet card, Meta Pixel, and Google Analytics.</p>
+                  </div>
+                </div>
+
+                <!-- Google / Link Card Preview -->
+                <div class="cs-card">
+                  <label class="cs-field-label" style="margin-bottom: 8px;">Social & Search Result Card Preview</label>
+                  <div class="cs-seo-card-preview">
+                    <div class="cs-seo-url" id="cs-seo-url-txt">https://renderreply.com/store/rajeev</div>
+                    <div class="cs-seo-title" id="cs-seo-title-txt">Rajeev Sharma | Official Storefront</div>
+                    <div class="cs-seo-desc" id="cs-seo-desc-txt">Building premium Instagram businesses and automation systems. Access Java PDF, 1-on-1 strategy sessions, and preset bundles.</div>
+                  </div>
+                </div>
+
+                <div class="cs-card">
+                  <div class="cs-field-group">
+                    <label class="cs-field-label" for="cs-input-seo-title">Meta Page Title</label>
+                    <input type="text" class="cs-input" id="cs-input-seo-title" value="Rajeev Sharma | Official Storefront">
+                  </div>
+                  <div class="cs-field-group" style="margin-top: 16px;">
+                    <label class="cs-field-label" for="cs-input-seo-desc">Meta Description</label>
+                    <textarea class="cs-textarea" id="cs-input-seo-desc" rows="2">Building premium Instagram businesses and automation systems. Access Java PDF, 1-on-1 strategy sessions, and preset bundles.</textarea>
+                  </div>
+
+                  <div class="cs-form-grid-2" style="margin-top: 16px;">
+                    <div class="cs-field-group">
+                      <label class="cs-field-label" for="cs-input-pixel-id">Meta / Facebook Pixel ID</label>
+                      <input type="text" class="cs-input" id="cs-input-pixel-id" value="984210482910482" placeholder="e.g. 123456789">
+                    </div>
+                    <div class="cs-field-group">
+                      <label class="cs-field-label" for="cs-input-ga4-id">Google Analytics GA4 ID</label>
+                      <input type="text" class="cs-input" id="cs-input-ga4-id" value="G-RR984201" placeholder="e.g. G-ABC123XYZ">
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- PANEL 6: Trust & Certificates Tab -->
+              <div id="cs-panel-trust-certificates" class="cs-settings-panel">
+                <div class="cs-panel-header">
+                  <div>
+                    <h2 class="cs-panel-title">Trust & Security Badges</h2>
+                    <p class="cs-panel-subtitle">Display buyer trust signals, money-back guarantees, and SSL badges on phone.</p>
+                  </div>
+                </div>
+
+                <div class="cs-card">
+                  <h3 class="cs-card-section-title" style="margin-bottom: 12px;">Active Security Badges</h3>
+
+                  <div class="cs-trust-item-row">
+                    <div class="cs-trust-info">
+                      <span class="cs-trust-name">Verified Instagram Automation Specialist</span>
+                      <span class="cs-trust-sub">Platform Certified Badge</span>
+                    </div>
+                    <label class="cs-switch">
+                      <input type="checkbox" class="cs-trust-toggle" data-trust="verified" checked>
+                      <span class="cs-slider"></span>
+                    </label>
+                  </div>
+
+                  <div class="cs-trust-item-row" style="margin-top: 12px;">
+                    <div class="cs-trust-info">
+                      <span class="cs-trust-name">30-Day Money-Back Guarantee</span>
+                      <span class="cs-trust-sub">100% Risk-Free Buyer Protection</span>
+                    </div>
+                    <label class="cs-switch">
+                      <input type="checkbox" class="cs-trust-toggle" data-trust="guarantee" checked>
+                      <span class="cs-slider"></span>
+                    </label>
+                  </div>
+
+                  <div class="cs-trust-item-row" style="margin-top: 12px;">
+                    <div class="cs-trust-info">
+                      <span class="cs-trust-name">SSL 256-Bit Encrypted Checkout</span>
+                      <span class="cs-trust-sub">Bank-grade Payment Security</span>
+                    </div>
+                    <label class="cs-switch">
+                      <input type="checkbox" class="cs-trust-toggle" data-trust="ssl" checked>
+                      <span class="cs-slider"></span>
+                    </label>
+                  </div>
+                </div>
+              </div>
+
+              <!-- PANEL 7: Advanced Settings Tab -->
+              <div id="cs-panel-advanced-settings" class="cs-settings-panel">
+                <div class="cs-panel-header">
+                  <div>
+                    <h2 class="cs-panel-title">Advanced Settings & Overlays</h2>
+                    <p class="cs-panel-subtitle">Enable age verification gates, password screens, and custom CSS.</p>
+                  </div>
+                </div>
+
+                <div class="cs-card">
+                  <div class="cs-toggle-row">
+                    <div>
+                      <div class="cs-toggle-title">Age Gate / Sensitive Content Disclaimer</div>
+                      <div class="cs-toggle-sub">Require visitors to click 'I am 18+' before accessing store page.</div>
+                    </div>
+                    <label class="cs-switch">
+                      <input type="checkbox" id="cs-toggle-age-gate">
+                      <span class="cs-slider"></span>
+                    </label>
+                  </div>
+
+                  <div class="cs-toggle-row" style="margin-top: 16px;">
+                    <div>
+                      <div class="cs-toggle-title">Password Protection Lock Screen</div>
+                      <div class="cs-toggle-sub">Lock store page behind a private passcode gate.</div>
+                    </div>
+                    <label class="cs-switch">
+                      <input type="checkbox" id="cs-toggle-passcode-lock">
+                      <span class="cs-slider"></span>
+                    </label>
+                  </div>
+                </div>
+              </div>
             </div>
 
-            <!-- RIGHT COL: BRAND THEME SHOWCASE -->
-            <div class="settings-right-col">
-              <div class="brand-theme-live-card" id="customer-dash-preview">
-                <div class="brand-preview-top-bar">
-                  <span class="preview-title-tag">
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                      style="margin-right: 4px;">
-                      <circle cx="13.5" cy="6.5" r=".5" />
-                      <circle cx="17.5" cy="10.5" r=".5" />
-                      <circle cx="8.5" cy="7.5" r=".5" />
-                      <circle cx="6.5" cy="12.5" r=".5" />
-                      <path
-                        d="M12 2C6.49 2 2 6.49 2 12s4.49 10 10 10c1.38 0 2.5-1.12 2.5-2.5 0-.61-.23-1.21-.64-1.67-.38-.45-.6-.97-.6-1.57 0-1.29 1.05-2.34 2.34-2.34H17c2.76 0 5-2.24 5-5 0-4.42-4.03-8-10-8z" />
-                    </svg>
-                    Brand Theme Live Showcase
-                  </span>
-                  <span class="preview-live-indicator">
-                    <span class="dot-green"></span> Dynamic Sync
-                  </span>
-                </div>
+            <!-- RIGHT COLUMN: Live Phone Preview Panel -->
+            <div class="cs-settings-preview-col">
+              <div class="cs-preview-header">
+                <div class="cs-preview-title">Live Store Preview</div>
+                <div class="cs-live-pill"><span class="cs-live-dot"></span>Live</div>
+              </div>
 
-                <div class="dash-prev-header" id="dash-prev-bg"
-                  style="background: linear-gradient(135deg, #6366F1 0%, #4F46E5 100%);">
-                  <div class="brand-preview-inner-card">
-                    <div class="brand-avatar-box">R</div>
-                    <div class="brand-store-name">RudRa RR Store</div>
-                    <div class="brand-verified-pill">
-                      <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                        stroke-width="3">
-                        <polyline points="20 6 9 17 4 12" />
-                      </svg>
-                      Verified Creator Store
+              <!-- PHONE MOCKUP FRAME -->
+              <div class="cs-phone-frame-container" id="cs-preview-frame-wrapper">
+                <div class="cs-phone-mockup">
+                  <!-- iPhone Notch -->
+                  <div class="cs-phone-notch">
+                    <span class="cs-notch-camera"></span>
+                  </div>
+
+                  <!-- Phone Content Screen -->
+                  <div class="cs-phone-screen">
+                    <!-- Top Hero Section (Night City Backdrop with Palms) -->
+                    <div class="cs-phone-hero">
+                      <div class="cs-phone-topbar">
+                        <!-- Hamburger Menu -->
+                        <button class="cs-phone-icon-btn">
+                          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2">
+                            <line x1="3" y1="12" x2="21" y2="12"/>
+                            <line x1="3" y1="6" x2="21" y2="6"/>
+                            <line x1="3" y1="18" x2="21" y2="18"/>
+                          </svg>
+                        </button>
+                        <!-- Cart Badge -->
+                        <button class="cs-phone-icon-btn cs-cart-btn">
+                          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2">
+                            <circle cx="9" cy="21" r="1"/>
+                            <circle cx="20" cy="21" r="1"/>
+                            <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/>
+                          </svg>
+                          <span class="cs-cart-badge">2</span>
+                        </button>
+                      </div>
+
+                      <!-- Avatar & Creator Info -->
+                      <div class="cs-phone-profile">
+                        <div class="cs-phone-avatar-wrapper">
+                          <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=250&q=80" class="cs-phone-avatar-img" id="cs-prev-avatar" alt="Rajeev Sharma">
+                          <div class="cs-phone-verified-badge" title="Verified Creator">
+                            <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="3">
+                              <polyline points="20 6 9 17 4 12"/>
+                            </svg>
+                          </div>
+                        </div>
+                        <h3 class="cs-phone-name" id="cs-prev-name">Rajeev Sharma</h3>
+                        <div class="cs-phone-role">Digital Creator</div>
+                        <p class="cs-phone-bio" id="cs-prev-bio">Building premium Instagram businesses and automation systems.</p>
+
+                        <!-- Social Links Row -->
+                        <div class="cs-phone-socials">
+                          <span class="cs-phone-soc-circle insta">
+                            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2">
+                              <rect x="2" y="2" width="20" height="20" rx="5" ry="5"/>
+                              <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/>
+                              <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/>
+                            </svg>
+                          </span>
+                          <span class="cs-phone-soc-circle youtube">
+                            <svg width="13" height="13" viewBox="0 0 24 24" fill="#ffffff">
+                              <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
+                            </svg>
+                          </span>
+                          <span class="cs-phone-soc-circle twitter">
+                            <svg width="12" height="12" viewBox="0 0 24 24" fill="#ffffff">
+                              <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
+                            </svg>
+                          </span>
+                          <span class="cs-phone-soc-circle linkedin">
+                            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2">
+                              <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/>
+                              <rect x="2" y="9" width="4" height="12"/>
+                              <circle cx="4" cy="4" r="2"/>
+                            </svg>
+                          </span>
+                          <span class="cs-phone-soc-circle website">
+                            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2">
+                              <circle cx="12" cy="12" r="10"/>
+                              <line x1="2" y1="12" x2="22" y2="12"/>
+                              <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
+                            </svg>
+                          </span>
+                        </div>
+                      </div>
                     </div>
 
-                    <div class="brand-accent-code-pill" id="dash-live-hex-badge">
-                      #6366F1 • Primary Accent
+                    <!-- Bottom White Card Section -->
+                    <div class="cs-phone-body">
+                      <div class="cs-phone-card">
+                        <h4 class="cs-phone-card-title">Featured Products</h4>
+                        <div class="cs-phone-products-list">
+                          <!-- Product 1 -->
+                          <div class="cs-phone-prod-item">
+                            <div class="cs-phone-prod-img cs-prod-img-1">
+                              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.7)" stroke-width="2">
+                                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                                <polyline points="14 2 14 8 20 8"/>
+                              </svg>
+                            </div>
+                            <div class="cs-phone-prod-info">
+                              <span class="cs-phone-prod-name">Java Full Stack Roadmap PDF</span>
+                            </div>
+                            <span class="cs-phone-prod-price">$19.99</span>
+                          </div>
+
+                          <!-- Product 2 -->
+                          <div class="cs-phone-prod-item">
+                            <div class="cs-phone-prod-img cs-prod-img-2">
+                              <img src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=120&q=80" alt="Session">
+                            </div>
+                            <div class="cs-phone-prod-info">
+                              <span class="cs-phone-prod-name">1-on-1 Instagram Strategy Session</span>
+                            </div>
+                            <span class="cs-phone-prod-price">$49.00</span>
+                          </div>
+
+                          <!-- Product 3 -->
+                          <div class="cs-phone-prod-item">
+                            <div class="cs-phone-prod-img cs-prod-img-3">
+                              <img src="https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=120&q=80" alt="Bundle">
+                            </div>
+                            <div class="cs-phone-prod-info">
+                              <span class="cs-phone-prod-name">Instagram Automation Preset Bundle</span>
+                            </div>
+                            <span class="cs-phone-prod-free-badge">FREE</span>
+                          </div>
+                        </div>
+
+                        <!-- Button -->
+                        <button class="cs-phone-view-btn">View All Products</button>
+
+                        <!-- Footer Attribution -->
+                        <div class="cs-phone-footer">Powered by RenderReply Store</div>
+                      </div>
                     </div>
                   </div>
                 </div>
+              </div>
 
-                <div class="brand-prev-body">
-                  <div class="brand-section-label">LIVE BUTTON & ACCENT PREVIEW</div>
-
-                  <div class="brand-preview-actions">
-                    <button class="btn-brand-demo-primary" id="dash-purchases-btn"
-                      style="background-color: #6366F1; border-color: #6366F1;">
-                      Purchases & Instant Access
-                    </button>
-
-                    <div class="brand-checkout-sample-pill" id="dash-sample-checkout-pill"
-                      style="border-color: #6366F1; color: #6366F1;">
-                      <span style="display: flex; align-items: center; gap: 4px;">
-                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                          stroke-width="2.5">
-                          <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2" />
-                        </svg>
-                        Instant Checkout
-                      </span>
-                      <strong>$19.99</strong>
-                    </div>
-                  </div>
-
-                  <div class="brand-preview-footer-note">
-                    Your customer checkout screens, invoices, and email receipts update automatically with this theme
-                    color.
-                  </div>
-                </div>
+              <!-- Device Toggles Bar -->
+              <div class="cs-device-toggle-bar">
+                <button class="cs-device-btn active" id="cs-btn-device-mobile">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <rect x="5" y="2" width="14" height="20" rx="2" ry="2"/>
+                    <line x1="12" y1="18" x2="12.01" y2="18"/>
+                  </svg>
+                  Mobile
+                </button>
+                <button class="cs-device-btn" id="cs-btn-device-tablet">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <rect x="4" y="2" width="16" height="20" rx="2" ry="2"/>
+                    <line x1="12" y1="18" x2="12.01" y2="18"/>
+                  </svg>
+                  Tablet
+                </button>
               </div>
             </div>
           </div>

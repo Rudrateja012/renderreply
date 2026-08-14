@@ -1239,9 +1239,357 @@ function initApp() {
     }
   });
 
+  // INITIALIZE CREATOR STORE SETTINGS HANDLERS
+  initCreatorStoreSettings();
+
   // INITIALIZE APP DATA & CONNECTION STATE
   updateConnectionUI();
   loadDashboardData('7 Days');
+}
+
+// CREATOR STOREFRONT - SETTINGS INTERACTIVITY & LIVE PREVIEW SYNC
+function initCreatorStoreSettings() {
+  // 1. Sub-sidebar Tab Switching
+  const sidebarItems = document.querySelectorAll('.cs-sidebar-item');
+  sidebarItems.forEach(item => {
+    item.addEventListener('click', () => {
+      const tab = item.getAttribute('data-cs-tab');
+      if (!tab) return;
+
+      sidebarItems.forEach(i => i.classList.remove('active'));
+      item.classList.add('active');
+
+      const panels = document.querySelectorAll('.cs-settings-panel');
+      panels.forEach(p => {
+        if (p.id === `cs-panel-${tab}`) {
+          p.classList.add('active');
+        } else {
+          p.classList.remove('active');
+        }
+      });
+    });
+  });
+
+  // 2. Real-time Name Sync & Counter
+  const nameInput = document.getElementById('cs-input-store-name');
+  const namePrev = document.getElementById('cs-prev-name');
+  const nameCount = document.getElementById('cs-name-count');
+  if (nameInput) {
+    nameInput.addEventListener('input', () => {
+      const val = nameInput.value || 'Rajeev Sharma';
+      if (namePrev) namePrev.textContent = val;
+      if (nameCount) nameCount.textContent = `${nameInput.value.length}/50`;
+    });
+  }
+
+  // 3. Real-time Handle Sync & Copy
+  const handleInput = document.getElementById('cs-input-store-handle');
+  const handleSubtext = document.querySelector('.cs-handle-subtext');
+  const copyHandleBtn = document.getElementById('cs-btn-copy-handle');
+  const seoUrlTxt = document.getElementById('cs-seo-url-txt');
+
+  if (handleInput) {
+    handleInput.addEventListener('input', () => {
+      const val = handleInput.value.trim() || 'rajeev';
+      if (handleSubtext) handleSubtext.textContent = `renderreply.com/store/${val}`;
+      if (seoUrlTxt) seoUrlTxt.textContent = `https://renderreply.com/store/${val}`;
+    });
+  }
+  if (copyHandleBtn) {
+    copyHandleBtn.addEventListener('click', () => {
+      const handle = handleInput ? handleInput.value.trim() : 'rajeev';
+      const url = `renderreply.com/store/${handle}`;
+      if (navigator.clipboard) {
+        navigator.clipboard.writeText(`https://${url}`);
+      }
+      showToast(`Copied store link: https://${url}`);
+    });
+  }
+
+  // 4. Real-time Bio Sync & Counter
+  const bioInput = document.getElementById('cs-input-store-bio');
+  const bioPrev = document.getElementById('cs-prev-bio');
+  const bioCount = document.getElementById('cs-bio-count');
+  if (bioInput) {
+    bioInput.addEventListener('input', () => {
+      const val = bioInput.value || 'Building premium Instagram businesses and automation systems.';
+      if (bioPrev) bioPrev.textContent = val;
+      if (bioCount) bioCount.textContent = `${bioInput.value.length}/160`;
+    });
+  }
+
+  // 5. Change Logo Avatar
+  const changeLogoBtn = document.getElementById('cs-btn-change-logo');
+  const logoImg = document.getElementById('cs-logo-img');
+  const prevAvatar = document.getElementById('cs-prev-avatar');
+  if (changeLogoBtn) {
+    const demoAvatars = [
+      'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=250&q=80',
+      'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=250&q=80',
+      'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=250&q=80'
+    ];
+    let avatarIdx = 0;
+    changeLogoBtn.addEventListener('click', () => {
+      avatarIdx = (avatarIdx + 1) % demoAvatars.length;
+      const newSrc = demoAvatars[avatarIdx];
+      if (logoImg) logoImg.src = newSrc;
+      if (prevAvatar) prevAvatar.src = newSrc;
+      showToast('Store logo avatar updated!');
+    });
+  }
+
+  // 6. Reset Brand Settings Button
+  const resetBrandBtn = document.getElementById('cs-btn-reset-brand');
+  if (resetBrandBtn) {
+    resetBrandBtn.addEventListener('click', () => {
+      if (nameInput) {
+        nameInput.value = 'Rajeev Sharma';
+        nameInput.dispatchEvent(new Event('input'));
+      }
+      if (bioInput) {
+        bioInput.value = 'Building premium Instagram businesses and automation systems.';
+        bioInput.dispatchEvent(new Event('input'));
+      }
+      if (handleInput) {
+        handleInput.value = 'rajeev';
+        handleInput.dispatchEvent(new Event('input'));
+      }
+      showToast('Brand identity settings reset to defaults.');
+    });
+  }
+
+  // 7. HERO SECTION INTERACTIVITY
+  const heroTitleInput = document.getElementById('cs-hero-title-input');
+  const heroSubInput = document.getElementById('cs-hero-sub-input');
+  const heroCtaInput = document.getElementById('cs-hero-cta-input');
+  const phoneViewBtn = document.querySelector('.cs-phone-view-btn');
+
+  if (heroTitleInput && namePrev) {
+    heroTitleInput.addEventListener('input', () => {
+      namePrev.textContent = heroTitleInput.value || 'Rajeev Sharma';
+    });
+  }
+
+  if (heroSubInput && bioPrev) {
+    heroSubInput.addEventListener('input', () => {
+      bioPrev.textContent = heroSubInput.value || 'Building premium Instagram businesses and automation systems.';
+    });
+  }
+
+  if (heroCtaInput && phoneViewBtn) {
+    heroCtaInput.addEventListener('input', () => {
+      phoneViewBtn.textContent = heroCtaInput.value || 'View All Products';
+    });
+  }
+
+  // Banner Swatches
+  const bannerSwatches = document.querySelectorAll('.cs-banner-swatch');
+  const phoneHero = document.querySelector('.cs-phone-hero');
+  bannerSwatches.forEach(swatch => {
+    swatch.addEventListener('click', () => {
+      bannerSwatches.forEach(s => s.classList.remove('active'));
+      swatch.classList.add('active');
+      const bg = swatch.style.background;
+      if (phoneHero && bg) {
+        phoneHero.style.background = bg;
+        showToast('Hero banner gradient updated on phone preview!');
+      }
+    });
+  });
+
+  // 8. STORE APPEARANCE INTERACTIVITY
+  // Accent Color Swatches
+  const colorSwatches = document.querySelectorAll('.cs-color-swatch');
+  const customColorPicker = document.getElementById('cs-custom-color-picker');
+  const phoneVerifiedBadge = document.querySelector('.cs-phone-verified-badge');
+
+  function updatePhoneAccentColor(hexColor) {
+    if (phoneViewBtn) phoneViewBtn.style.background = hexColor;
+    if (phoneVerifiedBadge) phoneVerifiedBadge.style.background = hexColor;
+  }
+
+  colorSwatches.forEach(swatch => {
+    swatch.addEventListener('click', () => {
+      colorSwatches.forEach(s => s.classList.remove('active'));
+      swatch.classList.add('active');
+      const col = swatch.getAttribute('data-color');
+      if (col) {
+        updatePhoneAccentColor(col);
+        showToast(`Theme accent color changed to ${col}!`);
+      }
+    });
+  });
+
+  if (customColorPicker) {
+    customColorPicker.addEventListener('input', () => {
+      colorSwatches.forEach(s => s.classList.remove('active'));
+      updatePhoneAccentColor(customColorPicker.value);
+    });
+  }
+
+  // Typography Font Selector
+  const selectFont = document.getElementById('cs-select-font');
+  const phoneScreen = document.querySelector('.cs-phone-screen');
+
+  if (selectFont && phoneScreen) {
+    selectFont.addEventListener('change', () => {
+      const font = selectFont.value;
+      phoneScreen.style.fontFamily = `"${font}", sans-serif`;
+      showToast(`Store font changed to ${font}!`);
+    });
+  }
+
+  // Button Curvature Style (Rounded, Square, Pill)
+  const btnStyleGroup = document.querySelectorAll('#cs-group-btn-style .cs-option-btn');
+  btnStyleGroup.forEach(btn => {
+    btn.addEventListener('click', () => {
+      btnStyleGroup.forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      const style = btn.getAttribute('data-btn-style');
+      if (phoneScreen) {
+        phoneScreen.classList.remove('btn-rounded', 'btn-square', 'btn-pill');
+        phoneScreen.classList.add(`btn-${style}`);
+        showToast(`Button style changed to ${style}!`);
+      }
+    });
+  });
+
+  // Store Theme Mode (Dark / Light)
+  const themeModeGroup = document.querySelectorAll('#cs-group-theme-mode .cs-option-btn');
+  themeModeGroup.forEach(btn => {
+    btn.addEventListener('click', () => {
+      themeModeGroup.forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      const mode = btn.getAttribute('data-theme-mode');
+      if (phoneScreen) {
+        if (mode === 'light') {
+          phoneScreen.classList.add('light-mode');
+        } else {
+          phoneScreen.classList.remove('light-mode');
+        }
+        showToast(`Store theme changed to ${mode} mode!`);
+      }
+    });
+  });
+
+  // 9. LAYOUT & DISPLAY INTERACTIVITY
+  // Catalog Layout Picker
+  const layoutCards = document.querySelectorAll('.cs-layout-picker-card');
+  layoutCards.forEach(card => {
+    card.addEventListener('click', () => {
+      layoutCards.forEach(c => c.classList.remove('active'));
+      card.classList.add('active');
+      const layout = card.getAttribute('data-catalog-layout');
+      if (phoneScreen) {
+        if (layout === 'single') {
+          phoneScreen.classList.add('single-col');
+        } else {
+          phoneScreen.classList.remove('single-col');
+        }
+        showToast(`Catalog layout changed to ${layout}!`);
+      }
+    });
+  });
+
+  // Visibility Toggles
+  const toggleProducts = document.getElementById('cs-toggle-products');
+  const toggleBadge = document.getElementById('cs-toggle-badge');
+  const toggleSocials = document.getElementById('cs-toggle-socials');
+  const toggleFooter = document.getElementById('cs-toggle-footer');
+  const phoneCard = document.querySelector('.cs-phone-card');
+  const phoneSocials = document.querySelector('.cs-phone-socials');
+  const phoneFooter = document.querySelector('.cs-phone-footer');
+
+  if (toggleProducts && phoneCard) {
+    toggleProducts.addEventListener('change', () => {
+      phoneCard.style.display = toggleProducts.checked ? 'block' : 'none';
+      showToast(toggleProducts.checked ? 'Featured products section shown' : 'Featured products section hidden');
+    });
+  }
+
+  if (toggleBadge && phoneVerifiedBadge) {
+    toggleBadge.addEventListener('change', () => {
+      phoneVerifiedBadge.style.display = toggleBadge.checked ? 'flex' : 'none';
+      showToast(toggleBadge.checked ? 'Verified badge enabled' : 'Verified badge disabled');
+    });
+  }
+
+  if (toggleSocials && phoneSocials) {
+    toggleSocials.addEventListener('change', () => {
+      phoneSocials.style.display = toggleSocials.checked ? 'flex' : 'none';
+      showToast(toggleSocials.checked ? 'Social media icons shown' : 'Social media icons hidden');
+    });
+  }
+
+  if (toggleFooter && phoneFooter) {
+    toggleFooter.addEventListener('change', () => {
+      phoneFooter.style.display = toggleFooter.checked ? 'block' : 'none';
+      showToast(toggleFooter.checked ? 'Footer branding shown' : 'Footer branding hidden');
+    });
+  }
+
+  // 10. SEO CARD PREVIEW SYNC
+  const seoTitleInput = document.getElementById('cs-input-seo-title');
+  const seoDescInput = document.getElementById('cs-input-seo-desc');
+  const seoTitleTxt = document.getElementById('cs-seo-title-txt');
+  const seoDescTxt = document.getElementById('cs-seo-desc-txt');
+
+  if (seoTitleInput && seoTitleTxt) {
+    seoTitleInput.addEventListener('input', () => {
+      seoTitleTxt.textContent = seoTitleInput.value || 'Rajeev Sharma | Official Storefront';
+    });
+  }
+
+  if (seoDescInput && seoDescTxt) {
+    seoDescInput.addEventListener('input', () => {
+      seoDescTxt.textContent = seoDescInput.value || 'Building premium Instagram businesses and automation systems.';
+    });
+  }
+
+  // 11. ADVANCED SETTINGS OVERLAYS (Age Gate & Passcode Lock)
+  const toggleAgeGate = document.getElementById('cs-toggle-age-gate');
+
+  if (toggleAgeGate && phoneScreen) {
+    toggleAgeGate.addEventListener('change', () => {
+      const existingOverlay = phoneScreen.querySelector('.cs-phone-age-gate-overlay');
+      if (toggleAgeGate.checked) {
+        if (!existingOverlay) {
+          const overlay = document.createElement('div');
+          overlay.className = 'cs-phone-age-gate-overlay';
+          overlay.innerHTML = `
+            <div class="cs-age-icon">18+</div>
+            <div class="cs-age-title">Age Verification Required</div>
+            <div class="cs-age-desc">This storefront contains exclusive creator content. Confirm you are 18 or older to proceed.</div>
+            <button class="cs-btn-age-confirm" onclick="this.parentElement.remove()">I am 18 or older</button>
+          `;
+          phoneScreen.appendChild(overlay);
+        }
+        showToast('Age Gate overlay activated on live phone preview!');
+      } else {
+        if (existingOverlay) existingOverlay.remove();
+        showToast('Age Gate overlay removed');
+      }
+    });
+  }
+
+  // 12. DEVICE VIEW TOGGLES (Mobile / Tablet)
+  const mobileBtn = document.getElementById('cs-btn-device-mobile');
+  const tabletBtn = document.getElementById('cs-btn-device-tablet');
+  const frameContainer = document.getElementById('cs-preview-frame-wrapper');
+
+  if (mobileBtn && tabletBtn && frameContainer) {
+    mobileBtn.addEventListener('click', () => {
+      mobileBtn.classList.add('active');
+      tabletBtn.classList.remove('active');
+      frameContainer.classList.remove('tablet-mode');
+    });
+
+    tabletBtn.addEventListener('click', () => {
+      tabletBtn.classList.add('active');
+      mobileBtn.classList.remove('active');
+      frameContainer.classList.add('tablet-mode');
+    });
+  }
 }
 
 if (document.readyState === 'loading') {
