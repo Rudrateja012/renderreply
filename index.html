@@ -737,18 +737,16 @@
           </div>
         </div>
       </section>
-
       <!-- TAB 6: BIO LINK PAGE VIEW -->
       <section id="biolink-view" class="tab-view">
-        <header class="view-header">
+        <header class="view-header flex-between align-center">
           <div class="header-title-group">
-            <h1 class="view-title">Bio Link Page</h1>
-            <p class="view-subtitle">Design a high-converting profile landing page with real-time performance analytics.</p>
+            <h1 class="view-title">Bio Link Page Builder</h1>
+            <p class="view-subtitle">Design a high-converting profile landing page with real-time smartphone preview.</p>
           </div>
           <div class="header-actions">
             <button class="btn btn-outline" id="btn-save-biolink">
-              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                stroke-linecap="round" stroke-linejoin="round">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                 <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z" />
                 <polyline points="17 21 17 13 7 13 7 21" />
                 <polyline points="7 3 7 8 15 8" />
@@ -758,33 +756,32 @@
           </div>
         </header>
 
-        <!-- LIVE BANNER CARD -->
-        <div class="bio-link-banner">
-          <div class="banner-left">
-            <div class="banner-status">
-              <span class="dot-green"></span> Live Bio Link Active
+        <!-- LIVE BIO LINK ACTIVE BANNER -->
+        <div class="biolink-banner-card">
+          <div class="banner-status-info">
+            <div class="banner-status-title">
+              <span class="status-dot-active"></span>
+              <strong>Live Bio Link Active</strong>
             </div>
-            <div class="banner-subtitle">Paste your custom link into your Instagram Bio section.</div>
+            <p class="banner-status-sub">Paste your custom link into your Instagram Bio section.</p>
           </div>
-          <div class="banner-right-actions">
-            <div class="link-url-pill">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+          <div class="banner-actions-group">
+            <div class="biolink-url-box">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                 <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71" />
                 <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71" />
               </svg>
-              <span>https://renderreply.com/p/render6457</span>
+              <span id="biolink-url-display">https://renderreply.com/p/render6457</span>
             </div>
-            <button class="btn btn-outline" id="btn-copy-link">
-              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                stroke-linecap="round" stroke-linejoin="round">
+            <button class="btn btn-outline btn-sm" id="btn-copy-link">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                 <rect x="9" y="9" width="13" height="13" rx="2" ry="2" />
                 <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" />
               </svg>
               Copy
             </button>
-            <button class="btn btn-outline" id="btn-preview-biolink">
-              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                stroke-linecap="round" stroke-linejoin="round">
+            <button class="btn btn-outline btn-sm" id="btn-preview-biolink">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                 <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
                 <polyline points="15 3 21 3 21 9" />
                 <line x1="10" y1="14" x2="21" y2="3" />
@@ -794,527 +791,282 @@
           </div>
         </div>
 
-        <!-- SUB TABS -->
-        <div class="sub-tabs biolink-subtabs">
-          <button class="sub-tab-btn active" data-biolink-tab="activity">Activity & Analytics</button>
-          <button class="sub-tab-btn" data-biolink-tab="content">Content & Links</button>
-          <button class="sub-tab-btn" data-biolink-tab="appearance">Appearance & Design</button>
+        <!-- MAIN SUB-TABS NAVIGATION -->
+        <div class="biolink-subtabs-wrapper">
+          <button class="biolink-tab-btn active" data-biolink-tab="content">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 2L2 7l10 5 10-5-10-5z" />
+              <path d="M2 17l10 5 10-5" />
+              <path d="M2 12l10 5 10-5" />
+            </svg>
+            Content & Links
+          </button>
+          <button class="biolink-tab-btn" data-biolink-tab="appearance">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z" />
+            </svg>
+            Appearance & Design
+          </button>
         </div>
 
-        <!-- SUB TAB 1: ACTIVITY & ANALYTICS VIEW -->
-        <div id="biolink-tab-activity" class="biolink-tab-content active">
-          <!-- TOP HEADER BAR -->
-          <div class="biolink-activity-header">
-            <h2 class="biolink-activity-title">Activity</h2>
-            <div class="biolink-dropdown-wrapper">
-              <button class="biolink-dropdown-btn" id="biolink-timerange-btn">
-                <span>Last 7 days</span>
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
-              </button>
-            </div>
-          </div>
+        <!-- BUILDER MAIN GRID (LEFT FORMS + RIGHT LIVE PREVIEW) -->
+        <div class="biolink-builder-grid">
 
-          <!-- 4 METRICS KPI GRID -->
-          <div class="biolink-kpi-grid">
-            <div class="biolink-kpi-card">
-              <div class="kpi-card-top">
-                <div class="kpi-icon-bg green">
-                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="2">
-                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/>
-                  </svg>
-                </div>
-                <div class="kpi-info-icon" title="Total page visits">
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#94a3b8" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
-                </div>
-              </div>
-              <div class="kpi-card-val">0</div>
-              <div class="kpi-card-lbl">Visits</div>
-            </div>
+          <!-- LEFT COLUMN: TAB PANELS -->
+          <div class="biolink-panels-column">
 
-            <div class="biolink-kpi-card">
-              <div class="kpi-card-top">
-                <div class="kpi-icon-bg purple">
-                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#8b5cf6" stroke-width="2">
-                    <path d="M3 3l7 18 3-7 7-3L3 3z"/>
-                  </svg>
-                </div>
-                <div class="kpi-info-icon" title="Total link clicks">
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#94a3b8" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
-                </div>
-              </div>
-              <div class="kpi-card-val">0</div>
-              <div class="kpi-card-lbl">Clicks</div>
-            </div>
-
-            <div class="biolink-kpi-card">
-              <div class="kpi-card-top">
-                <div class="kpi-icon-bg cyan">
-                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#06b6d4" stroke-width="2">
-                    <circle cx="12" cy="12" r="9"/><path d="M12 3v9h9"/>
-                  </svg>
-                </div>
-                <div class="kpi-info-icon" title="Click-Through Rate">
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#94a3b8" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
-                </div>
-              </div>
-              <div class="kpi-card-val">0%</div>
-              <div class="kpi-card-lbl">CTR</div>
-            </div>
-
-            <div class="biolink-kpi-card">
-              <div class="kpi-card-top">
-                <div class="kpi-icon-bg orange">
-                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#f97316" stroke-width="2">
-                    <circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>
-                  </svg>
-                </div>
-                <div class="kpi-info-icon" title="Average time to click">
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#94a3b8" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
-                </div>
-              </div>
-              <div class="kpi-card-val">0s</div>
-              <div class="kpi-card-lbl">Time to click</div>
-            </div>
-          </div>
-
-          <!-- BAR CHART CARD (ROW 2) -->
-          <div class="biolink-card biolink-chart-card">
-            <div class="biolink-card-header">
-              <div class="biolink-chart-legend-row">
-                <span class="chart-title-sm">Last 7 days</span>
-                <div class="legend-pills-row">
-                  <span class="legend-pill green"><span class="pill-dot"></span> Unique Visits</span>
-                  <span class="legend-pill purple"><span class="pill-dot"></span> Total Visits</span>
-                  <span class="legend-pill grey"><span class="pill-dot"></span> Total Clicks</span>
-                  <span class="legend-pill cyan"><span class="pill-dot"></span> Unique Clicks</span>
-                </div>
-              </div>
-            </div>
-            <div class="biolink-card-body relative-chart-body">
-              <div class="biolink-watermark-overlay">
-                <div class="watermark-bold">This is example Data!</div>
-                <div class="watermark-sub">No activity in selected time range.</div>
-              </div>
-              <svg viewBox="0 0 800 220" class="biolink-barchart-svg">
-                <!-- Grid Lines -->
-                <line x1="40" y1="30" x2="780" y2="30" stroke="#f1f5f9" stroke-width="1.5" />
-                <line x1="40" y1="70" x2="780" y2="70" stroke="#f1f5f9" stroke-width="1.5" />
-                <line x1="40" y1="110" x2="780" y2="110" stroke="#f1f5f9" stroke-width="1.5" />
-                <line x1="40" y1="150" x2="780" y2="150" stroke="#f1f5f9" stroke-width="1.5" />
-                <line x1="40" y1="190" x2="780" y2="190" stroke="#e2e8f0" stroke-width="1.5" />
-
-                <!-- Y-Axis Labels -->
-                <text x="25" y="34" font-size="11" fill="#94a3b8" text-anchor="end">5</text>
-                <text x="25" y="74" font-size="11" fill="#94a3b8" text-anchor="end">4</text>
-                <text x="25" y="114" font-size="11" fill="#94a3b8" text-anchor="end">3</text>
-                <text x="25" y="154" font-size="11" fill="#94a3b8" text-anchor="end">2</text>
-                <text x="25" y="194" font-size="11" fill="#94a3b8" text-anchor="end">0</text>
-
-                <!-- Dec 13 Sample Bars -->
-                <rect x="655" y="30" width="16" height="160" rx="3" fill="#d1fae5" opacity="0.85"/>
-                <rect x="674" y="55" width="16" height="135" rx="3" fill="#ede9fe" opacity="0.85"/>
-
-                <!-- Dec 14 Sample Bars -->
-                <rect x="735" y="90" width="16" height="100" rx="3" fill="#d1fae5" opacity="0.85"/>
-                <rect x="754" y="90" width="16" height="100" rx="3" fill="#ede9fe" opacity="0.85"/>
-
-                <!-- X-Axis Dates -->
-                <text x="120" y="212" font-size="11" fill="#94a3b8" text-anchor="middle">Dec 08</text>
-                <text x="220" y="212" font-size="11" fill="#94a3b8" text-anchor="middle">Dec 09</text>
-                <text x="320" y="212" font-size="11" fill="#94a3b8" text-anchor="middle">Dec 10</text>
-                <text x="420" y="212" font-size="11" fill="#94a3b8" text-anchor="middle">Dec 11</text>
-                <text x="520" y="212" font-size="11" fill="#94a3b8" text-anchor="middle">Dec 12</text>
-                <text x="665" y="212" font-size="11" fill="#94a3b8" text-anchor="middle">Dec 13</text>
-                <text x="745" y="212" font-size="11" fill="#94a3b8" text-anchor="middle">Dec 14</text>
-              </svg>
-            </div>
-          </div>
-
-          <!-- TOP LOCATIONS CARD (ROW 3) -->
-          <div class="biolink-card biolink-locations-card">
-            <div class="biolink-card-header flex-between">
-              <div class="card-header-left">
-                <span class="biolink-card-title">Top Locations</span>
-              </div>
-              <div class="card-header-right-pills">
-                <div class="pill-group">
-                  <button class="pill-btn active">Map</button>
-                  <button class="pill-btn">List</button>
-                </div>
-                <div class="pill-group">
-                  <button class="pill-btn active">Total</button>
-                  <button class="pill-btn">Unique</button>
-                </div>
-              </div>
-            </div>
-
-            <div class="locations-filter-bar flex-between">
-              <div class="pill-group compact">
-                <button class="pill-btn active">Country</button>
-                <button class="pill-btn">City</button>
-              </div>
-              <div class="table-col-labels">
-                <span>Visits</span>
-                <span>Clicks</span>
-                <span>CTR</span>
-              </div>
-            </div>
-
-            <div class="biolink-card-body relative-chart-body map-body">
-              <div class="biolink-watermark-overlay">
-                <div class="watermark-bold">This is example Data!</div>
-                <div class="watermark-sub">No activity in selected time range.</div>
-              </div>
-              <!-- WORLD MAP VECTOR -->
-              <svg viewBox="0 0 800 340" class="world-map-svg">
-                <!-- Soft Continents path representation -->
-                <path d="M150,90 Q180,60 250,80 T300,140 T220,200 T120,150 Z" fill="#e2e8f0" opacity="0.6"/>
-                <path d="M260,220 Q310,240 330,290 T280,330 T240,260 Z" fill="#e2e8f0" opacity="0.6"/>
-                <path d="M420,80 Q480,60 540,90 T510,170 T430,130 Z" fill="#e2e8f0" opacity="0.6"/>
-                <path d="M450,180 Q520,200 540,280 T460,310 Z" fill="#e2e8f0" opacity="0.6"/>
-                <path d="M550,70 Q680,60 740,110 T680,200 T580,140 Z" fill="#e2e8f0" opacity="0.6"/>
-                <path d="M660,240 Q740,250 750,300 T650,310 Z" fill="#e2e8f0" opacity="0.6"/>
+            <!-- TAB 1 CONTENT: CONTENT & LINKS -->
+            <div id="biolink-tab-content" class="biolink-tab-panel active">
+              
+              <!-- CARD 1: PROFILE CUSTOMIZATION -->
+              <div class="biolink-card">
+                <h3 class="biolink-card-title">Profile Customization</h3>
                 
-                <!-- INDIA PIN POINT -->
-                <circle cx="610" cy="180" r="6" fill="#2563eb" opacity="0.9"/>
-                <circle cx="610" cy="180" r="12" fill="#3b82f6" opacity="0.3"/>
-              </svg>
-            </div>
-          </div>
-
-          <!-- TOP PERFORMING HIGHLIGHTS CARD (ROW 4) -->
-          <div class="biolink-card">
-            <div class="biolink-card-header flex-between">
-              <span class="biolink-card-title">Top Performing Highlights</span>
-              <div class="pill-group">
-                <button class="pill-btn active">Total</button>
-                <button class="pill-btn">Unique</button>
-              </div>
-            </div>
-
-            <div class="biolink-card-body relative-chart-body padding-box">
-              <div class="biolink-watermark-overlay">
-                <div class="watermark-bold">This is example Data!</div>
-                <div class="watermark-sub">No activity in selected time range.</div>
-              </div>
-
-              <div class="list-item-row">
-                <div class="item-left">
-                  <div class="item-icon-circle"></div>
-                  <span class="item-title">Buy my merch</span>
-                </div>
-                <div class="item-right-stats">
-                  <span>98 Views</span>
-                  <span>51 Clicks</span>
-                  <span>52.04% CTR</span>
-                </div>
-              </div>
-
-              <div class="list-item-row">
-                <div class="item-left">
-                  <div class="item-icon-circle"></div>
-                  <span class="item-title">Official Facebook</span>
-                </div>
-                <div class="item-right-stats">
-                  <span>98 Views</span>
-                  <span>19 Clicks</span>
-                  <span>19.39% CTR</span>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <!-- TOP PERFORMING BLOCKS CARD (ROW 5) -->
-          <div class="biolink-card">
-            <div class="biolink-card-header flex-between">
-              <span class="biolink-card-title">Top Performing Blocks</span>
-              <div class="pill-group">
-                <button class="pill-btn active">Total</button>
-                <button class="pill-btn">Unique</button>
-              </div>
-            </div>
-
-            <div class="biolink-card-body relative-chart-body padding-box">
-              <div class="biolink-watermark-overlay">
-                <div class="watermark-bold">This is example Data!</div>
-                <div class="watermark-sub">No activity in selected time range.</div>
-              </div>
-
-              <div class="list-item-row">
-                <div class="item-left">
-                  <span class="item-title">Buy my merch</span>
-                </div>
-                <div class="item-right-stats">
-                  <span>98 Views</span>
-                  <span>51 Clicks</span>
-                  <span>0% CTR</span>
-                </div>
-              </div>
-
-              <div class="list-item-row">
-                <div class="item-left">
-                  <span class="item-title">Official Facebook</span>
-                </div>
-                <div class="item-right-stats">
-                  <span>95 Views</span>
-                  <span>19 Clicks</span>
-                  <span>0% CTR</span>
-                </div>
-              </div>
-
-              <div class="list-item-row">
-                <div class="item-left">
-                  <span class="item-title">Checkout my exclusive content</span>
-                </div>
-                <div class="item-right-stats">
-                  <span>76 Views</span>
-                  <span>12 Clicks</span>
-                  <span>0% CTR</span>
-                </div>
-              </div>
-
-              <div class="list-item-row">
-                <div class="item-left">
-                  <span class="item-title">Twitter</span>
-                </div>
-                <div class="item-right-stats">
-                  <span>46 Views</span>
-                  <span>5 Clicks</span>
-                  <span>0% CTR</span>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <!-- TOP REFERRERS DONUT CARD (ROW 6) -->
-          <div class="biolink-card">
-            <div class="biolink-card-header flex-between">
-              <span class="biolink-card-title">Top Referrers</span>
-              <div class="card-header-right-pills">
-                <div class="pill-group">
-                  <button class="pill-btn active">Chart</button>
-                  <button class="pill-btn">List</button>
-                </div>
-                <div class="pill-group">
-                  <button class="pill-btn active">Total</button>
-                  <button class="pill-btn">Unique</button>
-                </div>
-                <div class="table-col-labels" style="margin-left: 12px;">
-                  <span>Visits</span>
-                  <span>Clicks</span>
-                </div>
-              </div>
-            </div>
-
-            <div class="biolink-card-body relative-chart-body padding-box flex-center-donut">
-              <div class="biolink-watermark-overlay">
-                <div class="watermark-bold">This is example Data!</div>
-                <div class="watermark-sub">No activity in selected time range.</div>
-              </div>
-
-              <div class="donut-chart-flex">
-                <svg viewBox="0 0 200 200" class="donut-svg">
-                  <!-- Donut slices -->
-                  <circle cx="100" cy="100" r="70" fill="none" stroke="#fed7aa" stroke-width="40" stroke-dasharray="130 310" transform="rotate(-90 100 100)"/>
-                  <circle cx="100" cy="100" r="70" fill="none" stroke="#fca5a5" stroke-width="40" stroke-dasharray="175 265" transform="rotate(15 100 100)"/>
-                  <circle cx="100" cy="100" r="70" fill="none" stroke="#bfdbfe" stroke-width="40" stroke-dasharray="130 310" transform="rotate(160 100 100)"/>
-                  
-                  <!-- Percentage Labels inside donut -->
-                  <text x="80" y="85" font-size="12" font-weight="700" fill="#475569">30%</text>
-                  <text x="115" y="145" font-size="12" font-weight="700" fill="#475569">40%</text>
-                  <text x="65" y="135" font-size="12" font-weight="700" fill="#475569">30%</text>
-                </svg>
-
-                <div class="donut-legend-col">
-                  <div class="legend-item"><span class="dot-color blue"></span> Organic</div>
-                  <div class="legend-item"><span class="dot-color peach"></span> Instagram</div>
-                  <div class="legend-item"><span class="dot-color yellow"></span> Twitter</div>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <!-- TOP DEVICES DONUT CARD (ROW 7) -->
-          <div class="biolink-card">
-            <div class="biolink-card-header flex-between">
-              <span class="biolink-card-title">Top Devices</span>
-              <div class="card-header-right-pills">
-                <div class="pill-group">
-                  <button class="pill-btn active">Chart</button>
-                  <button class="pill-btn">List</button>
-                </div>
-                <div class="pill-group">
-                  <button class="pill-btn active">Total</button>
-                  <button class="pill-btn">Unique</button>
-                </div>
-                <div class="table-col-labels" style="margin-left: 12px;">
-                  <span>Visits</span>
-                  <span>Clicks</span>
-                </div>
-              </div>
-            </div>
-
-            <div class="biolink-card-body relative-chart-body padding-box flex-center-donut">
-              <div class="biolink-watermark-overlay">
-                <div class="watermark-bold">This is example Data!</div>
-                <div class="watermark-sub">No activity in selected time range.</div>
-              </div>
-
-              <div class="donut-chart-flex">
-                <svg viewBox="0 0 200 200" class="donut-svg">
-                  <!-- Donut slices -->
-                  <circle cx="100" cy="100" r="70" fill="none" stroke="#fef08a" stroke-width="40" stroke-dasharray="115 325" transform="rotate(-90 100 100)"/>
-                  <circle cx="100" cy="100" r="70" fill="none" stroke="#fca5a5" stroke-width="40" stroke-dasharray="175 265" transform="rotate(5 100 100)"/>
-                  <circle cx="100" cy="100" r="70" fill="none" stroke="#bfdbfe" stroke-width="40" stroke-dasharray="150 290" transform="rotate(150 100 100)"/>
-
-                  <text x="75" y="130" font-size="12" font-weight="700" fill="#475569">26%</text>
-                  <text x="115" y="145" font-size="12" font-weight="700" fill="#475569">40%</text>
-                </svg>
-
-                <div class="donut-legend-col">
-                  <div class="legend-item"><span class="dot-color blue"></span> Mobile</div>
-                  <div class="legend-item"><span class="dot-color peach"></span> Desktop</div>
-                  <div class="legend-item"><span class="dot-color yellow"></span> Tablet</div>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <!-- SOCIAL CONNECTS CARD (ROW 8) -->
-          <div class="biolink-card">
-            <div class="biolink-card-header">
-              <span class="biolink-card-title">Social Connects</span>
-            </div>
-
-            <div class="biolink-card-body relative-chart-body padding-box">
-              <div class="biolink-watermark-overlay">
-                <div class="watermark-bold">This is example Data!</div>
-                <div class="watermark-sub">No activity in selected time range.</div>
-              </div>
-
-              <div class="list-item-row">
-                <div class="item-left">
-                  <span class="item-title">Instagram</span>
-                </div>
-                <div class="item-right-stats">
-                  <span>12 Unique clicks</span>
-                  <span>32 Total clicks</span>
-                </div>
-              </div>
-
-              <div class="list-item-row">
-                <div class="item-left">
-                  <span class="item-title">Facebook</span>
-                </div>
-                <div class="item-right-stats">
-                  <span>14 Unique clicks</span>
-                  <span>26 Total clicks</span>
-                </div>
-              </div>
-
-              <div class="list-item-row">
-                <div class="item-left">
-                  <span class="item-title">Email</span>
-                </div>
-                <div class="item-right-stats">
-                  <span>52 Unique clicks</span>
-                  <span>19 Total clicks</span>
-                </div>
-              </div>
-
-              <div class="list-item-row">
-                <div class="item-left">
-                  <span class="item-title">Twitter</span>
-                </div>
-                <div class="item-right-stats">
-                  <span>6 Unique clicks</span>
-                  <span>10 Total clicks</span>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- SUB TAB 2: CONTENT & LINKS BUILDER VIEW -->
-        <div id="biolink-tab-content" class="biolink-tab-content">
-          <div class="biolink-grid">
-            <div class="form-column">
-              <div class="form-card">
-                <h2 class="form-card-title">Profile Customization</h2>
-
-                <div class="form-group">
-                  <label class="form-label">Custom Page Title</label>
-                  <input type="text" class="form-input" id="input-page-title"
-                    value="RudRa RR | Full-Stack & Automation Creator">
+                <div class="form-group margin-top-md">
+                  <label class="form-label-uppercase">CUSTOM PAGE TITLE</label>
+                  <input type="text" id="biolink-input-title" class="form-input-custom" placeholder="e.g. My Link in Bio">
                 </div>
 
-                <div class="form-group">
-                  <label class="form-label">Biography Description</label>
-                  <textarea class="form-textarea"
-                    id="input-bio-desc">Helping creators & developers automate Instagram, sell digital products & scale leads.</textarea>
-                </div>
-              </div>
-
-              <div class="form-card">
-                <h2 class="form-card-title">Featured Links</h2>
-                <div style="font-size: 13px; color: var(--text-secondary); margin-bottom: 16px;">Add dynamic action
-                  buttons to your Instagram bio landing page.</div>
-                <button class="btn btn-primary btn-pill" id="btn-add-link">+ Add New Link Button</button>
-              </div>
-            </div>
-
-            <div class="preview-container">
-              <div class="preview-header-label">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                  style="margin-right: 6px;">
-                  <rect x="5" y="2" width="14" height="20" rx="2" ry="2" />
-                  <line x1="12" y1="18" x2="12.01" y2="18" />
-                </svg>
-                Real-Time Live Device Preview
-              </div>
-
-              <div class="phone-mockup">
-                <div class="phone-island"></div>
-                <div class="phone-screen">
-                  <div class="phone-avatar">R</div>
-                  <div class="phone-handle">@render6457</div>
-                  <p class="phone-bio" id="preview-phone-bio">Helping creators automate Instagram & convert followers into
-                    leads.</p>
-
-                  <div class="phone-links-list" id="preview-phone-links">
-                    <a class="phone-link-btn" href="#">Pricing Plans & Packages</a>
-                    <a class="phone-link-btn" href="#">Book 1-on-1 Strategy Call</a>
-                    <a class="phone-link-btn" href="#">Download Free Checklist PDF</a>
+                <div class="form-group margin-top-md">
+                  <label class="form-label-uppercase">BIOGRAPHY DESCRIPTION</label>
+                  <textarea id="biolink-input-bio" class="form-textarea-custom" rows="3" placeholder="Write a short description to display on your page..."></textarea>
+                  <div class="word-counter-row">
+                    <span id="biolink-word-count">0 / 80 words</span>
                   </div>
                 </div>
               </div>
+
+              <!-- CARD 2: FEATURED LINKS -->
+              <div class="biolink-card margin-top-lg">
+                <h3 class="biolink-card-title">Featured Links</h3>
+                <p class="biolink-card-sub">Add specific buttons for your personal websites, blogs, courses, or online shops.</p>
+                
+                <div class="biolink-add-link-form">
+                  <div class="link-form-field flex-2">
+                    <label class="form-label-uppercase">LINK LABEL</label>
+                    <input type="text" id="link-input-label" class="form-input-custom" placeholder="e.g. Visit my Blog">
+                  </div>
+                  <div class="link-form-field flex-3">
+                    <label class="form-label-uppercase">URL</label>
+                    <input type="url" id="link-input-url" class="form-input-custom" placeholder="e.g. https://mywebsite.com">
+                  </div>
+                  <div class="link-form-field flex-2">
+                    <label class="form-label-uppercase">CARD COLOR</label>
+                    <select id="link-input-color" class="form-select-custom">
+                      <option value="accent">Default (Accent)</option>
+                      <option value="indigo">Indigo</option>
+                      <option value="violet">Violet</option>
+                      <option value="emerald">Emerald</option>
+                      <option value="rose">Rose</option>
+                      <option value="dark">Dark</option>
+                    </select>
+                  </div>
+                  <div class="link-form-field flex-auto align-end">
+                    <button class="btn btn-dark" id="btn-add-link-item">
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                        <line x1="12" y1="5" x2="12" y2="19" />
+                        <line x1="5" y1="12" x2="19" y2="12" />
+                      </svg>
+                      Add Link
+                    </button>
+                  </div>
+                </div>
+
+                <!-- LINKS LIST CONTAINER / EMPTY STATE -->
+                <div id="biolink-links-list-container" class="links-list-container">
+                  <div class="empty-links-state">
+                    No custom links added yet.
+                  </div>
+                </div>
+              </div>
+
+              <!-- CARD 3: FEATURED VIDEOS -->
+              <div class="biolink-card margin-top-lg">
+                <h3 class="biolink-card-title">Featured Videos (Up to 2 Videos)</h3>
+                <p class="biolink-card-sub">Embed up to 2 YouTube videos on your profile landing page.</p>
+
+                <div class="form-group margin-top-md">
+                  <label class="form-label-uppercase">FEATURED VIDEO 1 (YOUTUBE URL)</label>
+                  <input type="url" id="biolink-input-video1" class="form-input-custom" placeholder="https://www.youtube.com/watch?v=...">
+                </div>
+
+                <div class="form-group margin-top-md">
+                  <label class="form-label-uppercase">FEATURED VIDEO 2 (YOUTUBE URL)</label>
+                  <input type="url" id="biolink-input-video2" class="form-input-custom" placeholder="https://www.youtube.com/watch?v=...">
+                </div>
+              </div>
+
+              <!-- CARD 4: SOCIAL PROFILES -->
+              <div class="biolink-card margin-top-lg">
+                <h3 class="biolink-card-title">Social Profiles</h3>
+                <p class="biolink-card-sub">No social profiles added yet. Click below to connect.</p>
+
+                <div class="social-dropdown-wrapper margin-top-md">
+                  <button class="social-select-btn" id="btn-toggle-social-menu">
+                    <span>+ Add Social Profile...</span>
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <polyline points="6 9 12 15 18 9" />
+                    </svg>
+                  </button>
+                  <div class="social-menu-dropdown" id="social-menu-dropdown">
+                    <div class="social-option" data-social="instagram">📸 Instagram Profile</div>
+                    <div class="social-option" data-social="youtube">▶️ YouTube Channel</div>
+                    <div class="social-option" data-social="twitter">🐦 Twitter / X</div>
+                    <div class="social-option" data-social="tiktok">🎵 TikTok</div>
+                    <div class="social-option" data-social="linkedin">💼 LinkedIn</div>
+                    <div class="social-option" data-social="github">💻 GitHub</div>
+                  </div>
+                </div>
+                
+                <div id="social-added-items" class="social-added-items"></div>
+              </div>
+
             </div>
-          </div>
-        </div>
 
-        <!-- SUB TAB 3: APPEARANCE & DESIGN VIEW -->
-        <div id="biolink-tab-appearance" class="biolink-tab-content">
-          <div class="form-card" style="max-width: 680px; margin-top: 10px;">
-            <h2 class="form-card-title">Theme & Design Settings</h2>
-            <p style="font-size: 13px; color: var(--text-secondary); margin-bottom: 20px;">Customize color schemes, background styles, and button aesthetics for your bio link profile page.</p>
+            <!-- TAB 2 CONTENT: APPEARANCE & DESIGN -->
+            <div id="biolink-tab-appearance" class="biolink-tab-panel">
+              <div class="biolink-card">
+                <div class="card-header-with-icon">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#6366f1" stroke-width="2">
+                    <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
+                  </svg>
+                  <h3 class="biolink-card-title">Theme & Style Controls</h3>
+                </div>
 
-            <div class="form-group">
-              <label class="form-label">Background Theme</label>
-              <div style="display: flex; gap: 12px; margin-top: 8px;">
-                <div style="width: 60px; height: 60px; border-radius: 12px; background: #ffffff; border: 2px solid #6366f1; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 700; color: #6366f1;">Light</div>
-                <div style="width: 60px; height: 60px; border-radius: 12px; background: #0f172a; border: 1px solid #e2e8f0; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 700; color: #ffffff;">Dark</div>
-                <div style="width: 60px; height: 60px; border-radius: 12px; background: linear-gradient(135deg, #6366f1, #a855f7); border: 1px solid #e2e8f0; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 700; color: #ffffff;">Gradient</div>
+                <!-- SECTION 1: BACKGROUND THEME -->
+                <div class="appearance-section margin-top-lg">
+                  <label class="form-label-uppercase">BACKGROUND THEME</label>
+                  <div class="theme-grid-selector">
+                    <button class="theme-card-option active" data-theme="indigo-slate">
+                      <div class="theme-preview-box theme-indigo-slate">Indigo Slate</div>
+                    </button>
+                    <button class="theme-card-option" data-theme="dark-space">
+                      <div class="theme-preview-box theme-dark-space">Dark Space</div>
+                    </button>
+                    <button class="theme-card-option" data-theme="violet-glass">
+                      <div class="theme-preview-box theme-violet-glass">Violet Glass</div>
+                    </button>
+                    <button class="theme-card-option" data-theme="insta-sunset">
+                      <div class="theme-preview-box theme-insta-sunset">Insta Sunset</div>
+                    </button>
+                    <button class="theme-card-option" data-theme="forest-emerald">
+                      <div class="theme-preview-box theme-forest-emerald">Forest Emerald</div>
+                    </button>
+                    <button class="theme-card-option" data-theme="blush-pink">
+                      <div class="theme-preview-box theme-blush-pink">Blush Pink</div>
+                    </button>
+                    <button class="theme-card-option" data-theme="midnight-ocean">
+                      <div class="theme-preview-box theme-midnight-ocean">Midnight Ocean</div>
+                    </button>
+                    <button class="theme-card-option" data-theme="warm-sand">
+                      <div class="theme-preview-box theme-warm-sand">Warm Sand</div>
+                    </button>
+                    <button class="theme-card-option" data-theme="lavender-mist">
+                      <div class="theme-preview-box theme-lavender-mist">Lavender Mist</div>
+                    </button>
+                    <button class="theme-card-option" data-theme="carbon-dark">
+                      <div class="theme-preview-box theme-carbon-dark">Carbon Dark</div>
+                    </button>
+                    <button class="theme-card-option" data-theme="nordic-sky">
+                      <div class="theme-preview-box theme-nordic-sky">Nordic Sky</div>
+                    </button>
+                    <button class="theme-card-option" data-theme="aurora-teal">
+                      <div class="theme-preview-box theme-aurora-teal">Aurora Teal</div>
+                    </button>
+                  </div>
+                </div>
+
+                <!-- SECTION 2: TYPOGRAPHY FONT STYLE -->
+                <div class="appearance-section margin-top-xl">
+                  <label class="form-label-uppercase">TYPOGRAPHY FONT STYLE</label>
+                  <div class="style-options-grid cols-3">
+                    <button class="style-btn-option active" data-font="jakarta">Jakarta</button>
+                    <button class="style-btn-option" data-font="courier">Courier</button>
+                    <button class="style-btn-option" data-font="georgia">Georgia</button>
+                    <button class="style-btn-option" data-font="outfit">Outfit</button>
+                    <button class="style-btn-option" data-font="playfair">Playfair</button>
+                    <button class="style-btn-option" data-font="quicksand">Quicksand</button>
+                    <button class="style-btn-option" data-font="inter">Inter</button>
+                  </div>
+                </div>
+
+                <!-- SECTION 3: PROFILE IMAGE SHAPE -->
+                <div class="appearance-section margin-top-xl">
+                  <label class="form-label-uppercase">PROFILE IMAGE SHAPE</label>
+                  <div class="style-options-grid cols-3">
+                    <button class="style-btn-option active" data-shape="circle">Circle</button>
+                    <button class="style-btn-option" data-shape="squircle">Squircle</button>
+                    <button class="style-btn-option" data-shape="square">Square</button>
+                  </div>
+                </div>
+
+                <!-- SECTION 4: FEATURED BUTTON CARD STYLE -->
+                <div class="appearance-section margin-top-xl">
+                  <label class="form-label-uppercase">FEATURED BUTTON CARD STYLE</label>
+                  <div class="style-options-grid cols-3">
+                    <button class="style-btn-option active" data-btnstyle="pill">Pill</button>
+                    <button class="style-btn-option" data-btnstyle="rounded">Rounded</button>
+                    <button class="style-btn-option" data-btnstyle="flat">Flat</button>
+                  </div>
+                </div>
+
               </div>
             </div>
 
-            <div class="form-group" style="margin-top: 20px;">
-              <label class="form-label">Button Style</label>
-              <div style="display: flex; gap: 12px; margin-top: 8px;">
-                <button class="btn btn-outline btn-pill" style="padding: 10px 20px;">Rounded Pill</button>
-                <button class="btn btn-outline" style="border-radius: 8px; padding: 10px 20px;">Soft Rectangle</button>
+          </div>
+
+          <!-- RIGHT COLUMN: REAL-TIME LIVE DEVICE PREVIEW -->
+          <div class="biolink-preview-column">
+            <div class="preview-header-label">
+              <span class="phone-icon">📱</span> REAL-TIME LIVE DEVICE PREVIEW
+            </div>
+
+            <!-- SMARTPHONE FRAME -->
+            <div class="phone-device-wrapper">
+              <div class="phone-device-body">
+                <!-- DYNAMIC ISLAND NOTCH -->
+                <div class="phone-notch"></div>
+                
+                <!-- PHONE SCREEN CONTAINER -->
+                <div id="phone-screen" class="phone-screen-container theme-indigo-slate font-jakarta">
+                  
+                  <div class="phone-screen-inner">
+
+                    <!-- AVATAR -->
+                    <div id="phone-avatar-box" class="phone-avatar shape-circle">
+                      <span class="avatar-letter">R</span>
+                    </div>
+
+                    <!-- HANDLE & TITLE -->
+                    <div class="phone-profile-info">
+                      <div id="phone-display-title" class="phone-title" style="display:none;"></div>
+                      <div id="phone-display-handle" class="phone-handle">@render6457</div>
+                      <p id="phone-display-bio" class="phone-bio">Helping creators automate Instagram & convert followers into leads.</p>
+                    </div>
+
+                    <!-- DYNAMIC LINKS LIST -->
+                    <div id="phone-links-render" class="phone-links-render btn-shape-pill">
+                      <!-- Rendered dynamically -->
+                    </div>
+
+                    <!-- DYNAMIC VIDEOS EMBED CONTAINER -->
+                    <div id="phone-videos-render" class="phone-videos-render">
+                      <!-- Rendered dynamically -->
+                    </div>
+
+                    <!-- SOCIAL ICONS BAR -->
+                    <div id="phone-social-render" class="phone-social-render">
+                      <!-- Rendered dynamically -->
+                    </div>
+
+                  </div>
+
+                </div>
               </div>
             </div>
+
           </div>
+
         </div>
       </section>
 
@@ -3382,24 +3134,23 @@
           </div>
         </div>
       </section>
-
       <!-- TAB 8: CAPTURED LEADS VIEW -->
       <section id="leads-view" class="tab-view">
-        <header class="view-header">
+        <header class="view-header flex-between align-center">
           <div class="header-title-group">
-            <h1 class="view-title">Captured Leads & CRM Hub</h1>
-            <p class="view-subtitle">View contacts & automatically sync leads with Google Sheets & Webhooks.</p>
+            <h1 class="view-title">Captured Leads</h1>
+            <p class="view-subtitle">View, filter, and export contacts collected from your Instagram automations.</p>
           </div>
           <div class="header-actions">
-            <button class="btn btn-refresh">Refresh</button>
-            <button class="btn btn-pill" id="btn-sync-sheets">
-              <span class="dot-green"
-                style="display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: #10b981; margin-right: 6px;"></span>
-              Google Sheets Connected
+            <button class="btn btn-outline" id="btn-refresh-leads">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="23 4 23 10 17 10" />
+                <path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10" />
+              </svg>
+              Refresh
             </button>
-            <button class="btn btn-pill" id="btn-export-csv">
-              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                style="margin-right: 4px;">
+            <button class="btn btn-outline" id="btn-export-csv">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                 <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
                 <polyline points="7 10 12 15 17 10" />
                 <line x1="12" y1="15" x2="12" y2="3" />
@@ -3409,151 +3160,93 @@
           </div>
         </header>
 
-        <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-bottom: 24px;">
-          <div class="stat-card" style="border-left: 4px solid #10b981;">
-            <div class="stat-label">Google Sheets Sync</div>
-            <div
-              style="font-size: 14px; font-weight: 800; color: var(--color-green-text); margin-top: 4px; display: flex; align-items: center; gap: 4px;">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
-                <polyline points="20 6 9 17 4 12" />
-              </svg>
-              Live Auto-Sync Active
-            </div>
-          </div>
-          <div class="stat-card" style="border-left: 4px solid #3b82f6;">
-            <div class="stat-label">Zapier / Webhooks</div>
-            <div style="font-size: 14px; font-weight: 800; color: #3b82f6; margin-top: 4px;">Enabled</div>
-          </div>
-          <div class="stat-card" style="border-left: 4px solid #6366f1;">
-            <div class="stat-label">Total Leads Saved</div>
-            <div style="font-size: 20px; font-weight: 800; color: var(--text-primary); margin-top: 2px;"
-              id="stat-leads-count">28</div>
-          </div>
-        </div>
+        <!-- SECTION: LEADS BY REEL / AUTOMATION -->
+        <div class="margin-top-lg">
+          <label class="form-label-uppercase">LEADS BY REEL / AUTOMATION</label>
 
-        <div class="form-card" style="margin-bottom: 24px;">
-          <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px;">
-            <h2 class="form-card-title">Recent Captured Leads</h2>
-            <span style="font-size: 12px; color: var(--text-secondary); font-weight: 600;">Showing 5 latest</span>
-          </div>
-
-          <div style="display: flex; flex-direction: column; gap: 10px;" id="leads-list-container">
-            <div class="rule-item-card" style="border-left: 4px solid #6366f1;">
-              <div class="rule-title-group">
-                <span class="rule-trigger-word"
-                  style="background: rgba(99, 102, 241, 0.1); color: #6366f1;">@alex_creator</span>
-                <span class="rule-desc-text">Alex Rivera • alex.rivera@example.com</span>
-              </div>
-              <div class="rule-meta">
-                <span class="rule-badge">Digital Guide</span>
-                <span style="font-size: 11px; color: var(--text-secondary);">2 mins ago</span>
-              </div>
-            </div>
-            <div class="rule-item-card" style="border-left: 4px solid #10b981;">
-              <div class="rule-title-group">
-                <span class="rule-trigger-word"
-                  style="background: rgba(16, 185, 129, 0.1); color: #10b981;">@dev_sarah</span>
-                <span class="rule-desc-text">Sarah Chen • sarah.dev@techlabs.io</span>
-              </div>
-              <div class="rule-meta">
-                <span class="rule-badge">1-on-1 Call</span>
-                <span style="font-size: 11px; color: var(--text-secondary);">14 mins ago</span>
-              </div>
-            </div>
-            <div class="rule-item-card" style="border-left: 4px solid #f59e0b;">
-              <div class="rule-title-group">
-                <span class="rule-trigger-word"
-                  style="background: rgba(245, 158, 11, 0.1); color: #f59e0b;">@marcus_fit</span>
-                <span class="rule-desc-text">Marcus Vance • marcus@fitgrowth.com</span>
-              </div>
-              <div class="rule-meta">
-                <span class="rule-badge">Lead Magnet</span>
-                <span style="font-size: 11px; color: var(--text-secondary);">1 hour ago</span>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div
-          style="font-size: 11px; font-weight: 700; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 12px;">
-          Leads By Reel / Automation
-        </div>
-
-        <div class="rules-container" style="margin-bottom: 24px;">
-          <div class="rule-card">
-            <div class="rule-thumb-header" style="height: 100px;">
-              <div
-                style="background: linear-gradient(135deg, #1e1b4b, #312e81); border-radius: 6px; padding: 8px; color: #fff; width: 100px; text-align: center; font-size: 9px; font-weight: 800;">
-                <div>JAVA ROADMAP</div>
-              </div>
-            </div>
-            <div class="rule-card-body">
-              <div class="rule-card-title">Pricing Plans Template</div>
-              <div class="rule-card-sub">Rule: PRICING</div>
-
-              <div class="rule-tags">
-                <div class="tag-column">
-                  <span class="tag-label">Trigger</span>
-                  <span class="tag-value">"PRICING"</span>
-                </div>
-                <div class="tag-column">
-                  <span class="tag-label">Target</span>
-                  <span class="tag-value">POST</span>
+          <div class="leads-automation-cards-grid margin-top-sm">
+            
+            <!-- AUTOMATION REEL CARD 1 -->
+            <div class="automation-reel-card">
+              <div class="reel-card-thumb">
+                <div class="thumb-inner-art">
+                  <div class="art-badge-purple">From Basics to Advanced</div>
+                  <div class="art-title">JAVA ROADMAP</div>
+                  <div class="art-sub">Complete Guide for Beginners to Advanced</div>
                 </div>
               </div>
+              <div class="reel-card-body">
+                <h4 class="reel-card-title">Pricing Plans Template</h4>
+                <div class="reel-card-rule">Rule: PRICING</div>
+                
+                <div class="reel-badges-row margin-top-xs flex-between align-center">
+                  <div class="trigger-meta-badge">
+                    <span class="lbl">TRIGGER</span>
+                    <span class="val">"PRICING"</span>
+                  </div>
+                  <span class="badge-post-tag">POST</span>
+                </div>
 
-              <div class="rule-action-badges" style="margin-bottom: 12px;">
-                <span class="rule-badge">
-                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" />
-                    <polyline points="22,6 12,13 2,6" />
-                  </svg>
-                  DM
-                </span>
-              </div>
+                <div class="margin-top-xs">
+                  <span class="badge-dm-tag">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <rect x="2" y="4" width="20" height="16" rx="2" />
+                      <path d="M22 6l-10 7L2 6" />
+                    </svg>
+                    DM
+                  </span>
+                </div>
 
-              <div style="font-size: 13px; font-weight: 800; color: var(--text-primary);">
-                0 leads
+                <div class="reel-card-footer margin-top-md flex-between align-center">
+                  <span class="leads-count-text"><strong>0</strong> leads</span>
+                  <button class="btn-icon-dots">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                      <circle cx="12" cy="5" r="2" />
+                      <circle cx="12" cy="12" r="2" />
+                      <circle cx="12" cy="19" r="2" />
+                    </svg>
+                  </button>
+                </div>
               </div>
-              <button class="rule-more-btn" aria-label="Rule options">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-                  <circle cx="12" cy="5" r="1" />
-                  <circle cx="12" cy="12" r="1" />
-                  <circle cx="12" cy="19" r="1" />
-                </svg>
-              </button>
             </div>
+
           </div>
         </div>
 
-        <!-- SEARCH BAR -->
-        <div class="search-bar-container">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <circle cx="11" cy="11" r="8" />
-            <line x1="21" y1="21" x2="16.65" y2="16.65" />
-          </svg>
-          <input type="text" class="search-input" id="search-leads-input"
-            placeholder="Search leads by name, email, phone, campaign...">
-          <button style="background: transparent; border: none; cursor: pointer; color: var(--text-muted);"
-            aria-label="Filters">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-              <circle cx="12" cy="5" r="1" />
-              <circle cx="12" cy="12" r="1" />
-              <circle cx="12" cy="19" r="1" />
+        <!-- SEARCH BAR & FILTER OPTIONS -->
+        <div class="leads-search-row margin-top-xl">
+          <div class="leads-search-input-wrapper">
+            <svg class="search-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#94a3b8" stroke-width="2">
+              <circle cx="11" cy="11" r="8" />
+              <line x1="21" y1="21" x2="16.65" y2="16.65" />
+            </svg>
+            <input type="text" id="input-search-leads" class="leads-search-field" placeholder="Search leads by name, email, phone, campaign...">
+          </div>
+          <button class="btn-circle-options" id="btn-leads-options">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+              <circle cx="12" cy="5" r="2" />
+              <circle cx="12" cy="12" r="2" />
+              <circle cx="12" cy="19" r="2" />
             </svg>
           </button>
         </div>
 
-        <!-- EMPTY STATE -->
-        <div class="empty-state-box" id="leads-empty-state">
-          <div class="empty-state-icon">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
-              <circle cx="12" cy="7" r="4" />
-            </svg>
+        <!-- LEADS DATA CONTAINER / EMPTY STATE -->
+        <div class="leads-main-card margin-top-lg">
+          <div class="leads-empty-state-box">
+            <div class="empty-state-users-icon">
+              <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#94a3b8" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
+                <circle cx="9" cy="7" r="4" />
+                <path d="M23 21v-2a4 4 0 0 0-3-3.87" />
+                <path d="M16 3.13a4 4 0 0 1 0 7.75" />
+              </svg>
+            </div>
+            <h3 class="leads-empty-title">No captured activities found</h3>
+            <p class="leads-empty-desc">No interaction activity matched your selected search or filter criteria.</p>
           </div>
-          <div class="empty-state-text">No captured activities found</div>
         </div>
+
       </section>
 
       <!-- TAB 9: LEARN & HELP VIEW (MAIN SECTION) -->

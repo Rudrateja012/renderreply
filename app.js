@@ -2390,3 +2390,334 @@ if (document.readyState === 'loading') {
 } else {
   initApp();
 }
+
+
+/* ==========================================================================
+   BIO LINK PAGE BUILDER - REAL-TIME LIVE PREVIEW INTERACTIVITY LOGIC
+   ========================================================================== */
+function initBioLinkBuilder() {
+  const bioState = {
+    title: '',
+    bio: 'Helping creators automate Instagram & convert followers into leads.',
+    links: [],
+    video1: '',
+    video2: '',
+    socials: [],
+    theme: 'indigo-slate',
+    font: 'jakarta',
+    shape: 'circle',
+    btnStyle: 'pill'
+  };
+
+  // 1. Subtabs switching
+  const tabBtns = document.querySelectorAll('.biolink-tab-btn');
+  const tabPanels = document.querySelectorAll('.biolink-tab-panel');
+
+  tabBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      const targetTab = btn.getAttribute('data-biolink-tab');
+      if (!targetTab) return;
+
+      tabBtns.forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+
+      tabPanels.forEach(panel => {
+        if (panel.id === `biolink-tab-${targetTab}`) {
+          panel.classList.add('active');
+        } else {
+          panel.classList.remove('active');
+        }
+      });
+    });
+  });
+
+  // 2. Custom Title & Bio inputs
+  const inputTitle = document.getElementById('biolink-input-title');
+  const inputBio = document.getElementById('biolink-input-bio');
+  const displayTitle = document.getElementById('phone-display-title');
+  const displayBio = document.getElementById('phone-display-bio');
+  const wordCount = document.getElementById('biolink-word-count');
+
+  if (inputBio && displayBio) {
+    inputBio.value = bioState.bio;
+  }
+
+  function updateTitleAndBio() {
+    if (inputTitle && displayTitle) {
+      const titleVal = inputTitle.value.trim();
+      if (titleVal) {
+        displayTitle.textContent = titleVal;
+        displayTitle.style.display = 'block';
+      } else {
+        displayTitle.style.display = 'none';
+      }
+    }
+
+    if (inputBio && displayBio) {
+      const bioVal = inputBio.value;
+      displayBio.textContent = bioVal || 'Helping creators automate Instagram & convert followers into leads.';
+      
+      // Word count
+      const words = bioVal.trim() ? bioVal.trim().split(/\s+/).length : 0;
+      if (wordCount) {
+        wordCount.textContent = `${words} / 80 words`;
+      }
+    }
+  }
+
+  if (inputTitle) inputTitle.addEventListener('input', updateTitleAndBio);
+  if (inputBio) inputBio.addEventListener('input', updateTitleAndBio);
+
+  // 3. Featured Links
+  const linkLabelInput = document.getElementById('link-input-label');
+  const linkUrlInput = document.getElementById('link-input-url');
+  const linkColorInput = document.getElementById('link-input-color');
+  const btnAddLink = document.getElementById('btn-add-link-item');
+  const linksContainer = document.getElementById('biolink-links-list-container');
+  const phoneLinksRender = document.getElementById('phone-links-render');
+
+  function renderLinks() {
+    if (!linksContainer || !phoneLinksRender) return;
+
+    if (bioState.links.length === 0) {
+      linksContainer.innerHTML = `<div class="empty-links-state">No custom links added yet.</div>`;
+      phoneLinksRender.innerHTML = '';
+      return;
+    }
+
+    // Builder list view
+    linksContainer.innerHTML = bioState.links.map((link, idx) => `
+      <div class="link-item-row">
+        <div class="link-item-info">
+          <span class="link-item-title">${escapeHtml(link.label)}</span>
+          <span class="link-item-url">${escapeHtml(link.url)}</span>
+        </div>
+        <button class="link-item-delete" data-delete-link="${idx}">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polyline points="3 6 5 6 21 6" />
+            <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" />
+          </svg>
+        </button>
+      </div>
+    `).join('');
+
+    // Phone preview render
+    phoneLinksRender.innerHTML = bioState.links.map(link => `
+      <a href="${escapeHtml(link.url)}" target="_blank" class="phone-link-card color-${link.color}">${escapeHtml(link.label)}</a>
+    `).join('');
+
+    // Attach delete handlers
+    linksContainer.querySelectorAll('[data-delete-link]').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        const idx = parseInt(btn.getAttribute('data-delete-link'));
+        bioState.links.splice(idx, 1);
+        renderLinks();
+      });
+    });
+  }
+
+  if (btnAddLink) {
+    btnAddLink.addEventListener('click', (e) => {
+      e.preventDefault();
+      const label = linkLabelInput ? linkLabelInput.value.trim() : '';
+      const url = linkUrlInput ? linkUrlInput.value.trim() : '';
+      const color = linkColorInput ? linkColorInput.value : 'accent';
+
+      if (!label || !url) {
+        if (typeof showToast === 'function') showToast('Please enter both Link Label and URL.');
+        return;
+      }
+
+      bioState.links.push({ label, url, color });
+      if (linkLabelInput) linkLabelInput.value = '';
+      if (linkUrlInput) linkUrlInput.value = '';
+      renderLinks();
+      if (typeof showToast === 'function') showToast('Featured link added!');
+    });
+  }
+
+  // 4. Featured Videos
+  const inputVid1 = document.getElementById('biolink-input-video1');
+  const inputVid2 = document.getElementById('biolink-input-video2');
+  const phoneVideosRender = document.getElementById('phone-videos-render');
+
+  function getYouTubeEmbedUrl(url) {
+    if (!url) return null;
+    const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
+    const match = url.match(regExp);
+    return (match && match[2].length === 11) ? `https://www.youtube.com/embed/${match[2]}` : null;
+  }
+
+  function renderVideos() {
+    if (!phoneVideosRender) return;
+    const v1Embed = getYouTubeEmbedUrl(inputVid1 ? inputVid1.value.trim() : '');
+    const v2Embed = getYouTubeEmbedUrl(inputVid2 ? inputVid2.value.trim() : '');
+
+    let html = '';
+    if (v1Embed) html += `<div class="phone-video-card"><iframe src="${v1Embed}" allowfullscreen></iframe></div>`;
+    if (v2Embed) html += `<div class="phone-video-card"><iframe src="${v2Embed}" allowfullscreen></iframe></div>`;
+    phoneVideosRender.innerHTML = html;
+  }
+
+  if (inputVid1) inputVid1.addEventListener('input', renderVideos);
+  if (inputVid2) inputVid2.addEventListener('input', renderVideos);
+
+  // 5. Social Profiles Toggle
+  const btnToggleSocial = document.getElementById('btn-toggle-social-menu');
+  const socialDropdown = document.getElementById('social-menu-dropdown');
+
+  if (btnToggleSocial && socialDropdown) {
+    btnToggleSocial.addEventListener('click', (e) => {
+      e.stopPropagation();
+      socialDropdown.classList.toggle('active');
+    });
+
+    document.addEventListener('click', () => {
+      socialDropdown.classList.remove('active');
+    });
+  }
+
+  // 6. Themes & Style Options
+  const phoneScreen = document.getElementById('phone-screen');
+  const themeCards = document.querySelectorAll('.theme-card-option');
+
+  themeCards.forEach(card => {
+    card.addEventListener('click', () => {
+      const theme = card.getAttribute('data-theme');
+      if (!theme) return;
+
+      themeCards.forEach(c => c.classList.remove('active'));
+      card.classList.add('active');
+
+      if (phoneScreen) {
+        phoneScreen.className = phoneScreen.className.replace(/theme-[a-z-]+/g, '');
+        phoneScreen.classList.add(`theme-${theme}`);
+      }
+    });
+  });
+
+  // Typography Options
+  const fontBtns = document.querySelectorAll('[data-font]');
+  fontBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      const font = btn.getAttribute('data-font');
+      if (!font) return;
+
+      fontBtns.forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+
+      if (phoneScreen) {
+        phoneScreen.className = phoneScreen.className.replace(/font-[a-z-]+/g, '');
+        phoneScreen.classList.add(`font-${font}`);
+      }
+    });
+  });
+
+  // Profile Image Shape Options
+  const shapeBtns = document.querySelectorAll('[data-shape]');
+  const phoneAvatarBox = document.getElementById('phone-avatar-box');
+  shapeBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      const shape = btn.getAttribute('data-shape');
+      if (!shape) return;
+
+      shapeBtns.forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+
+      if (phoneAvatarBox) {
+        phoneAvatarBox.className = `phone-avatar shape-${shape}`;
+      }
+    });
+  });
+
+  // Featured Button Card Style
+  const btnStyleBtns = document.querySelectorAll('[data-btnstyle]');
+  btnStyleBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      const btnstyle = btn.getAttribute('data-btnstyle');
+      if (!btnstyle) return;
+
+      btnStyleBtns.forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+
+      if (phoneLinksRender) {
+        phoneLinksRender.className = `phone-links-render btn-shape-${btnstyle}`;
+      }
+    });
+  });
+
+  // Save Changes & Copy Link Handlers
+  const btnSaveBio = document.getElementById('btn-save-biolink');
+  if (btnSaveBio) {
+    btnSaveBio.addEventListener('click', () => {
+      if (typeof showToast === 'function') showToast('Bio Link Page builder configuration saved successfully!');
+    });
+  }
+
+  const btnCopyBioLink = document.getElementById('btn-copy-link');
+  if (btnCopyBioLink) {
+    btnCopyBioLink.addEventListener('click', () => {
+      if (navigator.clipboard) {
+        navigator.clipboard.writeText('https://renderreply.com/p/render6457');
+      }
+      if (typeof showToast === 'function') showToast('Bio Link copied: https://renderreply.com/p/render6457');
+    });
+  }
+
+  function escapeHtml(str) {
+    return str.replace(/[&<>'"]/g, 
+      tag => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;' }[tag] || tag)
+    );
+  }
+}
+
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', initBioLinkBuilder);
+} else {
+  initBioLinkBuilder();
+}
+
+
+/* ==========================================================================
+   CAPTURED LEADS INTERACTIVITY LOGIC
+   ========================================================================== */
+function initCapturedLeadsPage() {
+  const btnRefreshLeads = document.getElementById('btn-refresh-leads');
+  const btnExportCsv = document.getElementById('btn-export-csv');
+  const inputSearchLeads = document.getElementById('input-search-leads');
+
+  if (btnRefreshLeads) {
+    btnRefreshLeads.addEventListener('click', () => {
+      if (typeof showToast === 'function') showToast('Refreshing captured leads data...');
+    });
+  }
+
+  if (btnExportCsv) {
+    btnExportCsv.addEventListener('click', () => {
+      if (typeof showToast === 'function') showToast('Exporting captured leads to CSV...');
+    });
+  }
+
+  if (inputSearchLeads) {
+    inputSearchLeads.addEventListener('input', (e) => {
+      const query = e.target.value.toLowerCase().trim();
+      const emptyStateBox = document.querySelector('.leads-empty-state-box');
+      if (emptyStateBox) {
+        const descEl = emptyStateBox.querySelector('.leads-empty-desc');
+        if (descEl) {
+          if (query) {
+            descEl.textContent = `No captured activities found matching "${query}".`;
+          } else {
+            descEl.textContent = 'No interaction activity matched your selected search or filter criteria.';
+          }
+        }
+      }
+    });
+  }
+}
+
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', initCapturedLeadsPage);
+} else {
+  initCapturedLeadsPage();
+}
