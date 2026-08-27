@@ -4289,12 +4289,12 @@ input:checked+.slider:before {
 /* MOBILE RESPONSIVE MEDIA QUERIES */
 @media (max-width: 1024px) {
   .sidebar {
-    width: 210px;
-    min-width: 210px;
+    width: 200px;
+    min-width: 200px;
   }
 
-  .store-builder-layout {
-    grid-template-columns: 1fr;
+  .tab-view {
+    padding: 20px 16px 40px 16px;
   }
 
   .settings-two-col-layout {
@@ -4517,8 +4517,8 @@ input:checked+.slider:before {
 
 /* PROFILE STATS ROW */
 .profile-stats-row {
-  display: flex;
-  align-items: stretch;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
   background: #f8fafc;
   border: 1px solid #e2e8f0;
   border-radius: 10px;
@@ -4527,15 +4527,18 @@ input:checked+.slider:before {
 }
 
 .profile-stat {
-  flex: 1;
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: center;
   gap: 4px;
-  padding: 12px 6px;
+  padding: 10px 4px;
   border-right: 1px solid #e2e8f0;
+  border-bottom: 1px solid #e2e8f0;
   cursor: default;
   transition: background 0.15s ease;
+  min-width: 0;
+  text-align: center;
 }
 
 .profile-stat:last-child {
@@ -4985,10 +4988,15 @@ input:checked+.slider:before {
 
 /* Override right column width to fit QC panel + preview */
 /* Override — now 3-column grid with increased col 2 & col 3 widths */
+/* ==========================================================================
+   STORE BUILDER RESPONSIVE 3-COLUMN / 2-COLUMN / 1-COLUMN GRID
+   ========================================================================== */
 .store-builder-layout {
-  grid-template-columns: minmax(0, 1fr) 260px 280px !important;
-  gap: 20px !important;
-  align-items: start !important;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 260px 280px;
+  gap: 20px;
+  align-items: start;
+  width: 100%;
 }
 
 /* MIDDLE COLUMN */
@@ -4997,6 +5005,54 @@ input:checked+.slider:before {
   flex-direction: column;
   gap: 16px;
   min-width: 0;
+  max-width: 100%;
+}
+
+.store-builder-left {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  min-width: 0;
+  max-width: 100%;
+}
+
+.store-builder-right {
+  min-width: 0;
+  max-width: 100%;
+  position: sticky;
+  top: 20px;
+}
+
+/* Responsive breakdowns for Desktop Mode on Mobile, Tablet & Narrow Screens */
+@media (max-width: 1240px) {
+  .store-builder-layout {
+    grid-template-columns: minmax(0, 1fr) 290px;
+    gap: 20px;
+  }
+  .store-builder-left {
+    grid-column: 1;
+  }
+  .store-builder-mid {
+    grid-column: 2;
+  }
+  .store-builder-right {
+    grid-column: 2;
+    position: static;
+  }
+}
+
+@media (max-width: 960px) {
+  .store-builder-layout {
+    grid-template-columns: 1fr !important;
+    gap: 20px !important;
+  }
+  .store-builder-left,
+  .store-builder-mid,
+  .store-builder-right {
+    grid-column: 1 !important;
+    width: 100% !important;
+    position: static !important;
+  }
 }
 
 /* Quick Customize in middle column */
@@ -5083,17 +5139,19 @@ input:checked+.slider:before {
   color: #0f172a !important;
 }
 
-
-/* STATUS BAR - compact */
+/* STATUS BAR - responsive wrap */
 .store-status-bar {
-  flex-wrap: nowrap !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  flex-wrap: wrap !important;
   padding: 12px 18px !important;
-  gap: 12px !important;
+  gap: 14px !important;
 }
 
 .status-bar-left {
   min-width: 0;
-  flex-shrink: 1;
+  flex: 1 1 auto;
 }
 
 .store-url-row {
@@ -5109,13 +5167,15 @@ input:checked+.slider:before {
 }
 
 .status-bar-metrics {
-  flex-shrink: 1;
+  flex: 2 1 auto;
   gap: 0;
   min-width: 0;
+  justify-content: center;
+  flex-wrap: wrap;
 }
 
 .status-metric-item {
-  padding: 0 14px !important;
+  padding: 4px 14px !important;
   gap: 8px !important;
   min-width: 0;
 }
@@ -5123,6 +5183,27 @@ input:checked+.slider:before {
 .metric-num {
   font-size: 17px !important;
   letter-spacing: -0.3px;
+}
+
+@media (max-width: 900px) {
+  .store-status-bar {
+    flex-direction: column !important;
+    align-items: stretch !important;
+  }
+  .status-bar-metrics {
+    justify-content: flex-start !important;
+    width: 100% !important;
+    border-top: 1px solid #f1f5f9;
+    padding-top: 8px;
+    gap: 8px !important;
+  }
+  .status-metric-sep {
+    display: none !important;
+  }
+  .status-bar-actions {
+    width: 100% !important;
+    justify-content: flex-end !important;
+  }
 }
 
 /* PROFILE COMPLETION RING WIDGET */
@@ -5171,11 +5252,31 @@ input:checked+.slider:before {
   display: flex !important;
   align-items: center !important;
   justify-content: space-between !important;
+  flex-wrap: wrap !important;
   gap: 16px !important;
   background: linear-gradient(135deg, #f8fafc, #f1f5f9) !important;
   padding: 16px 20px !important;
   border-radius: 12px !important;
   position: relative !important;
+  min-width: 0 !important;
+}
+
+@media (max-width: 640px) {
+  .store-profile-summary-box {
+    flex-direction: column !important;
+    align-items: center !important;
+    text-align: center !important;
+  }
+  .store-user-title-row {
+    justify-content: center !important;
+  }
+  .official-social-icons-row {
+    justify-content: center !important;
+  }
+  .store-profile-completion-col {
+    margin-left: 0 !important;
+    margin-top: 6px !important;
+  }
 }
 
 .store-avatar-wrapper {
