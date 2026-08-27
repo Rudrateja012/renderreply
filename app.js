@@ -1,3 +1,166 @@
+/* ==========================================================================
+   STORE PROFILE & OVERVIEW CENTRALIZED SYNCHRONIZATION ENGINE
+   ========================================================================== */
+window.storeProfileState = {
+  name: 'RudRa RR',
+  avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=250&q=80',
+  bio: 'Welcome to my SuperProfile & RenderReply Store!',
+  insta: '@rudra_rr',
+  yt: 'youtube.com/@rudra_rr',
+  tw: '@rudra_rr'
+};
+
+window.storeProfileDraft = null;
+
+function formatSocialUrl(platform, handle) {
+  if (!handle) return '#';
+  let str = handle.trim();
+  if (str.startsWith('http://') || str.startsWith('https://')) return str;
+  if (platform === 'insta') {
+    return `https://instagram.com/${str.replace(/^@/, '')}`;
+  }
+  if (platform === 'yt') {
+    if (str.startsWith('youtube.com/')) return `https://${str}`;
+    return `https://youtube.com/${str.startsWith('@') ? str : '@' + str}`;
+  }
+  if (platform === 'tw') {
+    return `https://x.com/${str.replace(/^@/, '')}`;
+  }
+  return '#';
+}
+
+function renderStoreSocialIcons(insta, yt, tw) {
+  const container = document.getElementById('store-social-icons-container');
+  if (!container) return;
+
+  let html = '';
+  if (insta && insta.trim()) {
+    const url = formatSocialUrl('insta', insta);
+    const handleClean = insta.trim().startsWith('@') ? insta.trim() : '@' + insta.trim();
+    html += `
+      <a href="${url}" target="_blank" rel="noopener" class="official-social-btn insta" title="Instagram (${handleClean})">
+        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
+          <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
+          <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
+        </svg>
+      </a>`;
+  }
+  if (yt && yt.trim()) {
+    const url = formatSocialUrl('yt', yt);
+    html += `
+      <a href="${url}" target="_blank" rel="noopener" class="official-social-btn youtube" title="YouTube Channel">
+        <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor">
+          <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z" />
+        </svg>
+      </a>`;
+  }
+  if (tw && tw.trim()) {
+    const url = formatSocialUrl('tw', tw);
+    const handleClean = tw.trim().startsWith('@') ? tw.trim() : '@' + tw.trim();
+    html += `
+      <a href="${url}" target="_blank" rel="noopener" class="official-social-btn twitter" title="X / Twitter (${handleClean})">
+        <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor">
+          <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
+        </svg>
+      </a>`;
+  }
+  container.innerHTML = html;
+}
+
+window.syncStoreProfileToUI = function(data) {
+  const profile = data || window.storeProfileState;
+  
+  // 1. Store Overview summary card
+  const nameTxt = document.getElementById('store-display-name-txt');
+  const bioTxt = document.getElementById('store-bio-text-txt');
+  const avatarImg = document.getElementById('store-avatar-img');
+  
+  if (nameTxt) nameTxt.textContent = profile.name || 'RudRa RR';
+  if (bioTxt) bioTxt.textContent = profile.bio || '';
+  if (avatarImg && profile.avatar) avatarImg.src = profile.avatar;
+
+  renderStoreSocialIcons(profile.insta, profile.yt, profile.tw);
+
+  // 2. Setup form inputs
+  const setupName = document.getElementById('setup-input-name');
+  const setupAvatar = document.getElementById('setup-input-avatar');
+  const setupBio = document.getElementById('setup-input-bio');
+  const setupInsta = document.getElementById('setup-input-insta');
+  const setupYt = document.getElementById('setup-input-yt');
+  const setupTw = document.getElementById('setup-input-tw');
+
+  if (setupName && document.activeElement !== setupName) setupName.value = profile.name || '';
+  if (setupAvatar && document.activeElement !== setupAvatar) setupAvatar.value = profile.avatar || '';
+  if (setupBio && document.activeElement !== setupBio) setupBio.value = profile.bio || '';
+  if (setupInsta && document.activeElement !== setupInsta) setupInsta.value = profile.insta || '';
+  if (setupYt && document.activeElement !== setupYt) setupYt.value = profile.yt || '';
+  if (setupTw && document.activeElement !== setupTw) setupTw.value = profile.tw || '';
+
+  // 3. Brand Identity Tab (Store Settings)
+  const csName = document.getElementById('cs-input-store-name');
+  const csBio = document.getElementById('cs-input-store-bio');
+  const csLogo = document.getElementById('cs-logo-img');
+  const csInsta = document.getElementById('cs-soc-insta');
+  const csYt = document.getElementById('cs-soc-yt');
+  const csTw = document.getElementById('cs-soc-tw');
+  const csPrevName = document.getElementById('cs-prev-name');
+  const csPrevAvatar = document.getElementById('cs-prev-avatar');
+
+  if (csName && document.activeElement !== csName) csName.value = profile.name || '';
+  if (csBio && document.activeElement !== csBio) csBio.value = profile.bio || '';
+  if (csLogo && profile.avatar) csLogo.src = profile.avatar;
+  if (csInsta && document.activeElement !== csInsta) csInsta.value = profile.insta?.replace(/^@/, '') || '';
+  if (csYt && document.activeElement !== csYt) csYt.value = profile.yt || '';
+  if (csTw && document.activeElement !== csTw) csTw.value = profile.tw?.replace(/^@/, '') || '';
+  if (csPrevName) csPrevName.textContent = profile.name || 'RudRa RR';
+  if (csPrevAvatar && profile.avatar) csPrevAvatar.src = profile.avatar;
+
+  // 4. Mobile / Phone Previews
+  const dspName = document.getElementById('dsp-name-el');
+  const dspBio = document.getElementById('dsp-bio-el');
+  const dspAvatar = document.getElementById('dsp-avatar-el');
+
+  if (dspName) dspName.textContent = profile.name || 'RudRa RR';
+  if (dspBio) dspBio.textContent = profile.bio || '';
+  if (dspAvatar && profile.avatar) dspAvatar.src = profile.avatar;
+
+  // 5. Live Storefront Modal Preview
+  const spmName = document.getElementById('spm-creator-name');
+  const spmBio = document.getElementById('spm-creator-bio');
+  const spmAvatar = document.getElementById('spm-avatar-img');
+
+  if (spmName) spmName.textContent = profile.name || 'RudRa RR';
+  if (spmBio) spmBio.textContent = profile.bio || '';
+  if (spmAvatar && profile.avatar) spmAvatar.src = profile.avatar;
+
+  // 6. Top Navbar / User Profile Header
+  const userNameEl = document.querySelector('.user-name');
+  const unifiedAvatar = document.getElementById('unified-avatar-el');
+  if (userNameEl) userNameEl.textContent = profile.name || 'RudRa RR';
+  if (unifiedAvatar && profile.avatar) unifiedAvatar.src = profile.avatar;
+};
+
+window.syncStoreProfileLiveFromSetupInputs = function() {
+  const setupName = document.getElementById('setup-input-name')?.value;
+  const setupAvatar = document.getElementById('setup-input-avatar')?.value;
+  const setupBio = document.getElementById('setup-input-bio')?.value;
+  const setupInsta = document.getElementById('setup-input-insta')?.value;
+  const setupYt = document.getElementById('setup-input-yt')?.value;
+  const setupTw = document.getElementById('setup-input-tw')?.value;
+
+  const currentLiveProfile = {
+    name: setupName !== undefined ? setupName : window.storeProfileState.name,
+    avatar: setupAvatar !== undefined ? setupAvatar : window.storeProfileState.avatar,
+    bio: setupBio !== undefined ? setupBio : window.storeProfileState.bio,
+    insta: setupInsta !== undefined ? setupInsta : window.storeProfileState.insta,
+    yt: setupYt !== undefined ? setupYt : window.storeProfileState.yt,
+    tw: setupTw !== undefined ? setupTw : window.storeProfileState.tw
+  };
+
+  window.syncStoreProfileToUI(currentLiveProfile);
+};
+
 // GLOBAL NATIVE HANDLERS FOR DIRECT / INLINE BROWSER CALLS
 window.switchStoreTab = function (tabName, btnEl) {
   if (!tabName) return;
@@ -639,6 +802,7 @@ function initApp() {
     'https://images.unsplash.com/photo-1517694712202-14dd9538aa97?auto=format&fit=crop&w=600&q=80'
   ];
   let currentPhotoUrl = uploadedPhotos[0];
+  let activeEditingProdId = null;
 
   function renderGallery() {
     if (!modalProdGallery) return;
@@ -649,7 +813,7 @@ function initApp() {
       item.className = `gallery-thumb-item ${url === currentPhotoUrl ? 'active' : ''}`;
       item.innerHTML = `
         <img src="${url}" alt="Photo ${idx + 1}">
-        ${uploadedPhotos.length > 1 ? `<button type="button" class="gallery-thumb-remove" title="Remove photo">✕</button>` : ''}
+        ${uploadedPhotos.length > 1 ? `<button type="button" class="gallery-thumb-remove" title="Remove photo">Remove</button>` : ''}
       `;
 
       const removeBtn = item.querySelector('.gallery-thumb-remove');
@@ -679,21 +843,148 @@ function initApp() {
       if (inputProdPhoto) inputProdPhoto.value = currentPhotoUrl;
       if (livePreviewImg) livePreviewImg.src = currentPhotoUrl;
       renderGallery();
-      showToast('Photo removed from gallery');
+      showToast('Photo removed from product gallery');
     }
   };
 
+  function calculateAndUpdateDiscount() {
+    const inputPrice = document.getElementById('modal-prod-price');
+    const inputOldPrice = document.getElementById('modal-prod-oldprice');
+    const inputDiscount = document.getElementById('modal-prod-discount');
+    const livePrice = document.getElementById('live-preview-price');
+    const liveOldPrice = document.getElementById('live-preview-oldprice');
+
+    if (!inputPrice || !inputOldPrice || !inputDiscount) return;
+
+    const valPrice = inputPrice.value.trim();
+    const valOldPrice = inputOldPrice.value.trim();
+
+    const cleanPriceStr = valPrice.replace(/[^0-9.]/g, '');
+    const cleanOldPriceStr = valOldPrice.replace(/[^0-9.]/g, '');
+
+    const priceNum = parseFloat(cleanPriceStr);
+    const oldPriceNum = parseFloat(cleanOldPriceStr);
+
+    const isFree = valPrice.toLowerCase() === 'free' || (valPrice !== '' && priceNum === 0);
+
+    let discountText = '0% OFF';
+
+    if (isFree && !isNaN(oldPriceNum) && oldPriceNum > 0) {
+      discountText = '100% FREE';
+    } else if (!isNaN(oldPriceNum) && !isNaN(priceNum) && oldPriceNum > priceNum && oldPriceNum > 0) {
+      const pct = Math.round(((oldPriceNum - priceNum) / oldPriceNum) * 100);
+      discountText = `${pct}% OFF`;
+    } else if (isFree) {
+      discountText = '100% FREE';
+    } else {
+      discountText = '0% OFF';
+    }
+
+    inputDiscount.value = discountText;
+
+    if (livePrice) {
+      if (isFree) {
+        livePrice.textContent = 'FREE';
+        livePrice.style.color = '#10b981';
+      } else if (!isNaN(priceNum) && priceNum > 0) {
+        livePrice.textContent = `₹${priceNum.toLocaleString('en-IN')}`;
+        livePrice.style.color = '';
+      } else if (valPrice) {
+        livePrice.textContent = valPrice.startsWith('₹') ? valPrice : (valPrice.startsWith('$') ? valPrice.replace('$', '₹') : `₹${valPrice}`);
+        livePrice.style.color = '';
+      } else {
+        livePrice.textContent = '₹0';
+      }
+    }
+
+    if (liveOldPrice) {
+      if (!isNaN(oldPriceNum) && oldPriceNum > 0) {
+        liveOldPrice.textContent = `₹${oldPriceNum.toLocaleString('en-IN')}`;
+        liveOldPrice.style.display = 'inline';
+      } else if (valOldPrice) {
+        liveOldPrice.textContent = valOldPrice.startsWith('₹') ? valOldPrice : (valOldPrice.startsWith('$') ? valOldPrice.replace('$', '₹') : `₹${valOldPrice}`);
+        liveOldPrice.style.display = 'inline';
+      } else {
+        liveOldPrice.textContent = '';
+        liveOldPrice.style.display = 'none';
+      }
+    }
+  }
+
   function openProductModal() {
+    const titleEl = document.getElementById('modal-prod-header-title');
+    const subEl = document.getElementById('modal-prod-header-sub');
+    const pubBtn = document.getElementById('btn-publish-product');
+
+    if (!activeEditingProdId) {
+      if (titleEl) titleEl.textContent = 'Add New Product';
+      if (subEl) subEl.textContent = 'Add a new product to your store catalog';
+      if (pubBtn) pubBtn.textContent = '+ Add Product';
+    } else {
+      if (titleEl) titleEl.textContent = 'Edit Product Details';
+      if (subEl) subEl.textContent = 'Manage and update your store item details';
+      if (pubBtn) pubBtn.textContent = 'Update Product';
+    }
+
     window.openProductStudio();
     renderGallery();
+    calculateAndUpdateDiscount();
+  }
+
+  function resetProductForm() {
+    activeEditingProdId = null;
+    if (document.getElementById('modal-prod-title')) document.getElementById('modal-prod-title').value = '';
+    if (document.getElementById('modal-prod-price')) document.getElementById('modal-prod-price').value = '';
+    if (document.getElementById('modal-prod-oldprice')) document.getElementById('modal-prod-oldprice').value = '';
+    if (document.getElementById('modal-prod-cta')) document.getElementById('modal-prod-cta').value = 'Instant Access';
+    if (document.getElementById('modal-prod-desc')) document.getElementById('modal-prod-desc').value = '';
+    uploadedPhotos = ['https://images.unsplash.com/photo-1517694712202-14dd9538aa97?auto=format&fit=crop&w=600&q=80'];
+    currentPhotoUrl = uploadedPhotos[0];
+    if (inputProdPhoto) inputProdPhoto.value = currentPhotoUrl;
+    if (livePreviewImg) livePreviewImg.src = currentPhotoUrl;
+    calculateAndUpdateDiscount();
   }
 
   function closeProductModal() {
     window.closeProductStudio();
+    resetProductForm();
   }
 
   if (btnAddAmazonProd) {
-    btnAddAmazonProd.addEventListener('click', openProductModal);
+    btnAddAmazonProd.addEventListener('click', () => {
+      resetProductForm();
+      openProductModal();
+    });
+  }
+
+  const inputPrice = document.getElementById('modal-prod-price');
+  const inputOldPrice = document.getElementById('modal-prod-oldprice');
+  const inputTitle = document.getElementById('modal-prod-title');
+  const inputDesc = document.getElementById('modal-prod-desc');
+  const inputCta = document.getElementById('modal-prod-cta');
+
+  if (inputPrice) {
+    inputPrice.addEventListener('input', calculateAndUpdateDiscount);
+    inputPrice.addEventListener('change', calculateAndUpdateDiscount);
+  }
+  if (inputOldPrice) {
+    inputOldPrice.addEventListener('input', calculateAndUpdateDiscount);
+    inputOldPrice.addEventListener('change', calculateAndUpdateDiscount);
+  }
+  if (inputTitle) {
+    inputTitle.addEventListener('input', (e) => {
+      if (livePreviewTitle) livePreviewTitle.textContent = e.target.value.trim() || 'Product Name';
+    });
+  }
+  if (inputDesc) {
+    inputDesc.addEventListener('input', (e) => {
+      if (livePreviewDesc) livePreviewDesc.textContent = e.target.value.trim() || 'Product Description';
+    });
+  }
+  if (inputCta) {
+    inputCta.addEventListener('input', (e) => {
+      if (livePreviewCta) livePreviewCta.textContent = e.target.value.trim() || 'Instant Access';
+    });
   }
 
   if (btnCloseProductModal) {
@@ -746,8 +1037,8 @@ function initApp() {
     {
       id: 'prod-1',
       title: 'Java Full-Stack Developer Roadmap PDF',
-      price: '$19.99',
-      oldPrice: '$39.99',
+      price: '₹499',
+      oldPrice: '₹999',
       desc: 'Comprehensive guide from Java core syntax to microservices, Spring Boot, and cloud deployment. Includes architecture diagrams, interview questions, and production checklist.',
       cta: 'Instant Access',
       rating: '5.0 (64 customer reviews)',
@@ -760,8 +1051,8 @@ function initApp() {
     {
       id: 'prod-2',
       title: '1-on-1 Instagram Strategy Session',
-      price: '$49.00',
-      oldPrice: '$99.00',
+      price: '₹1,499',
+      oldPrice: '₹2,999',
       desc: '30-minute private call to audit your Instagram DM automation funnel, optimize bio link conversion, and scale high-ticket lead generation.',
       cta: 'Book Session',
       rating: '4.9 (28 customer reviews)',
@@ -774,7 +1065,7 @@ function initApp() {
       id: 'prod-3',
       title: 'Instagram Automation Preset Bundle',
       price: 'FREE',
-      oldPrice: '$19.99',
+      oldPrice: '₹499',
       desc: 'Pre-configured comment triggers, DM copy templates, and Bio link presets ready to import directly into your RenderReply dashboard.',
       cta: 'Download Now',
       rating: '5.0 (112 customer reviews)',
@@ -788,9 +1079,24 @@ function initApp() {
   window.editProductItem = function (id) {
     const prod = storeProducts.find(p => p.id === id);
     if (prod) {
+      activeEditingProdId = id;
       if (document.getElementById('modal-prod-title')) document.getElementById('modal-prod-title').value = prod.title;
-      if (document.getElementById('modal-prod-price')) document.getElementById('modal-prod-price').value = prod.price.replace('$', '');
+      if (document.getElementById('modal-prod-price')) document.getElementById('modal-prod-price').value = prod.price.replace(/[₹$]/g, '');
+      if (document.getElementById('modal-prod-oldprice')) document.getElementById('modal-prod-oldprice').value = prod.oldPrice ? prod.oldPrice.replace(/[₹$]/g, '') : '';
+      if (document.getElementById('modal-prod-cta')) document.getElementById('modal-prod-cta').value = prod.cta || 'Instant Access';
       if (document.getElementById('modal-prod-desc')) document.getElementById('modal-prod-desc').value = prod.desc;
+
+      if (prod.photos && prod.photos.length > 0) {
+        uploadedPhotos = [...prod.photos];
+        currentPhotoUrl = uploadedPhotos[0];
+        if (inputProdPhoto) inputProdPhoto.value = currentPhotoUrl;
+        if (livePreviewImg) livePreviewImg.src = currentPhotoUrl;
+      }
+      if (livePreviewTitle) livePreviewTitle.textContent = prod.title;
+      if (livePreviewDesc) livePreviewDesc.textContent = prod.desc;
+      if (livePreviewPrice) livePreviewPrice.textContent = prod.price;
+      if (livePreviewOldPrice) livePreviewOldPrice.textContent = prod.oldPrice || '';
+      calculateAndUpdateDiscount();
     }
     openProductModal();
   };
@@ -948,34 +1254,69 @@ function initApp() {
       let formattedPrice = priceVal;
       if (priceVal.toLowerCase() === 'free' || priceVal === '0') {
         formattedPrice = 'FREE';
-      } else if (!priceVal.startsWith('$')) {
-        formattedPrice = `$${priceVal}`;
+      } else if (!priceVal.startsWith('₹') && !priceVal.startsWith('$')) {
+        formattedPrice = `₹${priceVal}`;
+      } else if (priceVal.startsWith('$')) {
+        formattedPrice = priceVal.replace('$', '₹');
       }
 
       let formattedOldPrice = oldPriceVal;
-      if (oldPriceVal && !oldPriceVal.startsWith('$')) {
-        formattedOldPrice = `$${oldPriceVal}`;
+      if (oldPriceVal && !oldPriceVal.startsWith('₹') && !oldPriceVal.startsWith('$')) {
+        formattedOldPrice = `₹${oldPriceVal}`;
+      } else if (oldPriceVal && oldPriceVal.startsWith('$')) {
+        formattedOldPrice = oldPriceVal.replace('$', '₹');
       }
 
       if (!ctaText) {
         ctaText = formattedPrice === 'FREE' ? 'Download Now' : 'Instant Access';
       }
 
-      const newProdObj = {
-        id: `prod-${Date.now()}`,
-        title: title,
-        price: formattedPrice,
-        oldPrice: formattedOldPrice,
-        desc: desc,
-        cta: ctaText,
-        rating: '5.0 (New Product)',
-        photos: uploadedPhotos.length > 0 ? [...uploadedPhotos] : [currentPhotoUrl]
-      };
+      if (activeEditingProdId) {
+        const existingProd = storeProducts.find(p => p.id === activeEditingProdId);
+        if (existingProd) {
+          existingProd.title = title;
+          existingProd.price = formattedPrice;
+          existingProd.oldPrice = formattedOldPrice;
+          existingProd.desc = desc;
+          existingProd.cta = ctaText;
+          if (uploadedPhotos.length > 0) existingProd.photos = [...uploadedPhotos];
+        }
+        showToast(`Updated "${title}" product details successfully!`);
+      } else {
+        const newProdObj = {
+          id: `prod-${Date.now()}`,
+          title: title,
+          price: formattedPrice,
+          oldPrice: formattedOldPrice,
+          desc: desc,
+          cta: ctaText,
+          rating: '5.0 (New Product)',
+          photos: uploadedPhotos.length > 0 ? [...uploadedPhotos] : [currentPhotoUrl]
+        };
+        storeProducts.push(newProdObj);
+        showToast(`Published "${title}" (${formattedPrice}) to Creator Storefront!`);
+      }
 
-      storeProducts.push(newProdObj);
       renderStoreProductsAndSyncPreview();
       closeProductModal();
-      showToast(`Published "${title}" (${formattedPrice}) to Creator Storefront!`);
+    });
+  }
+
+  const btnSaveDraft = document.getElementById('btn-save-draft');
+  if (btnSaveDraft) {
+    btnSaveDraft.addEventListener('click', (e) => {
+      e.preventDefault();
+      showToast('Product draft saved successfully!');
+      closeProductModal();
+    });
+  }
+
+  const btnScheduleProd = document.getElementById('btn-schedule-prod');
+  if (btnScheduleProd) {
+    btnScheduleProd.addEventListener('click', (e) => {
+      e.preventDefault();
+      showToast('Product scheduled for publication!');
+      closeProductModal();
     });
   }
 
@@ -1136,32 +1477,77 @@ function initApp() {
   const btnViewAllProds = document.getElementById('btn-view-all-store-products');
   if (btnViewAllProds) btnViewAllProds.addEventListener('click', closeProductDetail);
 
-  // STREAMLINED NON-INTRUSIVE CHANGE AVATAR (REMOVED PROMPT BLOCKER)
+  // STREAMLINED CHANGE AVATAR WITH FILE UPLOAD AND FULL STORE PROFILE SYNC
   const btnChangeAvatar = document.getElementById('btn-change-avatar');
-  if (btnChangeAvatar) {
-    btnChangeAvatar.addEventListener('click', (e) => {
-      e.preventDefault();
-      // Cycle avatar sample image smoothly without blocking modal prompt dialog
-      const avatarSampleUrls = [
-        'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=250&q=80',
-        'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=250&q=80',
-        'https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=250&q=80'
-      ];
-      const storeAvatar = document.getElementById('store-avatar-img');
-      const unifiedAvatar = document.getElementById('unified-avatar-el');
-      const setupInputAvatar = document.getElementById('setup-input-avatar');
+  const storeAvatarImg = document.getElementById('store-avatar-img');
+  const storeAvatarFileInput = document.getElementById('store-avatar-file-input');
 
-      const currentSrc = storeAvatar ? storeAvatar.src : '';
-      const nextIdx = (avatarSampleUrls.indexOf(currentSrc) + 1) % avatarSampleUrls.length;
-      const nextUrl = avatarSampleUrls[nextIdx];
+  function cycleSampleAvatar() {
+    const avatarSampleUrls = [
+      'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=250&q=80',
+      'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=250&q=80',
+      'https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=250&q=80'
+    ];
+    const currentSrc = window.storeProfileState ? window.storeProfileState.avatar : '';
+    let currentIdx = avatarSampleUrls.indexOf(currentSrc);
+    if (currentIdx === -1) currentIdx = 0;
+    const nextUrl = avatarSampleUrls[(currentIdx + 1) % avatarSampleUrls.length];
 
-      if (storeAvatar) storeAvatar.src = nextUrl;
-      if (unifiedAvatar) unifiedAvatar.src = nextUrl;
-      if (setupInputAvatar) setupInputAvatar.value = nextUrl;
+    if (!window.storeProfileState) window.storeProfileState = {};
+    window.storeProfileState.avatar = nextUrl;
+    const setupAvatarInput = document.getElementById('setup-input-avatar');
+    if (setupAvatarInput) setupAvatarInput.value = nextUrl;
 
-      showToast('Avatar creator photo updated!');
+    if (window.syncStoreProfileToUI) {
+      window.syncStoreProfileToUI(window.storeProfileState);
+    }
+    showToast('Avatar creator photo updated!');
+  }
+
+  const handleAvatarChangeClick = (e) => {
+    if (e) e.preventDefault();
+    if (storeAvatarFileInput) {
+      storeAvatarFileInput.click();
+    } else {
+      cycleSampleAvatar();
+    }
+  };
+
+  if (btnChangeAvatar) btnChangeAvatar.addEventListener('click', handleAvatarChangeClick);
+  if (storeAvatarImg) storeAvatarImg.addEventListener('click', handleAvatarChangeClick);
+
+  if (storeAvatarFileInput) {
+    storeAvatarFileInput.addEventListener('change', (e) => {
+      const file = e.target.files && e.target.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = function (evt) {
+          const newSrc = evt.target.result;
+          if (!window.storeProfileState) window.storeProfileState = {};
+          window.storeProfileState.avatar = newSrc;
+          const setupAvatarInput = document.getElementById('setup-input-avatar');
+          if (setupAvatarInput) setupAvatarInput.value = newSrc;
+          if (window.syncStoreProfileToUI) {
+            window.syncStoreProfileToUI(window.storeProfileState);
+          }
+          showToast('Profile image uploaded & updated!');
+        };
+        reader.readAsDataURL(file);
+      }
     });
   }
+
+  // STORE OVERVIEW LIVE SETUP FORM INPUT LISTENERS
+  ['setup-input-name', 'setup-input-avatar', 'setup-input-bio', 'setup-input-insta', 'setup-input-yt', 'setup-input-tw'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) {
+      el.addEventListener('input', () => {
+        if (window.syncStoreProfileLiveFromSetupInputs) {
+          window.syncStoreProfileLiveFromSetupInputs();
+        }
+      });
+    }
+  });
 
   // STORE SUB-NAV TAB SWITCHER FUNCTION
   window.switchStoreTab = function(tabName, clickedBtn) {
@@ -1190,6 +1576,10 @@ function initApp() {
 
   // GLOBAL EVENT DELEGATION FOR DEEP INTERACTIVE BUTTONS
   document.addEventListener('click', (e) => {
+    // 0. Ignore programmatic download link clicks
+    if (e.target && e.target.tagName === 'A' && e.target.hasAttribute('download')) {
+      return;
+    }
     // 1. Edit Product Button
     const editBtn = e.target.closest('.btn-edit-prod-item');
     if (editBtn) {
@@ -1215,18 +1605,141 @@ function initApp() {
       return;
     }
 
+    // 3.5 Payment Options Buttons Delegation
+    const upiBtn = e.target.closest('#btn-upi-config');
+    if (upiBtn) {
+      e.preventDefault();
+      e.stopPropagation();
+      try {
+        const inputUpi = document.getElementById('input-payout-upi');
+        const inputHolder = document.getElementById('input-upi-holder-name');
+        if (inputUpi && window.paymentState?.payout) inputUpi.value = window.paymentState.payout.upiId || 'rudra@okaxis';
+        if (inputHolder && window.paymentState?.payout) inputHolder.value = window.paymentState.payout.holderName || 'Rudra Teja';
+        const m = document.getElementById('modal-edit-upi');
+        if (m) m.classList.add('active');
+      } catch (err) {
+        console.error('Error triggering Edit UPI modal:', err);
+      }
+      return;
+    }
+
+    const bankBtn = e.target.closest('#btn-bank-config');
+    if (bankBtn) {
+      e.preventDefault();
+      e.stopPropagation();
+      try {
+        const inputHolder = document.getElementById('input-bank-name-holder');
+        const inputBank = document.getElementById('input-bank-name');
+        const inputAcc = document.getElementById('input-bank-acc-num');
+        const inputIfsc = document.getElementById('input-bank-ifsc');
+
+        if (inputHolder && window.paymentState?.payout) inputHolder.value = window.paymentState.payout.holderName || 'Rudra Teja';
+        if (inputBank && window.paymentState?.payout) inputBank.value = window.paymentState.payout.bankName || 'HDFC Bank';
+        if (inputAcc && window.paymentState?.payout) inputAcc.value = window.paymentState.payout.accountNumber || '50100293844892';
+        if (inputIfsc && window.paymentState?.payout) inputIfsc.value = window.paymentState.payout.ifsc || 'HDFC0000128';
+
+        const m = document.getElementById('modal-edit-bank');
+        if (m) m.classList.add('active');
+      } catch (err) {
+        console.error('Error triggering Edit Bank modal:', err);
+      }
+      return;
+    }
+
+    const withdrawBtn = e.target.closest('#btn-withdraw-funds');
+    if (withdrawBtn) {
+      e.preventDefault();
+      e.stopPropagation();
+      try {
+        const inputAmt = document.getElementById('input-withdraw-amount');
+        if (inputAmt && window.paymentState) {
+          inputAmt.max = window.paymentState.availableBalance || 98050;
+          inputAmt.value = Math.min(50000, window.paymentState.availableBalance || 98050);
+        }
+        const m = document.getElementById('modal-wallet-withdraw');
+        if (m) m.classList.add('active');
+      } catch (err) {
+        console.error('Error triggering Withdraw modal:', err);
+      }
+      return;
+    }
+
+    const viewHistBtn = e.target.closest('#btn-view-wallet-history');
+    if (viewHistBtn) {
+      e.preventDefault();
+      e.stopPropagation();
+      try {
+        const modalSearch = document.getElementById('modal-input-txn-search');
+        if (modalSearch) modalSearch.value = 'Withdrawal';
+        if (typeof window.updateTxnView === 'function') window.updateTxnView();
+        const m = document.getElementById('modal-txn-view-all');
+        if (m) m.classList.add('active');
+      } catch (err) {
+        console.error('Error triggering View History modal:', err);
+      }
+      return;
+    }
+
+    const viewAllBtn = e.target.closest('#btn-txn-view-all');
+    if (viewAllBtn) {
+      e.preventDefault();
+      e.stopPropagation();
+      try {
+        const modalSearch = document.getElementById('modal-input-txn-search');
+        if (modalSearch) modalSearch.value = '';
+        if (typeof window.updateTxnView === 'function') window.updateTxnView();
+        const m = document.getElementById('modal-txn-view-all');
+        if (m) m.classList.add('active');
+      } catch (err) {
+        console.error('Error triggering View All modal:', err);
+      }
+      return;
+    }
+
+    const closeBtn = e.target.closest('#btn-close-upi-modal, #btn-cancel-upi, #btn-close-bank-modal, #btn-cancel-bank, #btn-close-withdraw-modal, #btn-close-txn-all-modal, #btn-close-txn-detail-modal, #btn-close-receipt, #btn-close-spm-modal, #spm-dot-close');
+    if (closeBtn) {
+      e.preventDefault();
+      e.stopPropagation();
+      try {
+        const modal = closeBtn.closest('.store-preview-modal-backdrop') || document.getElementById('store-preview-modal');
+        if (modal) modal.classList.remove('active');
+      } catch (err) {
+        console.error('Error closing modal:', err);
+      }
+      return;
+    }
+
+    // 3.8 Preview Store & Open Store Triggers
+    const previewStoreBtn = e.target.closest('#btn-open-browser-overlay, .btn-preview-store');
+    if (previewStoreBtn) {
+      e.preventDefault();
+      const modal = document.getElementById('store-preview-modal');
+      if (modal) modal.classList.add('active');
+      if (typeof showToast === 'function') showToast('Opening live interactive Storefront Preview...');
+      return;
+    }
+
+    const openStoreBtn = e.target.closest('#btn-open-store-external, .btn-open-store');
+    if (openStoreBtn) {
+      e.preventDefault();
+      const storeUrl = 'https://renderreply.com/store/rajeev';
+      window.open(storeUrl, '_blank');
+      if (typeof showToast === 'function') showToast('Opening live public storefront in a new tab: ' + storeUrl);
+      return;
+    }
+
     // 4. Edit Header Trigger (Pencil / Cancel icon toggle)
-    const editPencilSvg = `<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>`;
-    const closeCrossSvg = `<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>`;
+    const editPencilSvg = `<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>`;
+    const closeCrossSvg = `<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>`;
 
     function updateEditHeaderTriggerIcon(isOpen) {
       const triggerBtn = document.getElementById('btn-edit-header-trigger');
       if (!triggerBtn) return;
       if (isOpen) {
-        triggerBtn.innerHTML = closeCrossSvg;
+        triggerBtn.innerHTML = `${closeCrossSvg} <span>Close Setup</span>`;
         triggerBtn.title = 'Close Setup';
       } else {
-        triggerBtn.innerHTML = editPencilSvg;
+        triggerBtn.innerHTML = `${editPencilSvg} <span>Edit Store</span>`;
         triggerBtn.title = 'Edit Store Info';
       }
     }
@@ -1237,10 +1750,18 @@ function initApp() {
       const formBox = document.getElementById('profile-setup-form-box');
       const summaryBox = document.getElementById('profile-summary-box');
       if (formBox && (formBox.style.display === 'none' || !formBox.style.display)) {
+        window.storeProfileDraft = { ...window.storeProfileState };
+        if (window.syncStoreProfileToUI) {
+          window.syncStoreProfileToUI(window.storeProfileState);
+        }
         formBox.style.display = 'block';
         if (summaryBox) summaryBox.style.display = 'none';
         updateEditHeaderTriggerIcon(true);
       } else {
+        if (window.storeProfileDraft) {
+          window.storeProfileState = { ...window.storeProfileDraft };
+          if (window.syncStoreProfileToUI) window.syncStoreProfileToUI(window.storeProfileState);
+        }
         if (formBox) formBox.style.display = 'none';
         if (summaryBox) summaryBox.style.display = 'flex';
         updateEditHeaderTriggerIcon(false);
@@ -1252,6 +1773,10 @@ function initApp() {
     const cancelSetupBtn = e.target.closest('#btn-cancel-profile-setup');
     if (cancelSetupBtn) {
       e.preventDefault();
+      if (window.storeProfileDraft) {
+        window.storeProfileState = { ...window.storeProfileDraft };
+        if (window.syncStoreProfileToUI) window.syncStoreProfileToUI(window.storeProfileState);
+      }
       const formBox = document.getElementById('profile-setup-form-box');
       const summaryBox = document.getElementById('profile-summary-box');
       if (formBox) formBox.style.display = 'none';
@@ -1263,6 +1788,26 @@ function initApp() {
     const saveSetupBtn = e.target.closest('#btn-save-profile-setup');
     if (saveSetupBtn) {
       e.preventDefault();
+      const setupName = document.getElementById('setup-input-name');
+      const setupAvatar = document.getElementById('setup-input-avatar');
+      const setupBio = document.getElementById('setup-input-bio');
+      const setupInsta = document.getElementById('setup-input-insta');
+      const setupYt = document.getElementById('setup-input-yt');
+      const setupTw = document.getElementById('setup-input-tw');
+
+      window.storeProfileState = {
+        name: setupName?.value.trim() || 'RudRa RR',
+        avatar: setupAvatar?.value.trim() || window.storeProfileState.avatar,
+        bio: setupBio?.value.trim() || '',
+        insta: setupInsta?.value.trim() || '',
+        yt: setupYt?.value.trim() || '',
+        tw: setupTw?.value.trim() || ''
+      };
+
+      if (window.syncStoreProfileToUI) {
+        window.syncStoreProfileToUI(window.storeProfileState);
+      }
+
       const formBox = document.getElementById('profile-setup-form-box');
       const summaryBox = document.getElementById('profile-summary-box');
       if (formBox) formBox.style.display = 'none';
@@ -1529,43 +2074,8 @@ function initApp() {
     });
   }
 
-  // 10. Payment Options Handlers
-  const btnAddHist = document.getElementById('btn-add-history');
-  const btnViewWalletHist = document.getElementById('btn-view-wallet-history');
-  const btnSetUpiDef = document.getElementById('btn-set-upi-default');
-  const btnRzpLogin = document.getElementById('btn-rzp-login');
-  const btnTxnViewAll = document.getElementById('btn-txn-view-all');
-
-  if (btnAddHist) {
-    btnAddHist.addEventListener('click', () => {
-      showToast('Add new wallet history entry dialog opened');
-    });
-  }
-
-  if (btnViewWalletHist) {
-    btnViewWalletHist.addEventListener('click', () => {
-      showToast('Loading full wallet deposit & withdrawal logs...');
-    });
-  }
-
-  if (btnSetUpiDef) {
-    btnSetUpiDef.addEventListener('click', () => {
-      const upiVal = document.getElementById('input-payout-upi')?.value || 'VPA / UPI ID';
-      showToast(`Default payout VPA set to: ${upiVal}`);
-    });
-  }
-
-  if (btnRzpLogin) {
-    btnRzpLogin.addEventListener('click', () => {
-      showToast('Connecting to Razorpay Creator OAuth Portal...');
-    });
-  }
-
-  if (btnTxnViewAll) {
-    btnTxnViewAll.addEventListener('click', () => {
-      showToast('Showing all historical store transactions');
-    });
-  }
+  // 10. PAYMENT OPTIONS COMPLETE INTERACTIVE SUITE
+  initPaymentOptionsSuite();
 
   // INITIALIZE CREATOR STORE SETTINGS HANDLERS
   initCreatorStoreSettings();
@@ -1573,6 +2083,391 @@ function initApp() {
   // INITIALIZE APP DATA & CONNECTION STATE
   updateConnectionUI();
   loadDashboardData('7 Days');
+}
+
+function initPaymentOptionsSuite() {
+  // Global Toast Helper Fallback
+  function toast(msg) {
+    try {
+      if (typeof window.showToast === 'function') {
+        window.showToast(msg);
+      } else {
+        let el = document.getElementById('global-toast-notification');
+        if (!el) {
+          el = document.createElement('div');
+          el.id = 'global-toast-notification';
+          el.style.cssText = 'position:fixed;bottom:24px;right:24px;background:#0f172a;color:#fff;padding:10px 18px;border-radius:8px;font-size:13px;font-weight:600;box-shadow:0 10px 25px rgba(0,0,0,0.2);z-index:99999;transition:all 0.3s ease;';
+          document.body.appendChild(el);
+        }
+        el.textContent = msg;
+        el.style.opacity = '1';
+        setTimeout(() => { if (el) el.style.opacity = '0'; }, 3000);
+      }
+    } catch (err) {
+      console.warn('Toast display warning:', err);
+    }
+  }
+
+  // Payment State Central Store (Safe Init)
+  if (!window.paymentState) {
+    window.paymentState = {
+      totalBalance: 124580,
+      availableBalance: 98050,
+      pendingBalance: 26530,
+      payout: {
+        upiId: 'rudra@okaxis',
+        holderName: 'Rudra Teja',
+        bankName: 'HDFC Bank',
+        accountNumber: '50100293844892',
+        ifsc: 'HDFC0000128',
+        primaryChannel: 'UPI'
+      },
+      transactions: [
+        { id: '67300007547192', date: 'Oct 24, 2026 02:15 PM', type: 'Order Sale', amount: 98050, status: 'Cleared', customer: 'ashok.k@gmail.com', channel: 'Direct UPI', fee: 2941, gst: 529, net: 94580 },
+        { id: '67300007547191', date: 'Oct 22, 2026 11:30 AM', type: 'Order Sale', amount: 49900, status: 'Cleared', customer: 'priya.s@yahoo.com', channel: 'Direct UPI', fee: 1497, gst: 269, net: 48134 },
+        { id: '60380007982004', date: 'Oct 23, 2026 06:45 PM', type: 'Creator Fund', amount: 26530, status: 'Pending', customer: 'RenderReply Partner Fund', channel: 'System Credit', fee: 0, gst: 0, net: 26530 },
+        { id: '89102471029471', date: 'Oct 20, 2026 04:10 PM', type: 'Withdrawal', amount: -50000, status: 'Cleared', customer: 'Payout to rudra@okaxis', channel: 'Direct UPI', fee: 0, gst: 0, net: -50000 },
+        { id: '67300007547188', date: 'Oct 19, 2026 09:20 AM', type: 'Order Sale', amount: 14990, status: 'Cleared', customer: 'rahul.m@gmail.com', channel: 'Bank IMPS', fee: 449, gst: 80, net: 14461 },
+        { id: 'OFFLINE-892401', date: 'Oct 18, 2026 05:00 PM', type: 'Manual Credit', amount: 5000, status: 'Cleared', customer: 'Offline Direct Client', channel: 'Manual Adjustment', fee: 0, gst: 0, net: 5000 },
+        { id: '67300007547180', date: 'Oct 15, 2026 01:10 PM', type: 'Order Sale', amount: 24990, status: 'Cleared', customer: 'vikram.p@gmail.com', channel: 'Bank NEFT', fee: 749, gst: 134, net: 24107 }
+      ]
+    };
+  }
+
+  // 1. Safe Sync Balances to UI
+  function updateBalancesUI() {
+    try {
+      const state = window.paymentState;
+      if (!state) return;
+      const totalEl = document.getElementById('display-total-balance');
+      const availEl = document.getElementById('display-avail-balance');
+      const pendingEl = document.getElementById('display-pending-balance');
+      const wAvailEl = document.getElementById('withdraw-avail-display');
+
+      if (totalEl) totalEl.textContent = `₹${(state.totalBalance || 0).toLocaleString('en-IN')}`;
+      if (availEl) availEl.textContent = `₹${(state.availableBalance || 0).toLocaleString('en-IN')}`;
+      if (pendingEl) pendingEl.textContent = `₹${(state.pendingBalance || 0).toLocaleString('en-IN')}`;
+      if (wAvailEl) wAvailEl.textContent = `₹${(state.availableBalance || 0).toLocaleString('en-IN')}`;
+    } catch (err) {
+      console.error('Error updating balances UI:', err);
+    }
+  }
+
+  // 2. Safe Sync Payout Info to UI
+  function updatePayoutsUI() {
+    try {
+      const state = window.paymentState;
+      if (!state || !state.payout) return;
+      const upiSub = document.getElementById('upi-vpa-subtext');
+      const bankSub = document.getElementById('bank-acc-subtext');
+
+      if (upiSub) {
+        const upi = state.payout.upiId || 'rudra@okaxis';
+        upiSub.textContent = `${upi} • Primary Channel`;
+      }
+      if (bankSub) {
+        const bName = state.payout.bankName || 'HDFC Bank';
+        const hName = state.payout.holderName || 'Rudra Teja';
+        const acc = state.payout.accountNumber || '4892';
+        const last4 = acc.slice(-4);
+        const ifsc = state.payout.ifsc || 'HDFC0000128';
+        bankSub.textContent = `${bName} (${hName}) • •••• ${last4} (IFSC: ${ifsc})`;
+      }
+    } catch (err) {
+      console.error('Error updating payouts UI:', err);
+    }
+  }
+
+  // 3. Safe Render Transaction Table
+  function renderTxnTable(tableBodyId, list) {
+    try {
+      const tbody = document.getElementById(tableBodyId);
+      if (!tbody) return;
+
+      if (!list || list.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="5" style="text-align:center; padding:20px; color:var(--text-muted);">No matching transactions found.</td></tr>`;
+        return;
+      }
+
+      tbody.innerHTML = list.map(tx => {
+        if (!tx) return '';
+        const amt = tx.amount || 0;
+        const isPos = amt >= 0;
+        const amtDisplay = isPos ? `✓ ₹${amt.toLocaleString('en-IN')}` : `- ₹${Math.abs(amt).toLocaleString('en-IN')}`;
+        const amtClass = isPos ? 'cell-amount pos' : 'cell-amount neg';
+        const statusClass = tx.status === 'Cleared' ? 'cleared' : (tx.status === 'Pending' ? 'pending' : 'failed');
+        const txIdShort = (tx.id || '').length > 12 ? (tx.id || '').substring(0, 11) + '...' : (tx.id || '');
+        const dateStr = (tx.date || '').split(' ')[0] || '';
+        const timeStr = (tx.date || '').split(' ')[1] || '';
+
+        return `
+          <tr data-txid="${tx.id || ''}">
+            <td>${dateStr} ${timeStr}</td>
+            <td class="cell-txid" title="${tx.id || ''}">${txIdShort}</td>
+            <td>${tx.type || 'Transaction'}</td>
+            <td class="${amtClass}" style="text-align: right; font-weight:700;">${amtDisplay}</td>
+            <td style="text-align: center;"><span class="badge-status ${statusClass}">${tx.status || 'Cleared'}</span></td>
+          </tr>
+        `;
+      }).join('');
+
+      tbody.querySelectorAll('tr[data-txid]').forEach(row => {
+        row.addEventListener('click', (e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          const id = row.getAttribute('data-txid');
+          openReceiptModal(id);
+        });
+      });
+    } catch (err) {
+      console.error('Error rendering txn table:', err);
+    }
+  }
+
+  // 4. Safe Filter Transactions Logic
+  function getFilteredTransactions() {
+    try {
+      const searchVal = document.getElementById('input-txn-search')?.value.toLowerCase().trim() || '';
+      const typeVal = document.getElementById('select-txn-type')?.value || 'ALL';
+      const statusVal = document.getElementById('select-txn-status')?.value || 'ALL';
+
+      if (!window.paymentState || !Array.isArray(window.paymentState.transactions)) {
+        return [];
+      }
+
+      return window.paymentState.transactions.filter(tx => {
+        if (!tx) return false;
+        const matchSearch = !searchVal || 
+          (tx.id && tx.id.toLowerCase().includes(searchVal)) || 
+          (tx.type && tx.type.toLowerCase().includes(searchVal)) || 
+          (tx.customer && tx.customer.toLowerCase().includes(searchVal));
+
+        const matchType = typeVal === 'ALL' || tx.type === typeVal;
+        const matchStatus = statusVal === 'ALL' || tx.status === statusVal;
+
+        return matchSearch && matchType && matchStatus;
+      });
+    } catch (err) {
+      console.error('Error filtering transactions:', err);
+      return [];
+    }
+  }
+
+  function updateTxnView() {
+    const filtered = getFilteredTransactions();
+    renderTxnTable('txn-table-body', filtered);
+    renderTxnTable('modal-txn-table-body', filtered);
+  }
+  window.updateTxnView = updateTxnView;
+
+  // 5. Safe Receipt Modal Opener
+  function openReceiptModal(txId) {
+    try {
+      const tx = window.paymentState?.transactions?.find(t => t.id === txId);
+      if (!tx) return;
+
+      const modal = document.getElementById('modal-txn-detail');
+      if (!modal) return;
+
+      const titleEl = document.getElementById('rec-txid-title');
+      const dateEl = document.getElementById('rec-date');
+      const grossEl = document.getElementById('rec-gross-amt');
+      const badgeEl = document.getElementById('rec-status-badge');
+      const typeEl = document.getElementById('rec-type');
+      const custEl = document.getElementById('rec-customer');
+      const chanEl = document.getElementById('rec-channel');
+      const feeEl = document.getElementById('rec-fee');
+      const gstEl = document.getElementById('rec-gst');
+      const netEl = document.getElementById('rec-net-amt');
+
+      if (titleEl) titleEl.textContent = `Txn ID: #${tx.id}`;
+      if (dateEl) dateEl.textContent = tx.date || '';
+      const amt = tx.amount || 0;
+      const isPos = amt >= 0;
+      if (grossEl) grossEl.textContent = isPos ? `₹${amt.toLocaleString('en-IN')}` : `- ₹${Math.abs(amt).toLocaleString('en-IN')}`;
+      
+      if (badgeEl) {
+        badgeEl.textContent = tx.status || 'Cleared';
+        badgeEl.className = `badge-status ${tx.status === 'Cleared' ? 'cleared' : (tx.status === 'Pending' ? 'pending' : 'failed')}`;
+      }
+
+      if (typeEl) typeEl.textContent = tx.type || 'N/A';
+      if (custEl) custEl.textContent = tx.customer || 'N/A';
+      if (chanEl) chanEl.textContent = tx.channel || 'Standard Gateway';
+      if (feeEl) feeEl.textContent = tx.fee ? `- ₹${tx.fee.toLocaleString('en-IN')}` : '₹0';
+      if (gstEl) gstEl.textContent = tx.gst ? `- ₹${tx.gst.toLocaleString('en-IN')}` : '₹0';
+      if (netEl) netEl.textContent = tx.net ? `₹${tx.net.toLocaleString('en-IN')}` : `₹${amt.toLocaleString('en-IN')}`;
+
+      modal.classList.add('active');
+    } catch (err) {
+      console.error('Error opening receipt modal:', err);
+    }
+  }
+
+  function setModalActive(modalId, active) {
+    const m = document.getElementById(modalId);
+    if (m) {
+      if (active) m.classList.add('active');
+      else m.classList.remove('active');
+    }
+  }
+
+  // 6. Safe CSV Export Utility
+  function exportCSV(e) {
+    if (e) {
+      e.preventDefault();
+      e.stopPropagation();
+    }
+    try {
+      const list = getFilteredTransactions();
+      if (!list || list.length === 0) {
+        toast('No transactions available to export.');
+        return;
+      }
+
+      let csv = 'Transaction ID,Date,Type,Amount (INR),Status,Customer,Channel,Net (INR)\n';
+      list.forEach(t => {
+        if (!t) return;
+        csv += `"${t.id || ''}","${t.date || ''}","${t.type || ''}",${t.amount || 0},"${t.status || ''}","${t.customer || ''}","${t.channel || ''}",${t.net || t.amount || 0}\n`;
+      });
+
+      const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.style.display = 'none';
+      a.href = url;
+      a.download = `RenderReply_Transactions_${new Date().toISOString().slice(0,10)}.csv`;
+      a.onclick = (evt) => { if (evt) evt.stopPropagation(); };
+      document.body.appendChild(a);
+      a.click();
+      setTimeout(() => {
+        if (document.body.contains(a)) document.body.removeChild(a);
+        window.URL.revokeObjectURL(url);
+      }, 100);
+      toast('Transaction CSV log exported successfully!');
+    } catch (err) {
+      console.error('Error exporting CSV:', err);
+      toast('Failed to export CSV: ' + err.message);
+    }
+  }
+
+  // ONE-TIME LISTENER BINDING GUARD (Prevents duplicate event loops)
+  if (!window._paymentFormsBound) {
+    window._paymentFormsBound = true;
+
+    // Search & Filter Listeners
+    const inputSearch = document.getElementById('input-txn-search');
+    const modalInputSearch = document.getElementById('modal-input-txn-search');
+    const selectType = document.getElementById('select-txn-type');
+    const selectStatus = document.getElementById('select-txn-status');
+
+    if (inputSearch) inputSearch.addEventListener('input', updateTxnView);
+    if (modalInputSearch) modalInputSearch.addEventListener('input', updateTxnView);
+    if (selectType) selectType.addEventListener('change', updateTxnView);
+    if (selectStatus) selectStatus.addEventListener('change', updateTxnView);
+
+    // CSV Export Buttons
+    document.getElementById('btn-export-csv-main')?.addEventListener('click', exportCSV);
+    document.getElementById('btn-export-csv-modal')?.addEventListener('click', exportCSV);
+
+    // Form Submits with e.preventDefault() & e.stopPropagation()
+    document.getElementById('form-edit-upi')?.addEventListener('submit', (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      try {
+        const upi = document.getElementById('input-payout-upi')?.value.trim();
+        const holder = document.getElementById('input-upi-holder-name')?.value.trim();
+        const appProvider = document.getElementById('select-upi-app')?.value || 'UPI';
+
+        if (!upi || !upi.includes('@') || upi.length < 5) {
+          toast('Invalid VPA Format! Please enter a valid UPI ID (e.g. username@okaxis or mobile@paytm).');
+          return;
+        }
+
+        if (upi) window.paymentState.payout.upiId = upi;
+        if (holder) window.paymentState.payout.holderName = holder;
+
+        updatePayoutsUI();
+        setModalActive('modal-edit-upi', false);
+        toast(`UPI Payout Address updated to ${upi} (${appProvider})!`);
+      } catch (err) {
+        console.error('Error saving UPI:', err);
+      }
+    });
+
+    document.getElementById('form-edit-bank')?.addEventListener('submit', (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      try {
+        const holder = document.getElementById('input-bank-name-holder')?.value.trim();
+        const bankName = document.getElementById('input-bank-name')?.value.trim();
+        const accNum = document.getElementById('input-bank-acc-num')?.value.trim();
+        const ifsc = document.getElementById('input-bank-ifsc')?.value.trim();
+
+        if (holder) window.paymentState.payout.holderName = holder;
+        if (bankName) window.paymentState.payout.bankName = bankName;
+        if (accNum) window.paymentState.payout.accountNumber = accNum;
+        if (ifsc) window.paymentState.payout.ifsc = ifsc;
+
+        updatePayoutsUI();
+        setModalActive('modal-edit-bank', false);
+        toast(`Bank account details saved: ${bankName} (${accNum.slice(-4)})!`);
+      } catch (err) {
+        console.error('Error saving bank:', err);
+      }
+    });
+
+    document.getElementById('form-wallet-withdraw')?.addEventListener('submit', (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      try {
+        const amount = parseFloat(document.getElementById('input-withdraw-amount')?.value) || 0;
+        const channel = document.getElementById('select-withdraw-channel')?.value || 'UPI';
+
+        if (amount <= 0 || amount > window.paymentState.availableBalance) {
+          toast(`Error: Withdrawal amount must be between ₹100 and ₹${window.paymentState.availableBalance.toLocaleString('en-IN')}!`);
+          return;
+        }
+
+        const txId = `WD-${Date.now().toString().slice(-8)}`;
+        const newTx = {
+          id: txId,
+          date: 'Just now',
+          type: 'Withdrawal',
+          amount: -amount,
+          status: 'Cleared',
+          customer: `Instant Payout via ${channel}`,
+          channel: channel,
+          fee: 0,
+          gst: 0,
+          net: -amount
+        };
+
+        window.paymentState.transactions.unshift(newTx);
+        window.paymentState.availableBalance -= amount;
+        window.paymentState.totalBalance -= amount;
+
+        updateBalancesUI();
+        updateTxnView();
+        setModalActive('modal-wallet-withdraw', false);
+        toast(`Successfully initiated instant withdrawal of ₹${amount.toLocaleString('en-IN')}!`);
+      } catch (err) {
+        console.error('Error executing withdrawal:', err);
+      }
+    });
+  }
+
+  // Initial Sync Run
+  updateBalancesUI();
+  updatePayoutsUI();
+  updateTxnView();
+}
+window.initPaymentOptionsSuite = initPaymentOptionsSuite;
+
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', initPaymentOptionsSuite);
+} else {
+  initPaymentOptionsSuite();
 }
 
 // CREATOR STOREFRONT - SETTINGS INTERACTIVITY & LIVE PREVIEW SYNC
@@ -1604,9 +2499,12 @@ function initCreatorStoreSettings() {
   const nameCount = document.getElementById('cs-name-count');
   if (nameInput) {
     nameInput.addEventListener('input', () => {
-      const val = nameInput.value || 'Rajeev Sharma';
+      const val = nameInput.value || 'RudRa RR';
       if (namePrev) namePrev.textContent = val;
       if (nameCount) nameCount.textContent = `${nameInput.value.length}/50`;
+      if (!window.storeProfileState) window.storeProfileState = {};
+      window.storeProfileState.name = val;
+      if (window.syncStoreProfileToUI) window.syncStoreProfileToUI(window.storeProfileState);
     });
   }
 
@@ -1621,7 +2519,7 @@ function initCreatorStoreSettings() {
 
   if (handleInput) {
     handleInput.addEventListener('input', () => {
-      const val = handleInput.value.trim() || 'rajeev';
+      const val = handleInput.value.trim() || 'rudra_rr';
       if (handleSubtext) handleSubtext.textContent = `renderreply.com/store/${val}`;
       if (seoUrlTxt) seoUrlTxt.textContent = `https://renderreply.com/store/${val}`;
       if (topLinkPill) topLinkPill.textContent = `renderreply.com/store/${val}`;
@@ -1633,7 +2531,7 @@ function initCreatorStoreSettings() {
   }
 
   function copyCurrentStoreLink() {
-    const handle = handleInput ? handleInput.value.trim() : 'rajeev';
+    const handle = handleInput ? handleInput.value.trim() : 'rudra_rr';
     const url = `https://renderreply.com/store/${handle}`;
     if (navigator.clipboard) {
       navigator.clipboard.writeText(url);
@@ -1669,7 +2567,7 @@ function initCreatorStoreSettings() {
 
   if (downloadQrBtn) {
     downloadQrBtn.addEventListener('click', () => {
-      const handle = handleInput ? handleInput.value.trim() : 'rajeev';
+      const handle = handleInput ? handleInput.value.trim() : 'rudra_rr';
       const a = document.createElement('a');
       a.href = `https://api.qrserver.com/v1/create-qr-code/?size=400x400&data=https://renderreply.com/store/${handle}`;
       a.download = `storefront-qr-${handle}.png`;
@@ -1685,11 +2583,31 @@ function initCreatorStoreSettings() {
   const bioCount = document.getElementById('cs-bio-count');
   if (bioInput) {
     bioInput.addEventListener('input', () => {
-      const val = bioInput.value || 'Building premium Instagram businesses and automation systems.';
+      const val = bioInput.value || 'Welcome to my SuperProfile & RenderReply Store!';
       if (bioPrev) bioPrev.textContent = val;
       if (bioCount) bioCount.textContent = `${bioInput.value.length}/160`;
+      if (!window.storeProfileState) window.storeProfileState = {};
+      window.storeProfileState.bio = val;
+      if (window.syncStoreProfileToUI) window.syncStoreProfileToUI(window.storeProfileState);
     });
   }
+
+  // Real-time Social Links Sync (Brand Identity Panel)
+  const csInsta = document.getElementById('cs-soc-insta');
+  const csYt = document.getElementById('cs-soc-yt');
+  const csTw = document.getElementById('cs-soc-tw');
+
+  [csInsta, csYt, csTw].forEach(inputEl => {
+    if (inputEl) {
+      inputEl.addEventListener('input', () => {
+        if (!window.storeProfileState) window.storeProfileState = {};
+        if (csInsta) window.storeProfileState.insta = csInsta.value ? (csInsta.value.startsWith('@') ? csInsta.value : '@' + csInsta.value) : '';
+        if (csYt) window.storeProfileState.yt = csYt.value || '';
+        if (csTw) window.storeProfileState.tw = csTw.value ? (csTw.value.startsWith('@') ? csTw.value : '@' + csTw.value) : '';
+        if (window.syncStoreProfileToUI) window.syncStoreProfileToUI(window.storeProfileState);
+      });
+    }
+  });
 
   // 5. Change Logo Avatar (Native File Upload + Fallback Cycle)
   const changeLogoBtn = document.getElementById('cs-btn-change-logo');
@@ -1710,7 +2628,9 @@ function initCreatorStoreSettings() {
           const newSrc = evt.target.result;
           if (logoImg) logoImg.src = newSrc;
           if (prevAvatar) prevAvatar.src = newSrc;
-          syncAllStorePreviewFields();
+          if (!window.storeProfileState) window.storeProfileState = {};
+          window.storeProfileState.avatar = newSrc;
+          if (window.syncStoreProfileToUI) window.syncStoreProfileToUI(window.storeProfileState);
           showToast('Uploaded new store logo image!');
         };
         reader.readAsDataURL(file);
@@ -1736,7 +2656,7 @@ function initCreatorStoreSettings() {
           if (faviconBox) {
             faviconBox.innerHTML = `<img src="${evt.target.result}" style="width:100%;height:100%;object-fit:cover;border-radius:10px;" alt="Favicon">`;
           }
-          syncAllStorePreviewFields();
+          if (window.syncAllStorePreviewFields) window.syncAllStorePreviewFields();
           showToast('Uploaded new favicon icon!');
         };
         reader.readAsDataURL(file);
@@ -1748,19 +2668,21 @@ function initCreatorStoreSettings() {
   const resetBrandBtn = document.getElementById('cs-btn-reset-brand');
   if (resetBrandBtn) {
     resetBrandBtn.addEventListener('click', () => {
-      if (nameInput) {
-        nameInput.value = 'Rajeev Sharma';
-        nameInput.dispatchEvent(new Event('input'));
-      }
-      if (bioInput) {
-        bioInput.value = 'Building premium Instagram businesses and automation systems.';
-        bioInput.dispatchEvent(new Event('input'));
-      }
+      window.storeProfileState = {
+        name: 'RudRa RR',
+        avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=250&q=80',
+        bio: 'Welcome to my SuperProfile & RenderReply Store!',
+        insta: '@rudra_rr',
+        yt: 'youtube.com/@rudra_rr',
+        tw: '@rudra_rr'
+      };
       if (handleInput) {
-        handleInput.value = 'rajeev';
+        handleInput.value = 'rudra_rr';
         handleInput.dispatchEvent(new Event('input'));
       }
-      syncAllStorePreviewFields();
+      if (window.syncStoreProfileToUI) {
+        window.syncStoreProfileToUI(window.storeProfileState);
+      }
       showToast('Brand identity settings reset to defaults.');
     });
   }
@@ -2383,6 +3305,9 @@ function initCreatorStoreSettings() {
 
   // Initial Sync
   syncAllStorePreviewFields();
+  if (window.syncStoreProfileToUI) {
+    window.syncStoreProfileToUI(window.storeProfileState);
+  }
 }
 
 if (document.readyState === 'loading') {

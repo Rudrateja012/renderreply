@@ -1337,7 +1337,8 @@
                   <div class="store-avatar-wrapper">
                     <img
                       src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=250&q=80"
-                      alt="Content Creator Avatar" class="store-avatar-preview-img" id="store-avatar-img">
+                      alt="Content Creator Avatar" class="store-avatar-preview-img" id="store-avatar-img" style="cursor: pointer;" title="Click to Change Creator Profile Image">
+                    <input type="file" id="store-avatar-file-input" accept="image/*" style="display: none;">
                     <button class="avatar-upload-badge" id="btn-change-avatar" title="Change Creator Image">
                       <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor"
                         stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
@@ -1628,14 +1629,14 @@
                             <div class="dsp-prod-img" style="background: linear-gradient(135deg,#1e3a5f,#2563eb);"></div>
                             <div class="dsp-prod-info">
                               <div class="dsp-prod-name">Java Full Stack Roadmap PDF</div>
-                              <div class="dsp-prod-price">$19.99</div>
+                              <div class="dsp-prod-price">₹499</div>
                             </div>
                           </div>
                           <div class="dsp-prod-row">
                             <div class="dsp-prod-img" style="background: linear-gradient(135deg,#3b1f6a,#7c3aed);"></div>
                             <div class="dsp-prod-info">
                               <div class="dsp-prod-name">1-on-1 Instagram Strategy Session</div>
-                              <div class="dsp-prod-price">$49.00</div>
+                              <div class="dsp-prod-price">₹1,499</div>
                             </div>
                           </div>
                           <div class="dsp-prod-row">
@@ -2414,7 +2415,7 @@
                             <div class="cs-phone-prod-info">
                               <span class="cs-phone-prod-name">Java Full Stack Roadmap PDF</span>
                             </div>
-                            <span class="cs-phone-prod-price">$19.99</span>
+                            <span class="cs-phone-prod-price">₹499</span>
                           </div>
 
                           <!-- Product 2 -->
@@ -2425,7 +2426,7 @@
                             <div class="cs-phone-prod-info">
                               <span class="cs-phone-prod-name">1-on-1 Instagram Strategy Session</span>
                             </div>
-                            <span class="cs-phone-prod-price">$49.00</span>
+                            <span class="cs-phone-prod-price">₹1,499</span>
                           </div>
 
                           <!-- Product 3 -->
@@ -2633,7 +2634,7 @@
                           <img src="https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?auto=format&fit=crop&w=80&q=80" alt="Java PDF" class="prod-thumb">
                           <div>
                             <div class="prod-title-text" title="Java Full Stack Roadmap PDF">Java Full Stack Roadmap PDF</div>
-                            <div class="prod-price-text">$19.99</div>
+                            <div class="prod-price-text">₹499</div>
                           </div>
                         </div>
                       </td>
@@ -2648,7 +2649,7 @@
                           <img src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=80&q=80" alt="Session" class="prod-thumb">
                           <div>
                             <div class="prod-title-text" title="1-on-1 Instagram Strategy Session">1-on-1 Instagram Strategy...</div>
-                            <div class="prod-price-text">$49.00</div>
+                            <div class="prod-price-text">₹1,499</div>
                           </div>
                         </div>
                       </td>
@@ -2678,7 +2679,7 @@
                           <img src="https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&w=80&q=80" alt="Masterclass" class="prod-thumb">
                           <div>
                             <div class="prod-title-text" title="Viral Reels Growth Masterclass">Viral Reels Growth Master...</div>
-                            <div class="prod-price-text">$29.99</div>
+                            <div class="prod-price-text">₹799</div>
                           </div>
                         </div>
                       </td>
@@ -2693,7 +2694,7 @@
                           <img src="https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=80&q=80" alt="Blueprint" class="prod-thumb">
                           <div>
                             <div class="prod-title-text" title="AI DM Automation Blueprint">AI DM Automation Blueprint</div>
-                            <div class="prod-price-text">$39.00</div>
+                            <div class="prod-price-text">₹999</div>
                           </div>
                         </div>
                       </td>
@@ -2779,7 +2780,7 @@
         <!-- TAB CONTENT 4: PAYMENT OPTIONS -->
         <div id="store-tab-payment-options" class="store-tab-content">
 
-          <!-- 2-COLUMN PAYMENT DASHBOARD LAYOUT (MATCHING USER SCREENSHOT) -->
+          <!-- 2-COLUMN PAYMENT DASHBOARD LAYOUT -->
           <div class="payment-dashboard-2col">
 
             <!-- LEFT COLUMN: Wallet Overview + Withdrawal Methods -->
@@ -2791,20 +2792,27 @@
                   <div>
                     <h3 class="analytics-card-title">Wallet Overview</h3>
                   </div>
-                  <button class="btn btn-outline btn-sm" id="btn-add-history">Add History</button>
+                  <div style="display: flex; gap: 8px;">
+                    <button type="button" class="btn btn-primary btn-sm" id="btn-withdraw-funds">
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" style="margin-right: 4px;">
+                        <line x1="12" y1="5" x2="12" y2="19"/><polyline points="19 12 12 19 5 12"/>
+                      </svg>
+                      Withdraw Funds
+                    </button>
+                  </div>
                 </div>
 
                 <div class="wallet-balance-row">
                   <div>
                     <div class="balance-label">Total Wallet Balance</div>
-                    <div class="balance-val-main">$1,245.80</div>
+                    <div class="balance-val-main" id="display-total-balance">₹1,24,580</div>
                   </div>
                   <div class="wallet-action-box">
-                    <button class="btn-view-history-pill" id="btn-view-wallet-history">
+                    <button type="button" class="btn-view-history-pill" id="btn-view-wallet-history">
                       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>
                       </svg>
-                      View Add/Withdraw History
+                      View Withdraw History
                     </button>
                   </div>
                 </div>
@@ -2812,11 +2820,11 @@
                 <div class="wallet-sub-metrics">
                   <div>
                     <div class="sub-metric-label">Available for Withdrawal</div>
-                    <div class="sub-metric-val available">$980.50</div>
+                    <div class="sub-metric-val available" id="display-avail-balance">₹98,050</div>
                   </div>
                   <div>
                     <div class="sub-metric-label">Pending Clearance</div>
-                    <div class="sub-metric-val pending">$265.30</div>
+                    <div class="sub-metric-val pending" id="display-pending-balance">₹26,530</div>
                   </div>
                 </div>
               </div>
@@ -2825,29 +2833,57 @@
               <div class="analytics-card payment-methods-card" style="margin-top: 16px;">
                 <div class="analytics-card-header">
                   <div>
-                    <h3 class="analytics-card-title">Withdrawal Methods (Configure for India Payouts)</h3>
+                    <h3 class="analytics-card-title">Withdrawal Methods (India & Global Payouts)</h3>
                   </div>
                 </div>
 
-                <div class="withdrawal-boxes-grid single-method">
-                  <!-- Linked Razorpay Account -->
-                  <div class="payout-method-box full-width">
+                <div class="withdrawal-boxes-stack">
+                  <!-- Method 1: Instant UPI VPA -->
+                  <div class="payout-method-box">
                     <div class="razorpay-link-row">
-                      <div class="payout-brand-badge rzp-badge">
-                        <div class="rzp-icon-box">⚡</div>
-                        <div>
-                          <div class="brand-name">Linked Razorpay Account</div>
+                      <div class="payout-brand-badge upi-badge">
+                        <div class="rzp-icon-box upi-logo-icon-box" style="background: #ffffff; border: 1px solid #cbd5e1; border-radius: 8px; width: 68px; height: 42px; display: flex; align-items: center; justify-content: center; padding: 4px; box-shadow: 0 2px 6px rgba(0,0,0,0.06); flex-shrink: 0;">
+                          <svg width="58" height="32" viewBox="0 0 160 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <text x="5" y="48" font-family="'Trebuchet MS', 'Arial Black', sans-serif" font-size="44" font-weight="900" font-style="italic" fill="#54585A" letter-spacing="-2">UPI</text>
+                            <polygon points="100,12 125,35 100,58" fill="#E76326"/>
+                            <polygon points="114,12 139,35 114,58" fill="#0F8A43"/>
+                            <text x="4" y="73" font-family="Arial, sans-serif" font-size="9.5" font-weight="900" font-style="italic" fill="#54585A" letter-spacing="-0.2">UNIFIED PAYMENTS INTERFACE</text>
+                          </svg>
+                        </div>
+                        <div style="margin-left: 12px;">
+                          <div class="brand-name" style="font-weight: 700;">Direct UPI (VPA) Payout</div>
+                          <div class="brand-sub" id="upi-vpa-subtext">rudra@okaxis • Primary Channel</div>
                         </div>
                       </div>
                       <div class="rzp-action-group">
-                        <span class="status-lbl-text">Configuration Status</span>
-                        <button class="btn btn-outline btn-sm" id="btn-rzp-login">Login</button>
+                        <span class="status-lbl-text"><span class="badge-status cleared">Verified</span></span>
+                        <button type="button" class="btn btn-outline btn-sm" id="btn-upi-config">Edit UPI</button>
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- Method 2: Direct Bank Transfer / IMPS -->
+                  <div class="payout-method-box" style="margin-top: 10px;">
+                    <div class="razorpay-link-row">
+                      <div class="payout-brand-badge bank-badge">
+                        <div class="rzp-icon-box" style="background: linear-gradient(135deg, #1e3a8a 0%, #2563eb 100%); color: #ffffff; border-radius: 10px; width: 44px; height: 44px; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 12px rgba(37, 99, 235, 0.25); flex-shrink: 0;">
+                          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M3 21h18M3 10h18M5 10v11M9 10v11M15 10v11M19 10v11M12 3l9 7H3l9-7z"/>
+                          </svg>
+                        </div>
+                        <div style="margin-left: 10px;">
+                          <div class="brand-name" style="font-weight: 700;">Direct Bank Transfer (IMPS / NEFT)</div>
+                          <div class="brand-sub" id="bank-acc-subtext">HDFC Bank • •••• 4892 (IFSC: HDFC0000128)</div>
+                        </div>
+                      </div>
+                      <div class="rzp-action-group">
+                        <span class="status-lbl-text"><span class="badge-status cleared">Linked</span></span>
+                        <button type="button" class="btn btn-outline btn-sm" id="btn-bank-config">Edit Bank</button>
                       </div>
                     </div>
                   </div>
                 </div>
               </div>
-
             </div>
 
             <!-- RIGHT COLUMN: Unified Transaction History (All Activities) -->
@@ -2855,9 +2891,40 @@
               <div class="analytics-card txn-history-card">
                 <div class="analytics-card-header">
                   <div>
-                    <h3 class="analytics-card-title">Unified Transaction History (All Activities)</h3>
+                    <h3 class="analytics-card-title">Unified Transaction History</h3>
                   </div>
-                  <button class="btn btn-outline btn-sm" id="btn-txn-view-all">View All</button>
+                  <div style="display: flex; gap: 8px;">
+                    <button type="button" class="btn btn-outline btn-sm" id="btn-export-csv-main">
+                      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" style="margin-right: 4px;">
+                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/>
+                      </svg>
+                      CSV
+                    </button>
+                    <button type="button" class="btn btn-outline btn-sm" id="btn-txn-view-all">View All</button>
+                  </div>
+                </div>
+
+                <!-- Transaction Filter Bar -->
+                <div class="txn-filter-bar" style="display: flex; gap: 10px; margin-bottom: 14px; flex-wrap: wrap;">
+                  <div class="search-input-wrapper" style="flex: 1; min-width: 160px; position: relative;">
+                    <input type="text" id="input-txn-search" class="form-input" placeholder="Search Txn ID or Type..." style="padding-left: 32px; height: 36px; font-size: 0.85rem;">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="position: absolute; left: 10px; top: 11px; color: var(--text-muted);">
+                      <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+                    </svg>
+                  </div>
+                  <select id="select-txn-type" class="form-input" style="width: auto; height: 36px; font-size: 0.85rem;">
+                    <option value="ALL">All Types</option>
+                    <option value="Order Sale">Order Sale</option>
+                    <option value="Creator Fund">Creator Fund</option>
+                    <option value="Withdrawal">Withdrawal</option>
+                    <option value="Manual Credit">Manual Credit</option>
+                  </select>
+                  <select id="select-txn-status" class="form-input" style="width: auto; height: 36px; font-size: 0.85rem;">
+                    <option value="ALL">All Status</option>
+                    <option value="Cleared">Cleared</option>
+                    <option value="Pending">Pending</option>
+                    <option value="Failed">Failed</option>
+                  </select>
                 </div>
 
                 <div class="analytics-table-container">
@@ -2871,61 +2938,16 @@
                         <th style="text-align: center;">Status</th>
                       </tr>
                     </thead>
-                    <tbody>
-                      <tr>
-                        <td>Oct 20, 2022</td>
-                        <td class="cell-txid">67300007547...</td>
-                        <td>Order Sale</td>
-                        <td class="cell-amount pos">✓ $980.50</td>
-                        <td style="text-align: center;"><span class="badge-status cleared">Cleared</span></td>
-                      </tr>
-                      <tr>
-                        <td>Oct 22, 2022</td>
-                        <td class="cell-txid">67300007547...</td>
-                        <td>Order Sale</td>
-                        <td class="cell-amount pos">✓ $980.50</td>
-                        <td style="text-align: center;"><span class="badge-status cleared">Cleared</span></td>
-                      </tr>
-                      <tr>
-                        <td>Oct 23, 2022</td>
-                        <td class="cell-txid">60380007982...</td>
-                        <td>Creator Fund</td>
-                        <td class="cell-amount">$265.30</td>
-                        <td style="text-align: center;"><span class="badge-status pending">Pending</span></td>
-                      </tr>
-                      <tr>
-                        <td>Oct 20, 2022</td>
-                        <td class="cell-txid">67300007547...</td>
-                        <td>Order Sale</td>
-                        <td class="cell-amount pos">✓ $980.50</td>
-                        <td style="text-align: center;"><span class="badge-status cleared">Cleared</span></td>
-                      </tr>
-                      <tr>
-                        <td>Oct 22, 2022</td>
-                        <td class="cell-txid">67300007547...</td>
-                        <td>Order Sale</td>
-                        <td class="cell-amount pos">✓ $980.50</td>
-                        <td style="text-align: center;"><span class="badge-status cleared">Cleared</span></td>
-                      </tr>
-                      <tr>
-                        <td>Oct 23, 2022</td>
-                        <td class="cell-txid">60380007982...</td>
-                        <td>Creator Fund</td>
-                        <td class="cell-amount">$265.30</td>
-                        <td style="text-align: center;"><span class="badge-status pending">Pending</span></td>
-                      </tr>
-                      <tr>
-                        <td>Oct 23, 2022</td>
-                        <td class="cell-txid">60380007982...</td>
-                        <td>Creator Fund</td>
-                        <td class="cell-amount">$265.30</td>
-                        <td style="text-align: center;"><span class="badge-status pending">Pending</span></td>
-                      </tr>
+                    <tbody id="txn-table-body">
+                      <!-- Rendered dynamically by app.js -->
                     </tbody>
                   </table>
                 </div>
 
-                <div class="device-sync-footer" style="margin-top: 14px;">Data last synchronized: 2 mins ago.</div>
+                <div class="device-sync-footer" style="margin-top: 14px; display: flex; justify-content: space-between; align-items: center;">
+                  <span>Data last synchronized: 2 mins ago.</span>
+                  <span style="font-size: 0.78rem; color: var(--text-muted);">Click any row to view full receipt breakdown.</span>
+                </div>
               </div>
             </div>
 
@@ -3446,169 +3468,284 @@
     </main>
   </div>
 
-  <!-- FULL PAGE PRODUCT STUDIO EDITOR OVERLAY -->
+  <!-- STATE-OF-THE-ART PRODUCT STUDIO EDITOR OVERLAY (MATCHING INSPIRATION DESIGN) -->
   <div class="full-page-editor-backdrop" id="modal-product-backdrop">
+    <!-- TOP NAVIGATION & ACTION BAR -->
     <div class="editor-nav-bar">
       <div style="display: flex; align-items: center; gap: 20px;">
-        <button type="button" class="btn btn-outline" id="btn-close-product-modal"
-          style="border: 1px solid #e2e8f0; padding: 8px 16px; font-weight: 700; background: #fff;">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-            stroke-linecap="round" stroke-linejoin="round" style="margin-right: 6px;">
+        <button type="button" class="btn btn-outline" id="btn-close-product-modal" style="border: 1px solid #cbd5e1; padding: 10px 20px; font-weight: 700; font-size: 14px; background: #f8fafc; color: #334155; border-radius: 12px; display: flex; align-items: center; gap: 8px; transition: all 0.2s;">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
             <path d="M19 12H5M12 19l-7-7 7-7" />
           </svg>
           Back
         </button>
 
-        <div style="display: flex; align-items: center; gap: 10px;">
-          <div
-            style="width: 36px; height: 36px; background: linear-gradient(135deg, #6366f1, #4f46e5); color: #fff; border-radius: 10px; font-weight: 900; font-size: 18px; display: flex; align-items: center; justify-content: center;">
-            R</div>
+        <div style="height: 32px; width: 1px; background: #cbd5e1;"></div>
+
+        <div style="display: flex; align-items: center; gap: 14px;">
           <div>
-            <span style="font-size: 18px; font-weight: 800; color: #0f172a;">RenderReply</span>
-            <span style="font-size: 14px; color: #64748b; font-weight: 600; margin-left: 6px;">Product Studio</span>
+            <h1 style="font-size: 19px; font-weight: 800; color: #0f172a; margin: 0; letter-spacing: -0.3px;" id="modal-prod-header-title">Add New Product</h1>
+            <span style="font-size: 13px; color: #64748b; font-weight: 500;" id="modal-prod-header-sub">Add a new product to your store catalog</span>
           </div>
         </div>
       </div>
 
       <div style="display: flex; gap: 12px; align-items: center;">
-        <button type="button" class="btn btn-outline" id="btn-cancel-product-modal"
-          style="padding: 8px 18px;">Cancel</button>
-        <button type="submit" form="form-product-modal" class="btn btn-primary btn-pill" id="btn-publish-product"
-          style="background: linear-gradient(135deg, #6366f1, #4f46e5); font-weight: 700; padding: 10px 28px;">Publish
-          Product</button>
+        <button type="button" class="btn btn-outline" id="btn-cancel-product-modal" style="padding: 11px 22px; border-radius: 12px; font-size: 14px; font-weight: 700; background: #f8fafc; border: 1px solid #e2e8f0; color: #475569;">Cancel</button>
+        <button type="button" class="btn btn-outline" id="btn-save-draft" style="padding: 11px 22px; border-radius: 12px; font-size: 14px; font-weight: 700; border: 1px solid #cbd5e1; display: inline-flex; align-items: center; gap: 8px; background: #ffffff; color: #334155;">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
+          Save Product
+        </button>
+        <button type="button" class="btn btn-outline" id="btn-schedule-prod" style="padding: 11px 20px; border-radius: 12px; font-size: 14px; font-weight: 700; background: #f0fdf4; border: 1px solid #bbf7d0; color: #16a34a; display: inline-flex; align-items: center; gap: 8px;">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+          Schedule
+        </button>
+        <button type="submit" form="form-product-modal" class="btn btn-primary btn-pill" id="btn-publish-product" style="background: linear-gradient(135deg, #10b981, #059669); font-weight: 800; padding: 12px 28px; border-radius: 12px; font-size: 15px; box-shadow: 0 4px 16px rgba(16,185,129,0.35); border: none; cursor: pointer; color: #ffffff;">
+          + Add Product
+        </button>
       </div>
     </div>
 
-    <div
-      style="max-width: 1200px; width: 100%; margin: 32px auto; padding: 0 24px; display: grid; grid-template-columns: 1.2fr 1fr; gap: 36px; align-items: start;">
-
-      <form id="form-product-modal"
-        style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 16px; padding: 28px; display: flex; flex-direction: column; gap: 20px; box-shadow: 0 1px 3px rgba(0,0,0,0.04);">
-        <h2
-          style="font-size: 18px; font-weight: 800; color: #0f172a; margin: 0; padding-bottom: 12px; border-bottom: 1px solid #f1f5f9;">
-          Product Details</h2>
-
-        <div class="form-group" style="margin: 0;">
-          <label class="form-label"
-            style="font-weight: 700; display: flex; justify-content: space-between; align-items: center;">
-            <span>Product Photos & Media *</span>
-            <span style="font-size: 12px; color: #64748b; font-weight: 500;">Multiple images supported</span>
-          </label>
-
-          <div
-            style="border: 2px dashed #cbd5e1; border-radius: 12px; padding: 24px; text-align: center; background: #f8fafc; cursor: pointer; position: relative; transition: border-color 0.2s;"
-            id="photo-dropzone">
-            <input type="file" id="modal-prod-files" accept="image/*" multiple
-              style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; opacity: 0; cursor: pointer;">
-            <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#6366f1" stroke-width="1.8"
-              style="margin-bottom: 8px;">
-              <rect x="3" y="3" width="18" height="18" rx="2" ry="2" />
-              <circle cx="8.5" cy="8.5" r="1.5" />
-              <polyline points="21 15 16 10 5 21" />
-            </svg>
-            <div style="font-size: 14px; font-weight: 700; color: #0f172a;">Click or Drag & Drop multiple product photos
-              here</div>
-            <div style="font-size: 12px; color: #64748b; margin-top: 4px;">Upload 1 or more high-resolution photos (JPG,
-              PNG, WEBP)</div>
-          </div>
-
-          <div style="margin-top: 12px; display: flex; flex-direction: column; gap: 10px;">
-            <input type="text" class="form-input" id="modal-prod-photo" placeholder="Or paste image URL (https://...)"
-              value="https://images.unsplash.com/photo-1517694712202-14dd9538aa97?auto=format&fit=crop&w=600&q=80">
-
-            <div style="font-size: 12px; font-weight: 700; color: #64748b;">Uploaded Product Photo Gallery (Click to set
-              primary cover photo):</div>
-            <div class="gallery-thumbs-container" id="modal-prod-gallery"></div>
-          </div>
-        </div>
-
-        <div class="form-group" style="margin: 0;">
-          <label class="form-label" style="font-weight: 700;">Product Title *</label>
-          <input type="text" class="form-input" id="modal-prod-title"
-            placeholder="e.g. Java Full-Stack Developer Roadmap PDF" value="Java Full-Stack Developer Roadmap PDF"
-            required>
-        </div>
-
-        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px;">
-          <div class="form-group" style="margin: 0;">
-            <label class="form-label" style="font-weight: 700;">Price ($) *</label>
-            <input type="text" class="form-input" id="modal-prod-price" placeholder="e.g. 19.99 or 0 for FREE"
-              value="19.99" required>
-          </div>
-          <div class="form-group" style="margin: 0;">
-            <label class="form-label" style="font-weight: 700;">Original Price ($) (Optional)</label>
-            <input type="text" class="form-input" id="modal-prod-oldprice" placeholder="e.g. 39.99" value="39.99">
-          </div>
-        </div>
-
-        <div class="form-group" style="margin: 0;">
-          <label class="form-label" style="font-weight: 700;">Button Action Text</label>
-          <input type="text" class="form-input" id="modal-prod-cta"
-            placeholder="e.g. Instant Access, Book Session, Download Now" value="Instant Access">
-        </div>
-
-        <div class="form-group" style="margin: 0;">
-          <label class="form-label" style="font-weight: 700;">Product Description *</label>
-          <textarea class="form-textarea" id="modal-prod-desc" rows="4"
-            placeholder="Brief summary of what buyers will receive upon purchasing..."
-            required>Comprehensive guide from Java core syntax to microservices, Spring Boot, and cloud deployment.</textarea>
-        </div>
-      </form>
-
-      <div>
-        <div
-          style="font-size: 14px; font-weight: 800; color: #0f172a; margin-bottom: 12px; display: flex; align-items: center; justify-content: space-between;">
-          <span>Storefront Card Live Preview</span>
-          <span style="font-size: 11px; color: #64748b; font-weight: 600;">Real-time</span>
-        </div>
-
-        <div class="ecom-product-card" style="box-shadow: 0 10px 25px -5px rgba(0,0,0,0.08); border-radius: 16px;">
-          <div class="ecom-card-banner">
-            <img src="https://images.unsplash.com/photo-1517694712202-14dd9538aa97?auto=format&fit=crop&w=600&q=80"
-              alt="Product Photo" class="ecom-card-photo" id="live-preview-img">
-          </div>
-          <div class="ecom-card-body">
-            <div class="ecom-rating-row">
-              <div class="star-rating-row">
-                <svg class="star-icon" viewBox="0 0 24 24" width="13" height="13" fill="#f59e0b" stroke="none">
-                  <polygon
-                    points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
-                </svg>
-                <svg class="star-icon" viewBox="0 0 24 24" width="13" height="13" fill="#f59e0b" stroke="none">
-                  <polygon
-                    points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
-                </svg>
-                <svg class="star-icon" viewBox="0 0 24 24" width="13" height="13" fill="#f59e0b" stroke="none">
-                  <polygon
-                    points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
-                </svg>
-                <svg class="star-icon" viewBox="0 0 24 24" width="13" height="13" fill="#f59e0b" stroke="none">
-                  <polygon
-                    points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
-                </svg>
-                <svg class="star-icon" viewBox="0 0 24 24" width="13" height="13" fill="#f59e0b" stroke="none">
-                  <polygon
-                    points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
-                </svg>
-              </div>
-              <span style="color: var(--text-secondary);">5.0 (New Product)</span>
-            </div>
-            <div class="ecom-prod-title" id="live-preview-title">Java Full-Stack Developer Roadmap PDF</div>
-            <div class="ecom-prod-desc" id="live-preview-desc">Comprehensive guide from Java core syntax to
-              microservices, Spring Boot, and cloud deployment.</div>
-            <div class="ecom-price-row">
+    <!-- MAIN PRODUCT STUDIO FORM CONTAINER -->
+    <div style="max-width: 1280px; width: 100%; margin: 24px auto 40px; padding: 0 24px;">
+      <form id="form-product-modal" style="display: grid; grid-template-columns: 1.15fr 1fr; gap: 24px; align-items: start;">
+        
+        <!-- LEFT COLUMN -->
+        <div style="display: flex; flex-direction: column; gap: 20px;">
+          
+          <!-- Card 1: Name and Description -->
+          <div class="np-card">
+            <div class="np-card-header">
               <div>
-                <span class="ecom-price-tag" id="live-preview-price">$19.99</span>
-                <span class="ecom-price-old" id="live-preview-oldprice">$39.99</span>
+                <h3 class="np-card-title">Name and Description</h3>
+                <span class="np-card-subtitle">Set your product title and detailed description</span>
               </div>
-              <button type="button" class="btn-ecom-buy" id="live-preview-cta"
-                style="background: linear-gradient(135deg, #6366f1, #4f46e5); color: #fff; font-weight: 800;">Instant
-                Access</button>
+            </div>
+
+            <div class="form-group" style="margin-bottom: 18px;">
+              <label class="np-label" for="modal-prod-title">Product Name *</label>
+              <input type="text" class="np-input" id="modal-prod-title" placeholder="e.g. Premium Half Sleeve T-Shirt - Brooklyn Fleece" value="Java Full-Stack Developer Roadmap PDF" required>
+            </div>
+
+            <div class="form-group" style="margin: 0;">
+              <label class="np-label" for="modal-prod-desc">Product Description *</label>
+              <div class="np-toolbar">
+                <button type="button" class="np-tool-btn" title="Bold" onclick="document.execCommand('bold', false, null);"><strong style="font-family: serif;">B</strong></button>
+                <button type="button" class="np-tool-btn" title="Italic" onclick="document.execCommand('italic', false, null);"><em style="font-family: serif;">I</em></button>
+                <button type="button" class="np-tool-btn" title="Underline" onclick="document.execCommand('underline', false, null);"><span style="text-decoration: underline;">U</span></button>
+                <button type="button" class="np-tool-btn" title="Insert Link">🔗</button>
+                <button type="button" class="np-tool-btn" title="Bullet List">≡</button>
+              </div>
+              <textarea class="np-textarea np-textarea-toolbar" id="modal-prod-desc" rows="5" placeholder="Looking for a little extra warmth? Grab this classic hoodie/guide..." required>Comprehensive guide from Java core syntax to microservices, Spring Boot, and cloud deployment.</textarea>
             </div>
           </div>
-        </div>
-      </div>
 
+          <!-- Card 2: Category -->
+          <div class="np-card">
+            <div class="np-card-header">
+              <h3 class="np-card-title">Category</h3>
+            </div>
+
+            <div class="form-group" style="margin-bottom: 16px;">
+              <label class="np-label">Product Category</label>
+              <select class="np-select" id="modal-prod-category">
+                <option value="digital">Digital Guides & E-books (₹)</option>
+                <option value="course">Video Course & Tutorials</option>
+                <option value="session">1-on-1 Strategy Sessions</option>
+                <option value="free">Lead Magnets & Freebies (FREE)</option>
+                <option value="clothes">Men's Clothes & Apparel</option>
+                <option value="templates">Presets & Templates</option>
+              </select>
+            </div>
+
+            <div class="form-group" style="margin: 0;">
+              <label class="np-label">Product Sub-Category</label>
+              <select class="np-select" id="modal-prod-subcategory">
+                <option value="roadmaps">Developer Roadmaps & Guides</option>
+                <option value="tshirts">Men's Tops & T-Shirts</option>
+                <option value="coaching">Private Coaching Call</option>
+                <option value="automation">Instagram Automation Presets</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- Card 3: Manage Stock -->
+          <div class="np-card">
+            <div class="np-card-header">
+              <h3 class="np-card-title">Manage Stock</h3>
+            </div>
+
+            <div class="form-group" style="margin-bottom: 16px;">
+              <label class="np-label">Stock Keeping Unit (SKU)</label>
+              <input type="text" class="np-input" id="modal-prod-sku" value="SKU-BB-66-A6" placeholder="e.g. SKU-BB-66-A6">
+            </div>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px;">
+              <div class="form-group" style="margin: 0;">
+                <label class="np-label">Product Stock</label>
+                <input type="number" class="np-input" id="modal-prod-stock" value="10120" placeholder="10,120">
+              </div>
+              <div class="form-group" style="margin: 0;">
+                <label class="np-label">Minimum Stock Threshold</label>
+                <input type="number" class="np-input" id="modal-prod-minstock" value="100" placeholder="100">
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- RIGHT COLUMN -->
+        <div style="display: flex; flex-direction: column; gap: 20px;">
+          
+          <!-- Card 4: Product Details -->
+          <div class="np-card">
+            <div class="np-card-header">
+              <h3 class="np-card-title">Product Details</h3>
+            </div>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 16px;">
+              <div class="form-group" style="margin: 0;">
+                <label class="np-label">Brand Name</label>
+                <select class="np-select" id="modal-prod-brand">
+                  <option value="renderreply">RenderReply Official</option>
+                  <option value="superprofile">SuperProfile Creator</option>
+                  <option value="adidas">Adidas Fleece</option>
+                  <option value="custom">Custom Creator Brand</option>
+                </select>
+              </div>
+              <div class="form-group" style="margin: 0;">
+                <label class="np-label">Product Size / Format</label>
+                <select class="np-select" id="modal-prod-size">
+                  <option value="pdf">Digital PDF Guide</option>
+                  <option value="video">MP4 Video Training</option>
+                  <option value="medium">Medium Size</option>
+                  <option value="large">Large Size</option>
+                  <option value="zip">Zip Bundle</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="form-group" style="margin: 0;">
+              <label class="np-label">Product Colors / Theme Variant</label>
+              <select class="np-select" id="modal-prod-colors">
+                <option value="default">Black and White / Indigo</option>
+                <option value="slate">Dark Slate & Cyan</option>
+                <option value="sunset">Insta Sunset</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- Card 5: Product Pricing -->
+          <div class="np-card">
+            <div class="np-card-header">
+              <h3 class="np-card-title">Product Pricing</h3>
+            </div>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 16px;">
+              <div class="form-group" style="margin: 0;">
+                <label class="np-label">Price (₹) *</label>
+                <div style="position: relative;">
+                  <span style="position: absolute; left: 12px; top: 10px; color: #64748b; font-weight: 700;">₹</span>
+                  <input type="text" class="np-input" id="modal-prod-price" style="padding-left: 28px;" value="499" placeholder="499 or 0 for FREE" required>
+                </div>
+              </div>
+              <div class="form-group" style="margin: 0;">
+                <label class="np-label">Original Price (₹)</label>
+                <div style="position: relative;">
+                  <span style="position: absolute; left: 12px; top: 10px; color: #64748b; font-weight: 700;">₹</span>
+                  <input type="text" class="np-input" id="modal-prod-oldprice" style="padding-left: 28px;" value="999" placeholder="999">
+                </div>
+              </div>
+            </div>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 16px;">
+              <div class="form-group" style="margin: 0;">
+                <label class="np-label" style="display: flex; justify-content: space-between; align-items: center;">
+                  <span>Discount Percentage</span>
+                  <span style="font-size: 11px; color: #10b981; font-weight: 700;">⚡ Auto-Calculated</span>
+                </label>
+                <div style="position: relative;">
+                  <input type="text" class="np-input" id="modal-prod-discount" readonly style="background: #f0fdf4; font-weight: 800; color: #16a34a; border: 1px solid #bbf7d0; cursor: default;" value="50% OFF" title="Automatically calculated from Price and Original Price">
+                </div>
+              </div>
+              <div class="form-group" style="margin: 0;">
+                <label class="np-label">Minimum Order</label>
+                <input type="number" class="np-input" id="modal-prod-minorder" value="100" placeholder="100">
+              </div>
+            </div>
+
+            <div class="form-group" style="margin: 0;">
+              <label class="np-label">Button Action CTA Text</label>
+              <input type="text" class="np-input" id="modal-prod-cta" value="Instant Access" placeholder="e.g. Instant Access, Book Session, Download Now">
+            </div>
+          </div>
+
+          <!-- Card 6: Product Image -->
+          <div class="np-card">
+            <div class="np-card-header">
+              <h3 class="np-card-title">Product Image <span style="font-size: 12px; color: #94a3b8; font-weight: 500;">ⓘ</span></h3>
+            </div>
+
+            <div class="np-dropzone" id="photo-dropzone">
+              <input type="file" id="modal-prod-files" accept="image/*" multiple style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; opacity: 0; cursor: pointer;">
+              <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#14b8a6" stroke-width="2" style="margin-bottom: 6px;">
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                <polyline points="17 8 12 3 7 8"/>
+                <line x1="12" y1="3" x2="12" y2="15"/>
+              </svg>
+              <div style="font-size: 14px; font-weight: 800; color: #0d9488;">Click to Upload</div>
+              <div style="font-size: 12px; color: #64748b; margin-top: 2px;">Upload 1 or more high-resolution photos (JPG, PNG, WEBP)</div>
+            </div>
+
+            <div style="margin-top: 14px;">
+              <label class="np-label">Or Paste Product Photo URL</label>
+              <input type="text" class="np-input" id="modal-prod-photo" placeholder="https://..." value="https://images.unsplash.com/photo-1517694712202-14dd9538aa97?auto=format&fit=crop&w=600&q=80">
+            </div>
+
+            <div style="margin-top: 14px;">
+              <label class="np-label">Uploaded Product Photos Gallery</label>
+              <div class="gallery-thumbs-container" id="modal-prod-gallery"></div>
+            </div>
+          </div>
+
+          <!-- Card 7: Live Preview Card -->
+          <div class="np-card" style="background: #faf5ff; border-color: #e9d5ff;">
+            <div class="np-card-header">
+              <h3 class="np-card-title" style="color: #7e22ce;">Storefront Card Live Preview</h3>
+              <span style="font-size: 11px; background: #f3e8ff; color: #9333ea; font-weight: 800; padding: 2px 8px; border-radius: 10px;">Real-time</span>
+            </div>
+
+            <div class="ecom-product-card" style="box-shadow: 0 10px 25px -5px rgba(0,0,0,0.08); border-radius: 16px; background: #ffffff;">
+              <div class="ecom-card-banner">
+                <img src="https://images.unsplash.com/photo-1517694712202-14dd9538aa97?auto=format&fit=crop&w=600&q=80" alt="Product Photo" class="ecom-card-photo" id="live-preview-img">
+              </div>
+              <div class="ecom-card-body">
+                <div class="ecom-rating-row">
+                  <div class="star-rating-row">
+                    <svg class="star-icon" viewBox="0 0 24 24" width="13" height="13" fill="#f59e0b" stroke="none"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+                    <svg class="star-icon" viewBox="0 0 24 24" width="13" height="13" fill="#f59e0b" stroke="none"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+                    <svg class="star-icon" viewBox="0 0 24 24" width="13" height="13" fill="#f59e0b" stroke="none"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+                    <svg class="star-icon" viewBox="0 0 24 24" width="13" height="13" fill="#f59e0b" stroke="none"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+                    <svg class="star-icon" viewBox="0 0 24 24" width="13" height="13" fill="#f59e0b" stroke="none"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+                  </div>
+                  <span style="color: var(--text-secondary);">5.0 (New Product)</span>
+                </div>
+                <div class="ecom-prod-title" id="live-preview-title">Java Full-Stack Developer Roadmap PDF</div>
+                <div class="ecom-prod-desc" id="live-preview-desc">Comprehensive guide from Java core syntax to microservices, Spring Boot, and cloud deployment.</div>
+                <div class="ecom-price-row">
+                  <div>
+                    <span class="ecom-price-tag" id="live-preview-price">₹499</span>
+                    <span class="ecom-price-old" id="live-preview-oldprice">₹999</span>
+                  </div>
+                  <button type="button" class="btn-ecom-buy" id="live-preview-cta" style="background: linear-gradient(135deg, #6366f1, #4f46e5); color: #fff; font-weight: 800;">Instant Access</button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+      </form>
     </div>
   </div>
 
@@ -3866,35 +4003,8 @@
        3. PROFILE & BIO REAL-TIME SYNC TO PHONE PREVIEW
        ====================================================================== */
     function syncProfileToPreview() {
-      var nameInput = document.getElementById('setup-input-name');
-      var bioInput = document.getElementById('setup-input-bio');
-      var avatarInput = document.getElementById('setup-input-avatar');
-      var dspName = document.getElementById('dsp-name-el');
-      var dspBio = document.getElementById('dsp-bio-el');
-      var dspAvatar = document.getElementById('dsp-avatar-el');
-
-      if (nameInput && dspName) {
-        nameInput.addEventListener('input', function () {
-          dspName.textContent = this.value || 'RudRa RR';
-          var nameTxt = document.getElementById('store-display-name-txt');
-          if (nameTxt) nameTxt.textContent = this.value || 'RudRa RR';
-        });
-      }
-      if (bioInput && dspBio) {
-        bioInput.addEventListener('input', function () {
-          dspBio.textContent = this.value || 'Welcome to my official store!';
-          var bioTxt = document.getElementById('store-bio-text-txt');
-          if (bioTxt) bioTxt.textContent = this.value || 'Welcome to my official store!';
-        });
-      }
-      if (avatarInput && dspAvatar) {
-        avatarInput.addEventListener('input', function () {
-          if (this.value) {
-            dspAvatar.src = this.value;
-            var avImg = document.getElementById('store-avatar-img');
-            if (avImg) avImg.src = this.value;
-          }
-        });
+      if (window.syncStoreProfileToUI && window.storeProfileState) {
+        window.syncStoreProfileToUI(window.storeProfileState);
       }
     }
     setTimeout(syncProfileToPreview, 400);
@@ -3919,7 +4029,7 @@
       filterMenu.style.cssText = 'display:none; position:absolute; right:110px; top:44px; background:#ffffff; border:1px solid #e2e8f0; border-radius:10px; box-shadow:0 10px 25px rgba(0,0,0,0.1); z-index:100; min-width:160px; padding:6px 0; font-size:12px;';
       filterMenu.innerHTML = `
         <div class="cdrop-item active" data-filter="all" style="padding:7px 14px; cursor:pointer; font-weight:700; color:#6366f1;">All Products</div>
-        <div class="cdrop-item" data-filter="guide" style="padding:7px 14px; cursor:pointer; font-weight:500;">Digital Guides ($)</div>
+        <div class="cdrop-item" data-filter="guide" style="padding:7px 14px; cursor:pointer; font-weight:500;">Digital Guides (₹)</div>
         <div class="cdrop-item" data-filter="free" style="padding:7px 14px; cursor:pointer; font-weight:500;">Lead Magnets (FREE)</div>
         <div class="cdrop-item" data-filter="session" style="padding:7px 14px; cursor:pointer; font-weight:500;">Strategy Sessions</div>
       `;
@@ -4220,7 +4330,7 @@
                 <h3 class="spm-prod-title">Java Full Stack Roadmap PDF</h3>
                 <p class="spm-prod-desc">Complete step-by-step 2026 Java Backend & Full Stack developer roadmap with code examples.</p>
                 <div class="spm-prod-footer">
-                  <span class="spm-prod-price">$19.99</span>
+                  <span class="spm-prod-price">₹499</span>
                   <button class="btn spm-btn-buy" id="spm-cta-btn-1">Buy Instant PDF</button>
                 </div>
               </div>
@@ -4235,7 +4345,7 @@
                 <h3 class="spm-prod-title">1-on-1 Instagram Strategy Session</h3>
                 <p class="spm-prod-desc">60-minute private strategy call to audit your Instagram profile, reels, and DM automation funnel.</p>
                 <div class="spm-prod-footer">
-                  <span class="spm-prod-price">$49.00</span>
+                  <span class="spm-prod-price">₹1,499</span>
                   <button class="btn spm-btn-buy" id="spm-cta-btn-2">Book 1-on-1 Call</button>
                 </div>
               </div>
@@ -4331,7 +4441,7 @@
             <img src="https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?auto=format&fit=crop&w=150&q=80" class="order-prod-thumb" alt="">
             <div class="order-prod-info">
               <div class="order-prod-name">Java Full Stack Roadmap PDF</div>
-              <div class="order-prod-price-text">$19.99 • Complete 2026 PDF Bundle</div>
+              <div class="order-prod-price-text">₹499 • Complete 2026 PDF Bundle</div>
             </div>
             <button class="btn btn-primary btn-sm btn-download-asset" onclick="showToast('Initiating instant PDF download...')">
               <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" style="margin-right: 4px;"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
@@ -4350,7 +4460,7 @@
             <img src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=150&q=80" class="order-prod-thumb" alt="">
             <div class="order-prod-info">
               <div class="order-prod-name">1-on-1 Instagram Strategy Session</div>
-              <div class="order-prod-price-text">$49.00 • Private Strategy Call</div>
+              <div class="order-prod-price-text">₹1,499 • Private Strategy Call</div>
             </div>
             <button class="btn btn-outline btn-sm btn-download-asset" onclick="showToast('Opening Google Calendar booking link...')">
               View Calendar
@@ -4376,6 +4486,249 @@
             </button>
           </div>
         </div>
+      </div>
+  <!-- 1. EDIT DEDICATED UPI VPA MODAL -->
+  <div class="store-preview-modal-backdrop" id="modal-edit-upi">
+    <div class="store-auth-card" style="max-width: 480px;">
+      <div class="auth-card-header">
+        <div class="auth-title-group">
+          <h2 class="auth-title">Edit Direct UPI (VPA) Payout</h2>
+          <p class="auth-sub">Instant zero-fee creator payouts via BHIM, Google Pay, PhonePe & Paytm.</p>
+        </div>
+        <button type="button" class="btn-close-modal" id="btn-close-upi-modal">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </button>
+      </div>
+
+      <form id="form-edit-upi" style="margin-top: 16px;">
+        <div class="form-group" style="margin-bottom: 12px;">
+          <label class="form-label">UPI Virtual Payment Address (VPA)</label>
+          <input type="text" class="form-input" id="input-payout-upi" value="rudra@okaxis" required placeholder="e.g. name@okaxis or mobile@paytm">
+        </div>
+        <div class="form-group" style="margin-bottom: 12px;">
+          <label class="form-label">Associated VPA Account Name</label>
+          <input type="text" class="form-input" id="input-upi-holder-name" value="Rudra Teja" required placeholder="Name on UPI ID">
+        </div>
+        <div class="form-group" style="margin-bottom: 16px;">
+          <label class="form-label">UPI App Provider</label>
+          <select class="form-input" id="select-upi-app">
+            <option value="Axis / Google Pay">Google Pay / Axis Bank (@okaxis)</option>
+            <option value="PhonePe">PhonePe (@ybl / @ibl)</option>
+            <option value="Paytm">Paytm Payments Bank (@paytm)</option>
+            <option value="BHIM">BHIM UPI (@upi)</option>
+            <option value="HDFC Bank">HDFC Bank (@okhdfcbank)</option>
+            <option value="ICICI Bank">ICICI Bank (@okicici)</option>
+          </select>
+        </div>
+
+        <div style="display: flex; gap: 10px; justify-content: flex-end;">
+          <button type="button" class="btn btn-outline" id="btn-cancel-upi">Cancel</button>
+          <button type="submit" class="btn btn-primary" id="btn-save-upi">Save UPI Details</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- 2. EDIT DEDICATED BANK ACCOUNT MODAL -->
+  <div class="store-preview-modal-backdrop" id="modal-edit-bank">
+    <div class="store-auth-card" style="max-width: 520px;">
+      <div class="auth-card-header">
+        <div class="auth-title-group">
+          <h2 class="auth-title">Edit Direct Bank Transfer Account</h2>
+          <p class="auth-sub">Direct deposit via IMPS, NEFT, or RTGS bank transfer.</p>
+        </div>
+        <button type="button" class="btn-close-modal" id="btn-close-bank-modal">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </button>
+      </div>
+
+      <form id="form-edit-bank" style="margin-top: 16px;">
+        <div class="form-group" style="margin-bottom: 12px;">
+          <label class="form-label">Account Holder Name</label>
+          <input type="text" class="form-input" id="input-bank-name-holder" value="Rudra Teja" required placeholder="Full Name as registered in Bank">
+        </div>
+        <div class="form-group" style="margin-bottom: 12px;">
+          <label class="form-label">Bank Name</label>
+          <input type="text" class="form-input" id="input-bank-name" value="HDFC Bank" required placeholder="e.g. HDFC Bank, ICICI Bank, SBI">
+        </div>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 12px;">
+          <div class="form-group">
+            <label class="form-label">Account Number</label>
+            <input type="text" class="form-input" id="input-bank-acc-num" value="50100293844892" required placeholder="Account Number">
+          </div>
+          <div class="form-group">
+            <label class="form-label">IFSC Code</label>
+            <input type="text" class="form-input" id="input-bank-ifsc" value="HDFC0000128" required placeholder="HDFC0000128">
+          </div>
+        </div>
+        <div class="form-group" style="margin-bottom: 16px;">
+          <label class="form-label">Account Type</label>
+          <select class="form-input" id="select-bank-acc-type">
+            <option value="Savings">Savings Account</option>
+            <option value="Current">Current Business Account</option>
+          </select>
+        </div>
+
+        <div style="display: flex; gap: 10px; justify-content: flex-end;">
+          <button type="button" class="btn btn-outline" id="btn-cancel-bank">Cancel</button>
+          <button type="submit" class="btn btn-primary" id="btn-save-bank">Save Bank Account</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- 3. INSTANT WALLET WITHDRAWAL MODAL -->
+  <div class="store-preview-modal-backdrop" id="modal-wallet-withdraw">
+    <div class="store-auth-card" style="max-width: 480px;">
+      <div class="auth-card-header">
+        <div class="auth-title-group">
+          <h2 class="auth-title">Withdraw Funds to Payout Account</h2>
+          <p class="auth-sub">Transfer available wallet balance instantly to your verified account.</p>
+        </div>
+        <button class="btn-close-modal" id="btn-close-withdraw-modal">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </button>
+      </div>
+
+      <form id="form-wallet-withdraw" style="margin-top: 16px;">
+        <div style="background: rgba(34, 197, 94, 0.08); border: 1px solid rgba(34, 197, 94, 0.2); border-radius: 8px; padding: 12px; margin-bottom: 14px; display: flex; justify-content: space-between; align-items: center;">
+          <div>
+            <div style="font-size: 0.8rem; color: var(--text-muted);">Available Balance</div>
+            <div style="font-size: 1.25rem; font-weight: 700; color: #22c55e;" id="withdraw-avail-display">₹98,050</div>
+          </div>
+          <button type="button" class="btn btn-outline btn-sm" id="btn-withdraw-max">Withdraw Max</button>
+        </div>
+
+        <div class="form-group" style="margin-bottom: 12px;">
+          <label class="form-label">Withdrawal Amount (₹)</label>
+          <input type="number" class="form-input" id="input-withdraw-amount" value="50000" min="100" max="98050" required placeholder="Enter amount">
+        </div>
+
+        <div class="form-group" style="margin-bottom: 14px;">
+          <label class="form-label">Payout Channel</label>
+          <select class="form-input" id="select-withdraw-channel">
+            <option value="UPI">Direct UPI (rudra@okaxis - Instant)</option>
+            <option value="BANK">HDFC Bank (•••• 4892 - IMPS)</option>
+          </select>
+        </div>
+
+        <div style="background: var(--bg-surface); border: 1px dashed var(--border-color); border-radius: 8px; padding: 10px 12px; margin-bottom: 16px; font-size: 0.82rem; color: var(--text-secondary);">
+          <div style="display: flex; justify-content: space-between; margin-bottom: 4px;">
+            <span>Requested Amount:</span>
+            <strong id="w-req-amt">₹50,000</strong>
+          </div>
+          <div style="display: flex; justify-content: space-between; margin-bottom: 4px;">
+            <span>Processing Fee (0% Special Tier):</span>
+            <strong style="color: #22c55e;">₹0</strong>
+          </div>
+          <div style="display: flex; justify-content: space-between; border-top: 1px solid var(--border-color); padding-top: 4px; margin-top: 4px;">
+            <span>Estimated Net Transfer:</span>
+            <strong style="color: var(--text-primary);" id="w-net-amt">₹50,000</strong>
+          </div>
+        </div>
+
+        <div style="display: flex; gap: 10px; justify-content: flex-end;">
+          <button type="submit" class="btn btn-primary" id="btn-confirm-withdraw">Confirm & Transfer</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- 5. VIEW ALL TRANSACTIONS MODAL -->
+  <div class="store-preview-modal-backdrop" id="modal-txn-view-all">
+    <div class="store-auth-card" style="max-width: 820px; width: 90%;">
+      <div class="auth-card-header">
+        <div class="auth-title-group">
+          <h2 class="auth-title">All Historical Transactions</h2>
+          <p class="auth-sub">Complete audit log of all incoming sales, payout withdrawals, and creator funds.</p>
+        </div>
+        <button class="btn-close-modal" id="btn-close-txn-all-modal">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </button>
+      </div>
+
+      <div style="margin-top: 14px;">
+        <div class="txn-filter-bar" style="display: flex; gap: 10px; margin-bottom: 14px; flex-wrap: wrap;">
+          <input type="text" id="modal-input-txn-search" class="form-input" placeholder="Search by Txn ID or Description..." style="flex: 1; height: 36px; font-size: 0.85rem;">
+          <button type="button" class="btn btn-outline btn-sm" id="btn-export-csv-modal">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" style="margin-right: 4px;">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/>
+            </svg>
+            Export CSV
+          </button>
+        </div>
+
+        <div class="analytics-table-container" style="max-height: 380px; overflow-y: auto;">
+          <table class="analytics-product-table txn-table">
+            <thead>
+              <tr>
+                <th style="text-align: left;">Date</th>
+                <th style="text-align: left;">Transaction ID</th>
+                <th style="text-align: left;">Type</th>
+                <th style="text-align: right;">Amount</th>
+                <th style="text-align: center;">Status</th>
+              </tr>
+            </thead>
+            <tbody id="modal-txn-table-body">
+              <!-- Rendered dynamically -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 6. TRANSACTION RECEIPT BREAKDOWN DETAIL MODAL -->
+  <div class="store-preview-modal-backdrop" id="modal-txn-detail">
+    <div class="store-auth-card" style="max-width: 500px;">
+      <div class="auth-card-header">
+        <div class="auth-title-group">
+          <h2 class="auth-title">Transaction Receipt Details</h2>
+          <p class="auth-sub" id="rec-txid-title">Txn ID: #67300007547</p>
+        </div>
+        <button class="btn-close-modal" id="btn-close-txn-detail-modal">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </button>
+      </div>
+
+      <div style="margin-top: 14px; background: var(--bg-surface); border: 1px solid var(--border-color); border-radius: 10px; padding: 16px;">
+        <div style="text-align: center; padding-bottom: 12px; border-bottom: 1px dashed var(--border-color);">
+          <div style="font-size: 0.8rem; color: var(--text-muted);" id="rec-date">Oct 20, 2026 • 02:45 PM</div>
+          <div style="font-size: 1.6rem; font-weight: 700; color: var(--text-primary); margin: 4px 0;" id="rec-gross-amt">₹98,050</div>
+          <span class="badge-status cleared" id="rec-status-badge">Cleared</span>
+        </div>
+
+        <div style="margin-top: 14px; font-size: 0.85rem;">
+          <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+            <span style="color: var(--text-muted);">Event / Activity:</span>
+            <strong id="rec-type">Order Sale</strong>
+          </div>
+          <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+            <span style="color: var(--text-muted);">Customer Email:</span>
+            <strong id="rec-customer">customer@example.com</strong>
+          </div>
+          <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+            <span style="color: var(--text-muted);">Payment Channel:</span>
+            <strong id="rec-channel">Razorpay UPI / Cards</strong>
+          </div>
+          <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+            <span style="color: var(--text-muted);">Platform Fee (3%):</span>
+            <span id="rec-fee" style="color: #ef4444;">- ₹2,941</span>
+          </div>
+          <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+            <span style="color: var(--text-muted);">GST (18% on Fee):</span>
+            <span id="rec-gst" style="color: #ef4444;">- ₹529</span>
+          </div>
+          <div style="display: flex; justify-content: space-between; border-top: 1px solid var(--border-color); padding-top: 8px; margin-top: 8px; font-weight: 700; font-size: 0.95rem;">
+            <span>Net Credited to Wallet:</span>
+            <span id="rec-net-amt" style="color: #22c55e;">₹94,580</span>
+          </div>
+        </div>
+      </div>
+
+      <div style="display: flex; gap: 10px; justify-content: flex-end; margin-top: 16px;">
+        <button class="btn btn-outline" id="btn-print-receipt">Print Receipt</button>
+        <button class="btn btn-primary" id="btn-close-receipt">Done</button>
       </div>
     </div>
   </div>
