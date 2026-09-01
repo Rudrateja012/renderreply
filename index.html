@@ -37,7 +37,6 @@
               <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
             </svg>
             Live Inbox
-            <span class="nav-badge">2</span>
           </a>
           <a class="nav-item" data-tab="automation-rules">
             <svg viewBox="0 0 24 24">
@@ -229,91 +228,292 @@
         </div>
       </section>
 
-      <!-- TAB 2: LIVE INBOX VIEW -->
+      <!-- TAB 2: LIVE INBOX VIEW (Clean Minimalist Live DM Hub) -->
       <section id="inbox-view" class="tab-view">
         <header class="view-header">
           <div class="header-title-group">
-            <h1 class="view-title">Live DM Inbox</h1>
-            <p class="view-subtitle">Real-time Instagram message hub with automated bot handoff.</p>
+            <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
+              <h1 class="view-title">Live DM Inbox</h1>
+              <span class="live-status-pill"><span class="pulse-dot"></span> Live Sync Active</span>
+            </div>
+            <p class="view-subtitle">Real-time Instagram conversation hub with instant bot triggers and seamless human takeover.</p>
           </div>
           <div class="header-actions">
-            <button class="btn btn-refresh">Refresh Inbox</button>
+            <div class="inbox-quick-stats">
+              <span class="iq-stat"><strong id="iq-active-bots">3</strong> Bots Active</span>
+              <span class="iq-divider">•</span>
+              <span class="iq-stat"><strong id="iq-open-leads" style="color: #f59e0b;">2</strong> Needs Action</span>
+            </div>
+            <button class="btn btn-refresh" id="btn-inbox-refresh">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-right: 6px;">
+                <polyline points="23 4 23 10 17 10"/>
+                <path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/>
+              </svg>
+              Refresh
+            </button>
           </div>
         </header>
 
-        <div class="inbox-container">
-          <div class="chat-list-panel">
-            <div class="chat-search-box">
-              <input type="text" class="chat-search-input" placeholder="Search conversations...">
+        <!-- CLEAN 2-COLUMN LIVE INBOX CONTAINER -->
+        <div class="rr-clean-inbox-container" id="rr-inbox-container">
+          
+          <!-- COLUMN 1: CONVERSATIONS LIST & FILTERS -->
+          <div class="rr-clean-threads-col">
+            <!-- Filter Folders Bar -->
+            <div class="rr-clean-folder-tabs">
+              <button class="rr-folder-tab active" data-filter="all">All <span class="f-count" id="count-all">5</span></button>
+              <button class="rr-folder-tab alert-tab" data-filter="attention">Needs Action <span class="f-count alert" id="count-attention">2</span></button>
+              <button class="rr-folder-tab" data-filter="bot">Bot Active <span class="f-count" id="count-bot">2</span></button>
+              <button class="rr-folder-tab" data-filter="resolved">Resolved <span class="f-count" id="count-resolved">1</span></button>
             </div>
-            <div class="chat-threads-list">
-              <div class="chat-thread-item active">
-                <div class="thread-avatar">A</div>
-                <div class="thread-info">
-                  <div class="thread-name-row">
-                    <span class="thread-name">@alex_creator</span>
-                    <span class="thread-time">2m ago</span>
+
+            <!-- Search Bar -->
+            <div class="rr-clean-search-bar">
+              <div class="rr-clean-search-wrapper">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <circle cx="11" cy="11" r="8"/>
+                  <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+                </svg>
+                <input type="text" class="rr-clean-search-input" id="rr-inbox-search" placeholder="Search conversations, handles, keywords...">
+              </div>
+            </div>
+
+            <!-- Thread Items Scroll List -->
+            <div class="rr-clean-threads-scroll" id="rr-threads-list">
+              <!-- Thread 1 -->
+              <div class="rr-clean-thread-item active" data-thread-id="alex" data-status="attention">
+                <div class="rr-t-avatar-box">
+                  <img src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=100&q=80" alt="Alex" class="rr-t-avatar-img">
+                  <span class="rr-t-ig-icon" title="Instagram Direct">
+                    <svg width="8" height="8" viewBox="0 0 24 24" fill="#ffffff"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+                  </span>
+                </div>
+                <div class="rr-t-details">
+                  <div class="rr-t-header-row">
+                    <div class="rr-t-title-group">
+                      <span class="rr-t-user-name">Alex Mercer</span>
+                      <span class="rr-t-user-handle">@alex_creator</span>
+                    </div>
+                    <span class="rr-t-timestamp">2m ago</span>
                   </div>
-                  <div class="thread-preview">Automated DM: Sent Pricing Plans link</div>
+                  <div class="rr-t-snippet">Can I get the pricing plans for your course?</div>
+                  <div class="rr-t-tags-row">
+                    <span class="rr-pill-trigger">💬 Comment "PRICING"</span>
+                    <span class="rr-pill-badge action">Needs Action</span>
+                  </div>
                 </div>
               </div>
 
-              <div class="chat-thread-item">
-                <div class="thread-avatar" style="background: #3b82f6;">S</div>
-                <div class="thread-info">
-                  <div class="thread-name-row">
-                    <span class="thread-name">@sarah_m</span>
-                    <span class="thread-time">1h ago</span>
+              <!-- Thread 2 -->
+              <div class="rr-clean-thread-item" data-thread-id="sarah" data-status="bot">
+                <div class="rr-t-avatar-box">
+                  <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=100&q=80" alt="Sarah" class="rr-t-avatar-img">
+                  <span class="rr-t-ig-icon" title="Instagram Direct">
+                    <svg width="8" height="8" viewBox="0 0 24 24" fill="#ffffff"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+                  </span>
+                </div>
+                <div class="rr-t-details">
+                  <div class="rr-t-header-row">
+                    <div class="rr-t-title-group">
+                      <span class="rr-t-user-name">Sarah Miller</span>
+                      <span class="rr-t-user-handle">@sarah_m</span>
+                    </div>
+                    <span class="rr-t-timestamp">1h ago</span>
                   </div>
-                  <div class="thread-preview">Can you send me the free checklist?</div>
+                  <div class="rr-t-snippet">Can you send me the free checklist?</div>
+                  <div class="rr-t-tags-row">
+                    <span class="rr-pill-trigger">📸 Story Mention</span>
+                    <span class="rr-pill-badge bot">Bot Active</span>
+                  </div>
                 </div>
               </div>
 
-              <div class="chat-thread-item">
-                <div class="thread-avatar" style="background: #8b5cf6;">J</div>
-                <div class="thread-info">
-                  <div class="thread-name-row">
-                    <span class="thread-name">@dev_johndoe</span>
-                    <span class="thread-time">3h ago</span>
+              <!-- Thread 3 -->
+              <div class="rr-clean-thread-item" data-thread-id="dev" data-status="bot">
+                <div class="rr-t-avatar-box">
+                  <img src="https://images.unsplash.com/photo-1570295999919-56ceb5ecca61?auto=format&fit=crop&w=100&q=80" alt="John" class="rr-t-avatar-img">
+                  <span class="rr-t-ig-icon" title="Instagram Direct">
+                    <svg width="8" height="8" viewBox="0 0 24 24" fill="#ffffff"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+                  </span>
+                </div>
+                <div class="rr-t-details">
+                  <div class="rr-t-header-row">
+                    <div class="rr-t-title-group">
+                      <span class="rr-t-user-name">John Doe</span>
+                      <span class="rr-t-user-handle">@dev_johndoe</span>
+                    </div>
+                    <span class="rr-t-timestamp">3h ago</span>
                   </div>
-                  <div class="thread-preview">Tagged you in a story!</div>
+                  <div class="rr-t-snippet">Sent Java Full Stack roadmap PDF!</div>
+                  <div class="rr-t-tags-row">
+                    <span class="rr-pill-trigger">⚡ Keyword "JAVA"</span>
+                    <span class="rr-pill-badge bot">Bot Active</span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Thread 4 -->
+              <div class="rr-clean-thread-item" data-thread-id="priya" data-status="attention">
+                <div class="rr-t-avatar-box">
+                  <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=100&q=80" alt="Priya" class="rr-t-avatar-img">
+                  <span class="rr-t-ig-icon" title="Instagram Direct">
+                    <svg width="8" height="8" viewBox="0 0 24 24" fill="#ffffff"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+                  </span>
+                </div>
+                <div class="rr-t-details">
+                  <div class="rr-t-header-row">
+                    <div class="rr-t-title-group">
+                      <span class="rr-t-user-name">Priya S.</span>
+                      <span class="rr-t-user-handle">@priya_designs</span>
+                    </div>
+                    <span class="rr-t-timestamp">5h ago</span>
+                  </div>
+                  <div class="rr-t-snippet">Can we customize templates for agencies?</div>
+                  <div class="rr-t-tags-row">
+                    <span class="rr-pill-trigger">💬 Custom Inquiry</span>
+                    <span class="rr-pill-badge action">Needs Action</span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Thread 5 -->
+              <div class="rr-clean-thread-item" data-thread-id="vikram" data-status="resolved">
+                <div class="rr-t-avatar-box">
+                  <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=100&q=80" alt="Vikram" class="rr-t-avatar-img">
+                  <span class="rr-t-ig-icon" title="Instagram Direct">
+                    <svg width="8" height="8" viewBox="0 0 24 24" fill="#ffffff"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+                  </span>
+                </div>
+                <div class="rr-t-details">
+                  <div class="rr-t-header-row">
+                    <div class="rr-t-title-group">
+                      <span class="rr-t-user-name">Vikram P.</span>
+                      <span class="rr-t-user-handle">@vikram_tech</span>
+                    </div>
+                    <span class="rr-t-timestamp">1d ago</span>
+                  </div>
+                  <div class="rr-t-snippet">Downloaded presets successfully!</div>
+                  <div class="rr-t-tags-row">
+                    <span class="rr-pill-trigger">⚡ Preset Bundle</span>
+                    <span class="rr-pill-badge resolved">✓ Resolved</span>
+                  </div>
                 </div>
               </div>
             </div>
           </div>
 
-          <div class="chat-window-panel">
-            <div class="chat-header-bar">
-              <div class="chat-header-user">
-                <div class="thread-avatar">A</div>
+          <!-- COLUMN 2: CONVERSATION VIEWPORT & ACTIONS -->
+          <div class="rr-clean-chat-col">
+            <!-- Clean Header -->
+            <div class="rr-clean-chat-header">
+              <div class="rr-c-user-info">
+                <div class="rr-c-avatar-wrap">
+                  <img src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=120&q=80" alt="Avatar" class="rr-c-avatar-img" id="rr-current-avatar">
+                  <span class="rr-c-ig-badge">
+                    <svg width="9" height="9" viewBox="0 0 24 24" fill="#ffffff"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+                  </span>
+                </div>
                 <div>
-                  <div style="font-size: 14px; font-weight: 800;">@alex_creator</div>
-                  <div style="font-size: 11px; color: var(--text-secondary);">Instagram Direct • Bot Auto-Reply Active
+                  <div style="display: flex; align-items: center; gap: 6px;">
+                    <span class="rr-c-name" id="rr-current-name">Alex Mercer</span>
+                    <span class="rr-c-verified" title="Verified Creator">✓</span>
+                    <span class="rr-c-handle" id="rr-current-handle">@alex_creator</span>
+                  </div>
+                  <div style="display: flex; align-items: center; gap: 6px; margin-top: 2px;">
+                    <span class="rr-c-followers" id="rr-current-followers">48.2K Followers</span>
+                    <span style="color: #cbd5e1;">•</span>
+                    <span class="rr-c-source" id="rr-current-source">Reel Comment: "PRICING"</span>
                   </div>
                 </div>
               </div>
-              <span class="live-badge"><span class="dot"></span> Bot Engaged</span>
+
+              <!-- Header Action Buttons -->
+              <div class="rr-c-actions">
+                <button type="button" class="btn-clean-bot-toggle" id="btn-toggle-bot" data-status="active" title="Toggle Bot Automation">
+                  <span class="dot-status green" id="bot-toggle-dot"></span>
+                  <span id="bot-toggle-text">Bot Engaged</span>
+                </button>
+                <button type="button" class="btn-clean-resolve" id="btn-resolve-chat" title="Mark Resolved">
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                    <polyline points="20 6 9 17 4 12"/>
+                  </svg>
+                  <span>Resolve</span>
+                </button>
+              </div>
             </div>
 
-            <div class="chat-feed" id="chat-feed-box">
-              <div class="msg-bubble user">
-                <span class="msg-tag">@alex_creator • Commented "PRICING" on post</span>
-                Hey! Can I get the pricing plans for your course?
+            <!-- Subtle Trigger Banner -->
+            <div class="rr-clean-trigger-bar" id="rr-trigger-banner">
+              <div style="display: flex; align-items: center; gap: 8px; flex: 1; min-width: 0;">
+                <span style="font-size: 13px;">⚡</span>
+                <span class="trigger-bar-txt" id="rr-tcb-title">Triggered by Reel: "Build a 7-Figure IG Automation Engine" (Keyword: "PRICING")</span>
+              </div>
+              <button type="button" class="btn-view-trigger-rule" id="rr-tcb-view-rule">View Rule ↗</button>
+            </div>
+
+            <!-- Message Feed -->
+            <div class="rr-clean-chat-feed" id="chat-feed-box">
+              <div class="rr-clean-divider"><span>TODAY, OCT 24</span></div>
+
+              <!-- Message 1: Incoming User DM -->
+              <div class="rr-clean-msg user">
+                <img src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=80&q=80" alt="User" class="rr-clean-msg-avatar">
+                <div class="rr-clean-bubble user">
+                  <div class="msg-origin-tag">Commented "PRICING" on Reel #894</div>
+                  <div class="msg-text">Hey! Can I get the pricing plans for your creator roadmap and preset packs?</div>
+                  <div class="msg-time">02:14 PM</div>
+                </div>
               </div>
 
-              <div class="msg-bubble bot">
-                <span class="msg-tag">RenderReply Bot • Automated Trigger</span>
-                Hey Alex! Here are our membership options and subscription tiers:
-                https://renderreply.com/p/render6457
+              <!-- Message 2: Automated Bot DM with Card -->
+              <div class="rr-clean-msg bot">
+                <div class="rr-clean-bubble bot">
+                  <div class="msg-sender-line">
+                    <span class="bot-label">🤖 RenderReply Bot</span>
+                    <span class="flow-label">Reel Viral Funnel v2.4</span>
+                  </div>
+                  <div class="msg-text">Hey Alex! 👋 Here are our membership options, instant downloads, and 1-on-1 strategy sessions:</div>
+                  
+                  <!-- Rich Interactive Product Card inside DM -->
+                  <div class="rr-clean-product-card">
+                    <div class="dm-card-tag">OFFICIAL STORE</div>
+                    <div class="dm-card-title">Rudra Teja Creator Storefront</div>
+                    <div class="dm-card-sub">Instant PDF downloads, Instagram automation presets & private audit calls.</div>
+                    <a href="https://renderreply.com/store/rudrateja" target="_blank" rel="noopener" class="btn btn-sm btn-primary" style="margin-top: 8px; width: 100%;">
+                      View Pricing & Products ↗
+                    </a>
+                  </div>
+
+                  <div class="msg-time bot-time">02:14 PM • <span style="color: #38bdf8;">Delivered ✓✓</span></div>
+                </div>
               </div>
             </div>
 
-            <div class="chat-input-bar">
-              <input type="text" class="chat-text-field" id="chat-input-msg"
-                placeholder="Take over conversation & reply to @alex_creator...">
-              <button class="btn btn-primary btn-pill" id="btn-send-chat">Send DM</button>
+            <!-- Quick Action Preset Chips Bar -->
+            <div class="rr-clean-preset-bar">
+              <span class="preset-label">⚡ Quick Presets:</span>
+              <button type="button" class="clean-preset-chip" data-text="Hey Alex! Here is the direct link to our store pricing: https://renderreply.com/store/rudrateja">💰 Pricing Link</button>
+              <button type="button" class="clean-preset-chip" data-text="Would you like to book a private 1-on-1 strategy call? Select a slot: https://renderreply.com/store/rudrateja#call">📅 Book Call</button>
+              <button type="button" class="clean-preset-chip" data-text="Here is your free Java Roadmap PDF download: https://renderreply.com/store/rudrateja/downloads/java-roadmap.pdf">🎁 Free PDF</button>
+              <button type="button" class="clean-preset-chip" data-text="Can I help answer any specific questions about our automation presets?">💬 Follow-up</button>
+            </div>
+
+            <!-- Clean Composer -->
+            <div class="rr-clean-composer-box">
+              <div class="rr-composer-field-wrapper">
+                <textarea class="rr-clean-textarea" id="chat-input-msg" rows="2" placeholder="Reply to @alex_creator as Rudra Teja (pauses bot for 30m)..."></textarea>
+                <div class="rr-clean-composer-footer">
+                  <div style="display: flex; align-items: center; gap: 8px;">
+                    <span style="font-size: 11px; color: #94a3b8;">Press <strong>Enter ↵</strong> to send</span>
+                  </div>
+                  <button type="button" class="btn btn-primary btn-pill btn-sm" id="btn-send-chat" style="padding: 6px 16px;">
+                    Send DM
+                  </button>
+                </div>
+              </div>
             </div>
           </div>
+
         </div>
       </section>
 

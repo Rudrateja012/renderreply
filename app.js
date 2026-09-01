@@ -762,25 +762,474 @@ function initApp() {
     });
   });
 
-  // 9. LIVE INBOX DM INTERACTION
-  const chatInputMsg = document.getElementById('chat-input-msg');
-  const btnSendChat = document.getElementById('btn-send-chat');
-  const chatFeedBox = document.getElementById('chat-feed-box');
+  // 9. RENDERREPLY CLEAN LIVE DM INBOX ENGINE
+  const inboxThreadsData = {
+    alex: {
+      name: 'Alex Mercer',
+      handle: '@alex_creator',
+      avatar: 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=150&q=80',
+      followers: '48.2K Followers',
+      source: 'Reel Comment: "PRICING"',
+      status: 'attention',
+      botActive: true,
+      triggerTitle: 'Triggered by Reel: "Build a 7-Figure IG Automation Engine" (Keyword: "PRICING")',
+      messages: [
+        { type: 'divider', text: 'TODAY, OCT 24' },
+        { type: 'user', text: 'Hey! Can I get the pricing plans for your creator roadmap and preset packs?', time: '02:14 PM', context: 'Commented "PRICING" on Reel #894' },
+        { type: 'bot', text: 'Hey Alex! 👋 Here are our membership options, instant downloads, and 1-on-1 strategy sessions:', time: '02:14 PM', flow: 'Reel Viral Funnel v2.4', hasCard: true }
+      ]
+    },
+    sarah: {
+      name: 'Sarah Miller',
+      handle: '@sarah_m',
+      avatar: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=150&q=80',
+      followers: '120K Followers',
+      source: 'Story Mention: "FREE_CHECKLIST"',
+      status: 'bot',
+      botActive: true,
+      triggerTitle: 'Triggered by Story Mention: "@rudrateja tag on story"',
+      messages: [
+        { type: 'divider', text: 'TODAY, OCT 24' },
+        { type: 'user', text: 'Loved your latest story breakdown! Can you send me the free creator checklist you mentioned?', time: '01:10 PM', context: 'Mentioned you in Story' },
+        { type: 'bot', text: 'Hey Sarah! 🌟 Thank you so much for the story tag! Here is your exclusive 2026 Instagram Growth Checklist PDF: https://renderreply.com/store/rudrateja/downloads/checklist.pdf', time: '01:10 PM', flow: 'Story Mention Auto-Thank You v1.8', hasCard: false }
+      ]
+    },
+    dev: {
+      name: 'John Doe',
+      handle: '@dev_johndoe',
+      avatar: 'https://images.unsplash.com/photo-1570295999919-56ceb5ecca61?auto=format&fit=crop&w=150&q=80',
+      followers: '15.4K Followers',
+      source: 'DM Keyword: "JAVA"',
+      status: 'bot',
+      botActive: true,
+      triggerTitle: 'Triggered by DM Keyword: "JAVA"',
+      messages: [
+        { type: 'divider', text: 'TODAY, OCT 24' },
+        { type: 'user', text: 'JAVA', time: '11:20 AM', context: 'Sent DM keyword "JAVA"' },
+        { type: 'bot', text: 'Hey John! 🚀 Here is the instant access link to the Java Full Stack Roadmap 2026 PDF: https://renderreply.com/store/rudrateja/downloads/java-roadmap.pdf Happy coding!', time: '11:20 AM', flow: 'Full Stack Roadmap Auto-DM', hasCard: false }
+      ]
+    },
+    priya: {
+      name: 'Priya S.',
+      handle: '@priya_designs',
+      avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=150&q=80',
+      followers: '89K Followers',
+      source: 'Custom Inquiry: Agency License',
+      status: 'attention',
+      botActive: false,
+      triggerTitle: 'Custom Inquiry: Agency Multi-Account License (Bot Paused)',
+      messages: [
+        { type: 'divider', text: 'TODAY, OCT 24' },
+        { type: 'user', text: 'Hi Rudra! Can we customize the RenderReply templates for multiple client agencies? Do you have an agency tier?', time: '09:45 AM', context: 'Custom DM Inquiry' }
+      ]
+    },
+    vikram: {
+      name: 'Vikram P.',
+      handle: '@vikram_tech',
+      avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=150&q=80',
+      followers: '210K Followers',
+      source: 'Preset Bundle: Downloaded',
+      status: 'resolved',
+      botActive: true,
+      triggerTitle: 'Triggered by Reel: "Instagram Automation Presets 2026" (Keyword: "PRESET")',
+      messages: [
+        { type: 'divider', text: 'YESTERDAY, OCT 23' },
+        { type: 'user', text: 'PRESET', time: '04:15 PM', context: 'Commented "PRESET" on Reel #890' },
+        { type: 'bot', text: 'Hey Vikram! 🎁 Here is your free Instagram Automation Preset Bundle: https://renderreply.com/store/rudrateja/downloads/presets.zip', time: '04:15 PM', flow: 'Preset Distribution Flow', hasCard: false },
+        { type: 'user', text: 'Thank you so much Rudra! Downloaded presets successfully. They work amazingly well!', time: '04:30 PM', context: 'Direct DM' },
+        { type: 'human', text: 'Awesome Vikram! Let me know if you need any tweaks for your specific reels setup. Cheers! 🚀', time: '04:35 PM' }
+      ]
+    }
+  };
 
-  if (btnSendChat && chatInputMsg) {
-    btnSendChat.addEventListener('click', () => {
-      const text = chatInputMsg.value.trim();
-      if (text && chatFeedBox) {
-        const newMsg = document.createElement('div');
-        newMsg.className = 'msg-bubble bot';
-        newMsg.innerHTML = `<span class="msg-tag">Rudra Teja (Human Agent)</span>${text}`;
-        chatFeedBox.appendChild(newMsg);
-        chatInputMsg.value = '';
-        chatFeedBox.scrollTop = chatFeedBox.scrollHeight;
-        showToast('DM message sent to @alex_creator');
+  let activeThreadId = 'alex';
+
+  function renderThreadChatFeed(threadId) {
+    const thread = inboxThreadsData[threadId];
+    if (!thread) return;
+
+    const chatFeed = document.getElementById('chat-feed-box');
+    if (!chatFeed) return;
+
+    let html = '';
+    thread.messages.forEach(msg => {
+      if (msg.type === 'divider') {
+        html += `<div class="rr-clean-divider"><span>${msg.text}</span></div>`;
+      } else if (msg.type === 'user') {
+        html += `
+          <div class="rr-clean-msg user">
+            <img src="${thread.avatar}" alt="${thread.name}" class="rr-clean-msg-avatar">
+            <div class="rr-clean-bubble user">
+              ${msg.context ? `<div class="msg-origin-tag">${msg.context}</div>` : ''}
+              <div class="msg-text">${msg.text}</div>
+              <div class="msg-time">${msg.time}</div>
+            </div>
+          </div>
+        `;
+      } else if (msg.type === 'bot') {
+        html += `
+          <div class="rr-clean-msg bot">
+            <div class="rr-clean-bubble bot">
+              <div class="msg-sender-line">
+                <span class="bot-label">🤖 RenderReply Bot</span>
+                <span class="flow-label">${msg.flow || 'Automation Flow'}</span>
+              </div>
+              <div class="msg-text">${msg.text}</div>
+              ${msg.hasCard ? `
+                <div class="rr-clean-product-card">
+                  <div class="dm-card-tag">OFFICIAL STORE</div>
+                  <div class="dm-card-title">Rudra Teja Creator Storefront</div>
+                  <div class="dm-card-sub">Instant PDF downloads, Instagram automation presets & private audit calls.</div>
+                  <a href="https://renderreply.com/store/rudrateja" target="_blank" rel="noopener" class="btn btn-sm btn-primary" style="margin-top: 8px; width: 100%;">
+                    View Pricing & Products ↗
+                  </a>
+                </div>
+              ` : ''}
+              <div class="msg-time bot-time">${msg.time} • <span style="color: #38bdf8;">Delivered ✓✓</span></div>
+            </div>
+          </div>
+        `;
+      } else if (msg.type === 'human') {
+        html += `
+          <div class="rr-clean-msg human">
+            <div class="rr-clean-bubble human">
+              <div class="msg-sender-line">
+                <span class="human-label">👤 Rudra Teja (Human Agent)</span>
+                <span class="flow-label" style="background: rgba(255,255,255,0.15); color: #ffffff;">Direct Reply</span>
+              </div>
+              <div class="msg-text">${msg.text}</div>
+              <div class="msg-time" style="color: rgba(255,255,255,0.7);">${msg.time} • Delivered ✓✓</div>
+            </div>
+          </div>
+        `;
+      }
+    });
+
+    if (!thread.botActive) {
+      html += `
+        <div class="rr-clean-system-notice">
+          <span>⏸️ Bot paused for this conversation to allow direct human agent reply</span>
+        </div>
+      `;
+    }
+
+    chatFeed.innerHTML = html;
+    chatFeed.scrollTop = chatFeed.scrollHeight;
+  }
+
+  function updateInboxFolderCounts() {
+    let allCount = 0;
+    let attentionCount = 0;
+    let botCount = 0;
+    let resolvedCount = 0;
+
+    Object.values(inboxThreadsData).forEach(t => {
+      allCount++;
+      if (t.status === 'attention') attentionCount++;
+      else if (t.status === 'bot') botCount++;
+      else if (t.status === 'resolved') resolvedCount++;
+    });
+
+    const countAllEl = document.getElementById('count-all');
+    const countAttEl = document.getElementById('count-attention');
+    const countBotEl = document.getElementById('count-bot');
+    const countResEl = document.getElementById('count-resolved');
+    const iqOpenLeads = document.getElementById('iq-open-leads');
+    const iqActiveBots = document.getElementById('iq-active-bots');
+
+    if (countAllEl) countAllEl.textContent = allCount;
+    if (countAttEl) countAttEl.textContent = attentionCount;
+    if (countBotEl) countBotEl.textContent = botCount;
+    if (countResEl) countResEl.textContent = resolvedCount;
+    if (iqOpenLeads) iqOpenLeads.textContent = attentionCount;
+    if (iqActiveBots) iqActiveBots.textContent = botCount;
+  }
+
+  function applyActiveFolderFilter() {
+    const activeTab = document.querySelector('.rr-folder-tab.active');
+    const filter = activeTab ? activeTab.getAttribute('data-filter') : 'all';
+
+    document.querySelectorAll('.rr-clean-thread-item').forEach(item => {
+      const itemStatus = item.getAttribute('data-status');
+      if (filter === 'all') {
+        item.style.display = 'flex';
+      } else if (filter === 'attention' && itemStatus === 'attention') {
+        item.style.display = 'flex';
+      } else if (filter === 'bot' && itemStatus === 'bot') {
+        item.style.display = 'flex';
+      } else if (filter === 'resolved' && itemStatus === 'resolved') {
+        item.style.display = 'flex';
+      } else {
+        item.style.display = 'none';
       }
     });
   }
+
+  function selectInboxThread(threadId) {
+    const thread = inboxThreadsData[threadId];
+    if (!thread) return;
+
+    activeThreadId = threadId;
+
+    // Update active class in thread list
+    document.querySelectorAll('.rr-clean-thread-item').forEach(item => {
+      item.classList.toggle('active', item.getAttribute('data-thread-id') === threadId);
+    });
+
+    // Update Chat Header
+    const currentAvatar = document.getElementById('rr-current-avatar');
+    const currentName = document.getElementById('rr-current-name');
+    const currentHandle = document.getElementById('rr-current-handle');
+    const currentFollowers = document.getElementById('rr-current-followers');
+    const currentSource = document.getElementById('rr-current-source');
+    const btnToggleBot = document.getElementById('btn-toggle-bot');
+    const botToggleDot = document.getElementById('bot-toggle-dot');
+    const botToggleText = document.getElementById('bot-toggle-text');
+    const btnResolveChat = document.getElementById('btn-resolve-chat');
+
+    if (currentAvatar) currentAvatar.src = thread.avatar;
+    if (currentName) currentName.textContent = thread.name;
+    if (currentHandle) currentHandle.textContent = thread.handle;
+    if (currentFollowers) currentFollowers.textContent = thread.followers;
+    if (currentSource) currentSource.textContent = thread.source;
+
+    if (btnToggleBot && botToggleDot && botToggleText) {
+      if (thread.botActive) {
+        btnToggleBot.className = 'btn-clean-bot-toggle';
+        botToggleDot.className = 'dot-status green';
+        botToggleText.textContent = 'Bot Engaged';
+      } else {
+        btnToggleBot.className = 'btn-clean-bot-toggle paused';
+        botToggleDot.className = 'dot-status amber';
+        botToggleText.textContent = 'Bot Paused';
+      }
+    }
+
+    if (btnResolveChat) {
+      if (thread.status === 'resolved') {
+        btnResolveChat.className = 'btn-clean-resolve resolved';
+        btnResolveChat.innerHTML = `
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+            <polyline points="20 6 9 17 4 12"/>
+          </svg>
+          <span>✓ Resolved (Reopen)</span>
+        `;
+      } else {
+        btnResolveChat.className = 'btn-clean-resolve';
+        btnResolveChat.innerHTML = `
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+            <polyline points="20 6 9 17 4 12"/>
+          </svg>
+          <span>Resolve</span>
+        `;
+      }
+    }
+
+    // Update Trigger Context Banner
+    const tcbTitle = document.getElementById('rr-tcb-title');
+    if (tcbTitle) tcbTitle.textContent = thread.triggerTitle;
+
+    // Update Composer Placeholder
+    const composerInput = document.getElementById('chat-input-msg');
+    if (composerInput) {
+      composerInput.placeholder = `Reply to ${thread.handle} as Rudra Teja (pauses bot for 30m)...`;
+    }
+
+    // Render Feed
+    renderThreadChatFeed(threadId);
+    updateInboxFolderCounts();
+  }
+
+  // Setup Thread Click Handlers
+  document.querySelectorAll('.rr-clean-thread-item').forEach(item => {
+    item.addEventListener('click', () => {
+      const threadId = item.getAttribute('data-thread-id');
+      if (threadId) selectInboxThread(threadId);
+    });
+  });
+
+  // Folder Tabs Filtering (All, Needs Action, Bot Active, Resolved)
+  document.querySelectorAll('.rr-folder-tab').forEach(tab => {
+    tab.addEventListener('click', () => {
+      document.querySelectorAll('.rr-folder-tab').forEach(t => t.classList.remove('active'));
+      tab.classList.add('active');
+      applyActiveFolderFilter();
+    });
+  });
+
+  // Thread Search Filter
+  const threadSearchInput = document.getElementById('rr-inbox-search');
+  if (threadSearchInput) {
+    threadSearchInput.addEventListener('input', () => {
+      const query = threadSearchInput.value.toLowerCase().trim();
+      document.querySelectorAll('.rr-clean-thread-item').forEach(item => {
+        const text = item.textContent.toLowerCase();
+        item.style.display = text.includes(query) ? 'flex' : 'none';
+      });
+    });
+  }
+
+  // Bot Pause / Resume Toggle Button
+  const btnToggleBot = document.getElementById('btn-toggle-bot');
+  if (btnToggleBot) {
+    btnToggleBot.addEventListener('click', () => {
+      const thread = inboxThreadsData[activeThreadId];
+      if (!thread) return;
+
+      thread.botActive = !thread.botActive;
+      selectInboxThread(activeThreadId);
+
+      if (thread.botActive) {
+        showToast(`Bot automation resumed for ${thread.handle}.`);
+      } else {
+        showToast(`Bot paused for 30m. You are now chatting directly with ${thread.handle}.`);
+      }
+    });
+  }
+
+  // Resolve / Reopen Chat Button
+  const btnResolveChat = document.getElementById('btn-resolve-chat');
+  if (btnResolveChat) {
+    btnResolveChat.addEventListener('click', () => {
+      const thread = inboxThreadsData[activeThreadId];
+      if (!thread) return;
+
+      const activeThreadEl = document.querySelector(`.rr-clean-thread-item[data-thread-id="${activeThreadId}"]`);
+
+      if (thread.status !== 'resolved') {
+        // Mark as resolved
+        thread.status = 'resolved';
+        if (activeThreadEl) {
+          activeThreadEl.setAttribute('data-status', 'resolved');
+          const statusPill = activeThreadEl.querySelector('.rr-pill-badge');
+          if (statusPill) {
+            statusPill.className = 'rr-pill-badge resolved';
+            statusPill.textContent = '✓ Resolved';
+          }
+        }
+        thread.messages.push({
+          type: 'divider',
+          text: '✓ Conversation marked as resolved'
+        });
+        showToast(`Conversation with ${thread.handle} moved to Resolved!`);
+      } else {
+        // Reopen conversation
+        thread.status = 'attention';
+        if (activeThreadEl) {
+          activeThreadEl.setAttribute('data-status', 'attention');
+          const statusPill = activeThreadEl.querySelector('.rr-pill-badge');
+          if (statusPill) {
+            statusPill.className = 'rr-pill-badge action';
+            statusPill.textContent = 'Needs Action';
+          }
+        }
+        thread.messages.push({
+          type: 'divider',
+          text: '🔄 Conversation reopened'
+        });
+        showToast(`Conversation with ${thread.handle} reopened!`);
+      }
+
+      selectInboxThread(activeThreadId);
+      applyActiveFolderFilter();
+    });
+  }
+
+  // Quick Preset Chips Click
+  document.querySelectorAll('.clean-preset-chip').forEach(chip => {
+    chip.addEventListener('click', () => {
+      const text = chip.getAttribute('data-text');
+      const composer = document.getElementById('chat-input-msg');
+      if (composer && text) {
+        composer.value = text;
+        composer.focus();
+      }
+    });
+  });
+
+  // Send Message Action Handler
+  const chatInputMsg = document.getElementById('chat-input-msg');
+  const btnSendChat = document.getElementById('btn-send-chat');
+
+  function handleSendInboxMessage() {
+    if (!chatInputMsg) return;
+    const text = chatInputMsg.value.trim();
+    if (!text) return;
+
+    const thread = inboxThreadsData[activeThreadId];
+    if (!thread) return;
+
+    const now = new Date();
+    const timeStr = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+
+    // Direct DM send
+    thread.messages.push({
+      type: 'human',
+      text: text,
+      time: timeStr
+    });
+
+    // Auto-pause bot if active
+    if (thread.botActive) {
+      thread.botActive = false;
+      const btnToggle = document.getElementById('btn-toggle-bot');
+      const botDot = document.getElementById('bot-toggle-dot');
+      const botTxt = document.getElementById('bot-toggle-text');
+      if (btnToggle && botDot && botTxt) {
+        btnToggle.className = 'btn-clean-bot-toggle paused';
+        botDot.className = 'dot-status amber';
+        botTxt.textContent = 'Bot Paused';
+      }
+    }
+
+    // Re-render feed
+    renderThreadChatFeed(activeThreadId);
+    chatInputMsg.value = '';
+
+    // Update thread preview
+    const activeThreadEl = document.querySelector(`.rr-clean-thread-item[data-thread-id="${activeThreadId}"]`);
+    if (activeThreadEl) {
+      const prev = activeThreadEl.querySelector('.rr-t-snippet');
+      if (prev) prev.textContent = `You: ${text}`;
+    }
+
+    showToast(`DM message sent to ${thread.handle}`);
+  }
+
+  if (btnSendChat) {
+    btnSendChat.addEventListener('click', handleSendInboxMessage);
+  }
+
+  if (chatInputMsg) {
+    chatInputMsg.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' && !e.shiftKey) {
+        e.preventDefault();
+        handleSendInboxMessage();
+      }
+    });
+  }
+
+  // View Rule Button Handler
+  const btnViewRule = document.getElementById('rr-tcb-view-rule');
+  if (btnViewRule) {
+    btnViewRule.addEventListener('click', () => {
+      const autoTab = document.querySelector('.nav-item[data-tab="automation-rules"]');
+      if (autoTab) autoTab.click();
+      showToast('Viewing active Instagram automation rule in studio.');
+    });
+  }
+
+  // Refresh Inbox Button
+  const btnInboxRefresh = document.getElementById('btn-inbox-refresh');
+  if (btnInboxRefresh) {
+    btnInboxRefresh.addEventListener('click', () => {
+      showToast('Syncing real-time Instagram DMs & comments...');
+      selectInboxThread(activeThreadId);
+    });
+  }
+
+  // Initialize initial thread view on startup
+  selectInboxThread('alex');
 
   // BROWSER TAB STOREFRONT OVERLAY HANDLERS
   if (btnOpenBrowserOverlay && browserOverlay) {
