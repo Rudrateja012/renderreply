@@ -1844,9 +1844,11 @@ function initApp() {
     const openStoreBtn = e.target.closest('#btn-open-store-external, .btn-open-store');
     if (openStoreBtn) {
       e.preventDefault();
-      const storeUrl = 'https://renderreply.com/store/rajeev';
+      e.stopPropagation();
+      const rawUrl = document.getElementById('store-official-link-pill')?.textContent.trim() || 'renderreply.com/store/rajeev';
+      const storeUrl = rawUrl.startsWith('http') ? rawUrl : `https://${rawUrl}`;
       window.open(storeUrl, '_blank');
-      if (typeof showToast === 'function') showToast('Opening live public storefront in a new tab: ' + storeUrl);
+      if (typeof showToast === 'function') showToast(`Opening live public storefront in a new tab: ${storeUrl}`);
       return;
     }
 
@@ -3245,14 +3247,16 @@ function initCreatorStoreSettings() {
     });
   }
 
-  // Also hook external store open button
+  // Also hook external store open button to open store in new tab (not modal)
   const btnOpenExternal = document.getElementById('btn-open-store-external');
-  if (btnOpenExternal && spmModal) {
+  if (btnOpenExternal) {
     btnOpenExternal.addEventListener('click', (e) => {
       e.preventDefault();
-      syncAllStorePreviewFields();
-      spmModal.classList.add('active');
-      showToast('Opening Live Storefront...');
+      e.stopPropagation();
+      const rawUrl = document.getElementById('store-official-link-pill')?.textContent.trim() || 'renderreply.com/store/rajeev';
+      const storeUrl = rawUrl.startsWith('http') ? rawUrl : `https://${rawUrl}`;
+      window.open(storeUrl, '_blank');
+      showToast(`Opening live storefront in a new tab: ${storeUrl}`);
     });
   }
 
