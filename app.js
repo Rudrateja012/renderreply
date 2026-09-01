@@ -2,12 +2,12 @@
    STORE PROFILE & OVERVIEW CENTRALIZED SYNCHRONIZATION ENGINE
    ========================================================================== */
 window.storeProfileState = {
-  name: 'RudRa RR',
+  name: 'Rudra Teja',
   avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=250&q=80',
   bio: 'Welcome to my SuperProfile & RenderReply Store!',
-  insta: '@rudra_rr',
-  yt: 'youtube.com/@rudra_rr',
-  tw: '@rudra_rr'
+  insta: '@rudrateja',
+  yt: 'youtube.com/@rudrateja',
+  tw: '@rudrateja'
 };
 
 window.storeProfileDraft = null;
@@ -76,7 +76,7 @@ window.syncStoreProfileToUI = function(data) {
   const bioTxt = document.getElementById('store-bio-text-txt');
   const avatarImg = document.getElementById('store-avatar-img');
   
-  if (nameTxt) nameTxt.textContent = profile.name || 'RudRa RR';
+  if (nameTxt) nameTxt.textContent = profile.name || 'Rudra Teja';
   if (bioTxt) bioTxt.textContent = profile.bio || '';
   if (avatarImg && profile.avatar) avatarImg.src = profile.avatar;
 
@@ -113,7 +113,7 @@ window.syncStoreProfileToUI = function(data) {
   if (csInsta && document.activeElement !== csInsta) csInsta.value = profile.insta?.replace(/^@/, '') || '';
   if (csYt && document.activeElement !== csYt) csYt.value = profile.yt || '';
   if (csTw && document.activeElement !== csTw) csTw.value = profile.tw?.replace(/^@/, '') || '';
-  if (csPrevName) csPrevName.textContent = profile.name || 'RudRa RR';
+  if (csPrevName) csPrevName.textContent = profile.name || 'Rudra Teja';
   if (csPrevAvatar && profile.avatar) csPrevAvatar.src = profile.avatar;
 
   // 4. Mobile / Phone Previews
@@ -121,7 +121,7 @@ window.syncStoreProfileToUI = function(data) {
   const dspBio = document.getElementById('dsp-bio-el');
   const dspAvatar = document.getElementById('dsp-avatar-el');
 
-  if (dspName) dspName.textContent = profile.name || 'RudRa RR';
+  if (dspName) dspName.textContent = profile.name || 'Rudra Teja';
   if (dspBio) dspBio.textContent = profile.bio || '';
   if (dspAvatar && profile.avatar) dspAvatar.src = profile.avatar;
 
@@ -130,14 +130,14 @@ window.syncStoreProfileToUI = function(data) {
   const spmBio = document.getElementById('spm-creator-bio');
   const spmAvatar = document.getElementById('spm-avatar-img');
 
-  if (spmName) spmName.textContent = profile.name || 'RudRa RR';
+  if (spmName) spmName.textContent = profile.name || 'Rudra Teja';
   if (spmBio) spmBio.textContent = profile.bio || '';
   if (spmAvatar && profile.avatar) spmAvatar.src = profile.avatar;
 
   // 6. Top Navbar / User Profile Header
   const userNameEl = document.querySelector('.user-name');
   const unifiedAvatar = document.getElementById('unified-avatar-el');
-  if (userNameEl) userNameEl.textContent = profile.name || 'RudRa RR';
+  if (userNameEl) userNameEl.textContent = profile.name || 'Rudra Teja';
   if (unifiedAvatar && profile.avatar) unifiedAvatar.src = profile.avatar;
 };
 
@@ -773,7 +773,7 @@ function initApp() {
       if (text && chatFeedBox) {
         const newMsg = document.createElement('div');
         newMsg.className = 'msg-bubble bot';
-        newMsg.innerHTML = `<span class="msg-tag">RudRa (Human Agent)</span>${text}`;
+        newMsg.innerHTML = `<span class="msg-tag">Rudra Teja (Human Agent)</span>${text}`;
         chatFeedBox.appendChild(newMsg);
         chatInputMsg.value = '';
         chatFeedBox.scrollTop = chatFeedBox.scrollHeight;
@@ -1735,7 +1735,7 @@ function initApp() {
       try {
         const inputUpi = document.getElementById('input-payout-upi');
         const inputHolder = document.getElementById('input-upi-holder-name');
-        if (inputUpi && window.paymentState?.payout) inputUpi.value = window.paymentState.payout.upiId || 'rudra@okaxis';
+        if (inputUpi && window.paymentState?.payout) inputUpi.value = window.paymentState.payout.upiId || 'rudrateja@okaxis';
         if (inputHolder && window.paymentState?.payout) inputHolder.value = window.paymentState.payout.holderName || 'Rudra Teja';
         const m = document.getElementById('modal-edit-upi');
         if (m) m.classList.add('active');
@@ -1920,7 +1920,7 @@ function initApp() {
       const setupTw = document.getElementById('setup-input-tw');
 
       window.storeProfileState = {
-        name: setupName?.value.trim() || 'RudRa RR',
+        name: setupName?.value.trim() || 'Rudra Teja',
         avatar: setupAvatar?.value.trim() || window.storeProfileState.avatar,
         bio: setupBio?.value.trim() || '',
         insta: setupInsta?.value.trim() || '',
@@ -2239,7 +2239,7 @@ function initPaymentOptionsSuite() {
       availableBalance: 98050,
       pendingBalance: 26530,
       payout: {
-        upiId: 'rudra@okaxis',
+        upiId: 'rudrateja@okaxis',
         holderName: 'Rudra Teja',
         bankName: 'HDFC Bank',
         accountNumber: '50100293844892',
@@ -2247,13 +2247,13 @@ function initPaymentOptionsSuite() {
         primaryChannel: 'UPI'
       },
       transactions: [
-        { id: '67300007547192', date: 'Oct 24, 2026 02:15 PM', type: 'Order Sale', amount: 98050, status: 'Cleared', customer: 'ashok.k@gmail.com', channel: 'Direct UPI', fee: 2941, gst: 529, net: 94580 },
-        { id: '67300007547191', date: 'Oct 22, 2026 11:30 AM', type: 'Order Sale', amount: 49900, status: 'Cleared', customer: 'priya.s@yahoo.com', channel: 'Direct UPI', fee: 1497, gst: 269, net: 48134 },
+        { id: '67300007547192', date: 'Oct 24, 2026 02:15 PM', type: 'Order Sale', amount: 98050, status: 'Cleared', customer: 'rudrateja.order@gmail.com', channel: 'Direct UPI', fee: 2941, gst: 529, net: 94580 },
+        { id: '67300007547191', date: 'Oct 22, 2026 11:30 AM', type: 'Order Sale', amount: 49900, status: 'Cleared', customer: 'rudrateja.store@gmail.com', channel: 'Direct UPI', fee: 1497, gst: 269, net: 48134 },
         { id: '60380007982004', date: 'Oct 23, 2026 06:45 PM', type: 'Creator Fund', amount: 26530, status: 'Pending', customer: 'RenderReply Partner Fund', channel: 'System Credit', fee: 0, gst: 0, net: 26530 },
-        { id: '89102471029471', date: 'Oct 20, 2026 04:10 PM', type: 'Withdrawal', amount: -50000, status: 'Cleared', customer: 'Payout to rudra@okaxis', channel: 'Direct UPI', fee: 0, gst: 0, net: -50000 },
-        { id: '67300007547188', date: 'Oct 19, 2026 09:20 AM', type: 'Order Sale', amount: 14990, status: 'Cleared', customer: 'rahul.m@gmail.com', channel: 'Bank IMPS', fee: 449, gst: 80, net: 14461 },
+        { id: '89102471029471', date: 'Oct 20, 2026 04:10 PM', type: 'Withdrawal', amount: -50000, status: 'Cleared', customer: 'Payout to rudrateja@okaxis', channel: 'Direct UPI', fee: 0, gst: 0, net: -50000 },
+        { id: '67300007547188', date: 'Oct 19, 2026 09:20 AM', type: 'Order Sale', amount: 14990, status: 'Cleared', customer: 'rudrateja.client@gmail.com', channel: 'Bank IMPS', fee: 449, gst: 80, net: 14461 },
         { id: 'OFFLINE-892401', date: 'Oct 18, 2026 05:00 PM', type: 'Manual Credit', amount: 5000, status: 'Cleared', customer: 'Offline Direct Client', channel: 'Manual Adjustment', fee: 0, gst: 0, net: 5000 },
-        { id: '67300007547180', date: 'Oct 15, 2026 01:10 PM', type: 'Order Sale', amount: 24990, status: 'Cleared', customer: 'vikram.p@gmail.com', channel: 'Bank NEFT', fee: 749, gst: 134, net: 24107 }
+        { id: '67300007547180', date: 'Oct 15, 2026 01:10 PM', type: 'Order Sale', amount: 24990, status: 'Cleared', customer: 'rudrateja.buyer@gmail.com', channel: 'Bank NEFT', fee: 749, gst: 134, net: 24107 }
       ]
     };
   }
@@ -2286,7 +2286,7 @@ function initPaymentOptionsSuite() {
       const bankSub = document.getElementById('bank-acc-subtext');
 
       if (upiSub) {
-        const upi = state.payout.upiId || 'rudra@okaxis';
+        const upi = state.payout.upiId || 'rudrateja@okaxis';
         upiSub.textContent = `${upi} • Primary Channel`;
       }
       if (bankSub) {
@@ -2674,7 +2674,7 @@ function initCreatorStoreSettings() {
   const nameCount = document.getElementById('cs-name-count');
   if (nameInput) {
     nameInput.addEventListener('input', () => {
-      const val = nameInput.value || 'RudRa RR';
+      const val = nameInput.value || 'Rudra Teja';
       if (namePrev) namePrev.textContent = val;
       if (nameCount) nameCount.textContent = `${nameInput.value.length}/50`;
       if (!window.storeProfileState) window.storeProfileState = {};
@@ -2694,7 +2694,7 @@ function initCreatorStoreSettings() {
 
   if (handleInput) {
     handleInput.addEventListener('input', () => {
-      const val = handleInput.value.trim() || 'rudra_rr';
+      const val = handleInput.value.trim() || 'rudrateja';
       if (handleSubtext) handleSubtext.textContent = `renderreply.com/store/${val}`;
       if (seoUrlTxt) seoUrlTxt.textContent = `https://renderreply.com/store/${val}`;
       if (topLinkPill) topLinkPill.textContent = `renderreply.com/store/${val}`;
@@ -2706,7 +2706,7 @@ function initCreatorStoreSettings() {
   }
 
   function copyCurrentStoreLink() {
-    const handle = handleInput ? handleInput.value.trim() : 'rudra_rr';
+    const handle = handleInput ? handleInput.value.trim() : 'rudrateja';
     const url = `https://renderreply.com/store/${handle}`;
     if (navigator.clipboard) {
       navigator.clipboard.writeText(url);
@@ -2742,7 +2742,7 @@ function initCreatorStoreSettings() {
 
   if (downloadQrBtn) {
     downloadQrBtn.addEventListener('click', () => {
-      const handle = handleInput ? handleInput.value.trim() : 'rudra_rr';
+      const handle = handleInput ? handleInput.value.trim() : 'rudrateja';
       const a = document.createElement('a');
       a.href = `https://api.qrserver.com/v1/create-qr-code/?size=400x400&data=https://renderreply.com/store/${handle}`;
       a.download = `storefront-qr-${handle}.png`;
@@ -2844,15 +2844,15 @@ function initCreatorStoreSettings() {
   if (resetBrandBtn) {
     resetBrandBtn.addEventListener('click', () => {
       window.storeProfileState = {
-        name: 'RudRa RR',
+        name: 'Rudra Teja',
         avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=250&q=80',
         bio: 'Welcome to my SuperProfile & RenderReply Store!',
-        insta: '@rudra_rr',
-        yt: 'youtube.com/@rudra_rr',
-        tw: '@rudra_rr'
+        insta: '@rudrateja',
+        yt: 'youtube.com/@rudrateja',
+        tw: '@rudrateja'
       };
       if (handleInput) {
-        handleInput.value = 'rudra_rr';
+        handleInput.value = 'rudrateja';
         handleInput.dispatchEvent(new Event('input'));
       }
       if (window.syncStoreProfileToUI) {
@@ -2874,7 +2874,7 @@ function initCreatorStoreSettings() {
 
   if (heroTitleInput && namePrev) {
     heroTitleInput.addEventListener('input', () => {
-      namePrev.textContent = heroTitleInput.value || 'Rajeev Sharma';
+      namePrev.textContent = heroTitleInput.value || 'Rudra Teja';
     });
   }
 
@@ -3122,7 +3122,7 @@ function initCreatorStoreSettings() {
 
   if (seoTitleInput && seoTitleTxt) {
     seoTitleInput.addEventListener('input', () => {
-      seoTitleTxt.textContent = seoTitleInput.value || 'Rajeev Sharma | Official Storefront';
+      seoTitleTxt.textContent = seoTitleInput.value || 'Rudra Teja | Official Storefront';
     });
   }
 
@@ -3165,9 +3165,9 @@ function initCreatorStoreSettings() {
   const spmDotClose = document.getElementById('spm-dot-close');
 
   function syncAllStorePreviewFields() {
-    const nameVal = document.getElementById('cs-input-store-name')?.value || 'Rajeev Sharma';
+    const nameVal = document.getElementById('cs-input-store-name')?.value || 'Rudra Teja';
     const bioVal = document.getElementById('cs-input-store-bio')?.value || 'Building premium Instagram businesses and automation systems.';
-    const handleVal = document.getElementById('cs-input-store-handle')?.value?.trim() || 'rajeev';
+    const handleVal = document.getElementById('cs-input-store-handle')?.value?.trim() || 'rudrateja';
     
     // Name & Bio
     const spmName = document.getElementById('spm-creator-name');
@@ -3402,7 +3402,7 @@ function initCreatorStoreSettings() {
   }
 
   function handleSuccessfulLogin(email) {
-    loggedInCustomerEmail = email || 'rajeev@gmail.com';
+    loggedInCustomerEmail = email || 'rudrateja@gmail.com';
     if (userEmailTxt) userEmailTxt.textContent = loggedInCustomerEmail;
     if (ecomUserEmailTxt) ecomUserEmailTxt.textContent = loggedInCustomerEmail;
     if (ordersUserEmailDisp) ordersUserEmailDisp.textContent = loggedInCustomerEmail;
@@ -3419,14 +3419,14 @@ function initCreatorStoreSettings() {
   if (formCustomerLogin) {
     formCustomerLogin.addEventListener('submit', (e) => {
       e.preventDefault();
-      const email = document.getElementById('auth-input-email')?.value || 'rajeev@gmail.com';
+      const email = document.getElementById('auth-input-email')?.value || 'rudrateja@gmail.com';
       handleSuccessfulLogin(email);
     });
   }
 
   if (btnGoogleLogin) {
     btnGoogleLogin.addEventListener('click', () => {
-      handleSuccessfulLogin('rajeev.sharma@gmail.com');
+      handleSuccessfulLogin('rudrateja@gmail.com');
     });
   }
 
