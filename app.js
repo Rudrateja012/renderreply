@@ -594,6 +594,48 @@ function initApp() {
     }, 100);
   }
 
+  // MOBILE NAVIGATION DRAWER & AUTO SCREEN ADJUSTMENT CONTROLS
+  const sidebar = document.getElementById('app-sidebar');
+  const sidebarBackdrop = document.getElementById('sidebar-backdrop');
+  const btnMobileToggle = document.getElementById('btn-mobile-menu-toggle');
+  const btnCloseSidebar = document.getElementById('btn-close-sidebar');
+
+  function openMobileSidebar() {
+    if (sidebar) sidebar.classList.add('mobile-open');
+    if (sidebarBackdrop) sidebarBackdrop.classList.add('active');
+  }
+
+  function closeMobileSidebar() {
+    if (sidebar) sidebar.classList.remove('mobile-open');
+    if (sidebarBackdrop) sidebarBackdrop.classList.remove('active');
+  }
+
+  if (btnMobileToggle) {
+    btnMobileToggle.addEventListener('click', (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      openMobileSidebar();
+    });
+  }
+
+  if (btnCloseSidebar) {
+    btnCloseSidebar.addEventListener('click', (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      closeMobileSidebar();
+    });
+  }
+
+  if (sidebarBackdrop) {
+    sidebarBackdrop.addEventListener('click', closeMobileSidebar);
+  }
+
+  window.addEventListener('resize', () => {
+    if (window.innerWidth > 1024) {
+      closeMobileSidebar();
+    }
+  });
+
   navItems.forEach(item => {
     item.addEventListener('click', (e) => {
       e.preventDefault();
@@ -610,6 +652,18 @@ function initApp() {
           view.classList.remove('active');
         }
       });
+
+      if (targetTab === 'creatorstore') {
+        setTimeout(() => {
+          if (typeof window.updateSubnavArrows === 'function') {
+            window.updateSubnavArrows();
+          }
+        }, 60);
+      }
+
+      if (window.innerWidth <= 1024) {
+        closeMobileSidebar();
+      }
     });
   });
 
@@ -1549,17 +1603,83 @@ function initApp() {
     }
   });
 
+  // SUBNAV INLINE ARROW BUTTONS LOGIC
+  function initSubnavArrowButtons() {
+    const strip = document.getElementById('store-subnav-strip');
+    const leftBtn = document.getElementById('btn-subnav-arrow-left');
+    const rightBtn = document.getElementById('btn-subnav-arrow-right');
+    if (!strip) return;
+
+    function updateArrows() {
+      if (!strip) return;
+      if (strip.clientWidth === 0) {
+        if (rightBtn) rightBtn.classList.remove('hidden');
+        if (leftBtn) leftBtn.classList.remove('visible');
+        return;
+      }
+      const maxScroll = strip.scrollWidth - strip.clientWidth;
+      if (leftBtn) {
+        if (strip.scrollLeft > 10) {
+          leftBtn.classList.add('visible');
+        } else {
+          leftBtn.classList.remove('visible');
+        }
+      }
+      if (rightBtn) {
+        if (maxScroll > 8 && strip.scrollLeft < maxScroll - 8) {
+          rightBtn.classList.remove('hidden');
+        } else {
+          rightBtn.classList.add('hidden');
+        }
+      }
+    }
+    window.updateSubnavArrows = updateArrows;
+
+    if (leftBtn) {
+      leftBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        strip.scrollBy({ left: -180, behavior: 'smooth' });
+        setTimeout(updateArrows, 300);
+      });
+    }
+
+    if (rightBtn) {
+      rightBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        strip.scrollBy({ left: 180, behavior: 'smooth' });
+        setTimeout(updateArrows, 300);
+      });
+    }
+
+    strip.addEventListener('scroll', updateArrows, { passive: true });
+    window.addEventListener('resize', updateArrows, { passive: true });
+    setTimeout(updateArrows, 150);
+  }
+
   // STORE SUB-NAV TAB SWITCHER FUNCTION
   window.switchStoreTab = function(tabName, clickedBtn) {
     const subnavBtns = document.querySelectorAll('.store-subnav-btn');
+    let activeBtnEl = null;
     subnavBtns.forEach(btn => {
       btn.classList.remove('active');
       if (clickedBtn) {
-        if (btn === clickedBtn) btn.classList.add('active');
+        if (btn === clickedBtn) {
+          btn.classList.add('active');
+          activeBtnEl = btn;
+        }
       } else {
-        if (btn.getAttribute('data-store-tab') === tabName) btn.classList.add('active');
+        if (btn.getAttribute('data-store-tab') === tabName) {
+          btn.classList.add('active');
+          activeBtnEl = btn;
+        }
       }
     });
+
+    if (activeBtnEl && typeof activeBtnEl.scrollIntoView === 'function') {
+      activeBtnEl.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
+    }
 
     const tabContents = document.querySelectorAll('.store-tab-content');
     tabContents.forEach(content => {
@@ -1573,6 +1693,8 @@ function initApp() {
       targetContent.style.display = 'block';
     }
   };
+
+  initSubnavArrowButtons();
 
   // GLOBAL EVENT DELEGATION FOR DEEP INTERACTIVE BUTTONS
   document.addEventListener('click', (e) => {
@@ -1696,7 +1818,7 @@ function initApp() {
       return;
     }
 
-    const closeBtn = e.target.closest('#btn-close-upi-modal, #btn-cancel-upi, #btn-close-bank-modal, #btn-cancel-bank, #btn-close-withdraw-modal, #btn-close-txn-all-modal, #btn-close-txn-detail-modal, #btn-close-receipt, #btn-close-spm-modal, #spm-dot-close');
+    const closeBtn = e.target.closest('#btn-close-upi-modal, #btn-cancel-upi, #btn-close-bank-modal, #btn-cancel-bank, #btn-close-withdraw-modal, #btn-cancel-withdraw, #btn-close-txn-all-modal, #btn-close-txn-detail-modal, #btn-close-receipt, #btn-close-spm-modal, #spm-dot-close, #btn-close-auth-modal, #btn-close-orders-modal');
     if (closeBtn) {
       e.preventDefault();
       e.stopPropagation();
@@ -2369,6 +2491,57 @@ function initPaymentOptionsSuite() {
     // CSV Export Buttons
     document.getElementById('btn-export-csv-main')?.addEventListener('click', exportCSV);
     document.getElementById('btn-export-csv-modal')?.addEventListener('click', exportCSV);
+
+    // Live calculation for withdrawal amount input
+    const inputWithdrawAmt = document.getElementById('input-withdraw-amount');
+    if (inputWithdrawAmt) {
+      inputWithdrawAmt.addEventListener('input', (e) => {
+        const val = parseFloat(e.target.value) || 0;
+        const reqEl = document.getElementById('w-req-amt');
+        const netEl = document.getElementById('w-net-amt');
+        if (reqEl) reqEl.textContent = `₹${val.toLocaleString('en-IN')}`;
+        if (netEl) netEl.textContent = `₹${val.toLocaleString('en-IN')}`;
+      });
+    }
+
+    // Withdraw Max button click
+    const btnWithdrawMax = document.getElementById('btn-withdraw-max');
+    if (btnWithdrawMax) {
+      btnWithdrawMax.addEventListener('click', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        const maxVal = window.paymentState?.availableBalance || 98050;
+        const inputAmt = document.getElementById('input-withdraw-amount');
+        const reqEl = document.getElementById('w-req-amt');
+        const netEl = document.getElementById('w-net-amt');
+        if (inputAmt) inputAmt.value = maxVal;
+        if (reqEl) reqEl.textContent = `₹${maxVal.toLocaleString('en-IN')}`;
+        if (netEl) netEl.textContent = `₹${maxVal.toLocaleString('en-IN')}`;
+      });
+    }
+
+    // Print Receipt button click
+    const btnPrintRec = document.getElementById('btn-print-receipt');
+    if (btnPrintRec) {
+      btnPrintRec.addEventListener('click', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        try {
+          window.print();
+        } catch (err) {
+          toast('Receipt print triggered.');
+        }
+      });
+    }
+
+    // Backdrop click-to-close handler for modals
+    document.querySelectorAll('.store-preview-modal-backdrop, .payment-modal-backdrop').forEach(backdrop => {
+      backdrop.addEventListener('click', (e) => {
+        if (e.target === backdrop) {
+          backdrop.classList.remove('active');
+        }
+      });
+    });
 
     // Form Submits with e.preventDefault() & e.stopPropagation()
     document.getElementById('form-edit-upi')?.addEventListener('submit', (e) => {
