@@ -249,231 +249,246 @@ function initApp() {
   let isConnected = true;
   let currentRange = '30 Days';
 
-  // HELPER SVG GENERATOR FOR PERFECT GRAPH RENDERING MATCHING SCREENSHOT
-  function createChartSvg(options) {
-    const { 
-      yTop = '2', 
-      yBottom = '1', 
-      xLabels = ['1', '2', '3', '4', '5', '6'], 
-      points = [], 
-      strokeColor = '#09090b', 
-      fillColor = null 
+  // HELPER SVG GENERATOR FOR REACH & ENGAGEMENT DUAL-LINE GRAPH
+  function createDualLineChartSvg(options) {
+    const {
+      reachPoints = [18, 28, 38, 32, 44, 42, 48.2],
+      activityPoints = [1.2, 1.8, 2.4, 2.1, 3.0, 2.8, 3.4],
+      xLabels = ['Day 1', 'Day 5', 'Day 10', 'Day 15', 'Day 20', 'Day 25', 'Day 30'],
+      yTop = '50K',
+      yBottom = '0'
     } = options;
 
     const numPoints = xLabels.length;
-    const paddingLeft = 32;
-    const paddingRight = 290;
+    const paddingLeft = 36;
+    const paddingRight = 310;
     const availableWidth = paddingRight - paddingLeft;
     const step = numPoints > 1 ? availableWidth / (numPoints - 1) : 0;
     const xCoords = xLabels.map((_, i) => paddingLeft + i * step);
 
-    let pathD = '';
-    let areaD = '';
+    const maxReach = Math.max(...reachPoints, 1);
+    const maxAct = Math.max(...activityPoints, 1);
 
-    if (points && points.length > 0) {
-      pathD = points.map((p, i) => `${i === 0 ? 'M' : 'L'} ${xCoords[i]},${p}`).join(' ');
-      if (fillColor) {
-        areaD = `${pathD} L ${xCoords[points.length - 1]},90 L ${xCoords[0]},90 Z`;
-      }
-    } else {
-      pathD = `M ${xCoords[0]},90 L ${xCoords[xCoords.length - 1]},90`;
-    }
+    const scaleReachY = val => 112 - (val / maxReach) * 82;
+    const scaleActY = val => 112 - (val / maxAct) * 60;
 
-    const gradId = `chartGrad_${Math.random().toString(36).substr(2, 9)}`;
+    const reachY = reachPoints.map(v => scaleReachY(v));
+    const actY = activityPoints.map(v => scaleActY(v));
+
+    const reachPathD = reachY.map((y, i) => `${i === 0 ? 'M' : 'L'} ${xCoords[i]},${y}`).join(' ');
+    const reachAreaD = `${reachPathD} L ${xCoords[xCoords.length - 1]},112 L ${xCoords[0]},112 Z`;
+
+    const actPathD = actY.map((y, i) => `${i === 0 ? 'M' : 'L'} ${xCoords[i]},${y}`).join(' ');
+
+    const gradId = `reachGrad_${Math.random().toString(36).substr(2, 9)}`;
 
     return `
-      <svg viewBox="0 0 310 135" style="width: 100%; height: 100%;">
+      <svg viewBox="0 0 330 145" class="dual-line-chart-svg" style="width: 100%; height: 100%;">
         <defs>
-          ${fillColor ? `
           <linearGradient id="${gradId}" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0%" stop-color="${strokeColor}" stop-opacity="0.18"/>
-            <stop offset="100%" stop-color="${strokeColor}" stop-opacity="0.0"/>
-          </linearGradient>` : ''}
+            <stop offset="0%" stop-color="#09090b" stop-opacity="0.10"/>
+            <stop offset="100%" stop-color="#09090b" stop-opacity="0.0"/>
+          </linearGradient>
         </defs>
-        
-        <line x1="28" y1="30" x2="295" y2="30" stroke="#f1f5f9" stroke-width="1" stroke-dasharray="2 2" />
-        <line x1="28" y1="90" x2="295" y2="90" stroke="#f1f5f9" stroke-width="1" stroke-dasharray="2 2" />
-        
-        <text x="18" y="34" font-family="'Inter', sans-serif" font-size="9" font-weight="500" fill="#a1a1aa" text-anchor="end">${yTop}</text>
-        <text x="18" y="94" font-family="'Inter', sans-serif" font-size="9" font-weight="500" fill="#a1a1aa" text-anchor="end">${yBottom}</text>
 
-        ${fillColor && areaD ? `<path d="${areaD}" fill="url(#${gradId})" />` : ''}
+        <!-- Background Dash Gridlines -->
+        <line x1="32" y1="28" x2="315" y2="28" stroke="#f1f5f9" stroke-width="1" stroke-dasharray="3 3"/>
+        <line x1="32" y1="70" x2="315" y2="70" stroke="#f1f5f9" stroke-width="1" stroke-dasharray="3 3"/>
+        <line x1="32" y1="112" x2="315" y2="112" stroke="#f1f5f9" stroke-width="1"/>
 
-        <path d="${pathD}" fill="none" stroke="${strokeColor}" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+        <!-- Y Axis Labels -->
+        <text x="26" y="32" font-family="'Inter', sans-serif" font-size="9" font-weight="700" fill="#71717a" text-anchor="end">${yTop}</text>
+        <text x="26" y="115" font-family="'Inter', sans-serif" font-size="9" font-weight="700" fill="#71717a" text-anchor="end">${yBottom}</text>
 
-        ${xCoords.map((x, i) => {
-          const y = (points && points[i] !== undefined) ? points[i] : 90;
-          return `<circle cx="${x}" cy="${y}" r="3.5" fill="#ffffff" stroke="${strokeColor}" stroke-width="2.2"/>`;
-        }).join('')}
+        <!-- Reach Area Fill -->
+        <path d="${reachAreaD}" fill="url(#${gradId})"/>
 
+        <!-- Reach Bold Black Line -->
+        <path d="${reachPathD}" fill="none" stroke="#09090b" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
+
+        <!-- Profile Activity Slate Line -->
+        <path d="${actPathD}" fill="none" stroke="#71717a" stroke-width="1.8" stroke-dasharray="3 3" stroke-linecap="round" stroke-linejoin="round"/>
+
+        <!-- Data Points Circles -->
+        ${reachY.map((y, i) => `
+          <circle class="chart-point-reach pt-reach-${i}" cx="${xCoords[i]}" cy="${y}" r="3.2" fill="#ffffff" stroke="#09090b" stroke-width="2"/>
+          <circle class="chart-point-act pt-act-${i}" cx="${xCoords[i]}" cy="${actY[i]}" r="2.5" fill="#ffffff" stroke="#71717a" stroke-width="1.5"/>
+        `).join('')}
+
+        <!-- X Axis Labels -->
         ${xLabels.map((lbl, i) => `
-          <text x="${xCoords[i]}" y="116" font-family="'Inter', sans-serif" font-size="9.5" font-weight="500" fill="#a1a1aa" text-anchor="middle">${lbl}</text>
+          <text x="${xCoords[i]}" y="132" font-family="'Inter', sans-serif" font-size="9" font-weight="600" fill="#71717a" text-anchor="middle">${lbl}</text>
+        `).join('')}
+
+        <!-- Invisible Hover Trigger Strips -->
+        ${xCoords.map((x, i) => `
+          <rect class="chart-hover-trigger" data-idx="${i}" data-label="${xLabels[i]}" data-reach="${reachPoints[i]}K" data-act="${activityPoints[i]}K" data-x="${x}" data-reach-y="${reachY[i]}" data-act-y="${actY[i]}" x="${x - (step || 20)/2}" y="0" width="${step || 40}" height="145" fill="transparent" style="cursor: crosshair;"/>
         `).join('')}
       </svg>
     `;
   }
 
-  // DATA FOR TIME RANGES
+  // COMPREHENSIVE DATA FOR TIME RANGES (4-SECTION SAAS SYSTEM)
   const DASHBOARD_DATA = {
-    '14 Days': {
-      followers: '0',
-      following: '1',
-      views: '0',
-      comments: '0',
-      replies: '2',
-      sentToday: '0',
-      activeRules: '1',
-      leads: '0',
-      repliesSubtitle: 'Automation activity lifetime.',
-      followersSubtitle: 'Follower growth lifetime.',
-      leadsSubtitle: 'Leads captured lifetime.',
-      repliesSvg: createChartSvg({
-        yTop: '2', yBottom: '1',
-        xLabels: ['1', '2', '3', '4', '5', '6'],
-        points: [90, 90, 90, 90, 32, 32],
-        strokeColor: '#09090b',
-        fillColor: '#09090b'
-      }),
-      followersSvg: createChartSvg({
-        yTop: '0', yBottom: '0',
-        xLabels: ['1', '2', '3', '4', '5', '6'],
-        points: [90, 90, 90, 90, 90, 90],
-        strokeColor: '#71717a'
-      }),
-      leadsSvg: createChartSvg({
-        yTop: '0', yBottom: '0',
-        xLabels: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10'],
-        points: [90, 90, 90, 90, 90, 90, 90, 90, 90, 90],
-        strokeColor: '#8b5cf6'
-      })
-    },
     '7 Days': {
-      followers: '0',
-      following: '1',
-      views: '0',
-      comments: '0',
-      replies: '1',
-      sentToday: '0',
-      activeRules: '1',
-      leads: '0',
-      repliesSubtitle: 'Automation activity over the last 7 days.',
-      followersSubtitle: 'Follower growth over the last 7 days.',
-      leadsSubtitle: 'Leads captured over the last 7 days.',
-      repliesSvg: createChartSvg({
-        yTop: '2', yBottom: '1',
-        xLabels: ['1', '2', '3', '4', '5', '6'],
-        points: [90, 90, 90, 90, 45, 45],
-        strokeColor: '#09090b',
-        fillColor: '#09090b'
+      followers: '48', following: '12', views: '380', comments: '52',
+      totalReplies: '28', sentToday: '6', activeRulesFlat: '3', capturedLeadsFlat: '9',
+      reach: '12.4K', trendReach: '▲ +9.2%',
+      engaged: '1.4K', trendEngaged: '▲ +5.6%',
+      visits: '820', trendVisits: '▲ +12.4%',
+      clicks: '210', trendClicks: '▲ +14.8%',
+      replies: '310', trendReplies: '▲ +8.5%',
+      dmsToday: '18', trendDmsToday: '▲ +4.0%',
+      activeRules: '5 Active', trendRules: '● 100% Uptime',
+      leads: '84', trendLeads: '▲ +18.2%',
+      reachSub: 'Instagram reach vs profile activity over the last 7 days.',
+      legReach: '12.4K', legAct: '820',
+      reachSvg: createDualLineChartSvg({
+        reachPoints: [4, 6, 8, 7, 10, 11, 12.4],
+        activityPoints: [0.2, 0.3, 0.5, 0.4, 0.7, 0.75, 0.82],
+        xLabels: ['Day 1', 'Day 2', 'Day 3', 'Day 4', 'Day 5', 'Day 6', 'Day 7'],
+        yTop: '15K', yBottom: '0'
       }),
-      followersSvg: createChartSvg({
-        yTop: '0', yBottom: '0',
-        xLabels: ['1', '2', '3', '4', '5', '6'],
-        points: [90, 90, 90, 90, 90, 90],
-        strokeColor: '#71717a'
+      funnel: {
+        s1Num: '420', s1Pct: '100%', s1Fill: '100%',
+        s2Num: '310', s2Pct: '73.8%', s2Fill: '73.8%',
+        s3Num: '160', s3Pct: '38.0%', s3Fill: '38.0%',
+        s4Num: '84',  s4Pct: '20.0%', s4Fill: '20.0%',
+        rate: '20.0% Total Conv'
+      },
+      demographics: {
+        total: '12.4K',
+        nonFollowers: '62% (7.7K)', followers: '38% (4.7K)',
+        us: '40% (5.0K)', in: '30% (3.7K)', gb: '15% (1.9K)'
+      }
+    },
+    '14 Days': {
+      followers: '48', following: '12', views: '740', comments: '110',
+      totalReplies: '58', sentToday: '10', activeRulesFlat: '3', capturedLeadsFlat: '18',
+      reach: '24.8K', trendReach: '▲ +11.5%',
+      engaged: '2.9K', trendEngaged: '▲ +7.2%',
+      visits: '1,680', trendVisits: '▲ +15.1%',
+      clicks: '440', trendClicks: '▲ +18.0%',
+      replies: '620', trendReplies: '▲ +10.2%',
+      dmsToday: '42', trendDmsToday: '▲ +4.8%',
+      activeRules: '5 Active', trendRules: '● 100% Uptime',
+      leads: '172', trendLeads: '▲ +24.5%',
+      reachSub: 'Instagram reach vs profile activity over the last 14 days.',
+      legReach: '24.8K', legAct: '1.68K',
+      reachSvg: createDualLineChartSvg({
+        reachPoints: [8, 12, 16, 14, 20, 22, 24.8],
+        activityPoints: [0.5, 0.7, 1.0, 0.9, 1.4, 1.5, 1.68],
+        xLabels: ['Day 2', 'Day 4', 'Day 6', 'Day 8', 'Day 10', 'Day 12', 'Day 14'],
+        yTop: '30K', yBottom: '0'
       }),
-      leadsSvg: createChartSvg({
-        yTop: '0', yBottom: '0',
-        xLabels: ['1', '2', '3', '4', '5', '6', '7'],
-        points: [90, 90, 90, 90, 90, 90, 90],
-        strokeColor: '#8b5cf6'
-      })
+      funnel: {
+        s1Num: '890', s1Pct: '100%', s1Fill: '100%',
+        s2Num: '620', s2Pct: '69.6%', s2Fill: '69.6%',
+        s3Num: '310', s3Pct: '34.8%', s3Fill: '34.8%',
+        s4Num: '172', s4Pct: '19.3%', s4Fill: '19.3%',
+        rate: '19.3% Total Conv'
+      },
+      demographics: {
+        total: '24.8K',
+        nonFollowers: '63% (15.6K)', followers: '37% (9.2K)',
+        us: '41% (10.2K)', in: '29% (7.2K)', gb: '14% (3.5K)'
+      }
     },
     '30 Days': {
-      followers: '48',
-      following: '12',
-      views: '1,240',
-      comments: '184',
-      replies: '96',
-      sentToday: '14',
-      activeRules: '3',
-      leads: '28',
-      repliesSubtitle: 'Automation activity over the last 30 days.',
-      followersSubtitle: 'Follower growth over the last 30 days.',
-      leadsSubtitle: 'Leads captured over the last 30 days.',
-      repliesSvg: createChartSvg({
-        yTop: '40', yBottom: '0',
-        xLabels: ['1', '2', '3', '4', '5', '6'],
-        points: [85, 70, 45, 60, 30, 35],
-        strokeColor: '#09090b',
-        fillColor: '#09090b'
+      followers: '48', following: '12', views: '1,240', comments: '184',
+      totalReplies: '96', sentToday: '14', activeRulesFlat: '3', capturedLeadsFlat: '28',
+      reach: '48.2K', trendReach: '▲ +14.2%',
+      engaged: '5.8K', trendEngaged: '▲ +8.4%',
+      visits: '3,410', trendVisits: '▲ +18.0%',
+      clicks: '890', trendClicks: '▲ +22.5%',
+      replies: '1,240', trendReplies: '▲ +12.8%',
+      dmsToday: '86', trendDmsToday: '▲ +5.2%',
+      activeRules: '5 Active', trendRules: '● 100% Uptime',
+      leads: '342', trendLeads: '▲ +31.4%',
+      reachSub: 'Instagram reach vs profile activity over the last 30 days.',
+      legReach: '48.2K', legAct: '3.41K',
+      reachSvg: createDualLineChartSvg({
+        reachPoints: [18, 28, 38, 32, 44, 42, 48.2],
+        activityPoints: [1.2, 1.8, 2.4, 2.1, 3.0, 2.8, 3.41],
+        xLabels: ['Day 1', 'Day 5', 'Day 10', 'Day 15', 'Day 20', 'Day 25', 'Day 30'],
+        yTop: '50K', yBottom: '0'
       }),
-      followersSvg: createChartSvg({
-        yTop: '20', yBottom: '0',
-        xLabels: ['1', '2', '3', '4', '5', '6'],
-        points: [80, 70, 60, 50, 40, 30],
-        strokeColor: '#71717a'
-      }),
-      leadsSvg: createChartSvg({
-        yTop: '15', yBottom: '0',
-        xLabels: ['1', '2', '3', '4', '5', '6', '7', '8'],
-        points: [85, 75, 55, 45, 30, 25, 18, 15],
-        strokeColor: '#8b5cf6'
-      })
+      funnel: {
+        s1Num: '1,850', s1Pct: '100%', s1Fill: '100%',
+        s2Num: '1,240', s2Pct: '67.0%', s2Fill: '67.0%',
+        s3Num: '620',   s3Pct: '33.5%', s3Fill: '33.5%',
+        s4Num: '342',   s4Pct: '18.5%', s4Fill: '18.5%',
+        rate: '18.5% Total Conv'
+      },
+      demographics: {
+        total: '48.2K',
+        nonFollowers: '64% (30.8K)', followers: '36% (17.4K)',
+        us: '42% (20.2K)', in: '28% (13.5K)', gb: '14% (6.7K)'
+      }
     },
     '60 Days': {
-      followers: '120',
-      following: '28',
-      views: '4,500',
-      comments: '390',
-      replies: '240',
-      sentToday: '18',
-      activeRules: '4',
-      leads: '65',
-      repliesSubtitle: 'Automation activity over the last 60 days.',
-      followersSubtitle: 'Follower growth over the last 60 days.',
-      leadsSubtitle: 'Leads captured over the last 60 days.',
-      repliesSvg: createChartSvg({
-        yTop: '80', yBottom: '0',
-        xLabels: ['1', '2', '3', '4', '5', '6'],
-        points: [90, 75, 60, 45, 30, 20],
-        strokeColor: '#09090b',
-        fillColor: '#09090b'
+      followers: '48', following: '12', views: '2,850', comments: '410',
+      totalReplies: '210', sentToday: '18', activeRulesFlat: '4', capturedLeadsFlat: '62',
+      reach: '92.6K', trendReach: '▲ +19.4%',
+      engaged: '11.2K', trendEngaged: '▲ +12.0%',
+      visits: '6,890', trendVisits: '▲ +21.4%',
+      clicks: '1,740', trendClicks: '▲ +26.8%',
+      replies: '2,410', trendReplies: '▲ +16.5%',
+      dmsToday: '140', trendDmsToday: '▲ +6.1%',
+      activeRules: '5 Active', trendRules: '● 100% Uptime',
+      leads: '680', trendLeads: '▲ +35.2%',
+      reachSub: 'Instagram reach vs profile activity over the last 60 days.',
+      legReach: '92.6K', legAct: '6.89K',
+      reachSvg: createDualLineChartSvg({
+        reachPoints: [35, 50, 68, 62, 80, 85, 92.6],
+        activityPoints: [2.5, 3.6, 4.8, 4.2, 5.9, 6.2, 6.89],
+        xLabels: ['Day 1', 'Day 10', 'Day 20', 'Day 30', 'Day 40', 'Day 50', 'Day 60'],
+        yTop: '100K', yBottom: '0'
       }),
-      followersSvg: createChartSvg({
-        yTop: '50', yBottom: '0',
-        xLabels: ['1', '2', '3', '4', '5', '6'],
-        points: [85, 70, 55, 45, 35, 25],
-        strokeColor: '#71717a'
-      }),
-      leadsSvg: createChartSvg({
-        yTop: '35', yBottom: '0',
-        xLabels: ['1', '2', '3', '4', '5', '6', '7', '8'],
-        points: [88, 72, 58, 42, 30, 20, 15, 10],
-        strokeColor: '#8b5cf6'
-      })
+      funnel: {
+        s1Num: '3,620', s1Pct: '100%', s1Fill: '100%',
+        s2Num: '2,410', s2Pct: '66.5%', s2Fill: '66.5%',
+        s3Num: '1,220', s3Pct: '33.7%', s3Fill: '33.7%',
+        s4Num: '680',   s4Pct: '18.7%', s4Fill: '18.7%',
+        rate: '18.7% Total Conv'
+      },
+      demographics: {
+        total: '92.6K',
+        nonFollowers: '65% (60.2K)', followers: '35% (32.4K)',
+        us: '43% (39.8K)', in: '28% (25.9K)', gb: '13% (12.0K)'
+      }
     },
     '90 Days': {
-      followers: '210',
-      following: '45',
-      views: '8,920',
-      comments: '640',
-      replies: '412',
-      sentToday: '22',
-      activeRules: '5',
-      leads: '114',
-      repliesSubtitle: 'Automation activity over the last 90 days.',
-      followersSubtitle: 'Follower growth over the last 90 days.',
-      leadsSubtitle: 'Leads captured over the last 90 days.',
-      repliesSvg: createChartSvg({
-        yTop: '120', yBottom: '0',
-        xLabels: ['1', '2', '3', '4', '5', '6'],
-        points: [90, 75, 55, 40, 45, 25],
-        strokeColor: '#09090b',
-        fillColor: '#09090b'
+      followers: '48', following: '12', views: '4,920', comments: '680',
+      totalReplies: '340', sentToday: '22', activeRulesFlat: '5', capturedLeadsFlat: '104',
+      reach: '142.8K', trendReach: '▲ +24.8%',
+      engaged: '17.4K', trendEngaged: '▲ +15.2%',
+      visits: '10,450', trendVisits: '▲ +25.0%',
+      clicks: '2,680', trendClicks: '▲ +30.2%',
+      replies: '3,820', trendReplies: '▲ +19.4%',
+      dmsToday: '185', trendDmsToday: '▲ +7.0%',
+      activeRules: '5 Active', trendRules: '● 100% Uptime',
+      leads: '1,040', trendLeads: '▲ +39.0%',
+      reachSub: 'Instagram reach vs profile activity over the last 90 days.',
+      legReach: '142.8K', legAct: '10.4K',
+      reachSvg: createDualLineChartSvg({
+        reachPoints: [50, 75, 95, 90, 115, 128, 142.8],
+        activityPoints: [3.8, 5.2, 7.0, 6.8, 8.5, 9.6, 10.45],
+        xLabels: ['Day 1', 'Day 15', 'Day 30', 'Day 45', 'Day 60', 'Day 75', 'Day 90'],
+        yTop: '150K', yBottom: '0'
       }),
-      followersSvg: createChartSvg({
-        yTop: '80', yBottom: '0',
-        xLabels: ['1', '2', '3', '4', '5', '6'],
-        points: [85, 70, 55, 45, 35, 25],
-        strokeColor: '#71717a'
-      }),
-      leadsSvg: createChartSvg({
-        yTop: '50', yBottom: '0',
-        xLabels: ['1', '2', '3', '4', '5', '6', '7', '8'],
-        points: [88, 72, 58, 42, 30, 20, 12, 10],
-        strokeColor: '#8b5cf6'
-      })
+      funnel: {
+        s1Num: '5,740', s1Pct: '100%', s1Fill: '100%',
+        s2Num: '3,820', s2Pct: '66.5%', s2Fill: '66.5%',
+        s3Num: '1,940', s3Pct: '33.8%', s3Fill: '33.8%',
+        s4Num: '1,040', s4Pct: '18.1%', s4Fill: '18.1%',
+        rate: '18.1% Total Conv'
+      },
+      demographics: {
+        total: '142.8K',
+        nonFollowers: '66% (94.2K)', followers: '34% (48.6K)',
+        us: '44% (62.8K)', in: '27% (38.5K)', gb: '13% (18.6K)'
+      }
     }
   };
 
@@ -496,26 +511,67 @@ function initApp() {
   const btnCloseBrowserTab = document.getElementById('btn-close-browser-tab');
   const btnExitBrowserTab = document.getElementById('btn-exit-browser-tab');
 
-  // Stats Element IDs
-  const statIds = {
+  // Stats Element IDs (4-Section System)
+  const flatStatIds = {
     followers: document.getElementById('stat-followers'),
     following: document.getElementById('stat-following'),
     views: document.getElementById('stat-views'),
     comments: document.getElementById('stat-comments'),
-    replies: document.getElementById('stat-replies'),
+    totalReplies: document.getElementById('stat-total-replies'),
     sentToday: document.getElementById('stat-sent-today'),
+    activeRules: document.getElementById('stat-active-rules-flat'),
+    leads: document.getElementById('stat-captured-leads-flat')
+  };
+
+  const statIds = {
+    reach: document.getElementById('stat-reach'),
+    engaged: document.getElementById('stat-engaged'),
+    visits: document.getElementById('stat-visits'),
+    clicks: document.getElementById('stat-clicks'),
+    replies: document.getElementById('stat-replies'),
+    dmsToday: document.getElementById('stat-dms-today'),
     activeRules: document.getElementById('stat-active-rules'),
-    leads: document.getElementById('stat-captured-leads')
+    leads: document.getElementById('stat-leads')
+  };
+
+  const trendIds = {
+    reach: document.getElementById('trend-reach'),
+    engaged: document.getElementById('trend-engaged'),
+    visits: document.getElementById('trend-visits'),
+    clicks: document.getElementById('trend-clicks'),
+    replies: document.getElementById('trend-replies'),
+    dmsToday: document.getElementById('trend-dms-today'),
+    activeRules: document.getElementById('trend-active-rules'),
+    leads: document.getElementById('trend-leads')
   };
 
   // Chart Containers
-  const chartReplies = document.getElementById('chart-replies-container');
-  const chartFollowers = document.getElementById('chart-followers-container');
-  const chartLeads = document.getElementById('chart-leads-container');
+  const chartReachWrapper = document.getElementById('dash-reach-chart-box');
+  const reachChartSub = document.getElementById('reach-chart-sub');
+  const legReachVal = document.getElementById('leg-reach-val');
+  const legActVal = document.getElementById('leg-activity-val');
 
-  const subReplies = document.getElementById('subtitle-replies');
-  const subFollowers = document.getElementById('subtitle-followers');
-  const subLeads = document.getElementById('subtitle-leads');
+  // Funnel elements
+  const funnelRate = document.getElementById('funnel-overall-rate');
+  const funnelStep1Num = document.getElementById('funnel-step1-num');
+  const funnelStep1Fill = document.getElementById('funnel-step1-fill');
+  const funnelStep2Num = document.getElementById('funnel-step2-num');
+  const funnelStep2Pct = document.getElementById('funnel-step2-pct');
+  const funnelStep2Fill = document.getElementById('funnel-step2-fill');
+  const funnelStep3Num = document.getElementById('funnel-step3-num');
+  const funnelStep3Pct = document.getElementById('funnel-step3-pct');
+  const funnelStep3Fill = document.getElementById('funnel-step3-fill');
+  const funnelStep4Num = document.getElementById('funnel-step4-num');
+  const funnelStep4Pct = document.getElementById('funnel-step4-pct');
+  const funnelStep4Fill = document.getElementById('funnel-step4-fill');
+
+  // Demographics elements
+  const donutTotal = document.getElementById('donut-total-reach');
+  const donutNonFollowers = document.getElementById('donut-pct-nonfollowers');
+  const donutFollowers = document.getElementById('donut-pct-followers');
+  const audUs = document.getElementById('aud-country-us');
+  const audIn = document.getElementById('aud-country-in');
+  const audGb = document.getElementById('aud-country-gb');
 
   // Account Row Elements
   const accountInfoContainer = document.getElementById('account-info-container');
@@ -523,13 +579,15 @@ function initApp() {
 
   // 1. SKELETON LOADING SHIMMER ANIMATION FOR THE WHOLE PAGE
   function showSkeletonLoading() {
+    Object.values(flatStatIds).forEach(el => {
+      if (el) el.innerHTML = '<span class="skeleton skeleton-text" style="width: 48px; height: 26px;"></span>';
+    });
+
     Object.values(statIds).forEach(el => {
       if (el) el.innerHTML = '<span class="skeleton skeleton-text"></span>';
     });
 
-    if (chartReplies) chartReplies.innerHTML = '<span class="skeleton skeleton-chart"></span>';
-    if (chartFollowers) chartFollowers.innerHTML = '<span class="skeleton skeleton-chart"></span>';
-    if (chartLeads) chartLeads.innerHTML = '<span class="skeleton skeleton-chart"></span>';
+    if (chartReachWrapper) chartReachWrapper.innerHTML = '<span class="skeleton skeleton-chart"></span>';
   }
 
   // 2. LOAD DASHBOARD DATA FUNCTION
@@ -539,56 +597,90 @@ function initApp() {
 
     setTimeout(() => {
       if (!isConnected) {
+        Object.values(flatStatIds).forEach(el => {
+          if (el) el.textContent = '0';
+        });
+
         Object.values(statIds).forEach(el => {
           if (el) el.textContent = '0';
         });
 
-        if (chartReplies) {
-          chartReplies.innerHTML = `
+        if (chartReachWrapper) {
+          chartReachWrapper.innerHTML = `
             <div class="chart-empty-state">
               <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#94a3b8" stroke-width="2"><path d="M18 20V10M12 20V4M6 20v-6" stroke-linecap="round"/></svg>
               <span>No activity data available.</span>
             </div>`;
         }
-
-        if (chartFollowers) {
-          chartFollowers.innerHTML = `
-            <div class="chart-empty-state">
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#94a3b8" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-              <span>No growth data available.</span>
-            </div>`;
-        }
-
-        if (chartLeads) {
-          chartLeads.innerHTML = createChartSvg({
-            yTop: '0', yBottom: '0',
-            xLabels: ['6', '7', '8', '9', '10', '11', '12'],
-            points: [90, 90, 90, 90, 90, 90, 90],
-            strokeColor: '#8b5cf6'
-          });
-        }
         return;
       }
 
-      const data = DASHBOARD_DATA[range] || DASHBOARD_DATA['7 Days'];
+      const data = DASHBOARD_DATA[range] || DASHBOARD_DATA['30 Days'];
 
-      if (statIds.followers) statIds.followers.textContent = data.followers;
-      if (statIds.following) statIds.following.textContent = data.following;
-      if (statIds.views) statIds.views.textContent = data.views;
-      if (statIds.comments) statIds.comments.textContent = data.comments;
+      // Update Flat Overview Stats (Screenshot Section)
+      if (flatStatIds.followers) flatStatIds.followers.textContent = data.followers || '48';
+      if (flatStatIds.following) flatStatIds.following.textContent = data.following || '12';
+      if (flatStatIds.views) flatStatIds.views.textContent = data.views || '1,240';
+      if (flatStatIds.comments) flatStatIds.comments.textContent = data.comments || '184';
+      if (flatStatIds.totalReplies) flatStatIds.totalReplies.textContent = data.totalReplies || '96';
+      if (flatStatIds.sentToday) flatStatIds.sentToday.textContent = data.sentToday || '14';
+      if (flatStatIds.activeRules) flatStatIds.activeRules.textContent = data.activeRulesFlat || '3';
+      if (flatStatIds.leads) flatStatIds.leads.textContent = data.capturedLeadsFlat || '28';
+
+      // Update Top Stats
+      if (statIds.reach) statIds.reach.textContent = data.reach;
+      if (statIds.engaged) statIds.engaged.textContent = data.engaged;
+      if (statIds.visits) statIds.visits.textContent = data.visits;
+      if (statIds.clicks) statIds.clicks.textContent = data.clicks;
       if (statIds.replies) statIds.replies.textContent = data.replies;
-      if (statIds.sentToday) statIds.sentToday.textContent = data.sentToday;
+      if (statIds.dmsToday) statIds.dmsToday.textContent = data.dmsToday;
       if (statIds.activeRules) statIds.activeRules.textContent = data.activeRules;
       if (statIds.leads) statIds.leads.textContent = data.leads;
 
-      if (subReplies) subReplies.textContent = data.repliesSubtitle;
-      if (subFollowers) subFollowers.textContent = data.followersSubtitle;
-      if (subLeads) subLeads.textContent = data.leadsSubtitle;
+      // Update Trends
+      if (trendIds.reach) trendIds.reach.textContent = data.trendReach;
+      if (trendIds.engaged) trendIds.engaged.textContent = data.trendEngaged;
+      if (trendIds.visits) trendIds.visits.textContent = data.trendVisits;
+      if (trendIds.clicks) trendIds.clicks.textContent = data.trendClicks;
+      if (trendIds.replies) trendIds.replies.textContent = data.trendReplies;
+      if (trendIds.dmsToday) trendIds.dmsToday.textContent = data.trendDmsToday;
+      if (trendIds.activeRules) trendIds.activeRules.textContent = data.trendRules;
+      if (trendIds.leads) trendIds.leads.textContent = data.trendLeads;
 
-      if (chartReplies) chartReplies.innerHTML = data.repliesSvg;
-      if (chartFollowers) chartFollowers.innerHTML = data.followersSvg;
-      if (chartLeads) chartLeads.innerHTML = data.leadsSvg;
-    }, 400);
+      // Update Chart 1: Dual Line Reach
+      if (reachChartSub) reachChartSub.textContent = data.reachSub;
+      if (legReachVal) legReachVal.textContent = data.legReach;
+      if (legActVal) legActVal.textContent = data.legAct;
+      if (chartReachWrapper) chartReachWrapper.innerHTML = data.reachSvg;
+
+      // Update Chart 2: Conversion Funnel
+      if (data.funnel) {
+        if (funnelRate) funnelRate.textContent = data.funnel.rate;
+        if (funnelStep1Num) funnelStep1Num.textContent = data.funnel.s1Num;
+        if (funnelStep1Fill) funnelStep1Fill.style.width = data.funnel.s1Fill;
+        if (funnelStep2Num) funnelStep2Num.textContent = data.funnel.s2Num;
+        if (funnelStep2Pct) funnelStep2Pct.textContent = data.funnel.s2Pct;
+        if (funnelStep2Fill) funnelStep2Fill.style.width = data.funnel.s2Fill;
+        if (funnelStep3Num) funnelStep3Num.textContent = data.funnel.s3Num;
+        if (funnelStep3Pct) funnelStep3Pct.textContent = data.funnel.s3Pct;
+        if (funnelStep3Fill) funnelStep3Fill.style.width = data.funnel.s3Fill;
+        if (funnelStep4Num) funnelStep4Num.textContent = data.funnel.s4Num;
+        if (funnelStep4Pct) funnelStep4Pct.textContent = data.funnel.s4Pct;
+        if (funnelStep4Fill) funnelStep4Fill.style.width = data.funnel.s4Fill;
+      }
+
+      // Update Chart 3: Demographics
+      if (data.demographics) {
+        if (donutTotal) donutTotal.textContent = data.demographics.total;
+        if (donutNonFollowers) donutNonFollowers.textContent = data.demographics.nonFollowers;
+        if (donutFollowers) donutFollowers.textContent = data.demographics.followers;
+        if (audUs) audUs.textContent = data.demographics.us;
+        if (audIn) audIn.textContent = data.demographics.in;
+        if (audGb) audGb.textContent = data.demographics.gb;
+      }
+
+      attachChartTooltipListeners();
+    }, 280);
   }
 
   // 3. TOGGLE CONNECTION STATE
@@ -715,6 +807,116 @@ function initApp() {
     updateSidebarCapsulePill();
     updateTimeRangeCapsulePill();
   });
+  // ==========================================================================
+  // SKELETON SHIMMER LOADING SYSTEM (REPLACES WHOLE-VIEW BLUR/OVERLAYS)
+  // ==========================================================================
+  function triggerSkeletonShimmer(elements, onDone, duration = 400) {
+    if (!elements || elements.length === 0) {
+      if (onDone) onDone();
+      return;
+    }
+    const elList = Array.isArray(elements) ? elements : Array.from(elements);
+    const validEls = elList.filter(el => el && el instanceof HTMLElement);
+    
+    validEls.forEach(el => {
+      el.classList.add('skeleton-loading');
+    });
+
+    setTimeout(() => {
+      if (onDone) onDone();
+      validEls.forEach(el => {
+        el.classList.remove('skeleton-loading');
+      });
+    }, duration);
+  }
+
+  function skeletonizeDashboard(onDone, duration = 400) {
+    const targets = [
+      ...document.querySelectorAll('.flat-metric-value'),
+      ...document.querySelectorAll('#dashboard-view .dash-stat-val'),
+      ...document.querySelectorAll('#dashboard-view .dash-trend'),
+      ...document.querySelectorAll('#dashboard-view .funnel-stat-num'),
+      ...document.querySelectorAll('#dashboard-view .demo-sub-item span'),
+      document.getElementById('demo-total-reach'),
+      document.getElementById('dash-funnel-rate-badge'),
+      ...document.querySelectorAll('#dashboard-view td span')
+    ].filter(el => el !== null);
+
+    triggerSkeletonShimmer(targets, onDone, duration);
+  }
+
+  function skeletonizeCapturedLeads(onDone, duration = 400) {
+    const targets = [
+      document.getElementById('leads-stat-total'),
+      document.getElementById('leads-stat-emails'),
+      document.getElementById('leads-stat-phones'),
+      document.getElementById('leads-live-count-badge'),
+      ...document.querySelectorAll('.leads-reel-count'),
+      ...document.querySelectorAll('#leads-view .lead-handle'),
+      ...document.querySelectorAll('#leads-view .lead-name'),
+      ...document.querySelectorAll('#leads-view .lead-email-line'),
+      ...document.querySelectorAll('#leads-view .lead-phone-line'),
+      ...document.querySelectorAll('#leads-view .time-text'),
+      ...document.querySelectorAll('#leads-view .kw-tag'),
+      ...document.querySelectorAll('#leads-view .lead-status-pill')
+    ].filter(el => el !== null);
+
+    triggerSkeletonShimmer(targets, onDone, duration);
+  }
+
+  function skeletonizeInbox(onDone, duration = 400) {
+    const targets = [
+      document.getElementById('iq-active-bots'),
+      document.getElementById('iq-open-leads'),
+      document.getElementById('count-all'),
+      document.getElementById('count-attention'),
+      document.getElementById('count-bot'),
+      document.getElementById('count-resolved'),
+      ...document.querySelectorAll('.rr-t-user-name'),
+      ...document.querySelectorAll('.rr-t-snippet'),
+      ...document.querySelectorAll('.rr-t-timestamp')
+    ].filter(el => el !== null);
+
+    triggerSkeletonShimmer(targets, onDone, duration);
+  }
+
+  function skeletonizeRules(onDone, duration = 400) {
+    const targets = [
+      document.getElementById('filter-count-all'),
+      document.getElementById('filter-count-post'),
+      document.getElementById('filter-count-story'),
+      document.getElementById('filter-count-reel'),
+      document.getElementById('filter-count-dm'),
+      ...document.querySelectorAll('.rule-metric-val'),
+      ...document.querySelectorAll('.rule-card-title')
+    ].filter(el => el !== null);
+
+    triggerSkeletonShimmer(targets, onDone, duration);
+  }
+
+  function skeletonizeStorePreview(onDone, duration = 400) {
+    const targets = [
+      document.getElementById('dsp-name-el'),
+      document.getElementById('dsp-bio-el'),
+      ...document.querySelectorAll('.dsp-prod-name'),
+      ...document.querySelectorAll('.dsp-prod-price')
+    ].filter(el => el !== null);
+
+    triggerSkeletonShimmer(targets, onDone, duration);
+  }
+
+  function triggerReloadAnimation(viewEl) {
+    if (!viewEl) return;
+    if (viewEl.id === 'dashboard-view') {
+      skeletonizeDashboard(null, 300);
+    } else if (viewEl.id === 'leads-view') {
+      skeletonizeCapturedLeads(null, 300);
+    } else if (viewEl.id === 'inbox-view') {
+      skeletonizeInbox(null, 300);
+    } else if (viewEl.id === 'automation-rules-view') {
+      skeletonizeRules(null, 300);
+    }
+  }
 
   navItems.forEach(item => {
     item.addEventListener('click', (e) => {
@@ -794,10 +996,1069 @@ function initApp() {
       btn.classList.add('active');
       updateTimeRangeCapsulePill();
 
+      skeletonizeDashboard(() => {
+        loadDashboardData(selectedRange);
+        attachChartTooltipListeners();
+      }, 350);
+
       showToast(`Loading metrics for ${selectedRange}...`);
-      loadDashboardData(selectedRange);
     });
   });
+
+  // ==========================================================================
+  // DASHBOARD ADVANCED FEATURES: TOOLTIPS, CSV EXPORT, INSPECT DRAWER & FUNNEL
+  // ==========================================================================
+
+  // 1. CHART TOOLTIP & NODE HOVER LOGIC
+  function attachChartTooltipListeners() {
+    const chartBox = document.getElementById('dash-reach-chart-box');
+    if (!chartBox) return;
+
+    let tooltip = chartBox.querySelector('.dash-chart-tooltip');
+    if (!tooltip) {
+      tooltip = document.createElement('div');
+      tooltip.className = 'dash-chart-tooltip';
+      chartBox.appendChild(tooltip);
+    }
+
+    const triggers = chartBox.querySelectorAll('.chart-hover-trigger');
+    triggers.forEach(trig => {
+      trig.addEventListener('mouseenter', () => {
+        const lbl = trig.getAttribute('data-label');
+        const reach = trig.getAttribute('data-reach');
+        const act = trig.getAttribute('data-act');
+        const xPos = parseFloat(trig.getAttribute('data-x'));
+        const idx = trig.getAttribute('data-idx');
+
+        tooltip.innerHTML = `
+          <div class="tt-title">${lbl} Performance</div>
+          <div class="tt-row">
+            <span><span class="tt-dot reach"></span>Reach:</span>
+            <span class="tt-reach">${reach}</span>
+          </div>
+          <div class="tt-row">
+            <span><span class="tt-dot act"></span>Profile Activity:</span>
+            <span class="tt-act">${act}</span>
+          </div>
+        `;
+
+        // Calculate left percentage based on SVG viewBox width 330
+        const leftPct = (xPos / 330) * 100;
+        tooltip.style.left = `${leftPct}%`;
+        tooltip.style.top = `38%`;
+        tooltip.classList.add('active');
+
+        // Enlarge corresponding circle dots
+        const reachDot = chartBox.querySelector(`.pt-reach-${idx}`);
+        const actDot = chartBox.querySelector(`.pt-act-${idx}`);
+        if (reachDot) {
+          reachDot.setAttribute('r', '5.2');
+          reachDot.setAttribute('fill', '#09090b');
+        }
+        if (actDot) {
+          actDot.setAttribute('r', '4.2');
+          actDot.setAttribute('fill', '#71717a');
+        }
+      });
+
+      trig.addEventListener('mouseleave', () => {
+        const idx = trig.getAttribute('data-idx');
+        tooltip.classList.remove('active');
+
+        const reachDot = chartBox.querySelector(`.pt-reach-${idx}`);
+        const actDot = chartBox.querySelector(`.pt-act-${idx}`);
+        if (reachDot) {
+          reachDot.setAttribute('r', '3.2');
+          reachDot.setAttribute('fill', '#ffffff');
+        }
+        if (actDot) {
+          actDot.setAttribute('r', '2.5');
+          actDot.setAttribute('fill', '#ffffff');
+        }
+      });
+    });
+  }
+
+  // 2. EXPORT DASHBOARD SUMMARY AS CSV
+  function initDashboardCsvExport() {
+    const btnExport = document.getElementById('btn-export-dash-csv');
+    if (!btnExport) return;
+
+    btnExport.addEventListener('click', () => {
+      const data = DASHBOARD_DATA[currentRange] || DASHBOARD_DATA['30 Days'];
+      const timestamp = new Date().toISOString().split('T')[0];
+
+      const csvRows = [
+        ['"RenderReply Instagram Analytics Summary Report"'],
+        ['"Generated Date"', `"${timestamp}"`],
+        ['"Selected Time Period"', `"${currentRange}"`],
+        ['"Instagram Account"', '"@render6457 (Verified)"'],
+        [''],
+        ['"--- QUICK-STATS METRICS ---"'],
+        ['"Metric"', '"Value"', '"Growth Trend"'],
+        ['"Accounts Reached"', `"${data.reach}"`, `"${data.trendReach}"`],
+        ['"Accounts Engaged"', `"${data.engaged}"`, `"${data.trendEngaged}"`],
+        ['"Profile Visits"', `"${data.visits}"`, `"${data.trendVisits}"`],
+        ['"Link / Bio Clicks"', `"${data.clicks}"`, `"${data.trendClicks}"`],
+        ['"Auto-Replies Sent"', `"${data.replies}"`, `"${data.trendReplies}"`],
+        ['"DMs Triggered Today"', `"${data.dmsToday}"`, `"${data.trendDmsToday}"`],
+        ['"Active Keywords / Rules"', `"${data.activeRules}"`, `"${data.trendRules}"`],
+        ['"Captured Leads / Emails"', `"${data.leads}"`, `"${data.trendLeads}"`],
+        [''],
+        ['"--- AUTOMATION CONVERSION FUNNEL ---"'],
+        ['"Stage"', '"Volume"', '"Conversion Rate"'],
+        ['"1. Comments Detected"', `"${data.funnel ? data.funnel.s1Num : '1,850'}"`, '"100%"'],
+        ['"2. DMs Sent"', `"${data.funnel ? data.funnel.s2Num : '1,240'}"`, `"${data.funnel ? data.funnel.s2Pct : '67.0%'}"`],
+        ['"3. Links Clicked"', `"${data.funnel ? data.funnel.s3Num : '620'}"`, `"${data.funnel ? data.funnel.s3Pct : '33.5%'}"`],
+        ['"4. Leads Captured"', `"${data.funnel ? data.funnel.s4Num : '342'}"`, `"${data.funnel ? data.funnel.s4Pct : '18.5%'}"`],
+        [''],
+        ['"--- TOP PERFORMING POSTS ---"'],
+        ['"Content Title"', '"Reach"', '"Triggers Fired"', '"DM Click-Through Rate"'],
+        ['"10x Instagram Automation Strategy 2026"', '"24.8K"', '"620 replies"', '"28.4%"'],
+        ['"How I Make ₹50,000/mo Selling Digital Products"', '"16.2K"', '"410 replies"', '"31.2%"'],
+        ['"Free Java Fullstack Roadmap 2026 PDF"', '"12.5K"', '"380 replies"', '"42.8%"'],
+        ['"Story Automation Blueprint & DM Triggers"', '"8.4K"', '"190 replies"', '"24.0%"'],
+        [''],
+        ['"--- RECENT AUTOMATED DM LEADS ---"'],
+        ['"Handle"', '"Full Name"', '"Keyword Trigger"', '"Status"', '"Timestamp"'],
+        ['"@alex_growth"', '"Alex Miller"', '"#GUIDE"', '"Email Captured"', '"2m ago"'],
+        ['"@sarah.designs"', '"Sarah K."', '"PRICING"', '"DM Delivered"', '"12m ago"'],
+        ['"@marcus_dev"', '"Marcus Vance"', '"ROADMAP"', '"Email Captured"', '"28m ago"'],
+        ['"@priya_creates"', '"Priya Sharma"', '"LINK"', '"DM Delivered"', '"1h ago"'],
+        ['"@david_agency"', '"David Ross"', '"FREE"', '"Email Captured"', '"2h ago"']
+      ];
+
+      const csvContent = 'data:text/csv;charset=utf-8,' + csvRows.map(e => e.join(',')).join('\n');
+      const encodedUri = encodeURI(csvContent);
+      const link = document.createElement('a');
+      link.setAttribute('href', encodedUri);
+      link.setAttribute('download', `RenderReply_${currentRange.replace(/\s+/g, '')}_Analytics_Report.csv`);
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+
+      showToast(`Exported ${currentRange} Analytics Report CSV!`);
+    });
+  }
+
+  // 3. SLIDE-OVER INSPECT DRAWER DATA & LOGIC
+  const LEADS_INSPECT_DATA = [
+    {
+      handle: '@alex_growth',
+      name: 'Alex Miller',
+      avatar: 'AM',
+      email: 'alex.miller@growthagency.io',
+      phone: '+1 (555) 234-8910',
+      source: 'Instagram Reel Comment',
+      keyword: '#GUIDE',
+      status: '✓ Email Captured',
+      statusClass: 'email',
+      time: '2m ago',
+      timestamp: 'Today, 2:14 PM',
+      postTitle: '10x Instagram Automation Strategy 2026',
+      postThumb: 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=80&q=80',
+      commentText: 'Can you send me the #GUIDE for full funnel setup?',
+      botReplyText: 'Hey Alex! 👋 Here is your complete 10x Automation Blueprint & PDF guide: https://renderreply.com/p/guide. Let me know if you have questions!',
+      ruleName: 'Reel Lead Magnet #GUIDE'
+    },
+    {
+      handle: '@sarah.designs',
+      name: 'Sarah K.',
+      avatar: 'SK',
+      email: 'sarah.k@designstudio.co',
+      phone: '+1 (555) 789-1234',
+      source: 'Instagram Story Reply',
+      keyword: 'PRICING',
+      status: '✓ DM Delivered',
+      statusClass: '',
+      time: '12m ago',
+      timestamp: 'Today, 2:04 PM',
+      postTitle: 'How I Make ₹50,000/mo Selling Digital Products',
+      postThumb: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=80&q=80',
+      commentText: 'PRICING details please!',
+      botReplyText: 'Hi Sarah! ✨ Here is the breakdown of our digital templates & pricing plans: https://renderreply.com/pricing',
+      ruleName: 'Pricing Trigger Rule'
+    },
+    {
+      handle: '@marcus_dev',
+      name: 'Marcus Vance',
+      avatar: 'MV',
+      email: 'marcus.vance@techlead.dev',
+      phone: '+44 7911 123456',
+      source: 'Instagram Carousel Comment',
+      keyword: 'ROADMAP',
+      status: '✓ Email Captured',
+      statusClass: 'email',
+      time: '28m ago',
+      timestamp: 'Today, 1:48 PM',
+      postTitle: 'Free Java Fullstack Roadmap 2026 PDF',
+      postThumb: 'https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?auto=format&fit=crop&w=80&q=80',
+      commentText: 'Sent you ROADMAP on the carousel post',
+      botReplyText: 'Awesome Marcus! 🚀 The Fullstack 2026 Roadmap PDF has been emailed to you and here is the direct link: https://renderreply.com/p/roadmap-pdf',
+      ruleName: 'Java Roadmap Lead Magnet'
+    },
+    {
+      handle: '@priya_creates',
+      name: 'Priya Sharma',
+      avatar: 'PS',
+      email: 'priya.sharma@creatorspace.in',
+      phone: '+91 98765 43210',
+      source: 'Instagram Story Mention',
+      keyword: 'LINK',
+      status: '✓ DM Delivered',
+      statusClass: '',
+      time: '1h ago',
+      timestamp: 'Today, 1:15 PM',
+      postTitle: 'Story Automation Blueprint & DM Triggers',
+      postThumb: 'https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&w=80&q=80',
+      commentText: 'LINK',
+      botReplyText: 'Hey Priya! 🙌 Here is the instant link you requested from our story: https://renderreply.com/story-blueprint',
+      ruleName: 'Story Reply Automation'
+    },
+    {
+      handle: '@david_agency',
+      name: 'David Ross',
+      avatar: 'DR',
+      email: 'david@scaleagency.com',
+      phone: '+1 (555) 901-4432',
+      source: 'Instagram Reel Comment',
+      keyword: 'FREE',
+      status: '✓ Email Captured',
+      statusClass: 'email',
+      time: '2h ago',
+      timestamp: 'Today, 12:10 PM',
+      postTitle: '10x Instagram Automation Strategy 2026',
+      postThumb: 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=80&q=80',
+      commentText: 'FREE resource download',
+      botReplyText: 'Hey David! 🎯 Your free resource package is ready: https://renderreply.com/free-pack. Check your email for login credentials!',
+      ruleName: 'Free Lead Pack Automation'
+    }
+  ];
+
+  const POSTS_INSPECT_DATA = [
+    {
+      title: '10x Instagram Automation Strategy 2026',
+      type: 'Instagram Reel',
+      published: '3 days ago',
+      reach: '24,800 Impressions',
+      engagementRate: '8.4%',
+      triggersFired: '620 replies delivered',
+      dmCtr: '28.4% Click-through',
+      leadsCaptured: '176 emails captured',
+      associatedRule: 'Reel Lead Magnet #GUIDE',
+      thumb: 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=80&q=80'
+    },
+    {
+      title: 'How I Make ₹50,000/mo Selling Digital Products',
+      type: 'Instagram Reel',
+      published: '5 days ago',
+      reach: '16,200 Impressions',
+      engagementRate: '9.2%',
+      triggersFired: '410 replies delivered',
+      dmCtr: '31.2% Click-through',
+      leadsCaptured: '128 emails captured',
+      associatedRule: 'Pricing Trigger Rule',
+      thumb: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=80&q=80'
+    },
+    {
+      title: 'Free Java Fullstack Roadmap 2026 PDF',
+      type: 'Instagram Carousel',
+      published: '1 week ago',
+      reach: '12,500 Impressions',
+      engagementRate: '11.8%',
+      triggersFired: '380 replies delivered',
+      dmCtr: '42.8% Click-through',
+      leadsCaptured: '162 emails captured',
+      associatedRule: 'Java Roadmap Lead Magnet',
+      thumb: 'https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?auto=format&fit=crop&w=80&q=80'
+    },
+    {
+      title: 'Story Automation Blueprint & DM Triggers',
+      type: 'Instagram Story',
+      published: '2 weeks ago',
+      reach: '8,400 Impressions',
+      engagementRate: '7.5%',
+      triggersFired: '190 replies delivered',
+      dmCtr: '24.0% Click-through',
+      leadsCaptured: '46 emails captured',
+      associatedRule: 'Story Reply Automation',
+      thumb: 'https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&w=80&q=80'
+    }
+  ];
+
+  const inspectDrawer = document.getElementById('dash-inspect-drawer');
+  const inspectBackdrop = document.getElementById('dash-inspect-backdrop');
+  const inspectTypeBadge = document.getElementById('inspect-type-badge');
+  const inspectMainTitle = document.getElementById('inspect-main-title');
+  const inspectSubTitle = document.getElementById('inspect-sub-title');
+  const inspectContent = document.getElementById('inspect-drawer-content');
+  const inspectActions = document.getElementById('inspect-drawer-actions');
+  const btnCloseInspect = document.getElementById('btn-close-inspect');
+
+  function openInspectDrawer() {
+    if (inspectDrawer) {
+      inspectDrawer.classList.add('active');
+      inspectDrawer.setAttribute('aria-hidden', 'false');
+    }
+    if (inspectBackdrop) inspectBackdrop.classList.add('active');
+  }
+
+  function closeInspectDrawer() {
+    if (inspectDrawer) {
+      inspectDrawer.classList.remove('active');
+      inspectDrawer.setAttribute('aria-hidden', 'true');
+    }
+    if (inspectBackdrop) inspectBackdrop.classList.remove('active');
+  }
+
+  if (btnCloseInspect) btnCloseInspect.addEventListener('click', closeInspectDrawer);
+  if (inspectBackdrop) inspectBackdrop.addEventListener('click', closeInspectDrawer);
+
+  window.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && inspectDrawer && inspectDrawer.classList.contains('active')) {
+      closeInspectDrawer();
+    }
+  });
+
+  function inspectLead(idx) {
+    const lead = LEADS_INSPECT_DATA[idx];
+    if (!lead) return;
+
+    if (inspectTypeBadge) inspectTypeBadge.textContent = 'Lead Inspection';
+    if (inspectMainTitle) inspectMainTitle.textContent = lead.handle;
+    if (inspectSubTitle) inspectSubTitle.textContent = `${lead.name} • Captured ${lead.time}`;
+
+    if (inspectContent) {
+      inspectContent.innerHTML = `
+        <div class="inspect-info-grid">
+          <div class="inspect-info-item">
+            <div class="inspect-info-lbl">Captured Email</div>
+            <div class="inspect-info-val">${lead.email}</div>
+          </div>
+          <div class="inspect-info-item">
+            <div class="inspect-info-lbl">Phone Number</div>
+            <div class="inspect-info-val">${lead.phone}</div>
+          </div>
+          <div class="inspect-info-item">
+            <div class="inspect-info-lbl">Trigger Keyword</div>
+            <div class="inspect-info-val"><span class="kw-tag">${lead.keyword}</span></div>
+          </div>
+          <div class="inspect-info-item">
+            <div class="inspect-info-lbl">Delivery Status</div>
+            <div class="inspect-info-val"><span class="lead-status-pill ${lead.statusClass}">${lead.status}</span></div>
+          </div>
+        </div>
+
+        <div>
+          <div class="inspect-section-title">Trigger Source Content</div>
+          <div class="post-content-cell" style="background: #f8fafc; border: 1px solid #e2e8f0; padding: 10px 12px; border-radius: 10px;">
+            <img src="${lead.postThumb}" class="post-table-thumb" alt="">
+            <div class="post-cell-meta">
+              <span class="post-table-title">${lead.postTitle}</span>
+              <span class="post-table-sub">Active Automation: <strong>${lead.ruleName}</strong></span>
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <div class="inspect-section-title">Automated DM Log</div>
+          <div class="inspect-chat-preview">
+            <div class="inspect-bubble-inbound">
+              <strong>${lead.handle}</strong>: "${lead.commentText}"
+              <span class="inspect-bubble-meta">${lead.timestamp}</span>
+            </div>
+            <div class="inspect-bubble-outbound">
+              <strong>RenderReply Bot</strong>: ${lead.botReplyText}
+              <span class="inspect-bubble-meta" style="color: #cbd5e1;">Sent instantly • < 0.8s</span>
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    if (inspectActions) {
+      inspectActions.innerHTML = `
+        <button type="button" class="btn btn-outline btn-sm" id="btn-copy-lead-email">Copy Email</button>
+        <button type="button" class="btn btn-primary btn-sm" id="btn-goto-inbox-lead">Open in Live Inbox →</button>
+      `;
+
+      const btnCopy = document.getElementById('btn-copy-lead-email');
+      if (btnCopy) {
+        btnCopy.addEventListener('click', () => {
+          navigator.clipboard.writeText(lead.email).then(() => {
+            btnCopy.textContent = '✓ Copied!';
+            showToast(`Copied ${lead.email} to clipboard`);
+            setTimeout(() => { btnCopy.textContent = 'Copy Email'; }, 2000);
+          });
+        });
+      }
+
+      const btnGotoInbox = document.getElementById('btn-goto-inbox-lead');
+      if (btnGotoInbox) {
+        btnGotoInbox.addEventListener('click', () => {
+          closeInspectDrawer();
+          const inboxNav = document.querySelector('.nav-item[data-tab="inbox"]');
+          if (inboxNav) inboxNav.click();
+          showToast(`Opened conversation with ${lead.handle}`);
+        });
+      }
+    }
+
+    openInspectDrawer();
+  }
+
+  function inspectPost(idx) {
+    const post = POSTS_INSPECT_DATA[idx];
+    if (!post) return;
+
+    if (inspectTypeBadge) inspectTypeBadge.textContent = 'Content Performance';
+    if (inspectMainTitle) inspectMainTitle.textContent = post.title;
+    if (inspectSubTitle) inspectSubTitle.textContent = `${post.type} • Published ${post.published}`;
+
+    if (inspectContent) {
+      inspectContent.innerHTML = `
+        <div style="display: flex; gap: 14px; align-items: center; background: #f8fafc; border: 1px solid #e2e8f0; padding: 12px 14px; border-radius: 12px;">
+          <img src="${post.thumb}" style="width: 54px; height: 54px; border-radius: 8px; object-fit: cover; border: 1px solid #e2e8f0;" alt="">
+          <div>
+            <div style="font-size: 13px; font-weight: 800; color: #09090b;">${post.title}</div>
+            <div style="font-size: 11px; color: #71717a; margin-top: 2px;">Assigned Rule: <strong>${post.associatedRule}</strong></div>
+          </div>
+        </div>
+
+        <div class="inspect-info-grid">
+          <div class="inspect-info-item">
+            <div class="inspect-info-lbl">Total Reach</div>
+            <div class="inspect-info-val">${post.reach}</div>
+          </div>
+          <div class="inspect-info-item">
+            <div class="inspect-info-lbl">Engagement Rate</div>
+            <div class="inspect-info-val">${post.engagementRate}</div>
+          </div>
+          <div class="inspect-info-item">
+            <div class="inspect-info-lbl">Bot Triggers Fired</div>
+            <div class="inspect-info-val">${post.triggersFired}</div>
+          </div>
+          <div class="inspect-info-item">
+            <div class="inspect-info-lbl">DM Click-Through Rate</div>
+            <div class="inspect-info-val">${post.dmCtr}</div>
+          </div>
+        </div>
+
+        <div class="inspect-info-item" style="background: #f8fafc;">
+          <div class="inspect-info-lbl">High-Intent Leads Captured</div>
+          <div class="inspect-info-val" style="font-size: 15px;">${post.leadsCaptured}</div>
+        </div>
+      `;
+    }
+
+    if (inspectActions) {
+      inspectActions.innerHTML = `
+        <button type="button" class="btn btn-outline btn-sm" onclick="closeInspectDrawer()">Close</button>
+        <button type="button" class="btn btn-primary btn-sm" id="btn-inspect-edit-rule">Manage Automation Rule →</button>
+      `;
+
+      const btnEditRule = document.getElementById('btn-inspect-edit-rule');
+      if (btnEditRule) {
+        btnEditRule.addEventListener('click', () => {
+          closeInspectDrawer();
+          const autoNav = document.querySelector('.nav-item[data-tab="automations"]');
+          if (autoNav) autoNav.click();
+          showToast(`Viewing automation rule "${post.associatedRule}"`);
+        });
+      }
+    }
+
+    openInspectDrawer();
+  }
+
+  function initTableClickInspectors() {
+    const postRows = document.querySelectorAll('.clickable-table-row[data-post-idx]');
+    postRows.forEach(row => {
+      row.addEventListener('click', () => {
+        const idx = parseInt(row.getAttribute('data-post-idx'), 10);
+        inspectPost(idx);
+      });
+    });
+
+    const leadRows = document.querySelectorAll('.clickable-table-row[data-lead-idx]');
+    leadRows.forEach(row => {
+      row.addEventListener('click', () => {
+        const idx = parseInt(row.getAttribute('data-lead-idx'), 10);
+        inspectLead(idx);
+      });
+    });
+  }
+
+  // 4. FUNNEL STEP INTERACTIVE DETAILS
+  function initFunnelInteractions() {
+    const funnelSteps = document.querySelectorAll('.funnel-step-item');
+    const dropoffMessages = [
+      'Top of Funnel: All detected keyword comments on posts & reels',
+      'Step 1 → 2: 67.0% of commenters received an instant bot DM (33% drop-off from private accounts/rate limits)',
+      'Step 2 → 3: 50.0% of DM recipients clicked the bio/store link (33.5% of overall funnel)',
+      'Step 3 → 4: 55.2% of link clickers opted in with their email address (18.5% total funnel conversion)'
+    ];
+
+    funnelSteps.forEach((step, i) => {
+      step.setAttribute('title', dropoffMessages[i] || 'Funnel step breakdown');
+      step.addEventListener('click', () => {
+        showToast(dropoffMessages[i] || 'Funnel step details');
+      });
+    });
+  }
+
+  // ==========================================================================
+  // CAPTURED LEADS VIEW TAB ENGINE & CONTROLLER
+  // ==========================================================================
+  const CAPTURED_LEADS_DATABASE = [
+    {
+      id: 'lead-1',
+      handle: '@alex_growth',
+      name: 'Alex Miller',
+      avatar: 'AM',
+      email: 'alex.miller@growthagency.io',
+      phone: '+1 (555) 234-8910',
+      keyword: '#GUIDE',
+      campaign: 'guide',
+      status: '✓ Email Captured',
+      statusClass: 'email',
+      sourceTitle: '10x Instagram Automation Strategy 2026',
+      sourceThumb: 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=80&q=80',
+      time: '2m ago',
+      timestamp: 'Today, 2:14 PM',
+      commentText: 'Can you send me the #GUIDE for full funnel setup?',
+      botReplyText: 'Hey Alex! 👋 Here is your complete 10x Automation Blueprint & PDF guide: https://renderreply.com/p/guide',
+      ruleName: 'Reel Lead Magnet #GUIDE'
+    },
+    {
+      id: 'lead-2',
+      handle: '@sarah.designs',
+      name: 'Sarah K.',
+      avatar: 'SK',
+      email: 'sarah.k@designstudio.co',
+      phone: '+1 (555) 789-1234',
+      keyword: 'PRICING',
+      campaign: 'pricing',
+      status: '✓ DM Delivered',
+      statusClass: '',
+      sourceTitle: 'How I Make ₹50,000/mo Selling Digital Products',
+      sourceThumb: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=80&q=80',
+      time: '12m ago',
+      timestamp: 'Today, 2:04 PM',
+      commentText: 'PRICING details please!',
+      botReplyText: 'Hi Sarah! ✨ Here is the breakdown of our digital templates & pricing plans: https://renderreply.com/pricing',
+      ruleName: 'Pricing Trigger Rule'
+    },
+    {
+      id: 'lead-3',
+      handle: '@marcus_dev',
+      name: 'Marcus Vance',
+      avatar: 'MV',
+      email: 'marcus.vance@techlead.dev',
+      phone: '+44 7911 123456',
+      keyword: 'ROADMAP',
+      campaign: 'roadmap',
+      status: '✓ Email Captured',
+      statusClass: 'email',
+      sourceTitle: 'Free Java Fullstack Roadmap 2026 PDF',
+      sourceThumb: 'https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?auto=format&fit=crop&w=80&q=80',
+      time: '28m ago',
+      timestamp: 'Today, 1:48 PM',
+      commentText: 'Sent you ROADMAP on the carousel post',
+      botReplyText: 'Awesome Marcus! 🚀 The Fullstack 2026 Roadmap PDF has been emailed to you and here is the direct link: https://renderreply.com/p/roadmap-pdf',
+      ruleName: 'Java Roadmap Lead Magnet'
+    },
+    {
+      id: 'lead-4',
+      handle: '@priya_creates',
+      name: 'Priya Sharma',
+      avatar: 'PS',
+      email: 'priya.sharma@creatorspace.in',
+      phone: '+91 98765 43210',
+      keyword: 'LINK',
+      campaign: 'story',
+      status: '✓ DM Delivered',
+      statusClass: '',
+      sourceTitle: 'Story Automation Blueprint & DM Triggers',
+      sourceThumb: 'https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&w=80&q=80',
+      time: '1h ago',
+      timestamp: 'Today, 1:15 PM',
+      commentText: 'LINK',
+      botReplyText: 'Hey Priya! 🙌 Here is the instant link you requested from our story: https://renderreply.com/story-blueprint',
+      ruleName: 'Story Reply Automation'
+    },
+    {
+      id: 'lead-5',
+      handle: '@david_agency',
+      name: 'David Ross',
+      avatar: 'DR',
+      email: 'david@scaleagency.com',
+      phone: '+1 (555) 901-4432',
+      keyword: 'FREE',
+      campaign: 'free',
+      status: '✓ Email Captured',
+      statusClass: 'email',
+      sourceTitle: 'Free Lead Pack Automation',
+      sourceThumb: 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=80&q=80',
+      time: '2h ago',
+      timestamp: 'Today, 12:10 PM',
+      commentText: 'FREE resource download',
+      botReplyText: 'Hey David! 🎯 Your free resource package is ready: https://renderreply.com/free-pack. Check your email for login credentials!',
+      ruleName: 'Free Lead Pack Automation'
+    },
+    {
+      id: 'lead-6',
+      handle: '@elena_ecom',
+      name: 'Elena Rostova',
+      avatar: 'ER',
+      email: 'elena@ecomscale.co',
+      phone: '+1 (555) 432-1098',
+      keyword: '#GUIDE',
+      campaign: 'guide',
+      status: '✓ Email Captured',
+      statusClass: 'email',
+      sourceTitle: '10x Instagram Automation Strategy 2026',
+      sourceThumb: 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=80&q=80',
+      time: '3h ago',
+      timestamp: 'Today, 11:32 AM',
+      commentText: '#GUIDE please!',
+      botReplyText: 'Hey Elena! 📈 Here is the full guide to scaling digital products with RenderReply: https://renderreply.com/p/guide',
+      ruleName: 'Reel Lead Magnet #GUIDE'
+    },
+    {
+      id: 'lead-7',
+      handle: '@karan_tech',
+      name: 'Karan Patel',
+      avatar: 'KP',
+      email: 'karan@codevalley.dev',
+      phone: '+91 99887 76655',
+      keyword: 'ROADMAP',
+      campaign: 'roadmap',
+      status: '✓ Email Captured',
+      statusClass: 'email',
+      sourceTitle: 'Free Java Fullstack Roadmap 2026 PDF',
+      sourceThumb: 'https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?auto=format&fit=crop&w=80&q=80',
+      time: '4h ago',
+      timestamp: 'Today, 10:18 AM',
+      commentText: 'ROADMAP link',
+      botReplyText: 'Hey Karan! 🚀 We sent the Fullstack Roadmap PDF straight to your inbox and here: https://renderreply.com/p/roadmap-pdf',
+      ruleName: 'Java Roadmap Lead Magnet'
+    },
+    {
+      id: 'lead-8',
+      handle: '@chloe_fashion',
+      name: 'Chloe Bennett',
+      avatar: 'CB',
+      email: 'chloe@stylecreator.com',
+      phone: '+1 (555) 678-9012',
+      keyword: 'PRICING',
+      campaign: 'pricing',
+      status: '✓ DM Delivered',
+      statusClass: '',
+      sourceTitle: 'How I Make ₹50,000/mo Selling Digital Products',
+      sourceThumb: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=80&q=80',
+      time: '5h ago',
+      timestamp: 'Today, 09:44 AM',
+      commentText: 'Can I get the PRICING?',
+      botReplyText: 'Hey Chloe! ✨ Here are all current creator store tiers and checkout links: https://renderreply.com/pricing',
+      ruleName: 'Pricing Trigger Rule'
+    }
+  ];
+
+  let currentLeadsCampaign = 'all';
+  let currentLeadsStatus = 'all';
+  let currentLeadsSearchQuery = '';
+
+  function renderCapturedLeadsTable() {
+    const tableBody = document.getElementById('leads-view-table-body');
+    if (!tableBody) return;
+
+    const filtered = CAPTURED_LEADS_DATABASE.filter(lead => {
+      // Campaign Filter
+      if (currentLeadsCampaign !== 'all' && lead.campaign !== currentLeadsCampaign) {
+        return false;
+      }
+      // Status Filter
+      if (currentLeadsStatus === 'email' && !lead.statusClass.includes('email')) {
+        return false;
+      }
+      if (currentLeadsStatus === 'dm' && lead.statusClass.includes('email')) {
+        return false;
+      }
+      // Search Query
+      if (currentLeadsSearchQuery) {
+        const q = currentLeadsSearchQuery.toLowerCase();
+        const matches = (
+          lead.handle.toLowerCase().includes(q) ||
+          lead.name.toLowerCase().includes(q) ||
+          lead.email.toLowerCase().includes(q) ||
+          lead.phone.toLowerCase().includes(q) ||
+          lead.keyword.toLowerCase().includes(q) ||
+          lead.sourceTitle.toLowerCase().includes(q)
+        );
+        if (!matches) return false;
+      }
+      return true;
+    });
+
+    if (filtered.length === 0) {
+      tableBody.innerHTML = `
+        <tr>
+          <td colspan="7" style="text-align: center; padding: 48px 20px;">
+            <div style="color: #71717a; font-size: 13px; font-weight: 600;">
+              No captured leads matched your current filter or search criteria.
+            </div>
+          </td>
+        </tr>
+      `;
+      return;
+    }
+
+    tableBody.innerHTML = filtered.map((lead, idx) => `
+      <tr class="clickable-table-row" data-db-lead-id="${lead.id}">
+        <td>
+          <div class="lead-user-cell">
+            <div class="lead-user-avatar">${lead.avatar}</div>
+            <div class="lead-cell-meta">
+              <span class="lead-handle">${lead.handle}</span>
+              <span class="lead-name">${lead.name}</span>
+            </div>
+          </div>
+        </td>
+        <td>
+          <div class="lead-contact-block">
+            <div class="lead-email-line">
+              <span>${lead.email}</span>
+            </div>
+            <div class="lead-phone-line">${lead.phone}</div>
+          </div>
+        </td>
+        <td class="cell-align-center">
+          <span class="kw-tag">${lead.keyword}</span>
+        </td>
+        <td class="cell-align-center">
+          <span class="lead-status-pill ${lead.statusClass}">${lead.status}</span>
+        </td>
+        <td>
+          <div class="post-content-cell">
+            <img src="${lead.sourceThumb}" class="post-table-thumb" alt="">
+            <div class="post-cell-meta">
+              <span class="post-table-title" style="max-width: 170px;">${lead.sourceTitle}</span>
+              <span class="post-table-sub">Auto: ${lead.ruleName}</span>
+            </div>
+          </div>
+        </td>
+        <td class="cell-align-right time-text">${lead.time}</td>
+        <td class="cell-align-center">
+          <button type="button" class="btn-mini-action btn-inspect-db-lead" data-db-lead-id="${lead.id}">
+            Inspect
+          </button>
+        </td>
+      </tr>
+    `).join('');
+
+    // Attach click listeners to rows & inspect buttons
+    tableBody.querySelectorAll('.clickable-table-row').forEach(row => {
+      row.addEventListener('click', (e) => {
+        const id = row.getAttribute('data-db-lead-id');
+        const found = CAPTURED_LEADS_DATABASE.find(l => l.id === id);
+        if (found) {
+          inspectCustomLead(found);
+        }
+      });
+    });
+
+    tableBody.querySelectorAll('.btn-inspect-db-lead').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const id = btn.getAttribute('data-db-lead-id');
+        const found = CAPTURED_LEADS_DATABASE.find(l => l.id === id);
+        if (found) {
+          inspectCustomLead(found);
+        }
+      });
+    });
+  }
+
+  function inspectCustomLead(lead) {
+    if (inspectTypeBadge) inspectTypeBadge.textContent = 'Lead Inspection';
+    if (inspectMainTitle) inspectMainTitle.textContent = lead.handle;
+    if (inspectSubTitle) inspectSubTitle.textContent = `${lead.name} • Captured ${lead.time}`;
+
+    if (inspectContent) {
+      inspectContent.innerHTML = `
+        <div class="inspect-info-grid">
+          <div class="inspect-info-item">
+            <div class="inspect-info-lbl">Captured Email</div>
+            <div class="inspect-info-val">${lead.email}</div>
+          </div>
+          <div class="inspect-info-item">
+            <div class="inspect-info-lbl">Phone Number</div>
+            <div class="inspect-info-val">${lead.phone}</div>
+          </div>
+          <div class="inspect-info-item">
+            <div class="inspect-info-lbl">Trigger Keyword</div>
+            <div class="inspect-info-val"><span class="kw-tag">${lead.keyword}</span></div>
+          </div>
+          <div class="inspect-info-item">
+            <div class="inspect-info-lbl">Delivery Status</div>
+            <div class="inspect-info-val"><span class="lead-status-pill ${lead.statusClass}">${lead.status}</span></div>
+          </div>
+        </div>
+
+        <div>
+          <div class="inspect-section-title">Trigger Source Content</div>
+          <div class="post-content-cell" style="background: #f8fafc; border: 1px solid #e2e8f0; padding: 10px 12px; border-radius: 10px;">
+            <img src="${lead.sourceThumb}" class="post-table-thumb" alt="">
+            <div class="post-cell-meta">
+              <span class="post-table-title">${lead.sourceTitle}</span>
+              <span class="post-table-sub">Active Automation: <strong>${lead.ruleName}</strong></span>
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <div class="inspect-section-title">Automated DM Log</div>
+          <div class="inspect-chat-preview">
+            <div class="inspect-bubble-inbound">
+              <strong>${lead.handle}</strong>: "${lead.commentText}"
+              <span class="inspect-bubble-meta">${lead.timestamp}</span>
+            </div>
+            <div class="inspect-bubble-outbound">
+              <strong>RenderReply Bot</strong>: ${lead.botReplyText}
+              <span class="inspect-bubble-meta" style="color: #cbd5e1;">Sent instantly • < 0.8s</span>
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    if (inspectActions) {
+      inspectActions.innerHTML = `
+        <button type="button" class="btn btn-outline btn-sm" id="btn-copy-custom-lead-email">Copy Email</button>
+        <button type="button" class="btn btn-primary btn-sm" id="btn-goto-custom-inbox-lead">Open in Live Inbox →</button>
+      `;
+
+      const btnCopy = document.getElementById('btn-copy-custom-lead-email');
+      if (btnCopy) {
+        btnCopy.addEventListener('click', () => {
+          navigator.clipboard.writeText(lead.email).then(() => {
+            btnCopy.textContent = '✓ Copied!';
+            showToast(`Copied ${lead.email} to clipboard`);
+            setTimeout(() => { btnCopy.textContent = 'Copy Email'; }, 2000);
+          });
+        });
+      }
+
+      const btnGotoInbox = document.getElementById('btn-goto-custom-inbox-lead');
+      if (btnGotoInbox) {
+        btnGotoInbox.addEventListener('click', () => {
+          closeInspectDrawer();
+          const inboxNav = document.querySelector('.nav-item[data-tab="inbox"]');
+          if (inboxNav) inboxNav.click();
+          showToast(`Opened conversation with ${lead.handle}`);
+        });
+      }
+    }
+
+    openInspectDrawer();
+  }
+
+  function initCapturedLeadsTabControls() {
+    const reelCards = document.querySelectorAll('#leads-reels-cards-grid .leads-reel-card');
+    const campaignPills = document.querySelectorAll('#leads-campaign-filters .leads-camp-pill');
+    const tableWrapper = document.querySelector('#leads-view .dash-table-card');
+    const descPill = document.getElementById('leads-active-filter-desc');
+    const currentReelLabel = document.getElementById('leads-current-reel-label');
+
+    const campaignDescriptions = {
+      all: 'This is All Reels Leads',
+      guide: 'Showing leads for 10x Instagram Automation Strategy (Keyword: #GUIDE)',
+      pricing: 'Showing leads for How I Make ₹50K/mo Selling Digital (Keyword: PRICING)',
+      roadmap: 'Showing leads for Free Java Roadmap 2026 PDF (Keyword: ROADMAP)',
+      story: 'Showing leads for Story Automation Blueprint (Keyword: LINK)',
+      free: 'Showing leads for Free Resource Pack Download (Keyword: FREE)'
+    };
+
+    const campaignShortLabels = {
+      all: 'All Reels Selected',
+      guide: 'Reel: #GUIDE',
+      pricing: 'Reel: PRICING',
+      roadmap: 'Carousel: ROADMAP',
+      story: 'Story: LINK',
+      free: 'Reel: FREE'
+    };
+
+    function selectCampaign(campKey, isTriggeredFromReel = false) {
+      currentLeadsCampaign = campKey || 'all';
+
+      // Sync Reel Cards active state
+      reelCards.forEach(c => {
+        if (c.getAttribute('data-campaign') === currentLeadsCampaign) {
+          c.classList.add('active');
+        } else {
+          c.classList.remove('active');
+        }
+      });
+
+      // Sync Filter Pills active state
+      campaignPills.forEach(p => {
+        if (p.getAttribute('data-campaign') === currentLeadsCampaign) {
+          p.classList.add('active');
+        } else {
+          p.classList.remove('active');
+        }
+      });
+
+      // Update Sub-pills and descriptions
+      if (descPill) {
+        descPill.textContent = campaignDescriptions[currentLeadsCampaign] || 'Filtered Leads';
+      }
+      if (currentReelLabel) {
+        currentReelLabel.textContent = campaignShortLabels[currentLeadsCampaign] || 'Selected Reel';
+      }
+
+      skeletonizeCapturedLeads(() => {
+        renderCapturedLeadsTable();
+      }, 250);
+
+      const label = campaignShortLabels[currentLeadsCampaign] || 'Filtered Leads';
+      if (isTriggeredFromReel) {
+        showToast(`Reloaded: ${campaignDescriptions[currentLeadsCampaign]}`);
+      }
+    }
+
+    // Reel Cards Click Listeners
+    reelCards.forEach(card => {
+      card.addEventListener('click', () => {
+        const camp = card.getAttribute('data-campaign') || 'all';
+        selectCampaign(camp, true);
+      });
+    });
+
+    // Campaign Pills Click Listeners
+    campaignPills.forEach(pill => {
+      pill.addEventListener('click', () => {
+        const camp = pill.getAttribute('data-campaign') || 'all';
+        selectCampaign(camp, false);
+      });
+    });
+
+    // Status Filter Buttons
+    const statusBtns = document.querySelectorAll('#leads-status-filter-buttons button');
+    statusBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        statusBtns.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        currentLeadsStatus = btn.getAttribute('data-status-filter') || 'all';
+        
+        skeletonizeCapturedLeads(() => {
+          renderCapturedLeadsTable();
+        }, 200);
+      });
+    });
+
+    // Search Input
+    const searchInput = document.getElementById('input-search-leads-tab');
+    if (searchInput) {
+      searchInput.addEventListener('input', (e) => {
+        currentLeadsSearchQuery = e.target.value.trim();
+        renderCapturedLeadsTable();
+      });
+    }
+
+    // Refresh Button (Skeleton Loading Animation for Captured Leads)
+    const btnRefreshLeads = document.getElementById('btn-refresh-leads');
+    if (btnRefreshLeads) {
+      btnRefreshLeads.addEventListener('click', () => {
+        const icon = btnRefreshLeads.querySelector('.refresh-icon') || btnRefreshLeads.querySelector('svg');
+        if (icon) icon.classList.add('spinning');
+        showToast('Refreshing captured leads database...');
+        
+        skeletonizeCapturedLeads(() => {
+          if (icon) icon.classList.remove('spinning');
+          renderCapturedLeadsTable();
+          showToast('Captured leads database synchronized with Instagram.');
+        }, 400);
+      });
+    }
+
+    // Export CSV Button
+    const btnExportLeadsCsv = document.getElementById('btn-export-csv-leads');
+    if (btnExportLeadsCsv) {
+      btnExportLeadsCsv.addEventListener('click', () => {
+        const rows = [
+          ['"Instagram Handle"', '"Full Name"', '"Email Address"', '"Phone Number"', '"Trigger Keyword"', '"Status"', '"Source Content"', '"Captured Time"']
+        ];
+
+        CAPTURED_LEADS_DATABASE.forEach(l => {
+          rows.push([
+            `"${l.handle}"`,
+            `"${l.name}"`,
+            `"${l.email}"`,
+            `"${l.phone}"`,
+            `"${l.keyword}"`,
+            `"${l.status}"`,
+            `"${l.sourceTitle}"`,
+            `"${l.timestamp}"`
+          ]);
+        });
+
+        const csvContent = 'data:text/csv;charset=utf-8,' + rows.map(e => e.join(',')).join('\n');
+        const encodedUri = encodeURI(csvContent);
+        const link = document.createElement('a');
+        link.setAttribute('href', encodedUri);
+        link.setAttribute('download', 'RenderReply_All_Captured_Leads.csv');
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+
+        showToast('Exported all captured leads to CSV!');
+      });
+    }
+
+    // Initial render
+    selectCampaign('all', false);
+  }
+
+  // Initialize Advanced Dashboard Features & Leads View
+  attachChartTooltipListeners();
+  initDashboardCsvExport();
+  initTableClickInspectors();
+  initFunnelInteractions();
+  initCapturedLeadsTabControls();
+
+  // 1. Dashboard View Refresh Button (Skeleton Shimmer Loading)
+  const btnDashboardRefresh = document.getElementById('btn-dashboard-refresh');
+  if (btnDashboardRefresh) {
+    btnDashboardRefresh.addEventListener('click', () => {
+      const refreshIcon = btnDashboardRefresh.querySelector('.refresh-icon') || btnDashboardRefresh.querySelector('svg');
+      if (refreshIcon) refreshIcon.classList.add('spinning');
+      showToast('Refreshing real-time dashboard analytics...');
+      
+      skeletonizeDashboard(() => {
+        loadDashboardData(currentRange);
+        if (refreshIcon) refreshIcon.classList.remove('spinning');
+        attachChartTooltipListeners();
+        showToast('Dashboard analytics synchronized with Instagram.');
+      }, 400);
+    });
+  }
+
+  // 3. Bio Link / Store Preview Refresh Button (Skeleton Shimmer Loading)
+  const btnLppRefresh = document.getElementById('btn-lpp-refresh');
+  if (btnLppRefresh) {
+    btnLppRefresh.addEventListener('click', () => {
+      const icon = btnLppRefresh.querySelector('svg');
+      if (icon) icon.classList.add('spinning');
+      showToast('Refreshing live mobile store preview...');
+      
+      skeletonizeStorePreview(() => {
+        if (icon) icon.classList.remove('spinning');
+        showToast('Live store preview updated.');
+      }, 400);
+    });
+  }
 
   // 7b. BIO LINK SUB-TAB SWITCHING & INTERACTIVE PILLS
   const biolinkSubNavBtns = document.querySelectorAll('.biolink-subtabs .sub-tab-btn');
@@ -1505,17 +2766,18 @@ function initApp() {
     });
   }
 
-  // Refresh Automation Rules Button
+  // Refresh Automation Rules Button (Skeleton Shimmer Loading)
   if (btnRulesRefresh) {
     btnRulesRefresh.addEventListener('click', () => {
-      const icon = btnRulesRefresh.querySelector('.refresh-icon');
+      const icon = btnRulesRefresh.querySelector('.refresh-icon') || btnRulesRefresh.querySelector('svg');
       if (icon) icon.classList.add('spinning');
+      showToast('Refreshing automation rules engine...');
 
-      setTimeout(() => {
+      skeletonizeRules(() => {
         if (icon) icon.classList.remove('spinning');
         renderAutomationRules();
         showToast('Automation rules synchronized with Instagram Graph API.');
-      }, 500);
+      }, 400);
     });
   }
 
@@ -2019,12 +3281,19 @@ function initApp() {
     });
   }
 
-  // Refresh Inbox Button
+  // Refresh Inbox Button (Skeleton Shimmer Loading)
   const btnInboxRefresh = document.getElementById('btn-inbox-refresh');
   if (btnInboxRefresh) {
     btnInboxRefresh.addEventListener('click', () => {
+      const icon = btnInboxRefresh.querySelector('svg');
+      if (icon) icon.classList.add('spinning');
       showToast('Syncing real-time Instagram DMs & comments...');
-      selectInboxThread(activeThreadId);
+      
+      skeletonizeInbox(() => {
+        if (icon) icon.classList.remove('spinning');
+        selectInboxThread(activeThreadId);
+        showToast('Live DM Inbox synchronized with Instagram.');
+      }, 400);
     });
   }
 
@@ -5027,6 +6296,7 @@ function initCreatorStoreSettings() {
   if (window.syncStoreProfileToUI) {
     window.syncStoreProfileToUI(window.storeProfileState);
   }
+  loadDashboardData('30 Days');
 }
 
 if (document.readyState === 'loading') {

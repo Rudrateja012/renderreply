@@ -128,11 +128,19 @@
               <h1 class="view-title">Dashboard</h1>
               <span class="live-badge"><span class="dot"></span> Live</span>
             </div>
-            <p class="view-subtitle">Here's your automation summary for today.</p>
+            <p class="view-subtitle">Here's your automation summary and audience growth for today.</p>
           </div>
           <div class="header-actions">
+            <button class="btn btn-outline" id="btn-export-dash-csv" title="Export Analytics Summary to CSV">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" style="margin-right: 4px;">
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                <polyline points="7 10 12 15 17 10"/>
+                <line x1="12" y1="15" x2="12" y2="3"/>
+              </svg>
+              Export CSV
+            </button>
             <button class="btn btn-refresh" id="btn-dashboard-refresh">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" class="refresh-icon">
                 <path d="M23 4v6h-6M1 20v-6h6" />
                 <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15" />
               </svg>
@@ -144,13 +152,18 @@
           </div>
         </header>
 
-        <!-- ACCOUNT INFO BAR -->
+        <!-- ACCOUNT INFO & TIME RANGE SELECTOR BAR -->
         <div class="account-bar">
           <div class="account-info" id="account-info-container">
             <div class="account-icon">R</div>
             <div class="account-details">
-              <span class="account-handle">@render6457</span>
-              <span class="account-status">Instagram Connected</span>
+              <div style="display: flex; align-items: center; gap: 6px;">
+                <span class="account-handle" id="dashboard-account-handle">@render6457</span>
+                <span class="verified-creator-icon" title="Instagram Verified">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="#3b82f6"><circle cx="12" cy="12" r="10"/><polyline points="8 12 11 15 16 9" stroke="#ffffff" stroke-width="2.5" fill="none"/></svg>
+                </span>
+              </div>
+              <span class="account-status">Instagram Connected • Verified Account</span>
             </div>
           </div>
           <div class="time-range-picker" id="dashboard-time-picker">
@@ -163,71 +176,531 @@
           </div>
         </div>
 
-        <!-- 8 STATS METRICS GRID -->
-        <div class="stats-grid">
-          <div class="stat-card">
-            <div class="stat-label">FOLLOWERS</div>
-            <div class="stat-value" id="stat-followers">0</div>
+        <!-- TOP FLAT OVERVIEW STATS GRID (MATCHING USER SCREENSHOT) -->
+        <div class="dash-flat-overview-grid">
+          <div class="flat-metric-item">
+            <span class="flat-metric-label">FOLLOWERS</span>
+            <span class="flat-metric-value" id="stat-followers">48</span>
           </div>
-          <div class="stat-card">
-            <div class="stat-label">FOLLOWING</div>
-            <div class="stat-value" id="stat-following">1</div>
+          <div class="flat-metric-item">
+            <span class="flat-metric-label">FOLLOWING</span>
+            <span class="flat-metric-value" id="stat-following">12</span>
           </div>
-          <div class="stat-card">
-            <div class="stat-label">TOTAL VIEWS</div>
-            <div class="stat-value" id="stat-views">0</div>
+          <div class="flat-metric-item">
+            <span class="flat-metric-label">TOTAL VIEWS</span>
+            <span class="flat-metric-value" id="stat-views">1,240</span>
           </div>
-          <div class="stat-card">
-            <div class="stat-label">COMMENTS</div>
-            <div class="stat-value" id="stat-comments">0</div>
+          <div class="flat-metric-item">
+            <span class="flat-metric-label">COMMENTS</span>
+            <span class="flat-metric-value" id="stat-comments">184</span>
           </div>
-          <div class="stat-card">
-            <div class="stat-label">TOTAL REPLIES</div>
-            <div class="stat-value" id="stat-replies">2</div>
+
+          <div class="flat-metric-item">
+            <span class="flat-metric-label">TOTAL REPLIES</span>
+            <span class="flat-metric-value" id="stat-total-replies">96</span>
           </div>
-          <div class="stat-card">
-            <div class="stat-label">SENT TODAY</div>
-            <div class="stat-value" id="stat-sent-today">0</div>
+          <div class="flat-metric-item">
+            <span class="flat-metric-label">SENT TODAY</span>
+            <span class="flat-metric-value" id="stat-sent-today">14</span>
           </div>
-          <div class="stat-card">
-            <div class="stat-label">ACTIVE RULES</div>
-            <div class="stat-value" id="stat-active-rules">1</div>
+          <div class="flat-metric-item">
+            <span class="flat-metric-label">ACTIVE RULES</span>
+            <span class="flat-metric-value" id="stat-active-rules-flat">3</span>
           </div>
-          <div class="stat-card">
-            <div class="stat-label">
-              CAPTURED LEADS
-              <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"
-                style="margin-left: 2px;">
-                <path d="M7 17L17 7M17 7H7M17 7V17" />
-              </svg>
-            </div>
-            <div class="stat-value" id="stat-captured-leads">0</div>
+          <div class="flat-metric-item">
+            <span class="flat-metric-label">CAPTURED LEADS</span>
+            <span class="flat-metric-value" id="stat-captured-leads-flat">28</span>
           </div>
         </div>
 
-        <!-- CHARTS GRID -->
-        <div class="charts-grid">
-          <div class="chart-card">
-            <div class="chart-title">Replies Sent Activity</div>
-            <div class="chart-subtitle" id="subtitle-replies">Automation activity over the last 7 days.</div>
-            <div class="chart-container" id="chart-replies-container">
-              <!-- Rendered via JS -->
+        <!-- 1. TOP QUICK-STATS GRID (2 ROWS OF 4 CARDS) -->
+        <div class="dash-quick-stats-container">
+          <!-- Section 1 Header: Reach & Engagement -->
+          <div class="stats-section-label">
+            <span>Instagram Reach &amp; Engagement</span>
+            <span class="sub-pill">Live Synced</span>
+          </div>
+          <div class="dash-stats-grid">
+            <div class="dash-stat-card">
+              <div class="dash-stat-top">
+                <span class="dash-stat-lbl">Accounts Reached</span>
+                <span class="dash-trend pos" id="trend-reach">▲ +14.2%</span>
+              </div>
+              <div class="dash-stat-val" id="stat-reach">48.2K</div>
+              <div class="dash-stat-sub">Organic Instagram Impressions</div>
+            </div>
+
+            <div class="dash-stat-card">
+              <div class="dash-stat-top">
+                <span class="dash-stat-lbl">Accounts Engaged</span>
+                <span class="dash-trend pos" id="trend-engaged">▲ +8.4%</span>
+              </div>
+              <div class="dash-stat-val" id="stat-engaged">5.8K</div>
+              <div class="dash-stat-sub">Comments, Likes &amp; Shares</div>
+            </div>
+
+            <div class="dash-stat-card">
+              <div class="dash-stat-top">
+                <span class="dash-stat-lbl">Profile Visits</span>
+                <span class="dash-trend pos" id="trend-visits">▲ +18.0%</span>
+              </div>
+              <div class="dash-stat-val" id="stat-visits">3,410</div>
+              <div class="dash-stat-sub">Unique Visitors to Profile</div>
+            </div>
+
+            <div class="dash-stat-card">
+              <div class="dash-stat-top">
+                <span class="dash-stat-lbl">Link / Bio Clicks</span>
+                <span class="dash-trend pos" id="trend-clicks">▲ +22.5%</span>
+              </div>
+              <div class="dash-stat-val" id="stat-clicks">890</div>
+              <div class="dash-stat-sub">Store &amp; Lead Magnet Clicks</div>
             </div>
           </div>
 
-          <div class="chart-card">
-            <div class="chart-title">Instagram Followers Growth</div>
-            <div class="chart-subtitle" id="subtitle-followers">Follower growth over the last 7 days.</div>
-            <div class="chart-container" id="chart-followers-container">
-              <!-- Rendered via JS -->
+          <!-- Section 2 Header: RenderReply Automation ROI -->
+          <div class="stats-section-label" style="margin-top: 18px;">
+            <span>RenderReply Automation ROI</span>
+            <span class="sub-pill highlight">Bot Engine Active</span>
+          </div>
+          <div class="dash-stats-grid">
+            <div class="dash-stat-card">
+              <div class="dash-stat-top">
+                <span class="dash-stat-lbl">Auto-Replies Sent</span>
+                <span class="dash-trend pos" id="trend-replies">▲ +12.8%</span>
+              </div>
+              <div class="dash-stat-val" id="stat-replies">1,240</div>
+              <div class="dash-stat-sub">Instant Comment &amp; DM Triggers</div>
+            </div>
+
+            <div class="dash-stat-card">
+              <div class="dash-stat-top">
+                <span class="dash-stat-lbl">DMs Triggered Today</span>
+                <span class="dash-trend pos" id="trend-dms-today">▲ +5.2%</span>
+              </div>
+              <div class="dash-stat-val" id="stat-dms-today">86</div>
+              <div class="dash-stat-sub">Outbound Bot Executions</div>
+            </div>
+
+            <div class="dash-stat-card">
+              <div class="dash-stat-top">
+                <span class="dash-stat-lbl">Active Keywords / Rules</span>
+                <span class="dash-trend active-pill" id="trend-active-rules">● 100% Uptime</span>
+              </div>
+              <div class="dash-stat-val" id="stat-active-rules">5 Active</div>
+              <div class="dash-stat-sub">Live Automation Triggers</div>
+            </div>
+
+            <div class="dash-stat-card">
+              <div class="dash-stat-top">
+                <span class="dash-stat-lbl">Captured Leads / Emails</span>
+                <span class="dash-trend pos" id="trend-leads">▲ +31.4%</span>
+              </div>
+              <div class="dash-stat-val" id="stat-leads">342</div>
+              <div class="dash-stat-sub">High-Intent Buyer Contacts</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 2. PRIMARY ANALYTICS ROW (3 WHITE FLOATING CARDS) -->
+        <div class="dash-charts-3col">
+          <!-- CARD 1: Reach & Engagement Breakdown (Dual Line Chart) -->
+          <div class="dash-chart-card" id="dash-reach-chart-card">
+            <div class="dash-card-header">
+              <div>
+                <h3 class="dash-card-title">Reach &amp; Engagement Breakdown</h3>
+                <p class="dash-card-sub" id="reach-chart-sub">Instagram Reach vs Profile Activity trends.</p>
+              </div>
+              <div class="dash-legend-row">
+                <span class="dash-leg-item"><span class="dash-leg-dot reach-black"></span>Reach (<strong id="leg-reach-val">48.2K</strong>)</span>
+                <span class="dash-leg-item"><span class="dash-leg-dot act-slate"></span>Profile Activity (<strong id="leg-activity-val">3.4K</strong>)</span>
+              </div>
+            </div>
+            <div class="dash-chart-wrapper" id="dash-reach-chart-box">
+              <svg viewBox="0 0 330 145" class="dual-line-chart-svg" style="width: 100%; height: 100%;">
+                <defs>
+                  <linearGradient id="initReachGrad" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="0%" stop-color="#09090b" stop-opacity="0.10"/>
+                    <stop offset="100%" stop-color="#09090b" stop-opacity="0.0"/>
+                  </linearGradient>
+                </defs>
+
+                <!-- Background Dash Gridlines -->
+                <line x1="32" y1="28" x2="315" y2="28" stroke="#f1f5f9" stroke-width="1" stroke-dasharray="3 3"/>
+                <line x1="32" y1="70" x2="315" y2="70" stroke="#f1f5f9" stroke-width="1" stroke-dasharray="3 3"/>
+                <line x1="32" y1="112" x2="315" y2="112" stroke="#f1f5f9" stroke-width="1"/>
+
+                <!-- Y Axis Labels -->
+                <text x="26" y="32" font-family="'Inter', sans-serif" font-size="9" font-weight="700" fill="#71717a" text-anchor="end">50K</text>
+                <text x="26" y="115" font-family="'Inter', sans-serif" font-size="9" font-weight="700" fill="#71717a" text-anchor="end">0</text>
+
+                <!-- Reach Area Fill -->
+                <path d="M 36,81.37 L 81.67,64.35 L 127.33,47.33 L 173,57.54 L 218.67,37.11 L 264.33,40.52 L 310,29.96 L 310,112 L 36,112 Z" fill="url(#initReachGrad)"/>
+
+                <!-- Reach Bold Black Line -->
+                <path d="M 36,81.37 L 81.67,64.35 L 127.33,47.33 L 173,57.54 L 218.67,37.11 L 264.33,40.52 L 310,29.96" fill="none" stroke="#09090b" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
+
+                <!-- Profile Activity Slate Line -->
+                <path d="M 36,90.88 L 81.67,80.34 L 127.33,69.79 L 173,75.06 L 218.67,59.25 L 264.33,62.76 L 310,52.00" fill="none" stroke="#71717a" stroke-width="1.8" stroke-dasharray="3 3" stroke-linecap="round" stroke-linejoin="round"/>
+
+                <!-- Data Points Circles -->
+                <circle cx="36" cy="81.37" r="3.2" fill="#ffffff" stroke="#09090b" stroke-width="2"/>
+                <circle cx="36" cy="90.88" r="2.5" fill="#ffffff" stroke="#71717a" stroke-width="1.5"/>
+                <circle cx="81.67" cy="64.35" r="3.2" fill="#ffffff" stroke="#09090b" stroke-width="2"/>
+                <circle cx="81.67" cy="80.34" r="2.5" fill="#ffffff" stroke="#71717a" stroke-width="1.5"/>
+                <circle cx="127.33" cy="47.33" r="3.2" fill="#ffffff" stroke="#09090b" stroke-width="2"/>
+                <circle cx="127.33" cy="69.79" r="2.5" fill="#ffffff" stroke="#71717a" stroke-width="1.5"/>
+                <circle cx="173" cy="57.54" r="3.2" fill="#ffffff" stroke="#09090b" stroke-width="2"/>
+                <circle cx="173" cy="75.06" r="2.5" fill="#ffffff" stroke="#71717a" stroke-width="1.5"/>
+                <circle cx="218.67" cy="37.11" r="3.2" fill="#ffffff" stroke="#09090b" stroke-width="2"/>
+                <circle cx="218.67" cy="59.25" r="2.5" fill="#ffffff" stroke="#71717a" stroke-width="1.5"/>
+                <circle cx="264.33" cy="40.52" r="3.2" fill="#ffffff" stroke="#09090b" stroke-width="2"/>
+                <circle cx="264.33" cy="62.76" r="2.5" fill="#ffffff" stroke="#71717a" stroke-width="1.5"/>
+                <circle cx="310" cy="29.96" r="3.2" fill="#ffffff" stroke="#09090b" stroke-width="2"/>
+                <circle cx="310" cy="52.00" r="2.5" fill="#ffffff" stroke="#71717a" stroke-width="1.5"/>
+
+                <!-- X Axis Labels -->
+                <text x="36" y="132" font-family="'Inter', sans-serif" font-size="9" font-weight="600" fill="#71717a" text-anchor="middle">Day 1</text>
+                <text x="81.67" y="132" font-family="'Inter', sans-serif" font-size="9" font-weight="600" fill="#71717a" text-anchor="middle">Day 5</text>
+                <text x="127.33" y="132" font-family="'Inter', sans-serif" font-size="9" font-weight="600" fill="#71717a" text-anchor="middle">Day 10</text>
+                <text x="173" y="132" font-family="'Inter', sans-serif" font-size="9" font-weight="600" fill="#71717a" text-anchor="middle">Day 15</text>
+                <text x="218.67" y="132" font-family="'Inter', sans-serif" font-size="9" font-weight="600" fill="#71717a" text-anchor="middle">Day 20</text>
+                <text x="264.33" y="132" font-family="'Inter', sans-serif" font-size="9" font-weight="600" fill="#71717a" text-anchor="middle">Day 25</text>
+                <text x="310" y="132" font-family="'Inter', sans-serif" font-size="9" font-weight="600" fill="#71717a" text-anchor="middle">Day 30</text>
+              </svg>
             </div>
           </div>
 
-          <div class="chart-card">
-            <div class="chart-title">Leads Captured</div>
-            <div class="chart-subtitle" id="subtitle-leads">Leads captured over the last 7 days.</div>
-            <div class="chart-container" id="chart-leads-container">
-              <!-- Rendered via JS -->
+          <!-- CARD 2: Automation Conversion Funnel (Step-down Bar Funnel) -->
+          <div class="dash-chart-card" id="dash-funnel-card">
+            <div class="dash-card-header">
+              <div>
+                <h3 class="dash-card-title">Automation Conversion Funnel</h3>
+                <p class="dash-card-sub">Comment-to-Lead execution drop-off rates.</p>
+              </div>
+              <span class="funnel-rate-badge" id="funnel-overall-rate">18.5% Total Conv</span>
+            </div>
+            <div class="funnel-bars-stack" id="dash-funnel-container">
+              <!-- Step 1: Comments Detected -->
+              <div class="funnel-step-item">
+                <div class="funnel-step-label-row">
+                  <span class="step-name">1. Comments Detected</span>
+                  <div class="step-metrics">
+                    <strong class="step-num" id="funnel-step1-num">1,850</strong>
+                    <span class="step-pct">100%</span>
+                  </div>
+                </div>
+                <div class="funnel-track">
+                  <div class="funnel-fill step1" id="funnel-step1-fill" style="width: 100%;"></div>
+                </div>
+              </div>
+
+              <!-- Step 2: DMs Sent -->
+              <div class="funnel-step-item">
+                <div class="funnel-step-label-row">
+                  <span class="step-name">2. DMs Sent</span>
+                  <div class="step-metrics">
+                    <strong class="step-num" id="funnel-step2-num">1,240</strong>
+                    <span class="step-pct" id="funnel-step2-pct">67.0%</span>
+                  </div>
+                </div>
+                <div class="funnel-track">
+                  <div class="funnel-fill step2" id="funnel-step2-fill" style="width: 67%;"></div>
+                </div>
+              </div>
+
+              <!-- Step 3: Links Clicked -->
+              <div class="funnel-step-item">
+                <div class="funnel-step-label-row">
+                  <span class="step-name">3. Links Clicked</span>
+                  <div class="step-metrics">
+                    <strong class="step-num" id="funnel-step3-num">620</strong>
+                    <span class="step-pct" id="funnel-step3-pct">33.5%</span>
+                  </div>
+                </div>
+                <div class="funnel-track">
+                  <div class="funnel-fill step3" id="funnel-step3-fill" style="width: 33.5%;"></div>
+                </div>
+              </div>
+
+              <!-- Step 4: Leads Captured -->
+              <div class="funnel-step-item highlight-step">
+                <div class="funnel-step-label-row">
+                  <span class="step-name">4. Leads Captured</span>
+                  <div class="step-metrics">
+                    <strong class="step-num" id="funnel-step4-num">342</strong>
+                    <span class="step-pct lead-pct" id="funnel-step4-pct">18.5%</span>
+                  </div>
+                </div>
+                <div class="funnel-track">
+                  <div class="funnel-fill step4" id="funnel-step4-fill" style="width: 18.5%;"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- CARD 3: Audience Demographics (Donut + Geographic Mini Bars) -->
+          <div class="dash-chart-card" id="dash-audience-card">
+            <div class="dash-card-header">
+              <div>
+                <h3 class="dash-card-title">Audience Demographics</h3>
+                <p class="dash-card-sub">Follower split &amp; geographical reach.</p>
+              </div>
+            </div>
+            
+            <div class="audience-demographics-body">
+              <!-- Follower vs Non-Follower Donut -->
+              <div class="audience-donut-row">
+                <div class="audience-donut-box">
+                  <svg viewBox="0 0 100 100" class="audience-donut-svg">
+                    <!-- Non-Followers: 64% (circumference ~ 214, 64% = 137) -->
+                    <circle cx="50" cy="50" r="34" stroke="#f1f5f9" stroke-width="14" fill="none" />
+                    <circle cx="50" cy="50" r="34" stroke="#09090b" stroke-width="14" fill="none"
+                      stroke-dasharray="137 214" stroke-dashoffset="0" stroke-linecap="round" />
+                    <!-- Followers: 36% (36% = 77) -->
+                    <circle cx="50" cy="50" r="34" stroke="#cbd5e1" stroke-width="14" fill="none"
+                      stroke-dasharray="77 214" stroke-dashoffset="-137" stroke-linecap="round" />
+                  </svg>
+                  <div class="donut-center-text">
+                    <span class="donut-total" id="donut-total-reach">48.2K</span>
+                    <span class="donut-sublbl">Total Reach</span>
+                  </div>
+                </div>
+
+                <div class="audience-donut-legend">
+                  <div class="aud-leg-item">
+                    <span class="aud-dot dot-black"></span>
+                    <div>
+                      <div class="aud-leg-title">Non-Followers</div>
+                      <div class="aud-leg-pct" id="donut-pct-nonfollowers">64% (30.8K)</div>
+                    </div>
+                  </div>
+                  <div class="aud-leg-item">
+                    <span class="aud-dot dot-gray"></span>
+                    <div>
+                      <div class="aud-leg-title">Followers</div>
+                      <div class="aud-leg-pct" id="donut-pct-followers">36% (17.4K)</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Top Countries Mini Progress List -->
+              <div class="aud-countries-list">
+                <div class="aud-country-row">
+                  <span class="country-badge">US</span>
+                  <span class="country-name">United States</span>
+                  <div class="country-track"><div class="country-fill us" style="width: 42%;"></div></div>
+                  <span class="country-val" id="aud-country-us">42% (20.2K)</span>
+                </div>
+                <div class="aud-country-row">
+                  <span class="country-badge in">IN</span>
+                  <span class="country-name">India</span>
+                  <div class="country-track"><div class="country-fill in" style="width: 28%;"></div></div>
+                  <span class="country-val" id="aud-country-in">28% (13.5K)</span>
+                </div>
+                <div class="aud-country-row">
+                  <span class="country-badge gb">GB</span>
+                  <span class="country-name">United Kingdom</span>
+                  <div class="country-track"><div class="country-fill gb" style="width: 14%;"></div></div>
+                  <span class="country-val" id="aud-country-gb">14% (6.7K)</span>
+                </div>
+              </div>
+
+              <!-- Age Demographics Pill Footer -->
+              <div class="aud-age-footer">
+                <span class="age-pill">18–24: <strong>48%</strong></span>
+                <span class="age-pill">25–34: <strong>38%</strong></span>
+                <span class="age-pill">35+: <strong>14%</strong></span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 3. HIGH-VALUE BOTTOM ROW (2 SPLIT CARDS) -->
+        <div class="dash-bottom-2col">
+          <!-- LEFT CARD: Top Performing Posts & Reels -->
+          <div class="dash-chart-card dash-table-card">
+            <div class="dash-card-header">
+              <div>
+                <h3 class="dash-card-title">Top Performing Posts &amp; Reels</h3>
+                <p class="dash-card-sub">Highest converting Instagram content &amp; automated replies.</p>
+              </div>
+              <button type="button" class="btn btn-outline btn-xs" onclick="switchMainTab('templates')">View All Posts</button>
+            </div>
+
+            <div class="dash-table-wrapper">
+              <table class="dash-clean-table">
+                <thead>
+                  <tr>
+                    <th style="text-align: left;">Content</th>
+                    <th style="text-align: right;">Reach</th>
+                    <th style="text-align: right;">Triggers</th>
+                    <th style="text-align: center;">DM CTR</th>
+                  </tr>
+                </thead>
+                <tbody id="dash-top-posts-body">
+                  <tr class="clickable-table-row" data-post-idx="0" title="Click to inspect post automation metrics">
+                    <td>
+                      <div class="post-content-cell">
+                        <img src="https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=80&q=80" class="post-table-thumb" alt="">
+                        <div class="post-cell-meta">
+                          <span class="post-table-title" title="10x Instagram Automation Strategy 2026">10x Instagram Automation Strategy</span>
+                          <span class="post-table-sub">Reel • 3 days ago</span>
+                        </div>
+                      </div>
+                    </td>
+                    <td class="cell-align-right num-bold">24.8K</td>
+                    <td class="cell-align-right num-trigger">620 replies</td>
+                    <td class="cell-align-center"><span class="ctr-badge">28.4%</span></td>
+                  </tr>
+
+                  <tr class="clickable-table-row" data-post-idx="1" title="Click to inspect post automation metrics">
+                    <td>
+                      <div class="post-content-cell">
+                        <img src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=80&q=80" class="post-table-thumb" alt="">
+                        <div class="post-cell-meta">
+                          <span class="post-table-title" title="How I Make ₹50,000/mo Selling Digital Products">How I Make ₹50,000/mo Selling Digital</span>
+                          <span class="post-table-sub">Reel • 5 days ago</span>
+                        </div>
+                      </div>
+                    </td>
+                    <td class="cell-align-right num-bold">16.2K</td>
+                    <td class="cell-align-right num-trigger">410 replies</td>
+                    <td class="cell-align-center"><span class="ctr-badge">31.2%</span></td>
+                  </tr>
+
+                  <tr class="clickable-table-row" data-post-idx="2" title="Click to inspect post automation metrics">
+                    <td>
+                      <div class="post-content-cell">
+                        <img src="https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?auto=format&fit=crop&w=80&q=80" class="post-table-thumb" alt="">
+                        <div class="post-cell-meta">
+                          <span class="post-table-title" title="Free Java Fullstack Roadmap 2026 PDF">Free Java Fullstack Roadmap 2026</span>
+                          <span class="post-table-sub">Carousel • 1 week ago</span>
+                        </div>
+                      </div>
+                    </td>
+                    <td class="cell-align-right num-bold">12.5K</td>
+                    <td class="cell-align-right num-trigger">380 replies</td>
+                    <td class="cell-align-center"><span class="ctr-badge highlight">42.8%</span></td>
+                  </tr>
+
+                  <tr class="clickable-table-row" data-post-idx="3" title="Click to inspect post automation metrics">
+                    <td>
+                      <div class="post-content-cell">
+                        <img src="https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&w=80&q=80" class="post-table-thumb" alt="">
+                        <div class="post-cell-meta">
+                          <span class="post-table-title" title="Story Automation Blueprint & DM Triggers">Story Automation Blueprint</span>
+                          <span class="post-table-sub">Story • 2 weeks ago</span>
+                        </div>
+                      </div>
+                    </td>
+                    <td class="cell-align-right num-bold">8.4K</td>
+                    <td class="cell-align-right num-trigger">190 replies</td>
+                    <td class="cell-align-center"><span class="ctr-badge">24.0%</span></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- RIGHT CARD: Recent Automated DM Leads -->
+          <div class="dash-chart-card dash-table-card">
+            <div class="dash-card-header">
+              <div>
+                <h3 class="dash-card-title">Recent Automated DM Leads</h3>
+                <p class="dash-card-sub">Real-time inbound leads captured via Instagram triggers.</p>
+              </div>
+              <button type="button" class="btn btn-outline btn-xs" onclick="switchMainTab('leads')">View All Leads</button>
+            </div>
+
+            <div class="dash-table-wrapper">
+              <table class="dash-clean-table">
+                <thead>
+                  <tr>
+                    <th style="text-align: left;">Lead / User</th>
+                    <th style="text-align: center;">Trigger Keyword</th>
+                    <th style="text-align: center;">Status</th>
+                    <th style="text-align: right;">Time</th>
+                  </tr>
+                </thead>
+                <tbody id="dash-recent-leads-body">
+                  <tr class="clickable-table-row" data-lead-idx="0" title="Click to inspect lead details & DM conversation">
+                    <td>
+                      <div class="lead-user-cell">
+                        <div class="lead-user-avatar">AM</div>
+                        <div class="lead-cell-meta">
+                          <span class="lead-handle">@alex_growth</span>
+                          <span class="lead-name">Alex Miller</span>
+                        </div>
+                      </div>
+                    </td>
+                    <td class="cell-align-center"><span class="kw-tag">#GUIDE</span></td>
+                    <td class="cell-align-center"><span class="lead-status-pill email">✓ Email Captured</span></td>
+                    <td class="cell-align-right time-text">2m ago</td>
+                  </tr>
+
+                  <tr class="clickable-table-row" data-lead-idx="1" title="Click to inspect lead details & DM conversation">
+                    <td>
+                      <div class="lead-user-cell">
+                        <div class="lead-user-avatar">SK</div>
+                        <div class="lead-cell-meta">
+                          <span class="lead-handle">@sarah.designs</span>
+                          <span class="lead-name">Sarah K.</span>
+                        </div>
+                      </div>
+                    </td>
+                    <td class="cell-align-center"><span class="kw-tag">PRICING</span></td>
+                    <td class="cell-align-center"><span class="lead-status-pill">✓ DM Delivered</span></td>
+                    <td class="cell-align-right time-text">12m ago</td>
+                  </tr>
+
+                  <tr class="clickable-table-row" data-lead-idx="2" title="Click to inspect lead details & DM conversation">
+                    <td>
+                      <div class="lead-user-cell">
+                        <div class="lead-user-avatar">MV</div>
+                        <div class="lead-cell-meta">
+                          <span class="lead-handle">@marcus_dev</span>
+                          <span class="lead-name">Marcus Vance</span>
+                        </div>
+                      </div>
+                    </td>
+                    <td class="cell-align-center"><span class="kw-tag">ROADMAP</span></td>
+                    <td class="cell-align-center"><span class="lead-status-pill email">✓ Email Captured</span></td>
+                    <td class="cell-align-right time-text">28m ago</td>
+                  </tr>
+
+                  <tr class="clickable-table-row" data-lead-idx="3" title="Click to inspect lead details & DM conversation">
+                    <td>
+                      <div class="lead-user-cell">
+                        <div class="lead-user-avatar">PS</div>
+                        <div class="lead-cell-meta">
+                          <span class="lead-handle">@priya_creates</span>
+                          <span class="lead-name">Priya Sharma</span>
+                        </div>
+                      </div>
+                    </td>
+                    <td class="cell-align-center"><span class="kw-tag">LINK</span></td>
+                    <td class="cell-align-center"><span class="lead-status-pill">✓ DM Delivered</span></td>
+                    <td class="cell-align-right time-text">1h ago</td>
+                  </tr>
+
+                  <tr class="clickable-table-row" data-lead-idx="4" title="Click to inspect lead details & DM conversation">
+                    <td>
+                      <div class="lead-user-cell">
+                        <div class="lead-user-avatar">DR</div>
+                        <div class="lead-cell-meta">
+                          <span class="lead-handle">@david_agency</span>
+                          <span class="lead-name">David Ross</span>
+                        </div>
+                      </div>
+                    </td>
+                    <td class="cell-align-center"><span class="kw-tag">FREE</span></td>
+                    <td class="cell-align-center"><span class="lead-status-pill email">✓ Email Captured</span></td>
+                    <td class="cell-align-right time-text">2h ago</td>
+                  </tr>
+                </tbody>
+              </table>
             </div>
           </div>
         </div>
@@ -3311,115 +3784,237 @@
       <section id="leads-view" class="tab-view">
         <header class="view-header flex-between align-center">
           <div class="header-title-group">
-            <h1 class="view-title">Captured Leads</h1>
-            <p class="view-subtitle">View, filter, and export contacts collected from your Instagram automations.</p>
+            <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
+              <h1 class="view-title">Captured Leads</h1>
+              <span class="live-status-pill"><span class="pulse-dot"></span> <strong id="leads-live-count-badge">342</strong> Leads Inbound</span>
+            </div>
+            <p class="view-subtitle">Real-time database of Instagram prospects, verified emails, and DM conversion contacts.</p>
           </div>
           <div class="header-actions">
             <button class="btn btn-outline" id="btn-refresh-leads">
-              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="refresh-icon">
                 <polyline points="23 4 23 10 17 10" />
                 <path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10" />
               </svg>
               Refresh
             </button>
-            <button class="btn btn-outline" id="btn-export-csv">
-              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <button class="btn btn-primary" id="btn-export-csv-leads">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" style="margin-right: 4px;">
                 <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
                 <polyline points="7 10 12 15 17 10" />
                 <line x1="12" y1="15" x2="12" y2="3" />
               </svg>
-              Export CSV
+              Export CSV (All Leads)
             </button>
           </div>
         </header>
 
-        <!-- SECTION: LEADS BY REEL / AUTOMATION -->
-        <div class="margin-top-lg">
-          <label class="form-label-uppercase">LEADS BY REEL / AUTOMATION</label>
+        <!-- TOP STATS FOR LEADS -->
+        <div class="dash-stats-grid margin-top-md">
+          <div class="dash-stat-card">
+            <div class="dash-stat-top">
+              <span class="dash-stat-lbl">Total Leads Captured</span>
+              <span class="dash-trend pos">▲ +31.4%</span>
+            </div>
+            <div class="dash-stat-val" id="leads-stat-total">342</div>
+            <div class="dash-stat-sub">From automated DM conversations</div>
+          </div>
+          <div class="dash-stat-card">
+            <div class="dash-stat-top">
+              <span class="dash-stat-lbl">Emails</span>
+              <span class="dash-trend pos">▲ +28.0%</span>
+            </div>
+            <div class="dash-stat-val" id="leads-stat-emails">284</div>
+            <div class="dash-stat-sub">83.0% lead email capture rate</div>
+          </div>
+          <div class="dash-stat-card">
+            <div class="dash-stat-top">
+              <span class="dash-stat-lbl">Phone Numbers</span>
+              <span class="dash-trend pos">▲ +14.5%</span>
+            </div>
+            <div class="dash-stat-val" id="leads-stat-phones">58</div>
+            <div class="dash-stat-sub">Direct WhatsApp &amp; SMS contacts</div>
+          </div>
+          <div class="dash-stat-card">
+            <div class="dash-stat-top">
+              <span class="dash-stat-lbl">Top Trigger Magnet</span>
+              <span class="dash-trend pos">#GUIDE (51%)</span>
+            </div>
+            <div class="dash-stat-val">176 Leads</div>
+            <div class="dash-stat-sub">10x IG Automation Reel</div>
+          </div>
+        </div>
 
-          <div class="leads-automation-cards-grid margin-top-sm">
-            
-            <!-- AUTOMATION REEL CARD 1 -->
-            <div class="automation-reel-card">
-              <div class="reel-card-thumb">
-                <div class="thumb-inner-art">
-                  <div class="art-badge-purple">From Basics to Advanced</div>
-                  <div class="art-title">JAVA ROADMAP</div>
-                  <div class="art-sub">Complete Guide for Beginners to Advanced</div>
+        <!-- SECTION: REELS & AUTOMATIONS SELECTOR CARDS -->
+        <div class="margin-top-xl">
+          <div class="stats-section-label">
+            <span>Instagram Reels &amp; Automations</span>
+            <span class="sub-pill" id="leads-current-reel-label">All Reels Selected</span>
+          </div>
+
+          <div class="leads-reels-grid" id="leads-reels-cards-grid">
+            <!-- REEL CARD 0: ALL REELS -->
+            <div class="leads-reel-card active" data-campaign="all" title="View all reels leads">
+              <div class="leads-reel-thumb-wrap">
+                <div class="leads-reel-thumb-placeholder all-reels">
+                  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <rect x="2" y="2" width="20" height="20" rx="4"/>
+                    <path d="M7 2v20M17 2v20M2 12h20M2 7h5M2 17h5M17 17h5M17 7h5"/>
+                  </svg>
                 </div>
+                <span class="leads-reel-type-badge">All Content</span>
               </div>
-              <div class="reel-card-body">
-                <h4 class="reel-card-title">Pricing Plans Template</h4>
-                <div class="reel-card-rule">Rule: PRICING</div>
-                
-                <div class="reel-badges-row margin-top-xs flex-between align-center">
-                  <div class="trigger-meta-badge">
-                    <span class="lbl">TRIGGER</span>
-                    <span class="val">"PRICING"</span>
-                  </div>
-                  <span class="badge-post-tag">POST</span>
-                </div>
-
-                <div class="margin-top-xs">
-                  <span class="badge-dm-tag">
-                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                      <rect x="2" y="4" width="20" height="16" rx="2" />
-                      <path d="M22 6l-10 7L2 6" />
-                    </svg>
-                    DM
-                  </span>
-                </div>
-
-                <div class="reel-card-footer margin-top-md flex-between align-center">
-                  <span class="leads-count-text"><strong>0</strong> leads</span>
-                  <button class="btn-icon-dots">
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
-                      <circle cx="12" cy="5" r="2" />
-                      <circle cx="12" cy="12" r="2" />
-                      <circle cx="12" cy="19" r="2" />
-                    </svg>
-                  </button>
+              <div class="leads-reel-info">
+                <h4 class="leads-reel-title">All Reels &amp; Posts</h4>
+                <div class="leads-reel-stats">
+                  <span class="leads-reel-kw">ALL TRIGGERS</span>
+                  <span class="leads-reel-count">342 leads</span>
                 </div>
               </div>
             </div>
 
+            <!-- REEL CARD 1: #GUIDE -->
+            <div class="leads-reel-card" data-campaign="guide" title="Click to view leads from this reel">
+              <div class="leads-reel-thumb-wrap">
+                <img src="https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=300&q=80" alt="10x Instagram Automation" class="leads-reel-img">
+                <div class="leads-reel-play-icon">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+                </div>
+                <span class="leads-reel-type-badge">Reel</span>
+              </div>
+              <div class="leads-reel-info">
+                <h4 class="leads-reel-title">10x Instagram Automation Strategy</h4>
+                <div class="leads-reel-stats">
+                  <span class="leads-reel-kw">#GUIDE</span>
+                  <span class="leads-reel-count">176 leads</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- REEL CARD 2: PRICING -->
+            <div class="leads-reel-card" data-campaign="pricing" title="Click to view leads from this reel">
+              <div class="leads-reel-thumb-wrap">
+                <img src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=300&q=80" alt="Selling Digital Products" class="leads-reel-img">
+                <div class="leads-reel-play-icon">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+                </div>
+                <span class="leads-reel-type-badge">Reel</span>
+              </div>
+              <div class="leads-reel-info">
+                <h4 class="leads-reel-title">How I Make ₹50K/mo Selling Digital</h4>
+                <div class="leads-reel-stats">
+                  <span class="leads-reel-kw">PRICING</span>
+                  <span class="leads-reel-count">128 leads</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- REEL CARD 3: ROADMAP -->
+            <div class="leads-reel-card" data-campaign="roadmap" title="Click to view leads from this carousel">
+              <div class="leads-reel-thumb-wrap">
+                <img src="https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?auto=format&fit=crop&w=300&q=80" alt="Java Fullstack Roadmap" class="leads-reel-img">
+                <span class="leads-reel-type-badge">Carousel</span>
+              </div>
+              <div class="leads-reel-info">
+                <h4 class="leads-reel-title">Free Java Roadmap 2026 PDF</h4>
+                <div class="leads-reel-stats">
+                  <span class="leads-reel-kw">ROADMAP</span>
+                  <span class="leads-reel-count">162 leads</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- REEL CARD 4: STORY -->
+            <div class="leads-reel-card" data-campaign="story" title="Click to view leads from this story">
+              <div class="leads-reel-thumb-wrap">
+                <img src="https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&w=300&q=80" alt="Story Automation" class="leads-reel-img">
+                <span class="leads-reel-type-badge">Story</span>
+              </div>
+              <div class="leads-reel-info">
+                <h4 class="leads-reel-title">Story Automation Blueprint</h4>
+                <div class="leads-reel-stats">
+                  <span class="leads-reel-kw">LINK</span>
+                  <span class="leads-reel-count">46 leads</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- REEL CARD 5: FREE -->
+            <div class="leads-reel-card" data-campaign="free" title="Click to view leads from this campaign">
+              <div class="leads-reel-thumb-wrap">
+                <img src="https://images.unsplash.com/photo-1517694712202-14dd9538aa97?auto=format&fit=crop&w=300&q=80" alt="Free Resource Pack" class="leads-reel-img">
+                <div class="leads-reel-play-icon">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+                </div>
+                <span class="leads-reel-type-badge">Reel</span>
+              </div>
+              <div class="leads-reel-info">
+                <h4 class="leads-reel-title">Free Resource Pack Download</h4>
+                <div class="leads-reel-stats">
+                  <span class="leads-reel-kw">FREE</span>
+                  <span class="leads-reel-count">32 leads</span>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
 
-        <!-- SEARCH BAR & FILTER OPTIONS -->
-        <div class="leads-search-row margin-top-xl">
-          <div class="leads-search-input-wrapper">
-            <svg class="search-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#94a3b8" stroke-width="2">
-              <circle cx="11" cy="11" r="8" />
-              <line x1="21" y1="21" x2="16.65" y2="16.65" />
-            </svg>
-            <input type="text" id="input-search-leads" class="leads-search-field" placeholder="Search leads by name, email, phone, campaign...">
-          </div>
-          <button class="btn-circle-options" id="btn-leads-options">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
-              <circle cx="12" cy="5" r="2" />
-              <circle cx="12" cy="12" r="2" />
-              <circle cx="12" cy="19" r="2" />
-            </svg>
-          </button>
-        </div>
+        <!-- FILTER TOOLBAR CARD (PILLS + SEARCH & STATUS) -->
+        <div class="leads-filter-toolbar-box margin-top-xl">
+          <div>
+            <div class="stats-section-label" style="margin-bottom: 10px;">
+              <span>Filter by Source Automation</span>
+              <span class="sub-pill" id="leads-active-filter-desc">This is All Reels Leads</span>
+            </div>
 
-        <!-- LEADS DATA CONTAINER / EMPTY STATE -->
-        <div class="leads-main-card margin-top-lg">
-          <div class="leads-empty-state-box">
-            <div class="empty-state-users-icon">
-              <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#94a3b8" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
-                <circle cx="9" cy="7" r="4" />
-                <path d="M23 21v-2a4 4 0 0 0-3-3.87" />
-                <path d="M16 3.13a4 4 0 0 1 0 7.75" />
+            <div class="leads-campaign-pills-row" id="leads-campaign-filters">
+              <button class="leads-camp-pill active" data-campaign="all">All Reels Leads (342)</button>
+              <button class="leads-camp-pill" data-campaign="guide">Reel #GUIDE (176)</button>
+              <button class="leads-camp-pill" data-campaign="pricing">Reel PRICING (128)</button>
+              <button class="leads-camp-pill" data-campaign="roadmap">Carousel ROADMAP (162)</button>
+              <button class="leads-camp-pill" data-campaign="story">Story LINK (46)</button>
+              <button class="leads-camp-pill" data-campaign="free">Free Pack (32)</button>
+            </div>
+          </div>
+
+          <!-- SEARCH BAR & FILTER ROW -->
+          <div class="leads-search-row">
+            <div class="leads-search-input-wrapper">
+              <svg class="search-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#71717a" stroke-width="2">
+                <circle cx="11" cy="11" r="8" />
+                <line x1="21" y1="21" x2="16.65" y2="16.65" />
               </svg>
+              <input type="text" id="input-search-leads-tab" class="leads-search-field" placeholder="Search by name, handle, email, keyword, or phone...">
             </div>
-            <h3 class="leads-empty-title">No captured activities found</h3>
-            <p class="leads-empty-desc">No interaction activity matched your selected search or filter criteria.</p>
+            <div class="leads-status-filter-buttons" id="leads-status-filter-buttons">
+              <button class="btn btn-outline btn-sm active" data-status-filter="all">All Statuses</button>
+              <button class="btn btn-outline btn-sm" data-status-filter="email">Email Captured</button>
+              <button class="btn btn-outline btn-sm" data-status-filter="dm">DM Delivered</button>
+            </div>
           </div>
         </div>
 
+        <!-- LEADS DATA TABLE CARD -->
+        <div class="dash-chart-card dash-table-card margin-top-md" style="padding: 0; overflow: hidden;">
+          <div class="dash-table-wrapper">
+            <table class="dash-clean-table">
+              <thead>
+                <tr>
+                  <th style="text-align: left;">Lead / User</th>
+                  <th style="text-align: left;">Contact Details</th>
+                  <th style="text-align: center;">Keyword</th>
+                  <th style="text-align: center;">Status</th>
+                  <th style="text-align: left;">Source Content</th>
+                  <th style="text-align: right;">Captured Time</th>
+                  <th style="text-align: center;">Actions</th>
+                </tr>
+              </thead>
+              <tbody id="leads-view-table-body">
+                <!-- Injected dynamically via JS -->
+              </tbody>
+            </table>
+          </div>
+        </div>
       </section>
 
       <!-- TAB 9: LEARN & HELP VIEW (MAIN SECTION) -->
@@ -5191,6 +5786,29 @@
       </div>
     </div>
   </div>
+
+  <!-- DASHBOARD SLIDE-OVER INSPECT DRAWER -->
+  <div class="dash-inspect-backdrop" id="dash-inspect-backdrop"></div>
+  <aside class="dash-inspect-drawer" id="dash-inspect-drawer" aria-hidden="true">
+    <div class="inspect-drawer-header">
+      <div class="inspect-drawer-title-group">
+        <span class="inspect-drawer-badge" id="inspect-type-badge">Lead Inspection</span>
+        <h3 class="inspect-drawer-title" id="inspect-main-title">@alex_growth</h3>
+        <p class="inspect-drawer-sub" id="inspect-sub-title">Alex Miller • Captured 2m ago</p>
+      </div>
+      <button type="button" class="inspect-close-btn" id="btn-close-inspect" title="Close Drawer">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </div>
+
+    <div class="inspect-drawer-body" id="inspect-drawer-content">
+      <!-- Injected dynamically via JS -->
+    </div>
+
+    <div class="inspect-drawer-footer" id="inspect-drawer-actions">
+      <!-- Injected dynamically via JS -->
+    </div>
+  </aside>
 
   <script src="./app.js"></script>
 </body>
