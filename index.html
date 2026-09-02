@@ -4,7 +4,9 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>RenderReply - Instagram Automation Dashboard</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Outfit:wght@300;400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="./styles.css">
 </head>
 
@@ -14,9 +16,9 @@
     <aside class="sidebar" id="app-sidebar">
       <div>
         <div class="sidebar-header">
-          <div style="display: flex; align-items: center; gap: 12px;">
+          <div style="display: flex; align-items: center; gap: 10px;">
             <div class="brand-logo">R</div>
-            <span class="brand-title">RenderReply</span>
+            <span class="brand-title"><span style="font-weight: 400; color: #ffffff;">Render</span><span style="font-weight: 800; color: #ffffff;">Reply</span></span>
           </div>
           <button type="button" class="btn-close-sidebar" id="btn-close-sidebar" aria-label="Close Sidebar">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
@@ -25,7 +27,8 @@
             </svg>
           </button>
         </div>
-        <nav class="sidebar-nav">
+        <nav class="sidebar-nav" id="sidebar-nav">
+          <div class="sidebar-pill-indicator" id="sidebar-pill-indicator"></div>
           <a class="nav-item active" data-tab="dashboard">
             <svg viewBox="0 0 24 24">
               <path d="M18 20V10M12 20V4M6 20v-6" stroke-linecap="round" stroke-linejoin="round" />
@@ -81,14 +84,14 @@
               <path d="M5.5 11.5v4.5a6.5 6.5 0 0 0 13 0v-4.5" />
             </svg>
             Learn & Help
-            <span class="nav-badge" style="background: rgba(99, 102, 241, 0.15); color: #6366f1;">4 Videos</span>
+            <span class="nav-badge-purple">4 Videos</span>
           </a>
         </nav>
       </div>
       <div class="sidebar-footer">
         <div class="user-profile">
           <div class="user-avatar">R</div>
-          <span class="user-name">Rudra Teja</span>
+          <span class="user-name">RudRa RR</span>
         </div>
       </div>
     </aside>
@@ -150,48 +153,50 @@
               <span class="account-status">Instagram Connected</span>
             </div>
           </div>
-          <div class="time-range-picker">
-            <button class="time-range-btn active" data-range="7 Days">7 Days</button>
-            <button class="time-range-btn" data-range="30 Days">30 Days</button>
+          <div class="time-range-picker" id="dashboard-time-picker">
+            <div class="time-range-indicator" id="time-range-indicator"></div>
+            <button class="time-range-btn" data-range="7 Days">7 Days</button>
+            <button class="time-range-btn" data-range="14 Days">14 Days</button>
+            <button class="time-range-btn active" data-range="30 Days">30 Days</button>
+            <button class="time-range-btn" data-range="60 Days">60 Days</button>
             <button class="time-range-btn" data-range="90 Days">90 Days</button>
-            <button class="time-range-btn" data-range="Lifetime">Lifetime</button>
           </div>
         </div>
 
         <!-- 8 STATS METRICS GRID -->
         <div class="stats-grid">
           <div class="stat-card">
-            <div class="stat-label">Followers</div>
+            <div class="stat-label">FOLLOWERS</div>
             <div class="stat-value" id="stat-followers">0</div>
           </div>
           <div class="stat-card">
-            <div class="stat-label">Following</div>
+            <div class="stat-label">FOLLOWING</div>
             <div class="stat-value" id="stat-following">1</div>
           </div>
           <div class="stat-card">
-            <div class="stat-label">Total Views</div>
-            <div class="stat-value" id="stat-views">7</div>
+            <div class="stat-label">TOTAL VIEWS</div>
+            <div class="stat-value" id="stat-views">0</div>
           </div>
           <div class="stat-card">
-            <div class="stat-label">Comments</div>
-            <div class="stat-value" id="stat-comments">5</div>
+            <div class="stat-label">COMMENTS</div>
+            <div class="stat-value" id="stat-comments">0</div>
           </div>
           <div class="stat-card">
-            <div class="stat-label">Total Replies</div>
+            <div class="stat-label">TOTAL REPLIES</div>
             <div class="stat-value" id="stat-replies">2</div>
           </div>
           <div class="stat-card">
-            <div class="stat-label">Sent Today</div>
+            <div class="stat-label">SENT TODAY</div>
             <div class="stat-value" id="stat-sent-today">0</div>
           </div>
           <div class="stat-card">
-            <div class="stat-label">Active Rules</div>
+            <div class="stat-label">ACTIVE RULES</div>
             <div class="stat-value" id="stat-active-rules">1</div>
           </div>
           <div class="stat-card">
             <div class="stat-label">
-              Captured Leads
-              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+              CAPTURED LEADS
+              <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"
                 style="margin-left: 2px;">
                 <path d="M7 17L17 7M17 7H7M17 7V17" />
               </svg>
@@ -346,7 +351,7 @@
                   </div>
                   <div class="rr-t-snippet">Sent Java Full Stack roadmap PDF!</div>
                   <div class="rr-t-tags-row">
-                    <span class="rr-pill-trigger">⚡ Keyword "JAVA"</span>
+                    <span class="rr-pill-trigger">Keyword "JAVA"</span>
                     <span class="rr-pill-badge bot">Bot Active</span>
                   </div>
                 </div>
@@ -370,7 +375,7 @@
                   </div>
                   <div class="rr-t-snippet">Can we customize templates for agencies?</div>
                   <div class="rr-t-tags-row">
-                    <span class="rr-pill-trigger">💬 Custom Inquiry</span>
+                    <span class="rr-pill-trigger">Custom Inquiry</span>
                     <span class="rr-pill-badge action">Needs Action</span>
                   </div>
                 </div>
@@ -394,7 +399,7 @@
                   </div>
                   <div class="rr-t-snippet">Downloaded presets successfully!</div>
                   <div class="rr-t-tags-row">
-                    <span class="rr-pill-trigger">⚡ Preset Bundle</span>
+                    <span class="rr-pill-trigger">Preset Bundle</span>
                     <span class="rr-pill-badge resolved">✓ Resolved</span>
                   </div>
                 </div>
@@ -445,7 +450,7 @@
             <!-- Subtle Trigger Banner -->
             <div class="rr-clean-trigger-bar" id="rr-trigger-banner">
               <div style="display: flex; align-items: center; gap: 8px; flex: 1; min-width: 0;">
-                <span style="font-size: 13px;">⚡</span>
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color: #6366f1; flex-shrink: 0;"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
                 <span class="trigger-bar-txt" id="rr-tcb-title">Triggered by Reel: "Build a 7-Figure IG Automation Engine" (Keyword: "PRICING")</span>
               </div>
               <button type="button" class="btn-view-trigger-rule" id="rr-tcb-view-rule">View Rule ↗</button>
@@ -469,10 +474,10 @@
               <div class="rr-clean-msg bot">
                 <div class="rr-clean-bubble bot">
                   <div class="msg-sender-line">
-                    <span class="bot-label">🤖 RenderReply Bot</span>
+                    <span class="bot-label">RenderReply Bot</span>
                     <span class="flow-label">Reel Viral Funnel v2.4</span>
                   </div>
-                  <div class="msg-text">Hey Alex! 👋 Here are our membership options, instant downloads, and 1-on-1 strategy sessions:</div>
+                  <div class="msg-text">Hey Alex! Here are our membership options, instant downloads, and 1-on-1 strategy sessions:</div>
                   
                   <!-- Rich Interactive Product Card inside DM -->
                   <div class="rr-clean-product-card">
@@ -491,11 +496,11 @@
 
             <!-- Quick Action Preset Chips Bar -->
             <div class="rr-clean-preset-bar">
-              <span class="preset-label">⚡ Quick Presets:</span>
-              <button type="button" class="clean-preset-chip" data-text="Hey Alex! Here is the direct link to our store pricing: https://renderreply.com/store/rudrateja">💰 Pricing Link</button>
-              <button type="button" class="clean-preset-chip" data-text="Would you like to book a private 1-on-1 strategy call? Select a slot: https://renderreply.com/store/rudrateja#call">📅 Book Call</button>
-              <button type="button" class="clean-preset-chip" data-text="Here is your free Java Roadmap PDF download: https://renderreply.com/store/rudrateja/downloads/java-roadmap.pdf">🎁 Free PDF</button>
-              <button type="button" class="clean-preset-chip" data-text="Can I help answer any specific questions about our automation presets?">💬 Follow-up</button>
+              <span class="preset-label">Quick Presets:</span>
+              <button type="button" class="clean-preset-chip" data-text="Hey Alex! Here is the direct link to our store pricing: https://renderreply.com/store/rudrateja">Pricing Link</button>
+              <button type="button" class="clean-preset-chip" data-text="Would you like to book a private 1-on-1 strategy call? Select a slot: https://renderreply.com/store/rudrateja#call">Book Call</button>
+              <button type="button" class="clean-preset-chip" data-text="Here is your free Java Roadmap PDF download: https://renderreply.com/store/rudrateja/downloads/java-roadmap.pdf">Free PDF</button>
+              <button type="button" class="clean-preset-chip" data-text="Can I help answer any specific questions about our automation presets?">Follow-up</button>
             </div>
 
             <!-- Clean Composer -->
@@ -521,186 +526,52 @@
       <section id="automation-rules-view" class="tab-view">
         <header class="view-header">
           <div class="header-title-group">
-            <h1 class="view-title">Automation Rules</h1>
-            <p class="view-subtitle">Manage your if/then comment, story mention & reel triggers for Instagram.</p>
+            <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
+              <h1 class="view-title">Automation Rules</h1>
+              <span class="live-status-pill"><span class="pulse-dot"></span> Engine Online</span>
+            </div>
+            <p class="view-subtitle">Manage your real-time if/then comment, story mention & reel triggers for Instagram.</p>
           </div>
           <div class="header-actions">
-            <button class="btn btn-refresh">Refresh</button>
-            <button class="btn btn-primary btn-pill" id="btn-new-automation">+ New Automation</button>
+            <button class="btn btn-refresh" id="btn-rules-refresh">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="refresh-icon">
+                <polyline points="23 4 23 10 17 10"/>
+                <path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/>
+              </svg>
+              Refresh
+            </button>
+            <button class="btn btn-primary btn-pill" id="btn-new-automation">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="margin-right: 4px;">
+                <line x1="12" y1="5" x2="12" y2="19"/>
+                <line x1="5" y1="12" x2="19" y2="12"/>
+              </svg>
+              + New Automation
+            </button>
           </div>
         </header>
 
-        <div class="sub-tabs" style="margin-bottom: 20px;">
-          <button class="sub-tab-btn active">All Rules (3)</button>
-          <button class="sub-tab-btn">Post Comments (1)</button>
-          <button class="sub-tab-btn">Story Mentions (1)</button>
-          <button class="sub-tab-btn">Reels & Live (1)</button>
+        <!-- FILTER TABS & SEARCH CONTROLS -->
+        <div class="rules-toolbar">
+          <div class="rules-filter-tabs" id="rules-filter-tabs">
+            <button class="rule-tab-btn active" data-rule-filter="all">All Rules <span class="rule-count-pill" id="filter-count-all">3</span></button>
+            <button class="rule-tab-btn" data-rule-filter="post">Post Comments <span class="rule-count-pill" id="filter-count-post">1</span></button>
+            <button class="rule-tab-btn" data-rule-filter="story">Story Mentions <span class="rule-count-pill" id="filter-count-story">1</span></button>
+            <button class="rule-tab-btn" data-rule-filter="reel">Reels &amp; Live <span class="rule-count-pill" id="filter-count-reel">1</span></button>
+            <button class="rule-tab-btn" data-rule-filter="dm">Direct Keywords <span class="rule-count-pill" id="filter-count-dm">0</span></button>
+          </div>
+
+          <div class="rules-search-wrapper">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="11" cy="11" r="8"/>
+              <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+            </svg>
+            <input type="text" class="rules-search-input" id="rules-search-input" placeholder="Search rules by keyword, trigger or name...">
+          </div>
         </div>
 
-        <div class="rules-container">
-          <div class="rule-card">
-            <div class="rule-thumb-header">
-              <div
-                style="background: linear-gradient(135deg, #1e1b4b, #312e81); border-radius: 6px; padding: 12px; color: #fff; width: 120px; text-align: center; font-size: 10px; font-weight: 800; border: 1px solid rgba(255,255,255,0.2);">
-                <div style="font-size: 8px; color: #a5b4fc; text-transform: uppercase;">From Basics to Advanced</div>
-                <div style="font-size: 14px; font-weight: 900; margin: 4px 0;">JAVA ROADMAP</div>
-                <div style="font-size: 8px; color: #cbd5e1;">Comprehensive Guide</div>
-              </div>
-            </div>
-            <div class="rule-card-body">
-              <div class="rule-card-title">Pricing Plans Template</div>
-              <div class="rule-card-sub">Rule: Pricing Plans Template</div>
-
-              <div class="rule-tags">
-                <div class="tag-column">
-                  <span class="tag-label">Trigger</span>
-                  <span class="tag-value">"PRICING"</span>
-                </div>
-                <div class="tag-column">
-                  <span class="tag-label">Target</span>
-                  <span class="tag-value">POST</span>
-                </div>
-              </div>
-
-              <div class="rule-action-badges">
-                <span class="rule-badge">
-                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" />
-                    <polyline points="22,6 12,13 2,6" />
-                  </svg>
-                  DM
-                </span>
-                <span class="rule-badge">
-                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71" />
-                    <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71" />
-                  </svg>
-                  Link
-                </span>
-              </div>
-              <button class="rule-more-btn" aria-label="Rule options">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-                  <circle cx="12" cy="5" r="1" />
-                  <circle cx="12" cy="12" r="1" />
-                  <circle cx="12" cy="19" r="1" />
-                </svg>
-              </button>
-            </div>
-          </div>
-
-          <div class="rule-card">
-            <div class="rule-thumb-header" style="background: linear-gradient(135deg, #ec4899, #831843);">
-              <div
-                style="color: #fff; text-align: center; font-weight: 800; font-size: 13px; display: flex; align-items: center; justify-content: center; gap: 6px;">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                  <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z" />
-                  <circle cx="12" cy="13" r="4" />
-                </svg>
-                STORY MENTION AUTO-REPLY
-              </div>
-            </div>
-            <div class="rule-card-body">
-              <div class="rule-card-title">Story Mention Thank You</div>
-              <div class="rule-card-sub">Rule: Auto DM when tagged in Story</div>
-
-              <div class="rule-tags">
-                <div class="tag-column">
-                  <span class="tag-label">Trigger</span>
-                  <span class="tag-value">STORY_TAG</span>
-                </div>
-                <div class="tag-column">
-                  <span class="tag-label">Target</span>
-                  <span class="tag-value">STORIES</span>
-                </div>
-              </div>
-
-              <div class="rule-action-badges">
-                <span class="rule-badge">
-                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" />
-                    <polyline points="22,6 12,13 2,6" />
-                  </svg>
-                  Instant DM
-                </span>
-                <span class="rule-badge">
-                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <polyline points="20 12 20 22 4 22 4 12" />
-                    <rect x="2" y="7" width="20" height="5" />
-                    <line x1="12" y1="22" x2="12" y2="7" />
-                    <path d="M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7z" />
-                    <path d="M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z" />
-                  </svg>
-                  Coupon Code
-                </span>
-              </div>
-              <button class="rule-more-btn" aria-label="Rule options">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-                  <circle cx="12" cy="5" r="1" />
-                  <circle cx="12" cy="12" r="1" />
-                  <circle cx="12" cy="19" r="1" />
-                </svg>
-              </button>
-            </div>
-          </div>
-
-          <div class="rule-card">
-            <div class="rule-thumb-header" style="background: linear-gradient(135deg, #059669, #064e3b);">
-              <div
-                style="color: #fff; text-align: center; font-weight: 800; font-size: 13px; display: flex; align-items: center; justify-content: center; gap: 6px;">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                  <rect x="2" y="2" width="20" height="20" rx="2.18" ry="2.18" />
-                  <line x1="7" y1="2" x2="7" y2="22" />
-                  <line x1="17" y1="2" x2="17" y2="22" />
-                  <line x1="2" y1="12" x2="22" y2="12" />
-                  <line x1="2" y1="7" x2="7" y2="7" />
-                  <line x1="2" y1="17" x2="7" y2="17" />
-                  <line x1="17" y1="17" x2="22" y2="17" />
-                  <line x1="17" y1="7" x2="22" y2="7" />
-                </svg>
-                REEL VIRAL GUIDE BOT
-              </div>
-            </div>
-            <div class="rule-card-body">
-              <div class="rule-card-title">Free Ebook Reel Auto-DM</div>
-              <div class="rule-card-sub">Rule: Comment 'GUIDE' on Reels</div>
-
-              <div class="rule-tags">
-                <div class="tag-column">
-                  <span class="tag-label">Trigger</span>
-                  <span class="tag-value">"GUIDE"</span>
-                </div>
-                <div class="tag-column">
-                  <span class="tag-label">Target</span>
-                  <span class="tag-value">REELS</span>
-                </div>
-              </div>
-
-              <div class="rule-action-badges">
-                <span class="rule-badge">
-                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" />
-                    <polyline points="22,6 12,13 2,6" />
-                  </svg>
-                  DM Link
-                </span>
-                <span class="rule-badge">
-                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <line x1="18" y1="20" x2="18" y2="10" />
-                    <line x1="12" y1="20" x2="12" y2="4" />
-                    <line x1="6" y1="20" x2="6" y2="14" />
-                  </svg>
-                  Lead Capture
-                </span>
-              </div>
-              <button class="rule-more-btn" aria-label="Rule options">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-                  <circle cx="12" cy="5" r="1" />
-                  <circle cx="12" cy="12" r="1" />
-                  <circle cx="12" cy="19" r="1" />
-                </svg>
-              </button>
-            </div>
-          </div>
+        <!-- DYNAMIC AUTOMATION RULES GRID -->
+        <div class="rules-container" id="automation-rules-grid">
+          <!-- Rendered dynamically by JavaScript -->
         </div>
       </section>
 
@@ -714,21 +585,26 @@
         </header>
 
         <div class="templates-grid">
-          <!-- CARD 1 -->
-          <div class="template-card">
-            <div class="template-header" style="background: linear-gradient(135deg, #b45309, #78350f);">
-              <div>
-                <div class="template-header-tag">Pricing Plans</div>
+          <!-- CARD 1: PRICING -->
+          <div class="template-card" data-template="pricing">
+            <div class="template-header" style="background: linear-gradient(135deg, #7c2d12 0%, #9a3412 40%, #c2410c 100%);">
+              <div class="template-header-left">
+                <div class="template-header-tag">PRICING PLANS</div>
                 <div class="template-header-title">"PRICING"</div>
-                <div class="template-header-desc">Comment to trigger instant DM</div>
+                <div class="template-header-desc"><span class="sparkle-icon">✦</span> Comment to trigger Instant DM</div>
+                <div class="template-header-code">RR-SYSTEM // FLOW_VER_4.0</div>
               </div>
-              <div class="template-header-mock"></div>
+              <div class="template-header-mock">
+                <div class="mock-phone-speaker"></div>
+                <div class="mock-comment-bubble">Comment: "PRICING"</div>
+                <div class="mock-dm-pill yellow">✔ Sent to DM!</div>
+              </div>
             </div>
             <div class="template-body">
               <div class="template-category-row">
-                <span class="cat-pill" style="color: #6366f1;">Sales</span>
+                <span class="cat-pill">SALES</span>
                 <span class="cat-insta">
-                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
                     <rect x="2" y="2" width="20" height="20" rx="5" ry="5" />
                     <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" />
                     <line x1="17.5" y1="6.5" x2="17.51" y2="6.5" />
@@ -737,26 +613,30 @@
                 </span>
               </div>
               <div class="template-card-title">Pricing Plans Template</div>
-              <div class="template-card-text">Directly send pricing options and subscription tiers to users who ask
-                about cost.</div>
+              <div class="template-card-text">Directly send pricing options and subscription tiers to users who ask about cost.</div>
             </div>
           </div>
 
-          <!-- CARD 2 -->
-          <div class="template-card">
-            <div class="template-header" style="background: linear-gradient(135deg, #065f46, #064e3b);">
-              <div>
-                <div class="template-header-tag">Strategy Audit</div>
+          <!-- CARD 2: AUDIT -->
+          <div class="template-card" data-template="audit">
+            <div class="template-header" style="background: linear-gradient(135deg, #042f2e 0%, #065f46 45%, #0f766e 100%);">
+              <div class="template-header-left">
+                <div class="template-header-tag">STRATEGY AUDIT</div>
                 <div class="template-header-title">"AUDIT"</div>
-                <div class="template-header-desc">Comment to trigger instant DM</div>
+                <div class="template-header-desc"><span class="sparkle-icon">✦</span> Comment to trigger Instant DM</div>
+                <div class="template-header-code">RR-SYSTEM // FLOW_VER_4.0</div>
               </div>
-              <div class="template-header-mock"></div>
+              <div class="template-header-mock">
+                <div class="mock-phone-speaker"></div>
+                <div class="mock-comment-bubble">Comment: "AUDIT"</div>
+                <div class="mock-dm-pill emerald">✔ Sent to DM!</div>
+              </div>
             </div>
             <div class="template-body">
               <div class="template-category-row">
-                <span class="cat-pill" style="color: #3b82f6;">Booking</span>
+                <span class="cat-pill">BOOKING</span>
                 <span class="cat-insta">
-                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
                     <rect x="2" y="2" width="20" height="20" rx="5" ry="5" />
                     <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" />
                     <line x1="17.5" y1="6.5" x2="17.51" y2="6.5" />
@@ -769,21 +649,26 @@
             </div>
           </div>
 
-          <!-- CARD 3 -->
-          <div class="template-card">
-            <div class="template-header" style="background: linear-gradient(135deg, #0f766e, #115e59);">
-              <div>
-                <div class="template-header-tag">Checklist PDF</div>
+          <!-- CARD 3: CHECKLIST -->
+          <div class="template-card" data-template="checklist">
+            <div class="template-header" style="background: linear-gradient(135deg, #022c22 0%, #047857 45%, #059669 100%);">
+              <div class="template-header-left">
+                <div class="template-header-tag">CHECKLIST PDF</div>
                 <div class="template-header-title">"CHECKLIST"</div>
-                <div class="template-header-desc">Comment to trigger instant DM</div>
+                <div class="template-header-desc"><span class="sparkle-icon">✦</span> Comment to trigger Instant DM</div>
+                <div class="template-header-code">RR-SYSTEM // FLOW_VER_4.0</div>
               </div>
-              <div class="template-header-mock"></div>
+              <div class="template-header-mock">
+                <div class="mock-phone-speaker"></div>
+                <div class="mock-comment-bubble">Comment: "CHECKLIST"</div>
+                <div class="mock-dm-pill emerald">✔ Sent to DM!</div>
+              </div>
             </div>
             <div class="template-body">
               <div class="template-category-row">
-                <span class="cat-pill" style="color: #10b981;">Lead Generation</span>
+                <span class="cat-pill">LEAD GENERATION</span>
                 <span class="cat-insta">
-                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
                     <rect x="2" y="2" width="20" height="20" rx="5" ry="5" />
                     <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" />
                     <line x1="17.5" y1="6.5" x2="17.51" y2="6.5" />
@@ -792,26 +677,30 @@
                 </span>
               </div>
               <div class="template-card-title">Free Checklist PDF Template</div>
-              <div class="template-card-text">Automatically send a cheat sheet or checklist PDF link to drive audience
-                value.</div>
+              <div class="template-card-text">Automatically send a cheat sheet or checklist PDF link to drive audience value.</div>
             </div>
           </div>
 
-          <!-- CARD 4 -->
-          <div class="template-card">
-            <div class="template-header" style="background: linear-gradient(135deg, #581c87, #3b0764);">
-              <div>
-                <div class="template-header-tag">Webinar Pass</div>
+          <!-- CARD 4: WEBINAR -->
+          <div class="template-card" data-template="webinar">
+            <div class="template-header" style="background: linear-gradient(135deg, #3b0764 0%, #581c87 45%, #7c3aed 100%);">
+              <div class="template-header-left">
+                <div class="template-header-tag">WEBINAR PASS</div>
                 <div class="template-header-title">"WEBINAR"</div>
-                <div class="template-header-desc">Comment to trigger instant DM</div>
+                <div class="template-header-desc"><span class="sparkle-icon">✦</span> Comment to trigger Instant DM</div>
+                <div class="template-header-code">RR-SYSTEM // FLOW_VER_4.0</div>
               </div>
-              <div class="template-header-mock"></div>
+              <div class="template-header-mock">
+                <div class="mock-phone-speaker"></div>
+                <div class="mock-comment-bubble">Comment: "WEBINAR"</div>
+                <div class="mock-dm-pill purple">✔ Sent to DM!</div>
+              </div>
             </div>
             <div class="template-body">
               <div class="template-category-row">
-                <span class="cat-pill" style="color: #8b5cf6;">Booking</span>
+                <span class="cat-pill">BOOKING</span>
                 <span class="cat-insta">
-                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
                     <rect x="2" y="2" width="20" height="20" rx="5" ry="5" />
                     <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" />
                     <line x1="17.5" y1="6.5" x2="17.51" y2="6.5" />
@@ -820,26 +709,30 @@
                 </span>
               </div>
               <div class="template-card-title">Webinar Registration Template</div>
-              <div class="template-card-text">Register commenters for your upcoming live training or masterclass via DM.
-              </div>
+              <div class="template-card-text">Register commenters for your upcoming live training or masterclass via DM.</div>
             </div>
           </div>
 
-          <!-- CARD 5 -->
-          <div class="template-card">
-            <div class="template-header" style="background: linear-gradient(135deg, #7c2d12, #451a03);">
-              <div>
-                <div class="template-header-tag">Store Link</div>
+          <!-- CARD 5: SHOP -->
+          <div class="template-card" data-template="shop">
+            <div class="template-header" style="background: linear-gradient(135deg, #7c2d12 0%, #9a3412 45%, #b45309 100%);">
+              <div class="template-header-left">
+                <div class="template-header-tag">STORE LINK</div>
                 <div class="template-header-title">"SHOP"</div>
-                <div class="template-header-desc">Comment to trigger instant DM</div>
+                <div class="template-header-desc"><span class="sparkle-icon">✦</span> Comment to trigger Instant DM</div>
+                <div class="template-header-code">RR-SYSTEM // FLOW_VER_4.0</div>
               </div>
-              <div class="template-header-mock"></div>
+              <div class="template-header-mock">
+                <div class="mock-phone-speaker"></div>
+                <div class="mock-comment-bubble">Comment: "SHOP"</div>
+                <div class="mock-dm-pill yellow">✔ Sent to DM!</div>
+              </div>
             </div>
             <div class="template-body">
               <div class="template-category-row">
-                <span class="cat-pill" style="color: #f59e0b;">Sales</span>
+                <span class="cat-pill">SALES</span>
                 <span class="cat-insta">
-                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
                     <rect x="2" y="2" width="20" height="20" rx="5" ry="5" />
                     <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" />
                     <line x1="17.5" y1="6.5" x2="17.51" y2="6.5" />
@@ -848,26 +741,30 @@
                 </span>
               </div>
               <div class="template-card-title">Store Link Template</div>
-              <div class="template-card-text">Automatically send the link to your online shop when someone comments
-                'SHOP'.</div>
+              <div class="template-card-text">Automatically send the link to your online shop when someone comments 'SHOP'.</div>
             </div>
           </div>
 
-          <!-- CARD 6 -->
-          <div class="template-card">
-            <div class="template-header" style="background: linear-gradient(135deg, #1e3a8a, #172554);">
-              <div>
-                <div class="template-header-tag">Booking Slot</div>
+          <!-- CARD 6: RESERVE -->
+          <div class="template-card" data-template="reserve">
+            <div class="template-header" style="background: linear-gradient(135deg, #172554 0%, #1e40af 45%, #2563eb 100%);">
+              <div class="template-header-left">
+                <div class="template-header-tag">BOOKING SLOT</div>
                 <div class="template-header-title">"RESERVE"</div>
-                <div class="template-header-desc">Comment to trigger instant DM</div>
+                <div class="template-header-desc"><span class="sparkle-icon">✦</span> Comment to trigger Instant DM</div>
+                <div class="template-header-code">RR-SYSTEM // FLOW_VER_4.0</div>
               </div>
-              <div class="template-header-mock"></div>
+              <div class="template-header-mock">
+                <div class="mock-phone-speaker"></div>
+                <div class="mock-comment-bubble">Comment: "RESERVE"</div>
+                <div class="mock-dm-pill blue">✔ Sent to DM!</div>
+              </div>
             </div>
             <div class="template-body">
               <div class="template-category-row">
-                <span class="cat-pill" style="color: #3b82f6;">Booking</span>
+                <span class="cat-pill">BOOKING</span>
                 <span class="cat-insta">
-                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
                     <rect x="2" y="2" width="20" height="20" rx="5" ry="5" />
                     <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" />
                     <line x1="17.5" y1="6.5" x2="17.51" y2="6.5" />
@@ -876,26 +773,30 @@
                 </span>
               </div>
               <div class="template-card-title">Live Demo Booking Template</div>
-              <div class="template-card-text">Automate booking calendar link delivery directly to DMs of people
-                commenting 'RESERVE'.</div>
+              <div class="template-card-text">Automate booking calendar link delivery directly to DMs of people commenting 'RESERVE'.</div>
             </div>
           </div>
 
-          <!-- CARD 7 -->
-          <div class="template-card">
-            <div class="template-header" style="background: linear-gradient(135deg, #047857, #064e3b);">
-              <div>
-                <div class="template-header-tag">Discount Code</div>
+          <!-- CARD 7: DISCOUNT -->
+          <div class="template-card" data-template="discount">
+            <div class="template-header" style="background: linear-gradient(135deg, #064e3b 0%, #047857 45%, #10b981 100%);">
+              <div class="template-header-left">
+                <div class="template-header-tag">DISCOUNT CODE</div>
                 <div class="template-header-title">"DISCOUNT"</div>
-                <div class="template-header-desc">Comment to trigger instant DM</div>
+                <div class="template-header-desc"><span class="sparkle-icon">✦</span> Comment to trigger Instant DM</div>
+                <div class="template-header-code">RR-SYSTEM // FLOW_VER_4.0</div>
               </div>
-              <div class="template-header-mock"></div>
+              <div class="template-header-mock">
+                <div class="mock-phone-speaker"></div>
+                <div class="mock-comment-bubble">Comment: "DISCOUNT"</div>
+                <div class="mock-dm-pill emerald">✔ Sent to DM!</div>
+              </div>
             </div>
             <div class="template-body">
               <div class="template-category-row">
-                <span class="cat-pill" style="color: #10b981;">Sales</span>
+                <span class="cat-pill">SALES</span>
                 <span class="cat-insta">
-                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
                     <rect x="2" y="2" width="20" height="20" rx="5" ry="5" />
                     <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" />
                     <line x1="17.5" y1="6.5" x2="17.51" y2="6.5" />
@@ -904,26 +805,30 @@
                 </span>
               </div>
               <div class="template-card-title">Exclusive Discount Template</div>
-              <div class="template-card-text">Auto-send a discount code and checkout button to users who comment
-                'DISCOUNT'.</div>
+              <div class="template-card-text">Auto-send a discount code and checkout button to users who comment 'DISCOUNT'.</div>
             </div>
           </div>
 
-          <!-- CARD 8 -->
-          <div class="template-card">
-            <div class="template-header" style="background: linear-gradient(135deg, #7e22ce, #581c87);">
-              <div>
-                <div class="template-header-tag">Giveaway Entry</div>
+          <!-- CARD 8: WIN -->
+          <div class="template-card" data-template="win">
+            <div class="template-header" style="background: linear-gradient(135deg, #4a044e 0%, #701a75 45%, #a21caf 100%);">
+              <div class="template-header-left">
+                <div class="template-header-tag">GIVEAWAY ENTRY</div>
                 <div class="template-header-title">"WIN"</div>
-                <div class="template-header-desc">Comment to trigger instant DM</div>
+                <div class="template-header-desc"><span class="sparkle-icon">✦</span> Comment to trigger Instant DM</div>
+                <div class="template-header-code">RR-SYSTEM // FLOW_VER_4.0</div>
               </div>
-              <div class="template-header-mock"></div>
+              <div class="template-header-mock">
+                <div class="mock-phone-speaker"></div>
+                <div class="mock-comment-bubble">Comment: "WIN"</div>
+                <div class="mock-dm-pill magenta">✔ Sent to DM!</div>
+              </div>
             </div>
             <div class="template-body">
               <div class="template-category-row">
-                <span class="cat-pill" style="color: #a855f7;">Engagement</span>
+                <span class="cat-pill">ENGAGEMENT</span>
                 <span class="cat-insta">
-                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
                     <rect x="2" y="2" width="20" height="20" rx="5" ry="5" />
                     <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" />
                     <line x1="17.5" y1="6.5" x2="17.51" y2="6.5" />
@@ -932,26 +837,30 @@
                 </span>
               </div>
               <div class="template-card-title">Giveaway Entry Template</div>
-              <div class="template-card-text">Enter commenters into a giveaway and automatically send confirmation
-                instructions via DM.</div>
+              <div class="template-card-text">Enter commenters into a giveaway and automatically send confirmation instructions via DM.</div>
             </div>
           </div>
 
-          <!-- CARD 9 -->
-          <div class="template-card">
-            <div class="template-header" style="background: linear-gradient(135deg, #1e1b4b, #0f172a);">
-              <div>
-                <div class="template-header-tag">Free E-Book</div>
+          <!-- CARD 9: GUIDE -->
+          <div class="template-card" data-template="guide">
+            <div class="template-header" style="background: linear-gradient(135deg, #0f172a 0%, #1e293b 45%, #1e3a8a 100%);">
+              <div class="template-header-left">
+                <div class="template-header-tag">FREE E-BOOK</div>
                 <div class="template-header-title">"GUIDE"</div>
-                <div class="template-header-desc">Comment to trigger instant DM</div>
+                <div class="template-header-desc"><span class="sparkle-icon">✦</span> Comment to trigger Instant DM</div>
+                <div class="template-header-code">RR-SYSTEM // FLOW_VER_4.0</div>
               </div>
-              <div class="template-header-mock"></div>
+              <div class="template-header-mock">
+                <div class="mock-phone-speaker"></div>
+                <div class="mock-comment-bubble">Comment: "GUIDE"</div>
+                <div class="mock-dm-pill cyan">✔ Sent to DM!</div>
+              </div>
             </div>
             <div class="template-body">
               <div class="template-category-row">
-                <span class="cat-pill" style="color: #6366f1;">Lead Generation</span>
+                <span class="cat-pill">LEAD GENERATION</span>
                 <span class="cat-insta">
-                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
                     <rect x="2" y="2" width="20" height="20" rx="5" ry="5" />
                     <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" />
                     <line x1="17.5" y1="6.5" x2="17.51" y2="6.5" />
@@ -960,8 +869,7 @@
                 </span>
               </div>
               <div class="template-card-title">Free Ebook Template</div>
-              <div class="template-card-text">Automatically send a download button to anyone who comments 'GUIDE' on
-                your Reel or post.</div>
+              <div class="template-card-text">Automatically send a download button to anyone who comments 'GUIDE' on your Reel or post.</div>
             </div>
           </div>
         </div>
@@ -4432,6 +4340,36 @@
       if (pstatProd) { pstatProd.textContent = visible; }
     }
 
+    /* Expose reset and filter functions globally */
+    window.resetBuilderCatalogView = function () {
+      activeFilterTag = 'all';
+      activeSortType = 'default';
+      var searchInput = document.getElementById('catalog-search-input');
+      if (searchInput) searchInput.value = '';
+      var fItems = document.querySelectorAll('#catalog-filter-dropdown .cdrop-item');
+      fItems.forEach(function (i) {
+        if (i.getAttribute('data-filter') === 'all') {
+          i.style.fontWeight = '700';
+          i.style.color = '#6366f1';
+        } else {
+          i.style.fontWeight = '500';
+          i.style.color = '';
+        }
+      });
+      var sItems = document.querySelectorAll('#catalog-sort-dropdown .cdrop-sort-item');
+      sItems.forEach(function (i) {
+        if (i.getAttribute('data-sort') === 'default') {
+          i.style.fontWeight = '700';
+          i.style.color = '#6366f1';
+        } else {
+          i.style.fontWeight = '500';
+          i.style.color = '';
+        }
+      });
+      filterAndSortProducts();
+    };
+    window.filterAndSortProducts = filterAndSortProducts;
+
     /* Helper hex shade utility */
     function shadeColor(hex, percent) {
       hex = hex.replace('#', '');
@@ -4739,7 +4677,7 @@
       <div class="auth-card-header">
         <div class="auth-title-group">
           <h2 class="auth-title">Edit Direct UPI (VPA) Payout</h2>
-          <p class="auth-sub">Instant zero-fee creator payouts via BHIM, Google Pay, PhonePe & Paytm.</p>
+          <p class="auth-sub">Instant zero-fee creator payouts via BHIM, Google Pay, PhonePe &amp; Paytm.</p>
         </div>
         <button type="button" class="btn-close-modal" id="btn-close-upi-modal">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
@@ -4748,15 +4686,15 @@
 
       <form id="form-edit-upi" style="margin-top: 16px;">
         <div class="form-group" style="margin-bottom: 12px;">
-          <label class="form-label" style="color: #cbd5e1; font-size: 12px; font-weight: 700; display: block; margin-bottom: 6px;">UPI Virtual Payment Address (VPA)</label>
+          <label class="form-label">UPI Virtual Payment Address (VPA)</label>
           <input type="text" class="form-input" id="input-payout-upi" value="rudrateja@okaxis" required placeholder="e.g. name@okaxis or mobile@paytm">
         </div>
         <div class="form-group" style="margin-bottom: 12px;">
-          <label class="form-label" style="color: #cbd5e1; font-size: 12px; font-weight: 700; display: block; margin-bottom: 6px;">Associated VPA Account Name</label>
+          <label class="form-label">Associated VPA Account Name</label>
           <input type="text" class="form-input" id="input-upi-holder-name" value="Rudra Teja" required placeholder="Name on UPI ID">
         </div>
         <div class="form-group" style="margin-bottom: 16px;">
-          <label class="form-label" style="color: #cbd5e1; font-size: 12px; font-weight: 700; display: block; margin-bottom: 6px;">UPI App Provider</label>
+          <label class="form-label">UPI App Provider</label>
           <select class="form-input" id="select-upi-app">
             <option value="Axis / Google Pay">Google Pay / Axis Bank (@okaxis)</option>
             <option value="PhonePe">PhonePe (@ybl / @ibl)</option>
@@ -4790,25 +4728,25 @@
 
       <form id="form-edit-bank" style="margin-top: 16px;">
         <div class="form-group" style="margin-bottom: 12px;">
-          <label class="form-label" style="color: #cbd5e1; font-size: 12px; font-weight: 700; display: block; margin-bottom: 6px;">Account Holder Name</label>
+          <label class="form-label">Account Holder Name</label>
           <input type="text" class="form-input" id="input-bank-name-holder" value="Rudra Teja" required placeholder="Full Name as registered in Bank">
         </div>
         <div class="form-group" style="margin-bottom: 12px;">
-          <label class="form-label" style="color: #cbd5e1; font-size: 12px; font-weight: 700; display: block; margin-bottom: 6px;">Bank Name</label>
+          <label class="form-label">Bank Name</label>
           <input type="text" class="form-input" id="input-bank-name" value="HDFC Bank" required placeholder="e.g. HDFC Bank, ICICI Bank, SBI">
         </div>
         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 12px;">
           <div class="form-group">
-            <label class="form-label" style="color: #cbd5e1; font-size: 12px; font-weight: 700; display: block; margin-bottom: 6px;">Account Number</label>
+            <label class="form-label">Account Number</label>
             <input type="text" class="form-input" id="input-bank-acc-num" value="50100293844892" required placeholder="Account Number">
           </div>
           <div class="form-group">
-            <label class="form-label" style="color: #cbd5e1; font-size: 12px; font-weight: 700; display: block; margin-bottom: 6px;">IFSC Code</label>
+            <label class="form-label">IFSC Code</label>
             <input type="text" class="form-input" id="input-bank-ifsc" value="HDFC0000128" required placeholder="HDFC0000128">
           </div>
         </div>
         <div class="form-group" style="margin-bottom: 16px;">
-          <label class="form-label" style="color: #cbd5e1; font-size: 12px; font-weight: 700; display: block; margin-bottom: 6px;">Account Type</label>
+          <label class="form-label">Account Type</label>
           <select class="form-input" id="select-bank-acc-type">
             <option value="Savings">Savings Account</option>
             <option value="Current">Current Business Account</option>
@@ -4837,45 +4775,45 @@
       </div>
 
       <form id="form-wallet-withdraw" style="margin-top: 16px;">
-        <div style="background: rgba(34, 197, 94, 0.12); border: 1px solid rgba(34, 197, 94, 0.3); border-radius: 10px; padding: 14px; margin-bottom: 14px; display: flex; justify-content: space-between; align-items: center;">
+        <div style="background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 12px; padding: 14px; margin-bottom: 14px; display: flex; justify-content: space-between; align-items: center;">
           <div>
-            <div style="font-size: 0.78rem; font-weight: 600; color: #94a3b8;">Available Balance</div>
-            <div style="font-size: 1.35rem; font-weight: 800; color: #22c55e; margin-top: 2px;" id="withdraw-avail-display">₹98,050</div>
+            <div style="font-size: 0.78rem; font-weight: 700; color: #15803d;">Available Balance</div>
+            <div style="font-size: 1.35rem; font-weight: 800; color: #166534; margin-top: 2px;" id="withdraw-avail-display">₹98,050</div>
           </div>
-          <button type="button" class="btn btn-outline btn-sm" id="btn-withdraw-max" style="border-color: #22c55e; color: #22c55e; background: rgba(34, 197, 94, 0.1);">Withdraw Max</button>
+          <button type="button" class="btn btn-outline btn-sm" id="btn-withdraw-max" style="border: 1px solid #86efac; color: #166534; background: #ffffff; font-weight: 700;">Withdraw Max</button>
         </div>
 
         <div class="form-group" style="margin-bottom: 12px;">
-          <label class="form-label" style="color: #cbd5e1; font-size: 12px; font-weight: 700; display: block; margin-bottom: 6px;">Withdrawal Amount (₹)</label>
+          <label class="form-label">Withdrawal Amount (₹)</label>
           <input type="number" class="form-input" id="input-withdraw-amount" value="50000" min="100" max="98050" required placeholder="Enter amount">
         </div>
 
         <div class="form-group" style="margin-bottom: 14px;">
-          <label class="form-label" style="color: #cbd5e1; font-size: 12px; font-weight: 700; display: block; margin-bottom: 6px;">Payout Channel</label>
+          <label class="form-label">Payout Channel</label>
           <select class="form-input" id="select-withdraw-channel">
             <option value="UPI">Direct UPI (rudrateja@okaxis - Instant)</option>
             <option value="BANK">HDFC Bank (•••• 4892 - IMPS)</option>
           </select>
         </div>
 
-        <div style="background: #1e293b; border: 1px dashed #334155; border-radius: 10px; padding: 12px 14px; margin-bottom: 16px; font-size: 0.82rem; color: #94a3b8;">
+        <div style="background: #f8fafc; border: 1px dashed #cbd5e1; border-radius: 12px; padding: 12px 14px; margin-bottom: 16px; font-size: 0.82rem; color: #64748b;">
           <div style="display: flex; justify-content: space-between; margin-bottom: 6px;">
             <span>Requested Amount:</span>
-            <strong style="color: #ffffff;" id="w-req-amt">₹50,000</strong>
+            <strong style="color: #09090b;" id="w-req-amt">₹50,000</strong>
           </div>
           <div style="display: flex; justify-content: space-between; margin-bottom: 6px;">
             <span>Processing Fee (0% Special Tier):</span>
-            <strong style="color: #22c55e;">₹0</strong>
+            <strong style="color: #16a34a;">₹0</strong>
           </div>
-          <div style="display: flex; justify-content: space-between; border-top: 1px solid #334155; padding-top: 6px; margin-top: 6px; font-weight: 700;">
+          <div style="display: flex; justify-content: space-between; border-top: 1px solid #e2e8f0; padding-top: 6px; margin-top: 6px; font-weight: 700;">
             <span>Estimated Net Transfer:</span>
-            <strong style="color: #ffffff; font-size: 0.95rem;" id="w-net-amt">₹50,000</strong>
+            <strong style="color: #09090b; font-size: 0.95rem;" id="w-net-amt">₹50,000</strong>
           </div>
         </div>
 
         <div style="display: flex; gap: 10px; justify-content: flex-end;">
           <button type="button" class="btn btn-outline" id="btn-cancel-withdraw">Cancel</button>
-          <button type="submit" class="btn btn-primary" id="btn-confirm-withdraw">Confirm & Transfer</button>
+          <button type="submit" class="btn btn-primary" id="btn-confirm-withdraw">Confirm &amp; Transfer</button>
         </div>
       </form>
     </div>
@@ -4905,15 +4843,15 @@
           </button>
         </div>
 
-        <div class="analytics-table-container" style="max-height: 380px; overflow-y: auto; border-radius: 8px; border: 1px solid #334155; background: #1e293b;">
+        <div class="analytics-table-container" style="max-height: 380px; overflow-y: auto; border-radius: 12px; border: 1px solid #e2e8f0; background: #ffffff;">
           <table class="analytics-product-table txn-table">
             <thead>
               <tr>
-                <th style="text-align: left; color: #94a3b8;">Date</th>
-                <th style="text-align: left; color: #94a3b8;">Transaction ID</th>
-                <th style="text-align: left; color: #94a3b8;">Type</th>
-                <th style="text-align: right; color: #94a3b8;">Amount</th>
-                <th style="text-align: center; color: #94a3b8;">Status</th>
+                <th style="text-align: left; color: #64748b; background: #f8fafc;">Date</th>
+                <th style="text-align: left; color: #64748b; background: #f8fafc;">Transaction ID</th>
+                <th style="text-align: left; color: #64748b; background: #f8fafc;">Type</th>
+                <th style="text-align: right; color: #64748b; background: #f8fafc;">Amount</th>
+                <th style="text-align: center; color: #64748b; background: #f8fafc;">Status</th>
               </tr>
             </thead>
             <tbody id="modal-txn-table-body">
@@ -4938,37 +4876,37 @@
         </button>
       </div>
 
-      <div style="margin-top: 14px; background: #1e293b; border: 1px solid #334155; border-radius: 12px; padding: 18px;">
-        <div style="text-align: center; padding-bottom: 14px; border-bottom: 1px dashed #334155;">
-          <div style="font-size: 0.8rem; color: #94a3b8;" id="rec-date">Oct 20, 2026 • 02:45 PM</div>
-          <div style="font-size: 1.7rem; font-weight: 800; color: #ffffff; margin: 6px 0;" id="rec-gross-amt">₹98,050</div>
+      <div style="margin-top: 14px; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 14px; padding: 18px;">
+        <div style="text-align: center; padding-bottom: 14px; border-bottom: 1px dashed #cbd5e1;">
+          <div style="font-size: 0.8rem; color: #64748b;" id="rec-date">Oct 20, 2026 • 02:45 PM</div>
+          <div style="font-size: 1.7rem; font-weight: 800; color: #09090b; margin: 6px 0;" id="rec-gross-amt">₹98,050</div>
           <span class="badge-status cleared" id="rec-status-badge">Cleared</span>
         </div>
 
         <div style="margin-top: 14px; font-size: 0.85rem; display: flex; flex-direction: column; gap: 8px;">
           <div style="display: flex; justify-content: space-between;">
-            <span style="color: #94a3b8;">Event / Activity:</span>
-            <strong style="color: #ffffff;" id="rec-type">Order Sale</strong>
+            <span style="color: #64748b;">Event / Activity:</span>
+            <strong style="color: #09090b;" id="rec-type">Order Sale</strong>
           </div>
           <div style="display: flex; justify-content: space-between;">
-            <span style="color: #94a3b8;">Customer Email:</span>
-            <strong style="color: #ffffff;" id="rec-customer">customer@example.com</strong>
+            <span style="color: #64748b;">Customer Email:</span>
+            <strong style="color: #09090b;" id="rec-customer">customer@example.com</strong>
           </div>
           <div style="display: flex; justify-content: space-between;">
-            <span style="color: #94a3b8;">Payment Channel:</span>
-            <strong style="color: #ffffff;" id="rec-channel">Razorpay UPI / Cards</strong>
+            <span style="color: #64748b;">Payment Channel:</span>
+            <strong style="color: #09090b;" id="rec-channel">Razorpay UPI / Cards</strong>
           </div>
           <div style="display: flex; justify-content: space-between;">
-            <span style="color: #94a3b8;">Platform Fee (3%):</span>
-            <span id="rec-fee" style="color: #f87171; font-weight: 700;">- ₹2,941</span>
+            <span style="color: #64748b;">Platform Fee (3%):</span>
+            <span id="rec-fee" style="color: #ef4444; font-weight: 700;">- ₹2,941</span>
           </div>
           <div style="display: flex; justify-content: space-between;">
-            <span style="color: #94a3b8;">GST (18% on Fee):</span>
-            <span id="rec-gst" style="color: #f87171; font-weight: 700;">- ₹529</span>
+            <span style="color: #64748b;">GST (18% on Fee):</span>
+            <span id="rec-gst" style="color: #ef4444; font-weight: 700;">- ₹529</span>
           </div>
-          <div style="display: flex; justify-content: space-between; border-top: 1px solid #334155; padding-top: 10px; margin-top: 4px; font-weight: 800; font-size: 0.95rem;">
-            <span style="color: #cbd5e1;">Net Credited to Wallet:</span>
-            <span id="rec-net-amt" style="color: #34d399;">₹94,580</span>
+          <div style="display: flex; justify-content: space-between; border-top: 1px solid #e2e8f0; padding-top: 10px; margin-top: 4px; font-weight: 800; font-size: 0.95rem;">
+            <span style="color: #475569;">Net Credited to Wallet:</span>
+            <span id="rec-net-amt" style="color: #10b981;">₹94,580</span>
           </div>
         </div>
       </div>
@@ -4976,6 +4914,280 @@
       <div style="display: flex; gap: 10px; justify-content: flex-end; margin-top: 16px;">
         <button type="button" class="btn btn-outline" id="btn-print-receipt">Print Receipt</button>
         <button type="button" class="btn btn-primary" id="btn-close-receipt">Done</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 7. VIEW ALL PRODUCTS / FULL CATALOG MANAGER MODAL -->
+  <div class="store-preview-modal-backdrop payment-modal-backdrop" id="modal-all-products">
+    <div class="store-auth-card" style="max-width: 880px; width: 92%; max-height: 90vh; display: flex; flex-direction: column;">
+      <div class="auth-card-header">
+        <div class="auth-title-group">
+          <div style="display: flex; align-items: center; gap: 10px;">
+            <h2 class="auth-title">All Products &amp; Digital Catalog</h2>
+            <span class="catalog-count-pill" id="modal-all-prods-count-badge" style="background: rgba(99, 102, 241, 0.12); color: #4f46e5; border: 1px solid rgba(99, 102, 241, 0.25); padding: 2px 10px; border-radius: 9999px; font-size: 12px; font-weight: 800;">3 Products</span>
+          </div>
+          <p class="auth-sub">Manage, edit, search, and monitor performance across all your digital products, lead magnets, and services.</p>
+        </div>
+        <button type="button" class="btn-close-modal" id="btn-close-all-prods-modal" title="Close Modal">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </button>
+      </div>
+
+      <!-- Quick Metrics Summary Bar -->
+      <div class="modal-prods-kpi-bar" style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-top: 14px; margin-bottom: 14px;">
+        <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px; padding: 10px 14px;">
+          <div style="font-size: 11px; color: #64748b; font-weight: 600;">Total Active Items</div>
+          <div style="font-size: 18px; font-weight: 800; color: #09090b; margin-top: 2px;" id="modal-kpi-total-prods">3</div>
+        </div>
+        <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px; padding: 10px 14px;">
+          <div style="font-size: 11px; color: #64748b; font-weight: 600;">Lead Magnets</div>
+          <div style="font-size: 18px; font-weight: 800; color: #10b981; margin-top: 2px;" id="modal-kpi-free-prods">1 Free</div>
+        </div>
+        <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px; padding: 10px 14px;">
+          <div style="font-size: 11px; color: #64748b; font-weight: 600;">Paid Products</div>
+          <div style="font-size: 18px; font-weight: 800; color: #4f46e5; margin-top: 2px;" id="modal-kpi-paid-prods">2 Items</div>
+        </div>
+        <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px; padding: 10px 14px;">
+          <div style="font-size: 11px; color: #64748b; font-weight: 600;">Avg Rating</div>
+          <div style="font-size: 18px; font-weight: 800; color: #f59e0b; margin-top: 2px;">4.95 ★</div>
+        </div>
+      </div>
+
+      <!-- Search, Filter & Action Toolbar -->
+      <div style="display: flex; gap: 10px; margin-bottom: 12px; flex-wrap: wrap; align-items: center; justify-content: space-between;">
+        <div style="display: flex; gap: 8px; flex: 1; min-width: 240px;">
+          <div class="catalog-search-box" style="flex: 1; width: 100%;">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+            </svg>
+            <input type="text" class="catalog-search-input" id="modal-input-all-prods-search" placeholder="Search by title, keyword, or price..." style="width: 100%;">
+          </div>
+        </div>
+
+        <div class="modal-all-prods-filter-tabs" id="modal-all-prods-filter-tabs" style="display: flex; gap: 6px; background: #f1f5f9; padding: 4px; border-radius: 10px; border: 1px solid #e2e8f0;">
+          <button type="button" class="modal-pfilter-btn active" data-filter="all" style="padding: 5px 12px; border-radius: 7px; border: none; font-size: 11px; font-weight: 700; cursor: pointer; background: #09090b; color: #fff;">All</button>
+          <button type="button" class="modal-pfilter-btn" data-filter="guide" style="padding: 5px 12px; border-radius: 7px; border: none; font-size: 11px; font-weight: 600; cursor: pointer; background: transparent; color: #64748b;">Guides</button>
+          <button type="button" class="modal-pfilter-btn" data-filter="free" style="padding: 5px 12px; border-radius: 7px; border: none; font-size: 11px; font-weight: 600; cursor: pointer; background: transparent; color: #64748b;">Free</button>
+          <button type="button" class="modal-pfilter-btn" data-filter="session" style="padding: 5px 12px; border-radius: 7px; border: none; font-size: 11px; font-weight: 600; cursor: pointer; background: transparent; color: #64748b;">Sessions</button>
+        </div>
+
+        <div style="display: flex; gap: 8px;">
+          <button type="button" class="btn btn-primary btn-sm" id="btn-modal-add-product" style="display: flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 700; background: #09090b; border: none; border-radius: 9999px; padding: 8px 16px; cursor: pointer; color: #fff;">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+            Add Product
+          </button>
+          <button type="button" class="btn btn-outline btn-sm" id="btn-modal-open-live-store" style="display: flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 700; border-radius: 9999px; padding: 8px 16px; cursor: pointer;">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+            Live Store
+          </button>
+        </div>
+      </div>
+
+      <!-- Scrollable Product List Grid -->
+      <div class="modal-prods-scroll-container" style="flex: 1; overflow-y: auto; max-height: 440px; padding-right: 4px; display: flex; flex-direction: column; gap: 10px;" id="modal-all-products-list">
+        <!-- Rendered dynamically via JS -->
+      </div>
+
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 14px; padding-top: 12px; border-top: 1px solid #f1f5f9;">
+        <span style="font-size: 12px; color: #64748b;" id="modal-all-prods-footer-summary">Showing 3 of 3 products</span>
+        <div style="display: flex; gap: 10px;">
+          <button type="button" class="btn btn-outline btn-sm" id="btn-close-all-prods-bottom">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 8. INSTAGRAM AUTOMATION STUDIO (CREATE & EDIT RULE MODAL) -->
+  <div class="store-preview-modal-backdrop payment-modal-backdrop" id="modal-automation-studio">
+    <div class="store-auth-card automation-studio-card" style="max-width: 860px; width: 94%; max-height: 90vh; display: flex; flex-direction: column;">
+      <div class="auth-card-header">
+        <div class="auth-title-group">
+          <div style="display: flex; align-items: center; gap: 10px;">
+            <h2 class="auth-title" id="auto-modal-title">Instagram Automation Studio</h2>
+            <span class="catalog-count-pill" id="auto-modal-mode-badge" style="background: rgba(16, 185, 129, 0.12); color: #059669; border: 1px solid rgba(16, 185, 129, 0.25); padding: 2px 10px; border-radius: 9999px; font-size: 11px; font-weight: 800;">Create Mode</span>
+          </div>
+          <p class="auth-sub" id="auto-modal-subtitle">Configure intelligent triggers, automated DM replies, and instant product delivery.</p>
+        </div>
+        <button type="button" class="btn-close-modal" id="btn-close-auto-modal" title="Close Modal">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </button>
+      </div>
+
+      <!-- 2-COLUMN STUDIO CONTAINER -->
+      <div class="auto-studio-body" style="flex: 1; overflow-y: auto; overflow-x: hidden; padding: 14px 4px 10px 2px; display: grid; grid-template-columns: 1fr 270px; gap: 24px;">
+        
+        <!-- LEFT COLUMN: CONFIGURATION FORM -->
+        <div class="auto-studio-form" style="display: flex; flex-direction: column; gap: 16px;">
+          <input type="hidden" id="auto-edit-rule-id" value="">
+
+          <div class="auto-form-group">
+            <label class="auto-form-label" for="auto-rule-name">Automation Rule Name <span style="color: #ef4444;">*</span></label>
+            <input type="text" class="auto-form-input" id="auto-rule-name" placeholder="e.g. Pricing Plans Instant Auto-DM" value="Pricing Plans Auto-DM">
+          </div>
+
+          <div class="auto-form-group">
+            <label class="auto-form-label">Instagram Trigger Event <span style="color: #ef4444;">*</span></label>
+            <div class="auto-trigger-grid" id="auto-trigger-selector">
+              <button type="button" class="auto-trigger-opt active" data-trigger="post">
+                <div class="trigger-opt-icon" style="background: rgba(99, 102, 241, 0.12); color: #4f46e5;">
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="9" y1="21" x2="9" y2="9"/></svg>
+                </div>
+                <div class="trigger-opt-text">
+                  <strong>Post Comments</strong>
+                  <span>When someone comments</span>
+                </div>
+              </button>
+
+              <button type="button" class="auto-trigger-opt" data-trigger="story">
+                <div class="trigger-opt-icon" style="background: rgba(236, 72, 153, 0.12); color: #db2777;">
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
+                </div>
+                <div class="trigger-opt-text">
+                  <strong>Story Mentions</strong>
+                  <span>When tagged in Story</span>
+                </div>
+              </button>
+
+              <button type="button" class="auto-trigger-opt" data-trigger="reel">
+                <div class="trigger-opt-icon" style="background: rgba(16, 185, 129, 0.12); color: #059669;">
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="2.18"/><line x1="7" y1="2" x2="7" y2="22"/><line x1="17" y1="2" x2="17" y2="22"/><line x1="2" y1="12" x2="22" y2="12"/></svg>
+                </div>
+                <div class="trigger-opt-text">
+                  <strong>Reels &amp; Live</strong>
+                  <span>When commented on Reels</span>
+                </div>
+              </button>
+
+              <button type="button" class="auto-trigger-opt" data-trigger="dm">
+                <div class="trigger-opt-icon" style="background: rgba(245, 158, 11, 0.12); color: #d97706;">
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+                </div>
+                <div class="trigger-opt-text">
+                  <strong>DM Keywords</strong>
+                  <span>When direct messaged</span>
+                </div>
+              </button>
+            </div>
+          </div>
+
+          <div class="auto-form-group">
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+              <label class="auto-form-label" for="auto-rule-keywords">Trigger Keywords / Phrases <span style="color: #ef4444;">*</span></label>
+              <span style="font-size: 11px; color: #64748b;">Separate keywords by commas</span>
+            </div>
+            <input type="text" class="auto-form-input" id="auto-rule-keywords" placeholder="PRICING, PRICE, COST, RATES, PLANS" value="PRICING, PRICE, COST">
+            <div class="auto-keyword-presets" style="display: flex; gap: 6px; margin-top: 6px; flex-wrap: wrap;">
+              <span class="kw-preset-chip" data-kw="PRICING">+ "PRICING"</span>
+              <span class="kw-preset-chip" data-kw="GUIDE">+ "GUIDE"</span>
+              <span class="kw-preset-chip" data-kw="LINK">+ "LINK"</span>
+              <span class="kw-preset-chip" data-kw="FREE">+ "FREE"</span>
+              <span class="kw-preset-chip" data-kw="ROADMAP">+ "ROADMAP"</span>
+            </div>
+          </div>
+
+          <div class="auto-form-group">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+              <label class="auto-form-label" for="auto-rule-response" style="margin-bottom: 0;">Automated Direct Message (DM) <span style="color: #ef4444;">*</span></label>
+              <div class="auto-var-chips">
+                <span class="var-chip" data-var="{first_name}">+{first_name}</span>
+                <span class="var-chip" data-var="{username}">+{username}</span>
+                <span class="var-chip" data-var="{link}">+{link}</span>
+              </div>
+            </div>
+            <textarea class="auto-form-textarea" id="auto-rule-response" rows="3" placeholder="Hey {first_name}! 👋 Thanks for asking about pricing. Here is our full breakdown link: {link}">Hey {first_name}! 👋 Here are our official creator pricing plans and instant checkout link: {link}</textarea>
+          </div>
+
+          <!-- ACTIONS & ATTACHMENTS -->
+          <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 14px; padding: 14px; display: flex; flex-direction: column; gap: 10px;">
+            <label style="font-size: 11px; font-weight: 800; color: #475569; text-transform: uppercase; letter-spacing: 0.5px;">Attached Actions &amp; Deliverables</label>
+            
+            <div style="display: flex; flex-direction: column; gap: 6px;">
+              <label style="display: flex; align-items: center; gap: 8px; font-size: 12.5px; color: #09090b; font-weight: 600; cursor: pointer;">
+                <input type="checkbox" id="auto-attach-link-chk" checked style="accent-color: #09090b;">
+                Attach Product / Bio Link Button
+              </label>
+              <input type="text" class="auto-form-input" id="auto-attach-url" placeholder="https://renderreply.com/p/pricing" value="https://renderreply.com/p/pricing" style="padding: 8px 12px; font-size: 13px;">
+            </div>
+
+            <div style="display: flex; flex-direction: column; gap: 6px; margin-top: 4px;">
+              <label style="display: flex; align-items: center; gap: 8px; font-size: 12.5px; color: #09090b; font-weight: 600; cursor: pointer;">
+                <input type="checkbox" id="auto-comment-reply-chk" checked style="accent-color: #09090b;">
+                Public Comment Reply (Instagram)
+              </label>
+              <input type="text" class="auto-form-input" id="auto-comment-reply-text" placeholder="Sent you a DM! 📩 Check your inbox." value="Sent you a DM! 📩 Check your requests." style="padding: 8px 12px; font-size: 13px;">
+            </div>
+          </div>
+
+          <div style="display: flex; align-items: center; justify-content: space-between; padding: 4px 2px;">
+            <label style="display: flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 700; color: #09090b; cursor: pointer;">
+              <input type="checkbox" id="auto-rule-active-chk" checked style="accent-color: #10b981; width: 16px; height: 16px;">
+              Enable Automation Immediately (Active)
+            </label>
+          </div>
+        </div>
+
+        <!-- RIGHT COLUMN: LIVE INSTAGRAM DM PHONE SIMULATOR -->
+        <div class="auto-studio-preview" style="display: flex; flex-direction: column; align-items: center; justify-content: flex-start;">
+          <div style="font-size: 11px; font-weight: 800; color: #64748b; text-transform: uppercase; letter-spacing: 0.6px; margin-bottom: 10px; display: flex; align-items: center; gap: 6px;">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="5" y="2" width="14" height="20" rx="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg>
+            Live Instagram DM Simulator
+          </div>
+
+          <div class="insta-simulator-frame">
+            <!-- Simulated Phone Header -->
+            <div class="sim-phone-header">
+              <div class="sim-user-avatar">R</div>
+              <div class="sim-user-meta">
+                <span class="sim-user-name">renderreply_bot <svg width="10" height="10" viewBox="0 0 24 24" fill="#3b82f6"><circle cx="12" cy="12" r="10"/></svg></span>
+                <span class="sim-user-status">Active now • Instagram</span>
+              </div>
+            </div>
+
+            <!-- Simulated Chat Area -->
+            <div class="sim-chat-area">
+              <div class="sim-chat-timestamp">Automated Trigger • Just Now</div>
+
+              <!-- Inbound Comment Trigger Mock -->
+              <div class="sim-inbound-trigger">
+                <div class="sim-trigger-label" id="sim-trigger-type-label">Post Comment Trigger</div>
+                <div class="sim-trigger-text" id="sim-inbound-keyword">User commented: "PRICING"</div>
+              </div>
+
+              <!-- Simulated Outbound Bot DM Message -->
+              <div class="sim-bot-bubble" id="sim-bot-message-bubble">
+                Hey Alex! 👋 Here are our official creator pricing plans and instant checkout link: https://renderreply.com/p/pricing
+              </div>
+
+              <!-- Simulated Attached Link Card -->
+              <div class="sim-link-card" id="sim-link-card-box">
+                <div class="sim-link-thumb" id="sim-link-card-thumb">
+                  <span>RENDERREPLY</span>
+                </div>
+                <div class="sim-link-info">
+                  <span class="sim-link-title" id="sim-link-title-preview">Pricing Plans &amp; Checkout</span>
+                  <span class="sim-link-url" id="sim-link-url-preview">renderreply.com/pricing</span>
+                  <button type="button" class="sim-link-btn">View Store &amp; Pricing →</button>
+                </div>
+              </div>
+
+              <!-- Public Comment Reply Pill -->
+              <div class="sim-public-reply-pill" id="sim-public-reply-pill">
+                <span>Public Reply: "Sent you a DM! Check your requests."</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- MODAL FOOTER ACTIONS -->
+      <div style="display: flex; justify-content: flex-end; align-items: center; margin-top: 16px; padding-top: 14px; border-top: 1px solid #f1f5f9; gap: 10px;">
+        <button type="button" class="btn btn-outline btn-sm" id="btn-cancel-auto-modal">Cancel</button>
+        <button type="button" class="btn btn-primary btn-sm" id="btn-save-auto-rule" style="display: flex; align-items: center; gap: 6px; font-weight: 800;">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+          <span id="btn-save-auto-text">Save &amp; Activate Rule</span>
+        </button>
       </div>
     </div>
   </div>

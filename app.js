@@ -247,12 +247,25 @@ window.deleteProductItem = function (id) {
 function initApp() {
   // APP STATE
   let isConnected = true;
-  let currentRange = '7 Days';
+  let currentRange = '30 Days';
 
-  // HELPER SVG GENERATOR FOR PERFECT GRAPH RENDERING
+  // HELPER SVG GENERATOR FOR PERFECT GRAPH RENDERING MATCHING SCREENSHOT
   function createChartSvg(options) {
-    const { yTop = '0', yBottom = '0', xLabels = ['6', '7', '8', '9', '10', '11', '12'], points = [], strokeColor = '#0f172a', fillColor = null } = options;
-    const xCoords = [35, 75, 117, 159, 201, 243, 285];
+    const { 
+      yTop = '2', 
+      yBottom = '1', 
+      xLabels = ['1', '2', '3', '4', '5', '6'], 
+      points = [], 
+      strokeColor = '#09090b', 
+      fillColor = null 
+    } = options;
+
+    const numPoints = xLabels.length;
+    const paddingLeft = 32;
+    const paddingRight = 290;
+    const availableWidth = paddingRight - paddingLeft;
+    const step = numPoints > 1 ? availableWidth / (numPoints - 1) : 0;
+    const xCoords = xLabels.map((_, i) => paddingLeft + i * step);
 
     let pathD = '';
     let areaD = '';
@@ -266,33 +279,35 @@ function initApp() {
       pathD = `M ${xCoords[0]},90 L ${xCoords[xCoords.length - 1]},90`;
     }
 
+    const gradId = `chartGrad_${Math.random().toString(36).substr(2, 9)}`;
+
     return `
       <svg viewBox="0 0 310 135" style="width: 100%; height: 100%;">
-        ${fillColor ? `
         <defs>
-          <linearGradient id="chartFillGrad_${Math.random().toString(36).substr(2, 9)}" x1="0" y1="0" x2="0" y2="1">
+          ${fillColor ? `
+          <linearGradient id="${gradId}" x1="0" y1="0" x2="0" y2="1">
             <stop offset="0%" stop-color="${strokeColor}" stop-opacity="0.18"/>
             <stop offset="100%" stop-color="${strokeColor}" stop-opacity="0.0"/>
-          </linearGradient>
-        </defs>` : ''}
+          </linearGradient>` : ''}
+        </defs>
         
-        <line x1="30" y1="30" x2="290" y2="30" stroke="#e2e8f0" stroke-width="1" stroke-dasharray="3 3" />
-        <line x1="30" y1="90" x2="290" y2="90" stroke="#e2e8f0" stroke-width="1" stroke-dasharray="3 3" />
+        <line x1="28" y1="30" x2="295" y2="30" stroke="#f1f5f9" stroke-width="1" stroke-dasharray="2 2" />
+        <line x1="28" y1="90" x2="295" y2="90" stroke="#f1f5f9" stroke-width="1" stroke-dasharray="2 2" />
         
-        <text x="20" y="34" font-size="10" font-weight="600" fill="#94a3b8" text-anchor="end">${yTop}</text>
-        <text x="20" y="94" font-size="10" font-weight="600" fill="#94a3b8" text-anchor="end">${yBottom}</text>
+        <text x="18" y="34" font-family="'Inter', sans-serif" font-size="9" font-weight="500" fill="#a1a1aa" text-anchor="end">${yTop}</text>
+        <text x="18" y="94" font-family="'Inter', sans-serif" font-size="9" font-weight="500" fill="#a1a1aa" text-anchor="end">${yBottom}</text>
 
-        ${fillColor && areaD ? `<path d="${areaD}" fill="url(#chartFillGrad)" />` : ''}
+        ${fillColor && areaD ? `<path d="${areaD}" fill="url(#${gradId})" />` : ''}
 
         <path d="${pathD}" fill="none" stroke="${strokeColor}" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
 
         ${xCoords.map((x, i) => {
           const y = (points && points[i] !== undefined) ? points[i] : 90;
-          return `<circle cx="${x}" cy="${y}" r="4" fill="#ffffff" stroke="${strokeColor}" stroke-width="2.2"/>`;
+          return `<circle cx="${x}" cy="${y}" r="3.5" fill="#ffffff" stroke="${strokeColor}" stroke-width="2.2"/>`;
         }).join('')}
 
         ${xLabels.map((lbl, i) => `
-          <text x="${xCoords[i]}" y="116" font-size="10" font-weight="600" fill="#94a3b8" text-anchor="middle">${lbl}</text>
+          <text x="${xCoords[i]}" y="116" font-family="'Inter', sans-serif" font-size="9.5" font-weight="500" fill="#a1a1aa" text-anchor="middle">${lbl}</text>
         `).join('')}
       </svg>
     `;
@@ -300,12 +315,44 @@ function initApp() {
 
   // DATA FOR TIME RANGES
   const DASHBOARD_DATA = {
+    '14 Days': {
+      followers: '0',
+      following: '1',
+      views: '0',
+      comments: '0',
+      replies: '2',
+      sentToday: '0',
+      activeRules: '1',
+      leads: '0',
+      repliesSubtitle: 'Automation activity lifetime.',
+      followersSubtitle: 'Follower growth lifetime.',
+      leadsSubtitle: 'Leads captured lifetime.',
+      repliesSvg: createChartSvg({
+        yTop: '2', yBottom: '1',
+        xLabels: ['1', '2', '3', '4', '5', '6'],
+        points: [90, 90, 90, 90, 32, 32],
+        strokeColor: '#09090b',
+        fillColor: '#09090b'
+      }),
+      followersSvg: createChartSvg({
+        yTop: '0', yBottom: '0',
+        xLabels: ['1', '2', '3', '4', '5', '6'],
+        points: [90, 90, 90, 90, 90, 90],
+        strokeColor: '#71717a'
+      }),
+      leadsSvg: createChartSvg({
+        yTop: '0', yBottom: '0',
+        xLabels: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10'],
+        points: [90, 90, 90, 90, 90, 90, 90, 90, 90, 90],
+        strokeColor: '#8b5cf6'
+      })
+    },
     '7 Days': {
       followers: '0',
       following: '1',
-      views: '7',
-      comments: '5',
-      replies: '2',
+      views: '0',
+      comments: '0',
+      replies: '1',
       sentToday: '0',
       activeRules: '1',
       leads: '0',
@@ -313,21 +360,21 @@ function initApp() {
       followersSubtitle: 'Follower growth over the last 7 days.',
       leadsSubtitle: 'Leads captured over the last 7 days.',
       repliesSvg: createChartSvg({
-        yTop: '2', yBottom: '0',
-        xLabels: ['0', '7', '8', '9', '10', '11', '12'],
-        points: [30, 90, 90, 90, 90, 90, 90],
-        strokeColor: '#0f172a',
-        fillColor: '#0f172a'
+        yTop: '2', yBottom: '1',
+        xLabels: ['1', '2', '3', '4', '5', '6'],
+        points: [90, 90, 90, 90, 45, 45],
+        strokeColor: '#09090b',
+        fillColor: '#09090b'
       }),
       followersSvg: createChartSvg({
         yTop: '0', yBottom: '0',
-        xLabels: ['0', '7', '8', '9', '10', '11', '12'],
-        points: [90, 90, 90, 90, 90, 90, 90],
-        strokeColor: '#64748b'
+        xLabels: ['1', '2', '3', '4', '5', '6'],
+        points: [90, 90, 90, 90, 90, 90],
+        strokeColor: '#71717a'
       }),
       leadsSvg: createChartSvg({
         yTop: '0', yBottom: '0',
-        xLabels: ['0', '7', '8', '9', '10', '11', '12'],
+        xLabels: ['1', '2', '3', '4', '5', '6', '7'],
         points: [90, 90, 90, 90, 90, 90, 90],
         strokeColor: '#8b5cf6'
       })
@@ -346,21 +393,53 @@ function initApp() {
       leadsSubtitle: 'Leads captured over the last 30 days.',
       repliesSvg: createChartSvg({
         yTop: '40', yBottom: '0',
-        xLabels: ['W1', 'W2', 'W3', 'W4', 'W5', 'W6', 'W7'],
-        points: [85, 70, 45, 60, 30, 35, 15],
-        strokeColor: '#2563eb',
-        fillColor: '#2563eb'
+        xLabels: ['1', '2', '3', '4', '5', '6'],
+        points: [85, 70, 45, 60, 30, 35],
+        strokeColor: '#09090b',
+        fillColor: '#09090b'
       }),
       followersSvg: createChartSvg({
         yTop: '20', yBottom: '0',
-        xLabels: ['W1', 'W2', 'W3', 'W4', 'W5', 'W6', 'W7'],
-        points: [80, 70, 60, 50, 40, 30, 20],
-        strokeColor: '#10b981'
+        xLabels: ['1', '2', '3', '4', '5', '6'],
+        points: [80, 70, 60, 50, 40, 30],
+        strokeColor: '#71717a'
       }),
       leadsSvg: createChartSvg({
         yTop: '15', yBottom: '0',
-        xLabels: ['W1', 'W2', 'W3', 'W4', 'W5', 'W6', 'W7'],
-        points: [85, 75, 55, 45, 30, 25, 18],
+        xLabels: ['1', '2', '3', '4', '5', '6', '7', '8'],
+        points: [85, 75, 55, 45, 30, 25, 18, 15],
+        strokeColor: '#8b5cf6'
+      })
+    },
+    '60 Days': {
+      followers: '120',
+      following: '28',
+      views: '4,500',
+      comments: '390',
+      replies: '240',
+      sentToday: '18',
+      activeRules: '4',
+      leads: '65',
+      repliesSubtitle: 'Automation activity over the last 60 days.',
+      followersSubtitle: 'Follower growth over the last 60 days.',
+      leadsSubtitle: 'Leads captured over the last 60 days.',
+      repliesSvg: createChartSvg({
+        yTop: '80', yBottom: '0',
+        xLabels: ['1', '2', '3', '4', '5', '6'],
+        points: [90, 75, 60, 45, 30, 20],
+        strokeColor: '#09090b',
+        fillColor: '#09090b'
+      }),
+      followersSvg: createChartSvg({
+        yTop: '50', yBottom: '0',
+        xLabels: ['1', '2', '3', '4', '5', '6'],
+        points: [85, 70, 55, 45, 35, 25],
+        strokeColor: '#71717a'
+      }),
+      leadsSvg: createChartSvg({
+        yTop: '35', yBottom: '0',
+        xLabels: ['1', '2', '3', '4', '5', '6', '7', '8'],
+        points: [88, 72, 58, 42, 30, 20, 15, 10],
         strokeColor: '#8b5cf6'
       })
     },
@@ -378,53 +457,21 @@ function initApp() {
       leadsSubtitle: 'Leads captured over the last 90 days.',
       repliesSvg: createChartSvg({
         yTop: '120', yBottom: '0',
-        xLabels: ['Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
-        points: [90, 75, 55, 40, 45, 25, 10],
-        strokeColor: '#059669',
-        fillColor: '#059669'
+        xLabels: ['1', '2', '3', '4', '5', '6'],
+        points: [90, 75, 55, 40, 45, 25],
+        strokeColor: '#09090b',
+        fillColor: '#09090b'
       }),
       followersSvg: createChartSvg({
         yTop: '80', yBottom: '0',
-        xLabels: ['Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
-        points: [85, 70, 55, 45, 35, 25, 15],
-        strokeColor: '#10b981'
+        xLabels: ['1', '2', '3', '4', '5', '6'],
+        points: [85, 70, 55, 45, 35, 25],
+        strokeColor: '#71717a'
       }),
       leadsSvg: createChartSvg({
         yTop: '50', yBottom: '0',
-        xLabels: ['Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
-        points: [88, 72, 58, 42, 30, 20, 12],
-        strokeColor: '#8b5cf6'
-      })
-    },
-    'Lifetime': {
-      followers: '840',
-      following: '120',
-      views: '45,600',
-      comments: '3,410',
-      replies: '2,890',
-      sentToday: '35',
-      activeRules: '8',
-      leads: '520',
-      repliesSubtitle: 'All-time automation activity.',
-      followersSubtitle: 'All-time follower growth.',
-      leadsSubtitle: 'All-time leads captured.',
-      repliesSvg: createChartSvg({
-        yTop: '500', yBottom: '0',
-        xLabels: ['2023', 'Q1', 'Q2', 'Q3', 'Q4', '2025', '2026'],
-        points: [95, 80, 60, 45, 30, 20, 10],
-        strokeColor: '#7c3aed',
-        fillColor: '#7c3aed'
-      }),
-      followersSvg: createChartSvg({
-        yTop: '300', yBottom: '0',
-        xLabels: ['2023', 'Q1', 'Q2', 'Q3', 'Q4', '2025', '2026'],
-        points: [90, 75, 60, 45, 30, 20, 10],
-        strokeColor: '#10b981'
-      }),
-      leadsSvg: createChartSvg({
-        yTop: '200', yBottom: '0',
-        xLabels: ['2023', 'Q1', 'Q2', 'Q3', 'Q4', '2025', '2026'],
-        points: [92, 78, 62, 44, 28, 18, 8],
+        xLabels: ['1', '2', '3', '4', '5', '6', '7', '8'],
+        points: [88, 72, 58, 42, 30, 20, 12, 10],
         strokeColor: '#8b5cf6'
       })
     }
@@ -486,7 +533,7 @@ function initApp() {
   }
 
   // 2. LOAD DASHBOARD DATA FUNCTION
-  function loadDashboardData(range = '7 Days') {
+  function loadDashboardData(range = '30 Days') {
     currentRange = range;
     showSkeletonLoading();
 
@@ -630,10 +677,43 @@ function initApp() {
     sidebarBackdrop.addEventListener('click', closeMobileSidebar);
   }
 
+  // SMOOTH CAPSULE PILL ANIMATION CONTROLLERS
+  function updateSidebarCapsulePill() {
+    const nav = document.getElementById('sidebar-nav');
+    const indicator = document.getElementById('sidebar-pill-indicator');
+    const activeItem = nav?.querySelector('.nav-item.active');
+    if (!nav || !indicator || !activeItem) return;
+
+    const navRect = nav.getBoundingClientRect();
+    const itemRect = activeItem.getBoundingClientRect();
+    const topOffset = itemRect.top - navRect.top;
+
+    indicator.style.transform = `translateY(${topOffset}px)`;
+    indicator.style.height = `${itemRect.height}px`;
+    indicator.style.opacity = '1';
+  }
+
+  function updateTimeRangeCapsulePill() {
+    const picker = document.getElementById('dashboard-time-picker');
+    const indicator = document.getElementById('time-range-indicator');
+    const activeBtn = picker?.querySelector('.time-range-btn.active');
+    if (!picker || !indicator || !activeBtn) return;
+
+    const pickerRect = picker.getBoundingClientRect();
+    const btnRect = activeBtn.getBoundingClientRect();
+    const leftOffset = btnRect.left - pickerRect.left;
+
+    indicator.style.transform = `translateX(${leftOffset}px)`;
+    indicator.style.width = `${btnRect.width}px`;
+    indicator.style.opacity = '1';
+  }
+
   window.addEventListener('resize', () => {
     if (window.innerWidth > 1024) {
       closeMobileSidebar();
     }
+    updateSidebarCapsulePill();
+    updateTimeRangeCapsulePill();
   });
 
   navItems.forEach(item => {
@@ -643,6 +723,7 @@ function initApp() {
 
       navItems.forEach(nav => nav.classList.remove('active'));
       item.classList.add('active');
+      updateSidebarCapsulePill();
 
       tabViews.forEach(view => {
         if (view.id === `${targetTab}-view`) {
@@ -711,6 +792,7 @@ function initApp() {
       const selectedRange = btn.getAttribute('data-range');
       timeBtns.forEach(b => b.classList.remove('active'));
       btn.classList.add('active');
+      updateTimeRangeCapsulePill();
 
       showToast(`Loading metrics for ${selectedRange}...`);
       loadDashboardData(selectedRange);
@@ -754,13 +836,731 @@ function initApp() {
 
 
   // 8. REFRESH BUTTON CLICK HANDLERS
-  const refreshBtns = document.querySelectorAll('.btn-refresh');
+  const refreshBtns = document.querySelectorAll('.btn-refresh:not(#btn-rules-refresh)');
   refreshBtns.forEach(btn => {
     btn.addEventListener('click', () => {
       showToast('Refreshing page data...');
       loadDashboardData(currentRange);
     });
   });
+
+  // ==========================================================================
+  // 8b. RENDERREPLY INSTAGRAM AUTOMATION RULES ENGINE & STUDIO
+  // ==========================================================================
+  let currentRuleFilter = 'all';
+  let currentRuleSearchQuery = '';
+
+  const automationRulesState = [
+    {
+      id: 'rule-pricing',
+      name: 'Pricing Plans Template',
+      ruleSub: 'Pricing Plans Template',
+      thumbImg: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=600&q=80',
+      type: 'post',
+      typeName: 'Post Comments',
+      keywords: ['PRICING'],
+      target: 'POST',
+      targetType: 'POST',
+      active: true,
+      sentCount: 2140,
+      successRate: '99.2%',
+      response: 'Hey {first_name}! Thanks for asking about pricing. Here are our official creator plans and checkout link: {link}',
+      attachLink: true,
+      linkUrl: 'https://renderreply.com/p/pricing',
+      linkTitle: 'Pricing Plans & Checkout',
+      commentReply: false,
+      commentReplyText: ''
+    },
+    {
+      id: 'rule-story',
+      name: 'Story Mention Thank You',
+      ruleSub: 'Story Mention Thank You',
+      thumbImg: 'https://images.unsplash.com/photo-1611162617474-5b21e879e113?auto=format&fit=crop&w=600&q=80',
+      type: 'story',
+      typeName: 'Story Mentions',
+      keywords: ['STORY_TAG'],
+      target: 'STORIES',
+      targetType: 'STORIES',
+      active: true,
+      sentCount: 1820,
+      successRate: '98.7%',
+      response: 'Thanks for tagging us in your Story, {username}! Here is an exclusive 15% VIP discount code: VIP15. Link: {link}',
+      attachLink: true,
+      linkUrl: 'https://renderreply.com/p/vip-pass',
+      linkTitle: 'VIP Pass & Discount',
+      commentReply: false,
+      commentReplyText: ''
+    },
+    {
+      id: 'rule-reel',
+      name: 'Free Ebook Reel Auto-DM',
+      ruleSub: 'Free Ebook Reel Auto-DM',
+      thumbImg: 'https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?auto=format&fit=crop&w=600&q=80',
+      type: 'reel',
+      typeName: 'Reels & Live',
+      keywords: ['GUIDE'],
+      target: 'REELS',
+      targetType: 'REELS',
+      active: true,
+      sentCount: 932,
+      successRate: '97.9%',
+      response: 'Hey {first_name}! Here is the free Creator Automation Ebook you requested: {link}',
+      attachLink: true,
+      linkUrl: 'https://renderreply.com/free-guide.pdf',
+      linkTitle: 'Free Creator Ebook PDF',
+      commentReply: false,
+      commentReplyText: ''
+    }
+  ];
+
+  const defaultThumbImages = {
+    post: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=600&q=80',
+    story: 'https://images.unsplash.com/photo-1611162617474-5b21e879e113?auto=format&fit=crop&w=600&q=80',
+    reel: 'https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?auto=format&fit=crop&w=600&q=80',
+    dm: 'https://images.unsplash.com/photo-1616469829941-c7200edec809?auto=format&fit=crop&w=600&q=80'
+  };
+
+  // DOM Elements for Automation Rules
+  const rulesGridEl = document.getElementById('automation-rules-grid');
+  const btnRulesRefresh = document.getElementById('btn-rules-refresh');
+  const btnNewAutomation = document.getElementById('btn-new-automation');
+  const rulesSearchInput = document.getElementById('rules-search-input');
+  const rulesFilterTabs = document.querySelectorAll('.rule-tab-btn');
+
+  // KPI elements
+  const filterCountAll = document.getElementById('filter-count-all');
+  const filterCountPost = document.getElementById('filter-count-post');
+  const filterCountStory = document.getElementById('filter-count-story');
+  const filterCountReel = document.getElementById('filter-count-reel');
+  const filterCountDm = document.getElementById('filter-count-dm');
+
+  // Studio Modal Elements
+  const modalAutoStudio = document.getElementById('modal-automation-studio');
+  const autoModalTitle = document.getElementById('auto-modal-title');
+  const autoModalModeBadge = document.getElementById('auto-modal-mode-badge');
+  const btnCloseAutoModal = document.getElementById('btn-close-auto-modal');
+  const btnCancelAutoModal = document.getElementById('btn-cancel-auto-modal');
+  const btnSaveAutoRule = document.getElementById('btn-save-auto-rule');
+  const btnSaveAutoText = document.getElementById('btn-save-auto-text');
+  const btnAutoTestSim = document.getElementById('btn-auto-test-sim');
+
+  const inputAutoEditId = document.getElementById('auto-edit-rule-id');
+  const inputAutoRuleName = document.getElementById('auto-rule-name');
+  const inputAutoKeywords = document.getElementById('auto-rule-keywords');
+  const inputAutoResponse = document.getElementById('auto-rule-response');
+  const chkAutoAttachLink = document.getElementById('auto-attach-link-chk');
+  const inputAutoAttachUrl = document.getElementById('auto-attach-url');
+  const chkAutoCommentReply = document.getElementById('auto-comment-reply-chk');
+  const inputAutoCommentReplyText = document.getElementById('auto-comment-reply-text');
+  const chkAutoRuleActive = document.getElementById('auto-rule-active-chk');
+  const triggerOptBtns = document.querySelectorAll('.auto-trigger-opt');
+
+  // Simulator Elements
+  const simTriggerTypeLabel = document.getElementById('sim-trigger-type-label');
+  const simInboundKeyword = document.getElementById('sim-inbound-keyword');
+  const simBotMessageBubble = document.getElementById('sim-bot-message-bubble');
+  const simLinkCardBox = document.getElementById('sim-link-card-box');
+  const simLinkTitlePreview = document.getElementById('sim-link-title-preview');
+  const simLinkUrlPreview = document.getElementById('sim-link-url-preview');
+  const simPublicReplyPill = document.getElementById('sim-public-reply-pill');
+
+  let activeModalTriggerType = 'post';
+
+  function updateAutomationKPIs() {
+    if (filterCountAll) filterCountAll.textContent = automationRulesState.length;
+    if (filterCountPost) filterCountPost.textContent = automationRulesState.filter(r => r.type === 'post').length;
+    if (filterCountStory) filterCountStory.textContent = automationRulesState.filter(r => r.type === 'story').length;
+    if (filterCountReel) filterCountReel.textContent = automationRulesState.filter(r => r.type === 'reel').length;
+    if (filterCountDm) filterCountDm.textContent = automationRulesState.filter(r => r.type === 'dm').length;
+  }
+
+  function renderAutomationRules(filter = currentRuleFilter, searchQuery = currentRuleSearchQuery) {
+    if (!rulesGridEl) return;
+    currentRuleFilter = filter;
+    currentRuleSearchQuery = searchQuery;
+
+    updateAutomationKPIs();
+
+    let filtered = automationRulesState.filter(rule => {
+      const matchesFilter = (filter === 'all' || rule.type === filter);
+      const query = searchQuery.trim().toLowerCase();
+      if (!query) return matchesFilter;
+
+      const matchesSearch = rule.name.toLowerCase().includes(query) ||
+        (rule.ruleSub && rule.ruleSub.toLowerCase().includes(query)) ||
+        rule.keywords.some(k => k.toLowerCase().includes(query)) ||
+        rule.target.toLowerCase().includes(query);
+
+      return matchesFilter && matchesSearch;
+    });
+
+    if (filtered.length === 0) {
+      rulesGridEl.innerHTML = `
+        <div style="grid-column: 1 / -1; text-align: center; padding: 48px 20px; background: #ffffff; border: 1px dashed #cbd5e1; border-radius: 14px;">
+          <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#94a3b8" stroke-width="1.8" style="margin-bottom: 10px;">
+            <circle cx="12" cy="12" r="10"/>
+            <line x1="12" y1="8" x2="12" y2="12"/>
+            <line x1="12" y1="16" x2="12.01" y2="16"/>
+          </svg>
+          <h3 style="font-size: 16px; font-weight: 800; color: #09090b; margin-bottom: 4px;">No Automation Rules Found</h3>
+          <p style="font-size: 13px; color: #64748b; margin-bottom: 16px;">Try adjusting your search keywords or create a new automation rule.</p>
+          <button type="button" class="btn btn-primary btn-sm" id="btn-empty-new-auto" style="border-radius: 8px;">+ Create Automation</button>
+        </div>
+      `;
+
+      const emptyBtn = document.getElementById('btn-empty-new-auto');
+      if (emptyBtn) emptyBtn.addEventListener('click', () => openCreateAutomationModal());
+      return;
+    }
+
+    rulesGridEl.innerHTML = filtered.map(rule => {
+      const primaryKeyword = rule.keywords && rule.keywords.length > 0 ? `"${rule.keywords[0]}"` : '"AUTO"';
+      const imgSrc = rule.thumbImg || defaultThumbImages[rule.type] || defaultThumbImages.post;
+
+      return `
+        <div class="rule-card ${rule.active ? '' : 'paused'}" data-rule-id="${rule.id}">
+          <!-- Top Thumbnail Header -->
+          <div class="rule-thumb-header">
+            <img src="${imgSrc}" alt="${rule.name}" class="rule-thumb-img" loading="lazy" />
+            <div class="rule-thumb-overlay"></div>
+            <span class="rule-thumb-badge">${rule.typeName || 'Instagram'}</span>
+          </div>
+
+          <!-- Card Body -->
+          <div class="rule-card-body">
+            <div class="rule-card-title">${rule.name}</div>
+            <div class="rule-card-sub">Rule: ${rule.ruleSub || rule.name}</div>
+
+            <!-- Tags Row: TRIGGER & TARGET -->
+            <div class="rule-tags">
+              <div class="tag-column">
+                <span class="tag-label">TRIGGER</span>
+                <span class="tag-value">${primaryKeyword}</span>
+              </div>
+              <div class="tag-column">
+                <span class="tag-label">TARGET</span>
+                <span class="tag-target-val">${rule.targetType || 'POST'}</span>
+              </div>
+            </div>
+
+            <!-- Action Badges: DM, Link, Reply -->
+            <div class="rule-action-badges">
+              <span class="rule-badge">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+                  <polyline points="22,6 12,13 2,6"/>
+                </svg>
+                DM
+              </span>
+              ${rule.attachLink ? `
+              <span class="rule-badge">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/>
+                  <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/>
+                </svg>
+                Link
+              </span>` : ''}
+              ${rule.commentReply ? `
+              <span class="rule-badge">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+                </svg>
+                Reply
+              </span>` : ''}
+            </div>
+
+            <!-- Footer: only 3-dots button -->
+            <div class="rule-card-footer">
+              <button type="button" class="rule-more-btn" data-action="more" data-rule-id="${rule.id}" title="Rule Options">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                  <circle cx="12" cy="5" r="1.2"/>
+                  <circle cx="12" cy="12" r="1.2"/>
+                  <circle cx="12" cy="19" r="1.2"/>
+                </svg>
+              </button>
+
+              <!-- Floating Dropdown Menu -->
+              <div class="rule-dropdown-menu" id="dropdown-${rule.id}">
+                <div class="rule-menu-toggle-row">
+                  <span class="rule-menu-toggle-label" id="toggle-lbl-${rule.id}">${rule.active ? 'Active' : 'Paused'}</span>
+                  <label class="rule-switch" title="Toggle Active / Pause">
+                    <input type="checkbox" class="rule-toggle-input" data-rule-id="${rule.id}" ${rule.active ? 'checked' : ''}>
+                    <span class="rule-slider"></span>
+                  </label>
+                </div>
+                <button type="button" class="rule-menu-item" data-action="edit" data-rule-id="${rule.id}">
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+                  Edit
+                </button>
+                <button type="button" class="rule-menu-item danger" data-action="delete" data-rule-id="${rule.id}">
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/><line x1="10" y1="11" x2="10" y2="17"/><line x1="14" y1="11" x2="14" y2="17"/></svg>
+                  Delete
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      `;
+    }).join('');
+
+    wireRuleCardEvents();
+  }
+
+  function wireRuleCardEvents() {
+    // 1. Toggle Switch inside 3-dots popup
+    const toggleInputs = rulesGridEl.querySelectorAll('.rule-toggle-input');
+    toggleInputs.forEach(input => {
+      input.addEventListener('change', (e) => {
+        const ruleId = e.target.getAttribute('data-rule-id');
+        const rule = automationRulesState.find(r => r.id === ruleId);
+        if (rule) {
+          rule.active = e.target.checked;
+          const lbl = document.getElementById(`toggle-lbl-${rule.id}`);
+          if (lbl) lbl.textContent = rule.active ? 'Active' : 'Paused';
+
+          const card = rulesGridEl.querySelector(`.rule-card[data-rule-id="${rule.id}"]`);
+          if (card) card.classList.toggle('paused', !rule.active);
+
+          showToast(`Automation "${rule.name}" is now ${rule.active ? 'Active' : 'Paused'}.`);
+        }
+      });
+    });
+
+    // 2. 3-dots button & dropdown toggle
+    const moreBtns = rulesGridEl.querySelectorAll('.rule-more-btn');
+    moreBtns.forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const ruleId = btn.getAttribute('data-rule-id');
+        const targetDropdown = document.getElementById(`dropdown-${ruleId}`);
+
+        // Close all other dropdowns
+        document.querySelectorAll('.rule-dropdown-menu').forEach(d => {
+          if (d !== targetDropdown) d.classList.remove('show');
+        });
+
+        if (targetDropdown) {
+          targetDropdown.classList.toggle('show');
+        }
+      });
+    });
+
+    // 3. Edit Buttons
+    const editBtns = rulesGridEl.querySelectorAll('[data-action="edit"]');
+    editBtns.forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        closeAllRuleDropdowns();
+        const ruleId = btn.getAttribute('data-rule-id');
+        openEditAutomationModal(ruleId);
+      });
+    });
+
+    // 4. Delete Rule Buttons
+    const delBtns = rulesGridEl.querySelectorAll('[data-action="delete"]');
+    delBtns.forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        closeAllRuleDropdowns();
+        const ruleId = btn.getAttribute('data-rule-id');
+        const rule = automationRulesState.find(r => r.id === ruleId);
+        if (rule) {
+          openModal(
+            'Delete Automation Rule',
+            `Are you sure you want to delete the automation rule "${rule.name}"? This action will permanently remove this trigger.`,
+            () => {
+              const idx = automationRulesState.findIndex(r => r.id === ruleId);
+              if (idx !== -1) {
+                automationRulesState.splice(idx, 1);
+                showToast(`Deleted rule "${rule.name}".`);
+                renderAutomationRules();
+              }
+            }
+          );
+        }
+      });
+    });
+  }
+
+  function closeAllRuleDropdowns() {
+    document.querySelectorAll('.rule-dropdown-menu').forEach(d => d.classList.remove('show'));
+  }
+
+  document.addEventListener('click', closeAllRuleDropdowns);
+
+  // STUDIO MODAL FUNCTIONS & PHONE SIMULATOR
+  function updateStudioModalSimulator() {
+    const name = inputAutoRuleName ? inputAutoRuleName.value.trim() : 'Automation';
+    const keywords = inputAutoKeywords ? inputAutoKeywords.value.trim() : 'KEYWORD';
+    const responseText = inputAutoResponse ? inputAutoResponse.value : '';
+    const attachLink = chkAutoAttachLink ? chkAutoAttachLink.checked : false;
+    const attachUrl = inputAutoAttachUrl ? inputAutoAttachUrl.value.trim() : 'https://renderreply.com';
+    const commentReply = chkAutoCommentReply ? chkAutoCommentReply.checked : false;
+    const commentReplyText = inputAutoCommentReplyText ? inputAutoCommentReplyText.value.trim() : '';
+
+    const firstKw = keywords.split(',')[0].trim().replace(/^["']|["']$/g, '') || 'PRICING';
+
+    const typeLabels = {
+      post: 'Post Comment Trigger',
+      story: 'Story Mention Trigger',
+      reel: 'Reel Comment Trigger',
+      dm: 'Direct Message Trigger'
+    };
+
+    if (simTriggerTypeLabel) {
+      simTriggerTypeLabel.textContent = typeLabels[activeModalTriggerType] || 'Trigger Event';
+    }
+
+    if (simInboundKeyword) {
+      if (activeModalTriggerType === 'story') {
+        simInboundKeyword.textContent = `User tagged you in Story: "@render6457"`;
+      } else if (activeModalTriggerType === 'dm') {
+        simInboundKeyword.textContent = `User sent DM: "${firstKw}"`;
+      } else {
+        simInboundKeyword.textContent = `User commented: "${firstKw}"`;
+      }
+    }
+
+    if (simBotMessageBubble) {
+      let previewText = responseText
+        .replace(/{first_name}/g, 'Alex')
+        .replace(/{username}/g, '@alex_creator')
+        .replace(/{link}/g, attachUrl || 'https://renderreply.com/p/pricing')
+        .replace(/{store_url}/g, 'https://renderreply.com/p/render6457');
+
+      simBotMessageBubble.textContent = previewText || 'Automated response text...';
+    }
+
+    if (simLinkCardBox) {
+      simLinkCardBox.style.display = attachLink ? 'block' : 'none';
+      if (simLinkTitlePreview) simLinkTitlePreview.textContent = name || 'Instant Access Link';
+      if (simLinkUrlPreview) simLinkUrlPreview.textContent = attachUrl.replace(/^https?:\/\//, '') || 'renderreply.com/link';
+    }
+
+    if (simPublicReplyPill) {
+      if (commentReply && commentReplyText && (activeModalTriggerType === 'post' || activeModalTriggerType === 'reel')) {
+        simPublicReplyPill.style.display = 'block';
+        simPublicReplyPill.innerHTML = `<span>Public Reply: "${commentReplyText}"</span>`;
+      } else {
+        simPublicReplyPill.style.display = 'none';
+      }
+    }
+  }
+
+  function openCreateAutomationModal(templatePreset = null) {
+    if (!modalAutoStudio) return;
+
+    if (inputAutoEditId) inputAutoEditId.value = '';
+    if (autoModalTitle) autoModalTitle.textContent = 'Create New Instagram Automation';
+    if (autoModalModeBadge) {
+      autoModalModeBadge.textContent = 'Create Mode';
+      autoModalModeBadge.style.background = 'rgba(16, 185, 129, 0.2)';
+      autoModalModeBadge.style.color = '#34d399';
+    }
+    if (btnSaveAutoText) btnSaveAutoText.textContent = 'Save & Activate Rule';
+
+    if (templatePreset) {
+      if (inputAutoRuleName) inputAutoRuleName.value = templatePreset.name || 'New Template Automation';
+      if (inputAutoKeywords) inputAutoKeywords.value = templatePreset.keywords || 'PRICING';
+      if (inputAutoResponse) inputAutoResponse.value = templatePreset.response || 'Hey {first_name}! Here is your link: {link}';
+      activeModalTriggerType = templatePreset.type || 'post';
+    } else {
+      if (inputAutoRuleName) inputAutoRuleName.value = 'Pricing Plans Auto-DM';
+      if (inputAutoKeywords) inputAutoKeywords.value = 'PRICING, PRICE, COST';
+      if (inputAutoResponse) inputAutoResponse.value = 'Hey {first_name}! Here are our official creator pricing plans and instant checkout link: {link}';
+      activeModalTriggerType = 'post';
+    }
+
+    triggerOptBtns.forEach(btn => {
+      btn.classList.toggle('active', btn.getAttribute('data-trigger') === activeModalTriggerType);
+    });
+
+    if (chkAutoAttachLink) chkAutoAttachLink.checked = true;
+    if (inputAutoAttachUrl) inputAutoAttachUrl.value = 'https://renderreply.com/p/pricing';
+    if (chkAutoCommentReply) chkAutoCommentReply.checked = true;
+    if (inputAutoCommentReplyText) inputAutoCommentReplyText.value = 'Sent you a DM! Check your requests.';
+    if (chkAutoRuleActive) chkAutoRuleActive.checked = true;
+
+    updateStudioModalSimulator();
+
+    modalAutoStudio.classList.add('active');
+    modalAutoStudio.style.display = 'flex';
+  }
+
+  function openEditAutomationModal(ruleId) {
+    if (!modalAutoStudio) return;
+    const rule = automationRulesState.find(r => r.id === ruleId);
+    if (!rule) return;
+
+    if (inputAutoEditId) inputAutoEditId.value = rule.id;
+    if (autoModalTitle) autoModalTitle.textContent = 'Edit Automation Rule';
+    if (autoModalModeBadge) {
+      autoModalModeBadge.textContent = 'Edit Mode';
+      autoModalModeBadge.style.background = 'rgba(99, 102, 241, 0.2)';
+      autoModalModeBadge.style.color = '#818cf8';
+    }
+    if (btnSaveAutoText) btnSaveAutoText.textContent = 'Update Automation Rule';
+
+    if (inputAutoRuleName) inputAutoRuleName.value = rule.name;
+    if (inputAutoKeywords) inputAutoKeywords.value = rule.keywords.join(', ');
+    if (inputAutoResponse) inputAutoResponse.value = rule.response;
+
+    activeModalTriggerType = rule.type || 'post';
+    triggerOptBtns.forEach(btn => {
+      btn.classList.toggle('active', btn.getAttribute('data-trigger') === activeModalTriggerType);
+    });
+
+    if (chkAutoAttachLink) chkAutoAttachLink.checked = !!rule.attachLink;
+    if (inputAutoAttachUrl) inputAutoAttachUrl.value = rule.linkUrl || 'https://renderreply.com';
+    if (chkAutoCommentReply) chkAutoCommentReply.checked = !!rule.commentReply;
+    if (inputAutoCommentReplyText) inputAutoCommentReplyText.value = rule.commentReplyText || '';
+    if (chkAutoRuleActive) chkAutoRuleActive.checked = !!rule.active;
+
+    updateStudioModalSimulator();
+
+    modalAutoStudio.classList.add('active');
+    modalAutoStudio.style.display = 'flex';
+  }
+
+  function closeStudioModal() {
+    if (modalAutoStudio) {
+      modalAutoStudio.classList.remove('active');
+      modalAutoStudio.style.display = 'none';
+    }
+  }
+
+  // Hook Studio Modal Listeners
+  if (btnNewAutomation) {
+    btnNewAutomation.addEventListener('click', () => openCreateAutomationModal());
+  }
+
+  if (btnCloseAutoModal) btnCloseAutoModal.addEventListener('click', closeStudioModal);
+  if (btnCancelAutoModal) btnCancelAutoModal.addEventListener('click', closeStudioModal);
+  if (modalAutoStudio) {
+    modalAutoStudio.addEventListener('click', (e) => {
+      if (e.target === modalAutoStudio) closeStudioModal();
+    });
+  }
+
+  // Trigger type buttons in modal
+  triggerOptBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      triggerOptBtns.forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      activeModalTriggerType = btn.getAttribute('data-trigger') || 'post';
+      updateStudioModalSimulator();
+    });
+  });
+
+  // Real-time simulator inputs
+  [inputAutoRuleName, inputAutoKeywords, inputAutoResponse, inputAutoAttachUrl, inputAutoCommentReplyText].forEach(el => {
+    if (el) {
+      el.addEventListener('input', updateStudioModalSimulator);
+    }
+  });
+
+  [chkAutoAttachLink, chkAutoCommentReply, chkAutoRuleActive].forEach(chk => {
+    if (chk) {
+      chk.addEventListener('change', updateStudioModalSimulator);
+    }
+  });
+
+  // Keyword preset chips
+  const kwChips = document.querySelectorAll('.auto-keyword-presets .kw-preset-chip');
+  kwChips.forEach(chip => {
+    chip.addEventListener('click', () => {
+      const kw = chip.getAttribute('data-kw');
+      if (kw && inputAutoKeywords) {
+        let current = inputAutoKeywords.value.trim();
+        if (current && !current.includes(kw)) {
+          inputAutoKeywords.value = `${current}, ${kw}`;
+        } else if (!current) {
+          inputAutoKeywords.value = kw;
+        }
+        updateStudioModalSimulator();
+      }
+    });
+  });
+
+  // Variable insertion chips
+  const varChips = document.querySelectorAll('.auto-var-chips .var-chip');
+  varChips.forEach(chip => {
+    chip.addEventListener('click', () => {
+      const v = chip.getAttribute('data-var');
+      if (v && inputAutoResponse) {
+        const start = inputAutoResponse.selectionStart || inputAutoResponse.value.length;
+        const end = inputAutoResponse.selectionEnd || inputAutoResponse.value.length;
+        const text = inputAutoResponse.value;
+        inputAutoResponse.value = text.substring(0, start) + v + text.substring(end);
+        inputAutoResponse.focus();
+        inputAutoResponse.selectionStart = inputAutoResponse.selectionEnd = start + v.length;
+        updateStudioModalSimulator();
+      }
+    });
+  });
+
+
+
+  // Save Automation Rule Button
+  if (btnSaveAutoRule) {
+    btnSaveAutoRule.addEventListener('click', () => {
+      const ruleName = inputAutoRuleName ? inputAutoRuleName.value.trim() : '';
+      const kwRaw = inputAutoKeywords ? inputAutoKeywords.value.trim() : '';
+      const response = inputAutoResponse ? inputAutoResponse.value.trim() : '';
+
+      if (!ruleName) {
+        showToast('Please enter an automation rule name.');
+        if (inputAutoRuleName) inputAutoRuleName.focus();
+        return;
+      }
+
+      if (!kwRaw) {
+        showToast('Please provide at least one trigger keyword.');
+        if (inputAutoKeywords) inputAutoKeywords.focus();
+        return;
+      }
+
+      if (!response) {
+        showToast('Please enter automated DM message content.');
+        if (inputAutoResponse) inputAutoResponse.focus();
+        return;
+      }
+
+      const keywords = kwRaw.split(',').map(k => k.trim().toUpperCase().replace(/^["']|["']$/g, '')).filter(k => k);
+      const isEditing = !!(inputAutoEditId && inputAutoEditId.value);
+      const attachLink = chkAutoAttachLink ? chkAutoAttachLink.checked : false;
+      const attachUrl = inputAutoAttachUrl ? inputAutoAttachUrl.value.trim() : '';
+      const commentReply = chkAutoCommentReply ? chkAutoCommentReply.checked : false;
+      const commentReplyText = inputAutoCommentReplyText ? inputAutoCommentReplyText.value.trim() : '';
+      const active = chkAutoRuleActive ? chkAutoRuleActive.checked : true;
+
+      const typeNames = {
+        post: 'Post Comments',
+        story: 'Story Mentions',
+        reel: 'Reels & Live',
+        dm: 'Direct Keywords'
+      };
+
+      const gradients = {
+        post: 'linear-gradient(135deg, #1e1b4b 0%, #312e81 50%, #4338ca 100%)',
+        story: 'linear-gradient(135deg, #831843 0%, #be185d 50%, #ec4899 100%)',
+        reel: 'linear-gradient(135deg, #064e3b 0%, #059669 50%, #10b981 100%)',
+        dm: 'linear-gradient(135deg, #7c2d12 0%, #b45309 50%, #d97706 100%)'
+      };
+
+      const badges = [
+        { label: 'Instant DM', type: 'primary' }
+      ];
+      if (attachLink) badges.push({ label: 'Attached Link', type: 'accent' });
+      if (commentReply) badges.push({ label: 'Auto-Reply', type: 'default' });
+
+      if (isEditing) {
+        const rule = automationRulesState.find(r => r.id === inputAutoEditId.value);
+        if (rule) {
+          rule.name = ruleName;
+          rule.ruleSub = ruleName;
+          rule.type = activeModalTriggerType;
+          rule.typeName = typeNames[activeModalTriggerType] || 'Trigger';
+          rule.keywords = keywords;
+          rule.target = activeModalTriggerType === 'story' ? 'STORIES' : activeModalTriggerType === 'reel' ? 'REELS' : 'POST';
+          rule.targetType = activeModalTriggerType.toUpperCase();
+          rule.thumbIcon = '📸';
+          rule.response = response;
+          rule.attachLink = attachLink;
+          rule.linkUrl = attachUrl;
+          rule.commentReply = commentReply;
+          rule.commentReplyText = commentReplyText;
+          rule.active = active;
+
+          showToast(`Automation rule "${ruleName}" updated successfully!`);
+        }
+      } else {
+        const newRule = {
+          id: `rule-${Date.now()}`,
+          name: ruleName,
+          ruleSub: ruleName,
+          thumbIcon: '📸',
+          type: activeModalTriggerType,
+          typeName: typeNames[activeModalTriggerType] || 'Trigger',
+          keywords: keywords,
+          target: activeModalTriggerType === 'story' ? 'STORIES' : activeModalTriggerType === 'reel' ? 'REELS' : 'POST',
+          targetType: activeModalTriggerType.toUpperCase(),
+          active: active,
+          sentCount: 0,
+          successRate: '100%',
+          response: response,
+          attachLink: attachLink,
+          linkUrl: attachUrl,
+          linkTitle: ruleName,
+          commentReply: commentReply,
+          commentReplyText: commentReplyText
+        };
+
+        automationRulesState.unshift(newRule);
+        showToast(`New automation rule "${ruleName}" created and active!`);
+      }
+
+      closeStudioModal();
+      renderAutomationRules();
+    });
+  }
+
+  // Refresh Automation Rules Button
+  if (btnRulesRefresh) {
+    btnRulesRefresh.addEventListener('click', () => {
+      const icon = btnRulesRefresh.querySelector('.refresh-icon');
+      if (icon) icon.classList.add('spinning');
+
+      setTimeout(() => {
+        if (icon) icon.classList.remove('spinning');
+        renderAutomationRules();
+        showToast('Automation rules synchronized with Instagram Graph API.');
+      }, 500);
+    });
+  }
+
+  // Sub-Tab Filter Listeners
+  rulesFilterTabs.forEach(tab => {
+    tab.addEventListener('click', () => {
+      rulesFilterTabs.forEach(t => t.classList.remove('active'));
+      tab.classList.add('active');
+      const filter = tab.getAttribute('data-rule-filter') || 'all';
+      renderAutomationRules(filter, rulesSearchInput ? rulesSearchInput.value : '');
+    });
+  });
+
+  // Search Input Listener
+  if (rulesSearchInput) {
+    rulesSearchInput.addEventListener('input', (e) => {
+      renderAutomationRules(currentRuleFilter, e.target.value);
+    });
+  }
+
+  // Templates Tab Integration: Clicking any template opens New Automation preloaded!
+  const templateCards = document.querySelectorAll('.template-card');
+  templateCards.forEach(card => {
+    card.addEventListener('click', () => {
+      const title = card.querySelector('.template-card-title')?.textContent || 'Pricing Template';
+      const desc = card.querySelector('.template-card-text')?.textContent || '';
+      const tag = card.querySelector('.template-header-title')?.textContent.replace(/["']/g, '') || 'PRICING';
+
+      // Switch to Automation Rules Tab
+      const autoTab = document.querySelector('.nav-item[data-tab="automation-rules"]');
+      if (autoTab) autoTab.click();
+
+      openCreateAutomationModal({
+        name: title,
+        keywords: tag,
+        response: `Hey {first_name}! 👋 Thanks for asking about ${title}. Here is the direct link: {link}`,
+        type: 'post'
+      });
+
+      showToast(`Loaded "${title}" template into Automation Studio!`);
+    });
+  });
+
+  // Initial render of automation rules
+  renderAutomationRules();
 
   // 9. RENDERREPLY CLEAN LIVE DM INBOX ENGINE
   const inboxThreadsData = {
@@ -1621,17 +2421,20 @@ function initApp() {
     if (builderContainer) {
       builderContainer.innerHTML = '';
       storeProducts.forEach((prod, index) => {
+        const isFree = prod.price === 'FREE' || prod.price === '0' || prod.price === '$0.00';
+        const isSession = prod.title.toLowerCase().includes('session') || prod.title.toLowerCase().includes('strategy');
+        const badgeTag = isFree ? 'Lead Magnet' : (isSession ? '1-on-1 Session' : 'Digital Guide');
         const card = document.createElement('div');
         card.className = 'catalog-prod-card';
         card.innerHTML = `
           <div class="catalog-img-wrapper">
             <img src="${prod.photos[0]}" alt="${prod.title}">
-            <span class="prod-badge-tag">${prod.price === 'FREE' ? 'Lead Magnet' : 'Digital Guide'}</span>
+            <span class="prod-badge-tag ${isFree ? 'free-tag' : ''}">${badgeTag}</span>
           </div>
           <div class="catalog-prod-body">
             <div class="prod-title-price">
               <div class="prod-name">${prod.title}</div>
-              <div class="prod-price ${prod.price === 'FREE' ? 'free' : ''}">${prod.price}</div>
+              <div class="prod-price ${isFree ? 'free' : ''}">${prod.price}</div>
             </div>
             <div class="prod-meta">${prod.rating || '5.0 (Active)'}</div>
             <div class="prod-actions">
@@ -1735,9 +2538,198 @@ function initApp() {
         dspList.appendChild(row);
       });
     }
+
+    // SYNC TO LIVE STOREFRONT PREVIEW MODAL (#spm-products-grid)
+    const spmGrid = document.getElementById('spm-products-grid');
+    if (spmGrid) {
+      spmGrid.innerHTML = '';
+      storeProducts.forEach(prod => {
+        const isFree = prod.price === 'FREE' || prod.price === '$0.00' || prod.price === '0';
+        const photo = (prod.photos && prod.photos[0]) ? prod.photos[0] : 'https://images.unsplash.com/photo-1517694712202-14dd9538aa97?auto=format&fit=crop&w=400&q=80';
+        const card = document.createElement('div');
+        card.className = 'spm-prod-card';
+        card.innerHTML = `
+          <div class="spm-prod-thumb-box">
+            <img src="${photo}" alt="${prod.title}" class="spm-prod-img">
+          </div>
+          <div class="spm-prod-details">
+            <h3 class="spm-prod-title">${prod.title}</h3>
+            <p class="spm-prod-desc">${prod.desc}</p>
+            <div class="spm-prod-footer">
+              <span class="spm-prod-price ${isFree ? 'free' : ''}">${prod.price}</span>
+              <button class="btn spm-btn-buy" data-id="${prod.id}">${prod.cta || (isFree ? 'Download Free' : 'Buy Instant PDF')}</button>
+            </div>
+          </div>
+        `;
+        spmGrid.appendChild(card);
+      });
+    }
+
+    // SYNC CATALOG COUNTS & BADGES
+    const countPill = document.getElementById('catalog-count-pill');
+    if (countPill) countPill.textContent = storeProducts.length;
+    const pstatCount = document.getElementById('pstat-products-count');
+    if (pstatCount) pstatCount.textContent = storeProducts.length;
+
+    // SYNC ALL PRODUCTS CATALOG MODAL
+    renderModalAllProductsList();
+
     window.storeProductsRef = storeProducts;
   }
 
+  // RENDER ALL PRODUCTS MODAL LIST
+  function renderModalAllProductsList(filterTag = 'all', searchQuery = '') {
+    const list = document.getElementById('modal-all-products-list');
+    if (!list) return;
+    list.innerHTML = '';
+
+    const query = (searchQuery || '').toLowerCase().trim();
+    const filtered = storeProducts.filter(p => {
+      const matchQuery = !query || 
+        (p.title && p.title.toLowerCase().includes(query)) || 
+        (p.desc && p.desc.toLowerCase().includes(query)) || 
+        (p.price && p.price.toLowerCase().includes(query));
+      
+      let matchFilter = true;
+      const isFree = p.price === 'FREE' || p.price === '0' || p.price === '$0.00';
+      const isSession = p.title.toLowerCase().includes('session') || p.title.toLowerCase().includes('strategy');
+      
+      if (filterTag === 'free') matchFilter = isFree;
+      if (filterTag === 'guide') matchFilter = !isFree && !isSession;
+      if (filterTag === 'session') matchFilter = isSession;
+
+      return matchQuery && matchFilter;
+    });
+
+    // Update KPI counters
+    const kpiTotal = document.getElementById('modal-kpi-total-prods');
+    if (kpiTotal) kpiTotal.textContent = storeProducts.length;
+    const kpiFree = document.getElementById('modal-kpi-free-prods');
+    if (kpiFree) {
+      const freeCount = storeProducts.filter(p => p.price === 'FREE' || p.price === '0' || p.price === '$0.00').length;
+      kpiFree.textContent = `${freeCount} Free`;
+    }
+    const kpiPaid = document.getElementById('modal-kpi-paid-prods');
+    if (kpiPaid) {
+      const paidCount = storeProducts.filter(p => p.price !== 'FREE' && p.price !== '0' && p.price !== '$0.00').length;
+      kpiPaid.textContent = `${paidCount} Items`;
+    }
+    const badgeCount = document.getElementById('modal-all-prods-count-badge');
+    if (badgeCount) badgeCount.textContent = `${storeProducts.length} Products`;
+
+    if (filtered.length === 0) {
+      list.innerHTML = `
+        <div style="text-align: center; padding: 36px 16px; color: #94a3b8;">
+          <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#64748b" stroke-width="1.8" style="margin-bottom: 8px;"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+          <div style="font-size: 14px; font-weight: 700; color: #f8fafc;">No products matched your search</div>
+          <div style="font-size: 12px; margin-top: 4px;">Try changing filters or add a new product.</div>
+        </div>
+      `;
+      const footerSummary = document.getElementById('modal-all-prods-footer-summary');
+      if (footerSummary) footerSummary.textContent = `Showing 0 of ${storeProducts.length} products`;
+      return;
+    }
+
+    filtered.forEach(prod => {
+      const isFree = prod.price === 'FREE' || prod.price === '0' || prod.price === '$0.00';
+      const isSession = prod.title.toLowerCase().includes('session') || prod.title.toLowerCase().includes('strategy');
+      const badgeText = isFree ? 'Lead Magnet' : (isSession ? '1-on-1 Session' : 'Digital Guide');
+      const photo = (prod.photos && prod.photos[0]) ? prod.photos[0] : 'https://images.unsplash.com/photo-1517694712202-14dd9538aa97?auto=format&fit=crop&w=600&q=80';
+
+      const card = document.createElement('div');
+      card.className = 'modal-prod-item-card';
+      card.dataset.id = prod.id;
+      card.innerHTML = `
+        <div class="modal-prod-info-wrap">
+          <div class="modal-prod-thumb-box">
+            <img src="${photo}" alt="${prod.title}">
+          </div>
+          <div class="modal-prod-text-content">
+            <div class="modal-prod-title-row">
+              <span class="modal-prod-title-txt" title="${prod.title}">${prod.title}</span>
+              <span class="prod-badge-tag ${isFree ? 'free-tag' : ''}">${badgeText}</span>
+            </div>
+            <div class="modal-prod-desc-snippet">${prod.desc}</div>
+            <div class="modal-prod-sub-meta">
+              <span style="color: #f59e0b; font-weight: 700;">★ ${prod.rating ? prod.rating.split('(')[0].trim() : '5.0'}</span>
+              <span>•</span>
+              <span style="color: #94a3b8;">CTA: "${prod.cta || 'Instant Access'}"</span>
+              <span>•</span>
+              <span style="color: #10b981; font-weight: 600;">Status: Active</span>
+            </div>
+          </div>
+        </div>
+        <div class="modal-prod-actions-wrap">
+          <div class="modal-prod-pricing-col">
+            <div class="modal-prod-price-txt ${isFree ? 'free' : ''}">${prod.price}</div>
+            ${prod.oldPrice ? `<div class="modal-prod-oldprice-txt">${prod.oldPrice}</div>` : ''}
+          </div>
+          <div class="modal-prod-btns-group">
+            <button type="button" class="btn btn-outline btn-xs btn-edit-prod-item" data-id="${prod.id}" title="Edit Product Details">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+              Edit
+            </button>
+            <button type="button" class="btn btn-outline btn-xs btn-preview-modal-prod" data-id="${prod.id}" title="Preview in Live Storefront">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="13" r="3"/></svg>
+              Preview
+            </button>
+            <button type="button" class="btn btn-outline btn-xs btn-delete-prod-item" data-id="${prod.id}" title="Delete Product" style="color: #ef4444; border-color: rgba(239, 68, 68, 0.3);">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
+              Delete
+            </button>
+          </div>
+        </div>
+      `;
+      list.appendChild(card);
+    });
+
+    const footerSummary = document.getElementById('modal-all-prods-footer-summary');
+    if (footerSummary) footerSummary.textContent = `Showing ${filtered.length} of ${storeProducts.length} products`;
+  }
+
+  // OPEN & CLOSE ALL PRODUCTS MODAL
+  window.openAllProductsModal = function () {
+    if (typeof window.resetBuilderCatalogView === 'function') {
+      window.resetBuilderCatalogView();
+    }
+    renderModalAllProductsList('all', '');
+    const searchInput = document.getElementById('modal-input-all-prods-search');
+    if (searchInput) searchInput.value = '';
+    const filterTabs = document.querySelectorAll('#modal-all-prods-filter-tabs .modal-pfilter-btn');
+    filterTabs.forEach(b => {
+      if (b.getAttribute('data-filter') === 'all') {
+        b.classList.add('active');
+        b.style.background = '#6366f1';
+        b.style.color = '#fff';
+      } else {
+        b.classList.remove('active');
+        b.style.background = 'transparent';
+        b.style.color = '#94a3b8';
+      }
+    });
+
+    const modal = document.getElementById('modal-all-products');
+    if (modal) {
+      modal.classList.add('active');
+    }
+    showToast('Showing all products in catalog');
+  };
+
+  window.closeAllProductsModal = function () {
+    const modal = document.getElementById('modal-all-products');
+    if (modal) {
+      modal.classList.remove('active');
+    }
+  };
+
+  const modalProdSearchInput = document.getElementById('modal-input-all-prods-search');
+  if (modalProdSearchInput) {
+    modalProdSearchInput.addEventListener('input', (e) => {
+      const activeTab = document.querySelector('#modal-all-prods-filter-tabs .modal-pfilter-btn.active');
+      const filterTag = activeTab ? (activeTab.getAttribute('data-filter') || 'all') : 'all';
+      renderModalAllProductsList(filterTag, e.target.value);
+    });
+  }
 
   renderStoreProductsAndSyncPreview();
 
@@ -2267,7 +3259,94 @@ function initApp() {
       return;
     }
 
-    const closeBtn = e.target.closest('#btn-close-upi-modal, #btn-cancel-upi, #btn-close-bank-modal, #btn-cancel-bank, #btn-close-withdraw-modal, #btn-cancel-withdraw, #btn-close-txn-all-modal, #btn-close-txn-detail-modal, #btn-close-receipt, #btn-close-spm-modal, #spm-dot-close, #btn-close-auth-modal, #btn-close-orders-modal');
+    // 3.6 Builder Dashboard View All Products
+    const viewAllProdsBtn = e.target.closest('#btn-view-all-products');
+    if (viewAllProdsBtn) {
+      e.preventDefault();
+      e.stopPropagation();
+      window.openAllProductsModal();
+      return;
+    }
+
+    // 3.7 Phone Mockup "View All Products" Button Trigger (Builder & Settings preview)
+    const phoneViewAllBtn = e.target.closest('.dsp-view-all-btn, .cs-phone-view-btn');
+    if (phoneViewAllBtn) {
+      e.preventDefault();
+      e.stopPropagation();
+      if (typeof syncAllStorePreviewFields === 'function') syncAllStorePreviewFields();
+      const spm = document.getElementById('store-preview-modal');
+      if (spm) spm.classList.add('active');
+      const spmViewport = document.getElementById('spm-viewport');
+      const spmSec = document.querySelector('.spm-products-section');
+      if (spmViewport && spmSec) {
+        setTimeout(() => {
+          spmViewport.scrollTo({ top: spmSec.offsetTop - 20, behavior: 'smooth' });
+        }, 120);
+      }
+      showToast('Viewing all store products in Live Storefront!');
+      return;
+    }
+
+    // 3.75 Modal Actions
+    const previewModalProdBtn = e.target.closest('.btn-preview-modal-prod');
+    if (previewModalProdBtn) {
+      e.preventDefault();
+      e.stopPropagation();
+      window.closeAllProductsModal();
+      if (typeof syncAllStorePreviewFields === 'function') syncAllStorePreviewFields();
+      const spm = document.getElementById('store-preview-modal');
+      if (spm) spm.classList.add('active');
+      const spmViewport = document.getElementById('spm-viewport');
+      const spmSec = document.querySelector('.spm-products-section');
+      if (spmViewport && spmSec) {
+        setTimeout(() => {
+          spmViewport.scrollTo({ top: spmSec.offsetTop - 20, behavior: 'smooth' });
+        }, 120);
+      }
+      return;
+    }
+
+    const modalAddProdBtn = e.target.closest('#btn-modal-add-product');
+    if (modalAddProdBtn) {
+      e.preventDefault();
+      e.stopPropagation();
+      window.closeAllProductsModal();
+      resetProductForm();
+      openProductModal();
+      return;
+    }
+
+    const modalOpenLiveStoreBtn = e.target.closest('#btn-modal-open-live-store');
+    if (modalOpenLiveStoreBtn) {
+      e.preventDefault();
+      e.stopPropagation();
+      window.closeAllProductsModal();
+      if (typeof syncAllStorePreviewFields === 'function') syncAllStorePreviewFields();
+      const spm = document.getElementById('store-preview-modal');
+      if (spm) spm.classList.add('active');
+      return;
+    }
+
+    const modalFilterTabBtn = e.target.closest('.modal-pfilter-btn');
+    if (modalFilterTabBtn) {
+      e.preventDefault();
+      e.stopPropagation();
+      const tabs = document.querySelectorAll('#modal-all-prods-filter-tabs .modal-pfilter-btn');
+      tabs.forEach(t => {
+        t.classList.remove('active');
+        t.style.background = 'transparent';
+        t.style.color = '#94a3b8';
+      });
+      modalFilterTabBtn.classList.add('active');
+      modalFilterTabBtn.style.background = '#6366f1';
+      modalFilterTabBtn.style.color = '#fff';
+      const filterTag = modalFilterTabBtn.getAttribute('data-filter') || 'all';
+      const searchVal = document.getElementById('modal-input-all-prods-search')?.value || '';
+      renderModalAllProductsList(filterTag, searchVal);
+      return;
+    }
+
+    const closeBtn = e.target.closest('#btn-close-upi-modal, #btn-cancel-upi, #btn-close-bank-modal, #btn-cancel-bank, #btn-close-withdraw-modal, #btn-cancel-withdraw, #btn-close-txn-all-modal, #btn-close-txn-detail-modal, #btn-close-receipt, #btn-close-spm-modal, #spm-dot-close, #btn-close-auth-modal, #btn-close-orders-modal, #btn-close-all-prods-modal, #btn-close-all-prods-bottom');
     if (closeBtn) {
       e.preventDefault();
       e.stopPropagation();
@@ -2277,6 +3356,15 @@ function initApp() {
       } catch (err) {
         console.error('Error closing modal:', err);
       }
+      return;
+    }
+
+    // 3.82 Template Card Selection
+    const templateCard = e.target.closest('.template-card');
+    if (templateCard && !e.target.closest('button, a')) {
+      e.preventDefault();
+      const title = templateCard.querySelector('.template-card-title')?.textContent || 'Template';
+      showToast(`Selected "${title}"! Ready to activate in Automation Rules.`);
       return;
     }
 
@@ -2655,7 +3743,12 @@ function initApp() {
 
   // INITIALIZE APP DATA & CONNECTION STATE
   updateConnectionUI();
-  loadDashboardData('7 Days');
+  loadDashboardData('30 Days');
+
+  setTimeout(() => {
+    updateSidebarCapsulePill();
+    updateTimeRangeCapsulePill();
+  }, 50);
 }
 
 function initPaymentOptionsSuite() {
