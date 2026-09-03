@@ -3344,6 +3344,12 @@ function initApp() {
     // Render Feed
     renderThreadChatFeed(threadId);
     updateInboxFolderCounts();
+
+    // On Mobile: enter chat view
+    const inboxContainer = document.getElementById('rr-inbox-container');
+    if (inboxContainer) {
+      inboxContainer.classList.add('chat-active-mobile');
+    }
   }
 
   // Setup Thread Click Handlers
@@ -3353,6 +3359,17 @@ function initApp() {
       if (threadId) selectInboxThread(threadId);
     });
   });
+
+  // Mobile Back Button to Thread List
+  const btnInboxMobileBack = document.getElementById('btn-inbox-mobile-back');
+  if (btnInboxMobileBack) {
+    btnInboxMobileBack.addEventListener('click', () => {
+      const inboxContainer = document.getElementById('rr-inbox-container');
+      if (inboxContainer) {
+        inboxContainer.classList.remove('chat-active-mobile');
+      }
+    });
+  }
 
   // Folder Tabs Filtering (All, Needs Action, Bot Active, Resolved)
   document.querySelectorAll('.rr-folder-tab').forEach(tab => {

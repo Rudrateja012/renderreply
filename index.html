@@ -879,6 +879,9 @@
           <div class="rr-clean-chat-col">
             <!-- Clean Header -->
             <div class="rr-clean-chat-header">
+              <button type="button" class="btn-inbox-mobile-back" id="btn-inbox-mobile-back" title="Back to conversations">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg>
+              </button>
               <div class="rr-c-user-info">
                 <div class="rr-c-avatar-wrap">
                   <img src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=120&q=80" alt="Avatar" class="rr-c-avatar-img" id="rr-current-avatar">
@@ -1695,26 +1698,28 @@
               <span class="status-online-pill">Online</span>
             </div>
             <div class="store-url-row">
-              <div class="link-url-pill compact" style="max-width: none; overflow: visible;">
+              <div class="link-url-pill compact">
                 <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
                   <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71" />
                   <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71" />
                 </svg>
-                <span id="store-official-link-pill" style="white-space: nowrap; font-weight: 700; color: #0f172a;">renderreply.com/store/rudrateja</span>
+                <span id="store-official-link-pill">renderreply.com/store/rudrateja</span>
               </div>
-              <button class="btn btn-outline btn-xs" id="btn-copy-store-url" title="Copy Store URL">
-                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                  <rect x="9" y="9" width="13" height="13" rx="2" ry="2" />
-                  <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" />
-                </svg>
-                Copy
-              </button>
-              <button class="btn btn-outline btn-xs" id="btn-store-qr-code" title="View Store QR Code">
-                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                  <rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/>
-                </svg>
-                QR Code
-              </button>
+              <div class="store-url-actions-row">
+                <button class="btn btn-outline btn-xs" id="btn-copy-store-url" title="Copy Store URL">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <rect x="9" y="9" width="13" height="13" rx="2" ry="2" />
+                    <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" />
+                  </svg>
+                  Copy
+                </button>
+                <button class="btn btn-outline btn-xs" id="btn-store-qr-code" title="View Store QR Code">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/>
+                  </svg>
+                  QR Code
+                </button>
+              </div>
             </div>
           </div>
 
