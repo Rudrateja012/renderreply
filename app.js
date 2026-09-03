@@ -691,7 +691,7 @@ function initApp() {
       accountInfoContainer.innerHTML = `
         <div class="account-icon">R</div>
         <div class="account-details">
-          <span class="account-handle">@render6457</span>
+          <span class="account-handle" id="dashboard-account-handle">@render6457</span>
           <span class="account-status">Instagram Connected</span>
         </div>`;
 
@@ -1092,7 +1092,7 @@ function initApp() {
         ['"RenderReply Instagram Analytics Summary Report"'],
         ['"Generated Date"', `"${timestamp}"`],
         ['"Selected Time Period"', `"${currentRange}"`],
-        ['"Instagram Account"', '"@render6457 (Verified)"'],
+        ['"Instagram Account"', '"@render6457"'],
         [''],
         ['"--- QUICK-STATS METRICS ---"'],
         ['"Metric"', '"Value"', '"Growth Trend"'],
@@ -1151,14 +1151,14 @@ function initApp() {
       phone: '+1 (555) 234-8910',
       source: 'Instagram Reel Comment',
       keyword: '#GUIDE',
-      status: '✓ Email Captured',
+      status: 'Email Captured',
       statusClass: 'email',
       time: '2m ago',
       timestamp: 'Today, 2:14 PM',
       postTitle: '10x Instagram Automation Strategy 2026',
       postThumb: 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=80&q=80',
       commentText: 'Can you send me the #GUIDE for full funnel setup?',
-      botReplyText: 'Hey Alex! 👋 Here is your complete 10x Automation Blueprint & PDF guide: https://renderreply.com/p/guide. Let me know if you have questions!',
+      botReplyText: 'Hey Alex! Here is your complete 10x Automation Blueprint & PDF guide: https://renderreply.com/p/guide. Let me know if you have questions!',
       ruleName: 'Reel Lead Magnet #GUIDE'
     },
     {
@@ -1169,14 +1169,14 @@ function initApp() {
       phone: '+1 (555) 789-1234',
       source: 'Instagram Story Reply',
       keyword: 'PRICING',
-      status: '✓ DM Delivered',
+      status: 'DM Delivered',
       statusClass: '',
       time: '12m ago',
       timestamp: 'Today, 2:04 PM',
       postTitle: 'How I Make ₹50,000/mo Selling Digital Products',
       postThumb: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=80&q=80',
       commentText: 'PRICING details please!',
-      botReplyText: 'Hi Sarah! ✨ Here is the breakdown of our digital templates & pricing plans: https://renderreply.com/pricing',
+      botReplyText: 'Hi Sarah! Here is the breakdown of our digital templates & pricing plans: https://renderreply.com/pricing',
       ruleName: 'Pricing Trigger Rule'
     },
     {
@@ -1187,14 +1187,14 @@ function initApp() {
       phone: '+44 7911 123456',
       source: 'Instagram Carousel Comment',
       keyword: 'ROADMAP',
-      status: '✓ Email Captured',
+      status: 'Email Captured',
       statusClass: 'email',
       time: '28m ago',
       timestamp: 'Today, 1:48 PM',
       postTitle: 'Free Java Fullstack Roadmap 2026 PDF',
       postThumb: 'https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?auto=format&fit=crop&w=80&q=80',
       commentText: 'Sent you ROADMAP on the carousel post',
-      botReplyText: 'Awesome Marcus! 🚀 The Fullstack 2026 Roadmap PDF has been emailed to you and here is the direct link: https://renderreply.com/p/roadmap-pdf',
+      botReplyText: 'Awesome Marcus! The Fullstack 2026 Roadmap PDF has been emailed to you and here is the direct link: https://renderreply.com/p/roadmap-pdf',
       ruleName: 'Java Roadmap Lead Magnet'
     },
     {
@@ -1205,14 +1205,14 @@ function initApp() {
       phone: '+91 98765 43210',
       source: 'Instagram Story Mention',
       keyword: 'LINK',
-      status: '✓ DM Delivered',
+      status: 'DM Delivered',
       statusClass: '',
       time: '1h ago',
       timestamp: 'Today, 1:15 PM',
       postTitle: 'Story Automation Blueprint & DM Triggers',
       postThumb: 'https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&w=80&q=80',
       commentText: 'LINK',
-      botReplyText: 'Hey Priya! 🙌 Here is the instant link you requested from our story: https://renderreply.com/story-blueprint',
+      botReplyText: 'Hey Priya! Here is the instant link you requested from our story: https://renderreply.com/story-blueprint',
       ruleName: 'Story Reply Automation'
     },
     {
@@ -1223,14 +1223,14 @@ function initApp() {
       phone: '+1 (555) 901-4432',
       source: 'Instagram Reel Comment',
       keyword: 'FREE',
-      status: '✓ Email Captured',
+      status: 'Email Captured',
       statusClass: 'email',
       time: '2h ago',
       timestamp: 'Today, 12:10 PM',
       postTitle: '10x Instagram Automation Strategy 2026',
       postThumb: 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=80&q=80',
       commentText: 'FREE resource download',
-      botReplyText: 'Hey David! 🎯 Your free resource package is ready: https://renderreply.com/free-pack. Check your email for login credentials!',
+      botReplyText: 'Hey David! Your free resource package is ready: https://renderreply.com/free-pack. Check your email for login credentials!',
       ruleName: 'Free Lead Pack Automation'
     }
   ];
@@ -1240,49 +1240,150 @@ function initApp() {
       title: '10x Instagram Automation Strategy 2026',
       type: 'Instagram Reel',
       published: '3 days ago',
-      reach: '24,800 Impressions',
-      engagementRate: '8.4%',
-      triggersFired: '620 replies delivered',
-      dmCtr: '28.4% Click-through',
-      leadsCaptured: '176 emails captured',
+      mediaId: '17983948291048',
+      mediaUrl: 'https://instagram.com/p/C9x81k2mN',
+      thumb: 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=120&q=80',
       associatedRule: 'Reel Lead Magnet #GUIDE',
-      thumb: 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=80&q=80'
+      captionSnippet: "Want my exact 10x Instagram automation blueprint? Comment '#GUIDE' below and I'll DM you the free strategy pack!",
+      // Instagram Core Interactions API
+      likes: '1,480',
+      comments: '620',
+      shares: '385',
+      saves: '512',
+      // Instagram Video / Reel Insights API
+      plays: '31,450',
+      impressions: '34,200',
+      reach: '24,800',
+      avgWatchTime: '14.2s (84% retention)',
+      totalWatchHours: '28.4 hrs',
+      // Profile Activity API
+      followersGained: '+142',
+      profileVisits: '890',
+      websiteClicks: '340',
+      // Audience Distribution API
+      nonFollowersPercent: 86,
+      nonFollowersCount: '21,328',
+      followersPercent: 14,
+      followersCount: '3,472',
+      engagementRate: '8.4%',
+      // RenderReply Automation Funnel
+      keyword: '#GUIDE',
+      triggersFired: '620',
+      dmOpenRate: '96.8%',
+      dmCtr: '28.4%',
+      leadsCaptured: '176',
+      conversionRate: '28.4%',
+      revenueGenerated: '₹35,200',
+      sampleComment: 'Hey Alex: #GUIDE please!',
+      sampleReply: 'Hey Alex! Here is your 10x Instagram Automation Blueprint & Preset Pack ready to download:'
     },
     {
       title: 'How I Make ₹50,000/mo Selling Digital Products',
       type: 'Instagram Reel',
       published: '5 days ago',
-      reach: '16,200 Impressions',
-      engagementRate: '9.2%',
-      triggersFired: '410 replies delivered',
-      dmCtr: '31.2% Click-through',
-      leadsCaptured: '128 emails captured',
+      mediaId: '18029348123901',
+      mediaUrl: 'https://instagram.com/p/C8k12j9mP',
+      thumb: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=120&q=80',
       associatedRule: 'Pricing Trigger Rule',
-      thumb: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=80&q=80'
+      captionSnippet: "Full breakdown of how I monetize my reels with digital templates. Drop 'PRICING' to get the full revenue sheet!",
+      likes: '980',
+      comments: '410',
+      shares: '245',
+      saves: '420',
+      plays: '22,800',
+      impressions: '25,400',
+      reach: '16,200',
+      avgWatchTime: '15.1s (78% retention)',
+      totalWatchHours: '19.8 hrs',
+      followersGained: '+98',
+      profileVisits: '640',
+      websiteClicks: '210',
+      nonFollowersPercent: 82,
+      nonFollowersCount: '13,284',
+      followersPercent: 18,
+      followersCount: '2,916',
+      engagementRate: '9.2%',
+      keyword: 'PRICING',
+      triggersFired: '410',
+      dmOpenRate: '95.4%',
+      dmCtr: '31.2%',
+      leadsCaptured: '128',
+      conversionRate: '31.2%',
+      revenueGenerated: '₹25,600',
+      sampleComment: 'Sarah K: PRICING plans?',
+      sampleReply: 'Hey Sarah! Here are our exact pricing tiers and instant checkout links for creators:'
     },
     {
       title: 'Free Java Fullstack Roadmap 2026 PDF',
       type: 'Instagram Carousel',
       published: '1 week ago',
-      reach: '12,500 Impressions',
-      engagementRate: '11.8%',
-      triggersFired: '380 replies delivered',
-      dmCtr: '42.8% Click-through',
-      leadsCaptured: '162 emails captured',
+      mediaId: '17992837461029',
+      mediaUrl: 'https://instagram.com/p/C7m90x4kL',
+      thumb: 'https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?auto=format&fit=crop&w=120&q=80',
       associatedRule: 'Java Roadmap Lead Magnet',
-      thumb: 'https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?auto=format&fit=crop&w=80&q=80'
+      captionSnippet: "Swipe through for the complete 2026 Java Roadmap. Comment 'ROADMAP' and our bot will send you the high-res PDF!",
+      likes: '1,120',
+      comments: '380',
+      shares: '530',
+      saves: '890',
+      plays: '16,400',
+      impressions: '17,800',
+      reach: '12,500',
+      avgWatchTime: 'Swipe rate: 78.4%',
+      totalWatchHours: '14.2 hrs',
+      followersGained: '+215',
+      profileVisits: '780',
+      websiteClicks: '410',
+      nonFollowersPercent: 74,
+      nonFollowersCount: '9,250',
+      followersPercent: 26,
+      followersCount: '3,250',
+      engagementRate: '11.8%',
+      keyword: 'ROADMAP',
+      triggersFired: '380',
+      dmOpenRate: '98.1%',
+      dmCtr: '42.8%',
+      leadsCaptured: '162',
+      conversionRate: '42.8%',
+      revenueGenerated: '₹32,400',
+      sampleComment: 'Marcus V: ROADMAP',
+      sampleReply: 'Hey Marcus! Here is your direct PDF download link for the Java Fullstack Roadmap 2026:'
     },
     {
       title: 'Story Automation Blueprint & DM Triggers',
       type: 'Instagram Story',
       published: '2 weeks ago',
-      reach: '8,400 Impressions',
-      engagementRate: '7.5%',
-      triggersFired: '190 replies delivered',
-      dmCtr: '24.0% Click-through',
-      leadsCaptured: '46 emails captured',
+      mediaId: '18091283746192',
+      mediaUrl: 'https://instagram.com/stories/render6457',
+      thumb: 'https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&w=120&q=80',
       associatedRule: 'Story Reply Automation',
-      thumb: 'https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&w=80&q=80'
+      captionSnippet: "Automate your story replies 24/7. Tap or reply 'LINK' to try the live demo!",
+      likes: '340',
+      comments: '190',
+      shares: '94',
+      saves: '160',
+      plays: '9,600',
+      impressions: '10,200',
+      reach: '8,400',
+      avgWatchTime: '92% Completion rate',
+      totalWatchHours: '6.4 hrs',
+      followersGained: '+34',
+      profileVisits: '320',
+      websiteClicks: '190',
+      nonFollowersPercent: 42,
+      nonFollowersCount: '3,528',
+      followersPercent: 58,
+      followersCount: '4,872',
+      engagementRate: '7.5%',
+      keyword: 'LINK',
+      triggersFired: '190',
+      dmOpenRate: '94.2%',
+      dmCtr: '24.0%',
+      leadsCaptured: '46',
+      conversionRate: '24.0%',
+      revenueGenerated: '₹9,200',
+      sampleComment: 'Priya S: LINK',
+      sampleReply: 'Hey Priya! Here is the link to our live automated story workflow and demo:'
     }
   ];
 
@@ -1310,6 +1411,7 @@ function initApp() {
     }
     if (inspectBackdrop) inspectBackdrop.classList.remove('active');
   }
+  window.closeInspectDrawer = closeInspectDrawer;
 
   if (btnCloseInspect) btnCloseInspect.addEventListener('click', closeInspectDrawer);
   if (inspectBackdrop) inspectBackdrop.addEventListener('click', closeInspectDrawer);
@@ -1386,7 +1488,7 @@ function initApp() {
       if (btnCopy) {
         btnCopy.addEventListener('click', () => {
           navigator.clipboard.writeText(lead.email).then(() => {
-            btnCopy.textContent = '✓ Copied!';
+            btnCopy.textContent = 'Copied!';
             showToast(`Copied ${lead.email} to clipboard`);
             setTimeout(() => { btnCopy.textContent = 'Copy Email'; }, 2000);
           });
@@ -1417,52 +1519,211 @@ function initApp() {
 
     if (inspectContent) {
       inspectContent.innerHTML = `
-        <div style="display: flex; gap: 14px; align-items: center; background: #f8fafc; border: 1px solid #e2e8f0; padding: 12px 14px; border-radius: 12px;">
-          <img src="${post.thumb}" style="width: 54px; height: 54px; border-radius: 8px; object-fit: cover; border: 1px solid #e2e8f0;" alt="">
-          <div>
-            <div style="font-size: 13px; font-weight: 800; color: #09090b;">${post.title}</div>
-            <div style="font-size: 11px; color: #71717a; margin-top: 2px;">Assigned Rule: <strong>${post.associatedRule}</strong></div>
+        <!-- MEDIA BANNER -->
+        <div style="display: flex; gap: 14px; align-items: center; background: #ffffff; border: 1px solid #e2e8f0; padding: 14px; border-radius: 12px;">
+          <img src="${post.thumb}" style="width: 60px; height: 60px; border-radius: 10px; object-fit: cover; border: 1px solid #e2e8f0; flex-shrink: 0;" alt="">
+          <div style="flex: 1; min-width: 0;">
+            <div style="font-size: 13.5px; font-weight: 800; color: #09090b; line-height: 1.3; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">${post.title}</div>
+            <div style="display: flex; align-items: center; gap: 8px; margin-top: 4px; flex-wrap: wrap;">
+              <span style="font-size: 10.5px; background: #f1f5f9; color: #09090b; padding: 2px 7px; border-radius: 5px; font-weight: 700; border: 1px solid #e2e8f0;">${post.type}</span>
+              <span style="font-size: 11px; color: #71717a;">${post.published}</span>
+            </div>
+            <div style="font-size: 11px; color: #71717a; margin-top: 4px;">Assigned Rule: <strong style="color: #09090b;">${post.associatedRule}</strong></div>
           </div>
         </div>
 
-        <div class="inspect-info-grid">
-          <div class="inspect-info-item">
-            <div class="inspect-info-lbl">Total Reach</div>
-            <div class="inspect-info-val">${post.reach}</div>
+        <!-- 1. INSTAGRAM CORE ENGAGEMENT & INTERACTIONS -->
+        <div class="inspect-section-block">
+          <div class="inspect-section-title">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#09090b" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+            Instagram Engagement &amp; Interactions
           </div>
-          <div class="inspect-info-item">
-            <div class="inspect-info-lbl">Engagement Rate</div>
-            <div class="inspect-info-val">${post.engagementRate}</div>
-          </div>
-          <div class="inspect-info-item">
-            <div class="inspect-info-lbl">Bot Triggers Fired</div>
-            <div class="inspect-info-val">${post.triggersFired}</div>
-          </div>
-          <div class="inspect-info-item">
-            <div class="inspect-info-lbl">DM Click-Through Rate</div>
-            <div class="inspect-info-val">${post.dmCtr}</div>
+          <div class="inspect-metrics-4col">
+            <div class="inspect-stat-pill-box">
+              <div class="inspect-stat-pill-icon">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#09090b" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+              </div>
+              <div class="inspect-stat-pill-num">${post.likes}</div>
+              <div class="inspect-stat-pill-lbl">Likes</div>
+            </div>
+
+            <div class="inspect-stat-pill-box">
+              <div class="inspect-stat-pill-icon">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#09090b" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+              </div>
+              <div class="inspect-stat-pill-num">${post.comments}</div>
+              <div class="inspect-stat-pill-lbl">Comments</div>
+            </div>
+
+            <div class="inspect-stat-pill-box">
+              <div class="inspect-stat-pill-icon">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#09090b" stroke-width="2"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+              </div>
+              <div class="inspect-stat-pill-num">${post.shares}</div>
+              <div class="inspect-stat-pill-lbl">Shares</div>
+            </div>
+
+            <div class="inspect-stat-pill-box">
+              <div class="inspect-stat-pill-icon">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#09090b" stroke-width="2"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>
+              </div>
+              <div class="inspect-stat-pill-num">${post.saves}</div>
+              <div class="inspect-stat-pill-lbl">Saves</div>
+            </div>
           </div>
         </div>
 
-        <div class="inspect-info-item" style="background: #f8fafc;">
-          <div class="inspect-info-lbl">High-Intent Leads Captured</div>
-          <div class="inspect-info-val" style="font-size: 15px;">${post.leadsCaptured}</div>
+        <!-- 2. REEL VIDEO & PROFILE GROWTH INSIGHTS -->
+        <div class="inspect-section-block">
+          <div class="inspect-section-title">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#09090b" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+            Video Insights &amp; Profile Growth
+          </div>
+          <div class="inspect-info-grid">
+            <div class="inspect-info-item">
+              <div class="inspect-info-lbl">Total Video Plays</div>
+              <div class="inspect-info-val">${post.plays}</div>
+              <div class="inspect-info-sub">Total watch: ${post.totalWatchHours}</div>
+            </div>
+
+            <div class="inspect-info-item">
+              <div class="inspect-info-lbl">Followers Gained</div>
+              <div class="inspect-info-val">${post.followersGained} Follows</div>
+              <div class="inspect-info-sub">Directly from this post</div>
+            </div>
+
+            <div class="inspect-info-item">
+              <div class="inspect-info-lbl">Profile Visits</div>
+              <div class="inspect-info-val">${post.profileVisits}</div>
+              <div class="inspect-info-sub">${post.websiteClicks} bio link taps</div>
+            </div>
+
+            <div class="inspect-info-item">
+              <div class="inspect-info-lbl">Average Retention</div>
+              <div class="inspect-info-val">${post.avgWatchTime}</div>
+              <div class="inspect-info-sub">Engagement rate: ${post.engagementRate}</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 3. REACH & AUDIENCE DISTRIBUTION (EXPLORE/NON-FOLLOWERS) -->
+        <div class="inspect-section-block">
+          <div class="inspect-section-title">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#09090b" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+            Audience &amp; Discovery (Explore Feed)
+          </div>
+          <div class="inspect-reach-progress-wrap">
+            <div style="display: flex; justify-content: space-between; font-size: 12px; font-weight: 800; color: #09090b;">
+              <span>Total Reach: ${post.reach}</span>
+              <span style="color: #71717a; font-size: 11px; font-weight: 600;">Impressions: ${post.impressions}</span>
+            </div>
+            
+            <!-- Dual Monochrome Progress Bar -->
+            <div class="inspect-reach-bar">
+              <div class="reach-bar-nonfollowers" style="width: ${post.nonFollowersPercent}%;" title="Non-followers: ${post.nonFollowersPercent}%"></div>
+              <div class="reach-bar-followers" style="width: ${post.followersPercent}%;" title="Followers: ${post.followersPercent}%"></div>
+            </div>
+
+            <div class="inspect-reach-legend">
+              <div class="inspect-reach-legend-item">
+                <span class="legend-dot black"></span>
+                <span><strong>${post.nonFollowersPercent}%</strong> Non-Followers (${post.nonFollowersCount})</span>
+              </div>
+              <div class="inspect-reach-legend-item">
+                <span class="legend-dot light"></span>
+                <span><strong>${post.followersPercent}%</strong> Followers (${post.followersCount})</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 4. RENDERREPLY AUTOMATION FUNNEL & LEADS -->
+        <div class="inspect-section-block">
+          <div class="inspect-section-title">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#09090b" stroke-width="2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+            RenderReply DM Automation &amp; Lead Conversion
+          </div>
+          <div class="inspect-info-grid">
+            <div class="inspect-info-item">
+              <div class="inspect-info-lbl">Keyword Triggered</div>
+              <div class="inspect-info-val"><span class="kw-tag">${post.keyword}</span></div>
+              <div class="inspect-info-sub">${post.triggersFired} instant replies sent</div>
+            </div>
+
+            <div class="inspect-info-item">
+              <div class="inspect-info-lbl">DM Open &amp; CTR</div>
+              <div class="inspect-info-val">${post.dmCtr} CTR</div>
+              <div class="inspect-info-sub">${post.dmOpenRate} DM open rate</div>
+            </div>
+
+            <div class="inspect-info-item">
+              <div class="inspect-info-lbl">Leads / Emails Captured</div>
+              <div class="inspect-info-val" style="font-size: 15px;">${post.leadsCaptured} Verified Leads</div>
+              <div class="inspect-info-sub">${post.conversionRate} Conversion Rate</div>
+            </div>
+
+            <div class="inspect-info-item">
+              <div class="inspect-info-lbl">Pipeline Revenue</div>
+              <div class="inspect-info-val" style="font-size: 15px;">${post.revenueGenerated}</div>
+              <div class="inspect-info-sub">Generated from this Reel</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 5. AUTOMATED DM CHAT PREVIEW -->
+        <div class="inspect-section-block">
+          <div class="inspect-section-title">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#09090b" stroke-width="2"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
+            Live DM Automation Flow
+          </div>
+          <div class="inspect-chat-preview">
+            <div class="inspect-bubble-inbound">
+              <strong>User Comment</strong>: "${post.sampleComment}"
+              <span class="inspect-bubble-meta">Triggered keyword ${post.keyword}</span>
+            </div>
+            <div class="inspect-bubble-outbound">
+              <strong>RenderReply Bot</strong>: ${post.sampleReply}
+              <span class="inspect-bubble-meta" style="color: #cbd5e1;">Instant delivery (&lt; 0.8s) • Lead Magnet Attached</span>
+            </div>
+          </div>
         </div>
       `;
     }
 
     if (inspectActions) {
       inspectActions.innerHTML = `
-        <button type="button" class="btn btn-outline btn-sm" onclick="closeInspectDrawer()">Close</button>
+        <button type="button" class="btn btn-outline btn-sm" id="btn-inspect-close-post">Close</button>
         <button type="button" class="btn btn-primary btn-sm" id="btn-inspect-edit-rule">Manage Automation Rule →</button>
       `;
+
+      const btnClosePost = document.getElementById('btn-inspect-close-post');
+      if (btnClosePost) {
+        btnClosePost.addEventListener('click', closeInspectDrawer);
+      }
 
       const btnEditRule = document.getElementById('btn-inspect-edit-rule');
       if (btnEditRule) {
         btnEditRule.addEventListener('click', () => {
           closeInspectDrawer();
-          const autoNav = document.querySelector('.nav-item[data-tab="automations"]');
-          if (autoNav) autoNav.click();
+          const autoNav = document.querySelector('.nav-item[data-tab="automation-rules"]');
+          if (autoNav) {
+            autoNav.click();
+          } else if (typeof window.switchMainTab === 'function') {
+            window.switchMainTab('automation-rules');
+          }
+
+          const searchRuleName = (post.associatedRule || '').toLowerCase();
+          const matchedRule = automationRulesState.find(r =>
+            r.name.toLowerCase().includes(searchRuleName) ||
+            searchRuleName.includes(r.name.toLowerCase()) ||
+            (r.keywords && r.keywords.some(k => searchRuleName.includes(k.toLowerCase())))
+          );
+
+          if (matchedRule) {
+            setTimeout(() => {
+              openEditAutomationModal(matchedRule.id);
+            }, 250);
+          }
           showToast(`Viewing automation rule "${post.associatedRule}"`);
         });
       }
@@ -1520,14 +1781,14 @@ function initApp() {
       phone: '+1 (555) 234-8910',
       keyword: '#GUIDE',
       campaign: 'guide',
-      status: '✓ Email Captured',
+      status: 'Email Captured',
       statusClass: 'email',
       sourceTitle: '10x Instagram Automation Strategy 2026',
       sourceThumb: 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=80&q=80',
       time: '2m ago',
       timestamp: 'Today, 2:14 PM',
       commentText: 'Can you send me the #GUIDE for full funnel setup?',
-      botReplyText: 'Hey Alex! 👋 Here is your complete 10x Automation Blueprint & PDF guide: https://renderreply.com/p/guide',
+      botReplyText: 'Hey Alex! Here is your complete 10x Automation Blueprint & PDF guide: https://renderreply.com/p/guide',
       ruleName: 'Reel Lead Magnet #GUIDE'
     },
     {
@@ -1539,14 +1800,14 @@ function initApp() {
       phone: '+1 (555) 789-1234',
       keyword: 'PRICING',
       campaign: 'pricing',
-      status: '✓ DM Delivered',
+      status: 'DM Delivered',
       statusClass: '',
       sourceTitle: 'How I Make ₹50,000/mo Selling Digital Products',
       sourceThumb: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=80&q=80',
       time: '12m ago',
       timestamp: 'Today, 2:04 PM',
       commentText: 'PRICING details please!',
-      botReplyText: 'Hi Sarah! ✨ Here is the breakdown of our digital templates & pricing plans: https://renderreply.com/pricing',
+      botReplyText: 'Hi Sarah! Here is the breakdown of our digital templates & pricing plans: https://renderreply.com/pricing',
       ruleName: 'Pricing Trigger Rule'
     },
     {
@@ -1558,14 +1819,14 @@ function initApp() {
       phone: '+44 7911 123456',
       keyword: 'ROADMAP',
       campaign: 'roadmap',
-      status: '✓ Email Captured',
+      status: 'Email Captured',
       statusClass: 'email',
       sourceTitle: 'Free Java Fullstack Roadmap 2026 PDF',
       sourceThumb: 'https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?auto=format&fit=crop&w=80&q=80',
       time: '28m ago',
       timestamp: 'Today, 1:48 PM',
       commentText: 'Sent you ROADMAP on the carousel post',
-      botReplyText: 'Awesome Marcus! 🚀 The Fullstack 2026 Roadmap PDF has been emailed to you and here is the direct link: https://renderreply.com/p/roadmap-pdf',
+      botReplyText: 'Awesome Marcus! The Fullstack 2026 Roadmap PDF has been emailed to you and here is the direct link: https://renderreply.com/p/roadmap-pdf',
       ruleName: 'Java Roadmap Lead Magnet'
     },
     {
@@ -1577,14 +1838,14 @@ function initApp() {
       phone: '+91 98765 43210',
       keyword: 'LINK',
       campaign: 'story',
-      status: '✓ DM Delivered',
+      status: 'DM Delivered',
       statusClass: '',
       sourceTitle: 'Story Automation Blueprint & DM Triggers',
       sourceThumb: 'https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&w=80&q=80',
       time: '1h ago',
       timestamp: 'Today, 1:15 PM',
       commentText: 'LINK',
-      botReplyText: 'Hey Priya! 🙌 Here is the instant link you requested from our story: https://renderreply.com/story-blueprint',
+      botReplyText: 'Hey Priya! Here is the instant link you requested from our story: https://renderreply.com/story-blueprint',
       ruleName: 'Story Reply Automation'
     },
     {
@@ -1596,14 +1857,14 @@ function initApp() {
       phone: '+1 (555) 901-4432',
       keyword: 'FREE',
       campaign: 'free',
-      status: '✓ Email Captured',
+      status: 'Email Captured',
       statusClass: 'email',
       sourceTitle: 'Free Lead Pack Automation',
       sourceThumb: 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=80&q=80',
       time: '2h ago',
       timestamp: 'Today, 12:10 PM',
       commentText: 'FREE resource download',
-      botReplyText: 'Hey David! 🎯 Your free resource package is ready: https://renderreply.com/free-pack. Check your email for login credentials!',
+      botReplyText: 'Hey David! Your free resource package is ready: https://renderreply.com/free-pack. Check your email for login credentials!',
       ruleName: 'Free Lead Pack Automation'
     },
     {
@@ -1615,14 +1876,14 @@ function initApp() {
       phone: '+1 (555) 432-1098',
       keyword: '#GUIDE',
       campaign: 'guide',
-      status: '✓ Email Captured',
+      status: 'Email Captured',
       statusClass: 'email',
       sourceTitle: '10x Instagram Automation Strategy 2026',
       sourceThumb: 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=80&q=80',
       time: '3h ago',
       timestamp: 'Today, 11:32 AM',
       commentText: '#GUIDE please!',
-      botReplyText: 'Hey Elena! 📈 Here is the full guide to scaling digital products with RenderReply: https://renderreply.com/p/guide',
+      botReplyText: 'Hey Elena! Here is the full guide to scaling digital products with RenderReply: https://renderreply.com/p/guide',
       ruleName: 'Reel Lead Magnet #GUIDE'
     },
     {
@@ -1634,14 +1895,14 @@ function initApp() {
       phone: '+91 99887 76655',
       keyword: 'ROADMAP',
       campaign: 'roadmap',
-      status: '✓ Email Captured',
+      status: 'Email Captured',
       statusClass: 'email',
       sourceTitle: 'Free Java Fullstack Roadmap 2026 PDF',
       sourceThumb: 'https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?auto=format&fit=crop&w=80&q=80',
       time: '4h ago',
       timestamp: 'Today, 10:18 AM',
       commentText: 'ROADMAP link',
-      botReplyText: 'Hey Karan! 🚀 We sent the Fullstack Roadmap PDF straight to your inbox and here: https://renderreply.com/p/roadmap-pdf',
+      botReplyText: 'Hey Karan! We sent the Fullstack Roadmap PDF straight to your inbox and here: https://renderreply.com/p/roadmap-pdf',
       ruleName: 'Java Roadmap Lead Magnet'
     },
     {
@@ -1653,14 +1914,14 @@ function initApp() {
       phone: '+1 (555) 678-9012',
       keyword: 'PRICING',
       campaign: 'pricing',
-      status: '✓ DM Delivered',
+      status: 'DM Delivered',
       statusClass: '',
       sourceTitle: 'How I Make ₹50,000/mo Selling Digital Products',
       sourceThumb: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=80&q=80',
       time: '5h ago',
       timestamp: 'Today, 09:44 AM',
       commentText: 'Can I get the PRICING?',
-      botReplyText: 'Hey Chloe! ✨ Here are all current creator store tiers and checkout links: https://renderreply.com/pricing',
+      botReplyText: 'Hey Chloe! Here are all current creator store tiers and checkout links: https://renderreply.com/pricing',
       ruleName: 'Pricing Trigger Rule'
     }
   ];
@@ -1843,7 +2104,7 @@ function initApp() {
       if (btnCopy) {
         btnCopy.addEventListener('click', () => {
           navigator.clipboard.writeText(lead.email).then(() => {
-            btnCopy.textContent = '✓ Copied!';
+            btnCopy.textContent = 'Copied!';
             showToast(`Copied ${lead.email} to clipboard`);
             setTimeout(() => { btnCopy.textContent = 'Copy Email'; }, 2000);
           });
@@ -1901,15 +2162,6 @@ function initApp() {
         }
       });
 
-      // Sync Filter Pills active state
-      campaignPills.forEach(p => {
-        if (p.getAttribute('data-campaign') === currentLeadsCampaign) {
-          p.classList.add('active');
-        } else {
-          p.classList.remove('active');
-        }
-      });
-
       // Update Sub-pills and descriptions
       if (descPill) {
         descPill.textContent = campaignDescriptions[currentLeadsCampaign] || 'Filtered Leads';
@@ -1933,14 +2185,6 @@ function initApp() {
       card.addEventListener('click', () => {
         const camp = card.getAttribute('data-campaign') || 'all';
         selectCampaign(camp, true);
-      });
-    });
-
-    // Campaign Pills Click Listeners
-    campaignPills.forEach(pill => {
-      pill.addEventListener('click', () => {
-        const camp = pill.getAttribute('data-campaign') || 'all';
-        selectCampaign(camp, false);
       });
     });
 
@@ -2725,7 +2969,7 @@ function initApp() {
           rule.keywords = keywords;
           rule.target = activeModalTriggerType === 'story' ? 'STORIES' : activeModalTriggerType === 'reel' ? 'REELS' : 'POST';
           rule.targetType = activeModalTriggerType.toUpperCase();
-          rule.thumbIcon = '📸';
+          rule.thumbIcon = '';
           rule.response = response;
           rule.attachLink = attachLink;
           rule.linkUrl = attachUrl;
@@ -2740,7 +2984,7 @@ function initApp() {
           id: `rule-${Date.now()}`,
           name: ruleName,
           ruleSub: ruleName,
-          thumbIcon: '📸',
+          thumbIcon: '',
           type: activeModalTriggerType,
           typeName: typeNames[activeModalTriggerType] || 'Trigger',
           keywords: keywords,
@@ -2813,7 +3057,7 @@ function initApp() {
       openCreateAutomationModal({
         name: title,
         keywords: tag,
-        response: `Hey {first_name}! 👋 Thanks for asking about ${title}. Here is the direct link: {link}`,
+        response: `Hey {first_name}! Thanks for asking about ${title}. Here is the direct link: {link}`,
         type: 'post'
       });
 
@@ -2838,7 +3082,7 @@ function initApp() {
       messages: [
         { type: 'divider', text: 'TODAY, OCT 24' },
         { type: 'user', text: 'Hey! Can I get the pricing plans for your creator roadmap and preset packs?', time: '02:14 PM', context: 'Commented "PRICING" on Reel #894' },
-        { type: 'bot', text: 'Hey Alex! 👋 Here are our membership options, instant downloads, and 1-on-1 strategy sessions:', time: '02:14 PM', flow: 'Reel Viral Funnel v2.4', hasCard: true }
+        { type: 'bot', text: 'Hey Alex! Here are our membership options, instant downloads, and 1-on-1 strategy sessions:', time: '02:14 PM', flow: 'Reel Viral Funnel v2.4', hasCard: true }
       ]
     },
     sarah: {
@@ -2853,7 +3097,7 @@ function initApp() {
       messages: [
         { type: 'divider', text: 'TODAY, OCT 24' },
         { type: 'user', text: 'Loved your latest story breakdown! Can you send me the free creator checklist you mentioned?', time: '01:10 PM', context: 'Mentioned you in Story' },
-        { type: 'bot', text: 'Hey Sarah! 🌟 Thank you so much for the story tag! Here is your exclusive 2026 Instagram Growth Checklist PDF: https://renderreply.com/store/rudrateja/downloads/checklist.pdf', time: '01:10 PM', flow: 'Story Mention Auto-Thank You v1.8', hasCard: false }
+        { type: 'bot', text: 'Hey Sarah! Thank you so much for the story tag! Here is your exclusive 2026 Instagram Growth Checklist PDF: https://renderreply.com/store/rudrateja/downloads/checklist.pdf', time: '01:10 PM', flow: 'Story Mention Auto-Thank You v1.8', hasCard: false }
       ]
     },
     dev: {
@@ -2868,7 +3112,7 @@ function initApp() {
       messages: [
         { type: 'divider', text: 'TODAY, OCT 24' },
         { type: 'user', text: 'JAVA', time: '11:20 AM', context: 'Sent DM keyword "JAVA"' },
-        { type: 'bot', text: 'Hey John! 🚀 Here is the instant access link to the Java Full Stack Roadmap 2026 PDF: https://renderreply.com/store/rudrateja/downloads/java-roadmap.pdf Happy coding!', time: '11:20 AM', flow: 'Full Stack Roadmap Auto-DM', hasCard: false }
+        { type: 'bot', text: 'Hey John! Here is the instant access link to the Java Full Stack Roadmap 2026 PDF: https://renderreply.com/store/rudrateja/downloads/java-roadmap.pdf Happy coding!', time: '11:20 AM', flow: 'Full Stack Roadmap Auto-DM', hasCard: false }
       ]
     },
     priya: {
@@ -2897,9 +3141,9 @@ function initApp() {
       messages: [
         { type: 'divider', text: 'YESTERDAY, OCT 23' },
         { type: 'user', text: 'PRESET', time: '04:15 PM', context: 'Commented "PRESET" on Reel #890' },
-        { type: 'bot', text: 'Hey Vikram! 🎁 Here is your free Instagram Automation Preset Bundle: https://renderreply.com/store/rudrateja/downloads/presets.zip', time: '04:15 PM', flow: 'Preset Distribution Flow', hasCard: false },
+        { type: 'bot', text: 'Hey Vikram! Here is your free Instagram Automation Preset Bundle: https://renderreply.com/store/rudrateja/downloads/presets.zip', time: '04:15 PM', flow: 'Preset Distribution Flow', hasCard: false },
         { type: 'user', text: 'Thank you so much Rudra! Downloaded presets successfully. They work amazingly well!', time: '04:30 PM', context: 'Direct DM' },
-        { type: 'human', text: 'Awesome Vikram! Let me know if you need any tweaks for your specific reels setup. Cheers! 🚀', time: '04:35 PM' }
+        { type: 'human', text: 'Awesome Vikram! Let me know if you need any tweaks for your specific reels setup. Cheers! ', time: '04:35 PM' }
       ]
     }
   };
@@ -2933,7 +3177,7 @@ function initApp() {
           <div class="rr-clean-msg bot">
             <div class="rr-clean-bubble bot">
               <div class="msg-sender-line">
-                <span class="bot-label">🤖 RenderReply Bot</span>
+                <span class="bot-label"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-right: 4px; vertical-align: -2px;"><rect x="4" y="4" width="16" height="16" rx="2"/><circle cx="9" cy="9" r="1.5"/><circle cx="15" cy="9" r="1.5"/><line x1="9" y1="15" x2="15" y2="15"/><line x1="12" y1="2" x2="12" y2="4"/></svg>RenderReply Bot</span>
                 <span class="flow-label">${msg.flow || 'Automation Flow'}</span>
               </div>
               <div class="msg-text">${msg.text}</div>
@@ -2947,7 +3191,7 @@ function initApp() {
                   </a>
                 </div>
               ` : ''}
-              <div class="msg-time bot-time">${msg.time} • <span style="color: #38bdf8;">Delivered ✓✓</span></div>
+              <div class="msg-time bot-time">${msg.time} • <span style="color: #38bdf8;">Delivered <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#38bdf8" stroke-width="2.5" style="vertical-align: -2px;"><polyline points="18 6 9 17 4 12"/><polyline points="22 10 15 17 13 15"/></svg></span></div>
             </div>
           </div>
         `;
@@ -2956,11 +3200,11 @@ function initApp() {
           <div class="rr-clean-msg human">
             <div class="rr-clean-bubble human">
               <div class="msg-sender-line">
-                <span class="human-label">👤 Rudra Teja (Human Agent)</span>
+                <span class="human-label"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-right: 4px; vertical-align: -2px;"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>Rudra Teja (Human Agent)</span>
                 <span class="flow-label" style="background: rgba(255,255,255,0.15); color: #ffffff;">Direct Reply</span>
               </div>
               <div class="msg-text">${msg.text}</div>
-              <div class="msg-time" style="color: rgba(255,255,255,0.7);">${msg.time} • Delivered ✓✓</div>
+              <div class="msg-time" style="color: rgba(255,255,255,0.7);">${msg.time} • Delivered <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#38bdf8" stroke-width="2.5" style="vertical-align: -2px;"><polyline points="18 6 9 17 4 12"/><polyline points="22 10 15 17 13 15"/></svg></div>
             </div>
           </div>
         `;
@@ -2970,7 +3214,7 @@ function initApp() {
     if (!thread.botActive) {
       html += `
         <div class="rr-clean-system-notice">
-          <span>⏸️ Bot paused for this conversation to allow direct human agent reply</span>
+          <span><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="margin-right: 4px; vertical-align: -2px;"><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></svg>Bot paused for this conversation to allow direct human agent reply</span>
         </div>
       `;
     }
@@ -3074,7 +3318,7 @@ function initApp() {
           <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
             <polyline points="20 6 9 17 4 12"/>
           </svg>
-          <span>✓ Resolved (Reopen)</span>
+          <span>Resolved (Reopen)</span>
         `;
       } else {
         btnResolveChat.className = 'btn-clean-resolve';
@@ -3166,12 +3410,12 @@ function initApp() {
           const statusPill = activeThreadEl.querySelector('.rr-pill-badge');
           if (statusPill) {
             statusPill.className = 'rr-pill-badge resolved';
-            statusPill.textContent = '✓ Resolved';
+            statusPill.textContent = 'Resolved';
           }
         }
         thread.messages.push({
           type: 'divider',
-          text: '✓ Conversation marked as resolved'
+          text: 'Conversation marked as resolved'
         });
         showToast(`Conversation with ${thread.handle} moved to Resolved!`);
       } else {
@@ -3187,7 +3431,7 @@ function initApp() {
         }
         thread.messages.push({
           type: 'divider',
-          text: '🔄 Conversation reopened'
+          text: 'Conversation reopened'
         });
         showToast(`Conversation with ${thread.handle} reopened!`);
       }
@@ -3920,7 +4164,7 @@ function initApp() {
             </div>
             <div class="modal-prod-desc-snippet">${prod.desc}</div>
             <div class="modal-prod-sub-meta">
-              <span style="color: #f59e0b; font-weight: 700;">★ ${prod.rating ? prod.rating.split('(')[0].trim() : '5.0'}</span>
+              <span style="color: #f59e0b; font-weight: 700; display: inline-flex; align-items: center;"><svg width="12" height="12" viewBox="0 0 24 24" fill="#f59e0b" stroke="#f59e0b" stroke-width="1" style="vertical-align: -1px; margin-right: 2px;"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg> ${prod.rating ? prod.rating.split('(')[0].trim() : '5.0'}</span>
               <span>•</span>
               <span style="color: #94a3b8;">CTA: "${prod.cta || 'Instant Access'}"</span>
               <span>•</span>
@@ -5128,7 +5372,7 @@ function initPaymentOptionsSuite() {
         if (!tx) return '';
         const amt = tx.amount || 0;
         const isPos = amt >= 0;
-        const amtDisplay = isPos ? `✓ ₹${amt.toLocaleString('en-IN')}` : `- ₹${Math.abs(amt).toLocaleString('en-IN')}`;
+        const amtDisplay = isPos ? `+ ₹${amt.toLocaleString('en-IN')}` : `- ₹${Math.abs(amt).toLocaleString('en-IN')}`;
         const amtClass = isPos ? 'cell-amount pos' : 'cell-amount neg';
         const statusClass = tx.status === 'Cleared' ? 'cleared' : (tx.status === 'Pending' ? 'pending' : 'failed');
         const txIdShort = (tx.id || '').length > 12 ? (tx.id || '').substring(0, 11) + '...' : (tx.id || '');
@@ -6312,7 +6556,7 @@ if (document.readyState === 'loading') {
 function initBioLinkBuilder() {
   const bioState = {
     title: '',
-    bio: 'Helping creators automate Instagram & convert followers into leads.',
+    bio: '',
     links: [],
     video1: '',
     video2: '',
@@ -6504,7 +6748,7 @@ function initBioLinkBuilder() {
       card.classList.add('active');
 
       if (phoneScreen) {
-        phoneScreen.className = phoneScreen.className.replace(/theme-[a-z-]+/g, '');
+        phoneScreen.className = phoneScreen.className.split(' ').filter(c => !c.startsWith('theme-')).join(' ').trim();
         phoneScreen.classList.add(`theme-${theme}`);
       }
     });
@@ -6521,7 +6765,7 @@ function initBioLinkBuilder() {
       btn.classList.add('active');
 
       if (phoneScreen) {
-        phoneScreen.className = phoneScreen.className.replace(/font-[a-z-]+/g, '');
+        phoneScreen.className = phoneScreen.className.split(' ').filter(c => !c.startsWith('font-')).join(' ').trim();
         phoneScreen.classList.add(`font-${font}`);
       }
     });
