@@ -61,6 +61,15 @@
             </svg>
             Bio Link Page
           </a>
+          <a class="nav-item" data-tab="reels">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="2" y="2" width="20" height="20" rx="4" />
+              <path d="M10 9l5 3-5 3V9z" fill="currentColor" />
+              <path d="M2 8h20M2 16h20M8 2v6M16 2v6M8 16v6M16 16v6" />
+            </svg>
+            Reels Upload & Edit
+            <span class="nav-badge-purple" style="background: linear-gradient(135deg, #a855f7, #ec4899); color: #ffffff; font-size: 10px; font-weight: 700; padding: 2px 7px; border-radius: 9999px;">NEW</span>
+          </a>
           <a class="nav-item" data-tab="creatorstore">
             <svg viewBox="0 0 24 24">
               <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z" />
@@ -88,10 +97,68 @@
           </a>
         </nav>
       </div>
-      <div class="sidebar-footer">
-        <div class="user-profile">
-          <div class="user-avatar">R</div>
-          <span class="user-name">RudRa RR</span>
+      <div class="sidebar-footer" id="sidebar-footer">
+        <!-- USER PROFILE TRIGGER -->
+        <div class="user-profile" id="sidebar-user-profile-btn" onclick="window.toggleUserProfilePopup(event)" tabindex="0" role="button" aria-haspopup="true" aria-expanded="false" title="Account Settings & Options">
+          <div class="user-avatar" id="sidebar-user-avatar">
+            <span class="user-avatar-text">RR</span>
+          </div>
+          <div class="user-info-text">
+            <span class="user-name" id="sidebar-user-name">RudRa RR</span>
+            <span class="user-handle-sub" id="sidebar-user-sub">@render6457</span>
+          </div>
+          <button type="button" class="user-profile-action-btn" id="sidebar-settings-btn" title="Settings & Options" aria-label="Account Settings and Options" onclick="window.toggleUserProfilePopup(event)">
+            <svg class="gear-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="3"></circle>
+              <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+            </svg>
+          </button>
+        </div>
+
+        <!-- USER PROFILE POPUP MENU -->
+        <div class="user-profile-popup" id="user-profile-popup" role="menu" aria-hidden="true">
+          <div class="upp-header">
+            <div class="upp-name" id="upp-user-name">RudRa RR</div>
+            <div class="upp-email" id="upp-user-email">rudrateja08@gmail.com</div>
+          </div>
+          <div class="upp-divider"></div>
+          <div class="upp-menu-list">
+            <button type="button" class="upp-item" id="upp-item-switch-account" onclick="window.openSwitchAccountModal(event)" role="menuitem">
+              <svg class="upp-item-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="17 1 21 5 17 9"></polyline>
+                <path d="M3 11V9a4 4 0 0 1 4-4h14"></path>
+                <polyline points="7 23 3 19 7 15"></polyline>
+                <path d="M21 13v2a4 4 0 0 1-4 4H3"></path>
+              </svg>
+              <span class="upp-item-text">Switch Account</span>
+            </button>
+
+            <button type="button" class="upp-item" id="upp-item-settings" onclick="window.openAccountSettingsView(event)" role="menuitem">
+              <svg class="upp-item-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="3"></circle>
+                <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+              </svg>
+              <span class="upp-item-text">Settings</span>
+            </button>
+
+            <button type="button" class="upp-item" id="upp-item-support" onclick="window.openUserSupportModal(event)" role="menuitem">
+              <svg class="upp-item-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="10"></circle>
+                <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path>
+                <line x1="12" y1="17" x2="12.01" y2="17"></line>
+              </svg>
+              <span class="upp-item-text">Support</span>
+            </button>
+
+            <button type="button" class="upp-item upp-item-danger" id="upp-item-signout" onclick="window.openUserSignoutModal(event)" role="menuitem">
+              <svg class="upp-item-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+                <polyline points="16 17 21 12 16 7"></polyline>
+                <line x1="21" y1="12" x2="9" y2="12"></line>
+              </svg>
+              <span class="upp-item-text">Sign Out</span>
+            </button>
+          </div>
         </div>
       </div>
     </aside>
@@ -146,6 +213,15 @@
               </svg>
               Refresh
             </button>
+            <button type="button" class="btn btn-outline" id="btn-header-switch-account" onclick="window.openSwitchAccountModal(event)" title="Switch Account">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 4px;">
+                <polyline points="17 1 21 5 17 9"></polyline>
+                <path d="M3 11V9a4 4 0 0 1 4-4h14"></path>
+                <polyline points="7 23 3 19 7 15"></polyline>
+                <path d="M21 13v2a4 4 0 0 1-4 4H3"></path>
+              </svg>
+              Switch Account
+            </button>
             <div id="account-action-container">
               <button class="btn btn-disconnect" id="btn-disconnect-modal">Disconnect</button>
             </div>
@@ -155,9 +231,20 @@
         <!-- ACCOUNT INFO & TIME RANGE SELECTOR BAR -->
         <div class="account-bar">
           <div class="account-info" id="account-info-container">
-            <div class="account-icon">R</div>
+            <div class="account-icon" id="dashboard-account-icon">R</div>
             <div class="account-details">
-              <span class="account-handle" id="dashboard-account-handle">@render6457</span>
+              <div class="account-handle-row" style="display: flex; align-items: center; gap: 6px;">
+                <span class="account-handle" id="dashboard-account-handle">@render6457</span>
+                <button type="button" class="btn-quick-switch-icon" id="btn-quick-switch-account" onclick="window.openSwitchAccountModal(event)" title="Switch Connected Account">
+                  <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="17 1 21 5 17 9"></polyline>
+                    <path d="M3 11V9a4 4 0 0 1 4-4h14"></path>
+                    <polyline points="7 23 3 19 7 15"></polyline>
+                    <path d="M21 13v2a4 4 0 0 1-4 4H3"></path>
+                  </svg>
+                  <span>Switch</span>
+                </button>
+              </div>
               <span class="account-status">Instagram Connected</span>
             </div>
           </div>
@@ -1667,6 +1754,1398 @@
 
         </div>
       </section>
+
+      <!-- TAB: REELS & MEDIA STUDIO (GALLERY, SCHEDULER & AUTO-DM) -->
+      <section id="reels-view" class="tab-view">
+        <header class="view-header reels-header">
+          <div class="header-title-group">
+            <div class="title-row" style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
+              <h1 class="view-title">Reels & Media Studio</h1>
+              <span class="live-badge" style="background: rgba(168, 85, 247, 0.12); color: #c084fc; border: 1px solid rgba(168, 85, 247, 0.3);">
+                <span class="dot" style="background: #c084fc;"></span> Auto-DM Engine Active
+              </span>
+            </div>
+            <p class="view-subtitle">Upload media, manage gallery folders, schedule cross-platform Stories & Reels, and attach high-converting comment-to-DM rules.</p>
+          </div>
+        </header>
+
+        <!-- HIDDEN FILE INPUT FOR VIDEO/IMAGE UPLOAD -->
+        <input type="file" id="reels-file-input" accept="video/mp4,video/quicktime,video/webm,image/png,image/jpeg,image/*" style="display: none;" onchange="window.handleReelFileUpload(event)">
+
+        <!-- ========================================================================= -->
+        <!-- SUB-TAB 1: MEDIA GALLERY & FOLDERS WORKSPACE                              -->
+        <!-- ========================================================================= -->
+        <div class="reels-tab-pane active" id="reels-pane-gallery">
+          
+          <!-- TOP 2-CARD ACTION SECTION (MATCHING SCREENSHOT) -->
+          <div class="gallery-top-cards-grid">
+            
+            <!-- LEFT ACTION CARD: UPLOAD MEDIA + PROCESSING PROGRESS CHIP -->
+            <div class="gallery-action-card-box">
+              <button type="button" class="btn-storrito-red btn-upload-media" onclick="window.triggerReelFileInput()">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                  <path d="M17.5 19H9a7 7 0 1 1 6.71-9h1.79a4.5 4.5 0 1 1 0 9Z"></path>
+                  <polyline points="12 11 12 16"></polyline>
+                  <polyline points="9 13 12 10 15 13"></polyline>
+                </svg>
+                <span>Upload image(s) or video(s)</span>
+              </button>
+
+              <!-- LIVE UPLOAD/PROCESSING PROGRESS CHIP (APPEARS DYNAMICALLY DURING UPLOAD) -->
+              <div class="storrito-progress-chip" id="reels-upload-progress-chip" style="display: none;">
+                <div class="progress-bar-track">
+                  <div class="progress-bar-fill" id="upload-chip-fill" style="width: 0%;"></div>
+                </div>
+                <span class="progress-chip-text" id="upload-chip-status">Ready</span>
+                <button type="button" class="progress-chip-cancel-btn" onclick="document.getElementById('reels-upload-progress-chip').style.display = 'none';">✕</button>
+              </div>
+            </div>
+
+            <!-- RIGHT ACTION CARD: NEW EMPTY STORY / REEL -->
+            <div class="gallery-action-card-box">
+              <button type="button" class="btn-storrito-red btn-new-empty-story" onclick="window.createEmptyReel()">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                  <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
+                  <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
+                </svg>
+                <span>New empty story</span>
+              </button>
+            </div>
+
+          </div>
+
+          <!-- CENTER UNDERLINE TABS: GALLERY / ARCHIVE -->
+          <div class="gallery-center-tab-strip">
+            <button type="button" class="center-tab-btn active" id="tab-btn-gallery" onclick="window.toggleGalleryArchive('gallery', this)">
+              <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                <circle cx="8.5" cy="8.5" r="1.5"></circle>
+                <polyline points="21 15 16 10 5 21"></polyline>
+              </svg>
+              <span>Gallery</span>
+            </button>
+            <button type="button" class="center-tab-btn" id="tab-btn-archive" onclick="window.toggleGalleryArchive('archive', this)">
+              <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="21 8 21 21 3 21 3 8"></polyline>
+                <rect x="1" y="3" width="22" height="5"></rect>
+                <line x1="10" y1="12" x2="14" y2="12"></line>
+              </svg>
+              <span>Archive</span>
+            </button>
+          </div>
+
+          <!-- 2-COLUMN MAIN GALLERY SPLIT -->
+          <div class="gallery-main-split-container">
+            
+            <!-- LEFT COLUMN: FOLDER CARD -->
+            <aside class="gallery-folder-box">
+              <div class="folder-box-header">
+                <button type="button" class="btn-folder-add-icon" onclick="window.openNewFolderPrompt()" title="Create New Folder">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path>
+                    <line x1="12" y1="11" x2="12" y2="17"></line>
+                    <line x1="9" y1="14" x2="15" y2="14"></line>
+                  </svg>
+                </button>
+              </div>
+
+              <div class="folder-box-body" id="gallery-folder-box-body">
+                <div class="folder-list-items" id="gallery-folder-tree">
+                  <!-- Folders dynamically rendered here -->
+                </div>
+                <p class="folder-empty-note" id="gallery-folder-empty-note">This folder has no subfolders.</p>
+              </div>
+            </aside>
+
+            <!-- RIGHT COLUMN: MEDIA CARD AREA (DYNAMIC GRID + EMPTY STATE) -->
+            <main class="gallery-media-content-area">
+              <div class="gallery-media-items-grid" id="gallery-media-grid" style="display: none;">
+                <!-- Uploaded media cards will be rendered dynamically here -->
+              </div>
+
+              <!-- EMPTY GALLERY PLACEHOLDER (SHOWN BY DEFAULT UNTIL MEDIA IS UPLOADED) -->
+              <div class="gallery-empty-cloud-box" id="gallery-empty-state" style="display: flex;">
+                <div class="empty-cloud-graphic">
+                  <svg width="72" height="72" viewBox="0 0 24 24" fill="none" stroke="#94a3b8" stroke-width="1.6">
+                    <path d="M17.5 19H9a7 7 0 1 1 6.71-9h1.79a4.5 4.5 0 1 1 0 9Z"></path>
+                    <polyline points="12 12 12 16"></polyline>
+                    <polyline points="9 13 12 10 15 13"></polyline>
+                  </svg>
+                </div>
+                <h3 class="empty-heading">Your gallery is empty!</h3>
+                <p class="empty-sub">Drop images / videos here or click the button</p>
+                <button type="button" class="btn-empty-upload" onclick="window.triggerReelFileInput()">
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                    <polyline points="17 8 12 3 7 8"></polyline>
+                    <line x1="12" y1="3" x2="12" y2="15"></line>
+                  </svg>
+                  <span>Upload</span>
+                </button>
+              </div>
+            </main>
+
+          </div>
+
+        </div>
+
+        <!-- ========================================================================= -->
+        <!-- SUB-TAB 2: POST SCHEDULER & COMPOSER (MATCHING USER SCREENSHOT EXACTLY)    -->
+        <!-- ========================================================================= -->
+        <div class="reels-tab-pane" id="reels-pane-schedule">
+          
+          <!-- SCHEDULER PAGE HEADER -->
+          <div class="schedule-post-header">
+            <h2 class="schedule-title-main">Schedule social post</h2>
+            <p class="schedule-title-sub" id="sched-active-title">Digiproducthub (15)</p>
+          </div>
+
+          <!-- 2-COLUMN SPLIT SCHEDULER LAYOUT -->
+          <div class="schedule-post-split-layout">
+            
+            <!-- LEFT COLUMN: 9:16 VERTICAL VIDEO PLAYER WITH CONTROLS -->
+            <div class="schedule-video-preview-column">
+              <div class="schedule-video-player-card">
+                <div class="video-player-viewport">
+                  <img src="goldfish_reel_thumb.jpg" alt="Digiproducthub (15)" class="video-poster-img" id="sched-poster-img">
+                  <video id="schedule-video-element" class="video-element-main" playsinline loop controls src="goldfish_reel_thumb.jpg"></video>
+                </div>
+              </div>
+            </div>
+
+            <!-- RIGHT COLUMN: MULTI-PLATFORM COMPOSE CARDS (MATCHING USER SCREENSHOT EXACTLY) -->
+            <div class="schedule-compose-column">
+              
+              <!-- CARD 1: SOCIAL ACCOUNTS -->
+              <div class="sched-compose-card" id="card-social-accounts">
+                <div class="sched-card-top-row">
+                  <div>
+                    <h3 class="sched-card-heading">Social accounts</h3>
+                    <p class="sched-card-subheading">Select one or more accounts to post to. Accounts are grouped by platform.</p>
+                  </div>
+                  <span class="sched-pill-badge" id="selected-accounts-count-badge">1 selected</span>
+                </div>
+
+                <!-- SEARCHABLE DROPDOWN WITH SELECTED PILLS -->
+                <div class="social-select-dropdown-container">
+                  <div class="social-input-search-box" onclick="window.toggleSocialDropdown(event)">
+                    <!-- SELECTED ACCOUNT CHIPS -->
+                    <div class="social-selected-chips-row" id="selected-account-chips">
+                      <div class="sched-account-chip">
+                        <div class="chip-avatar-img"></div>
+                        <span class="chip-name">real_factcheck</span>
+                        <svg class="chip-ig-icon" width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><circle cx="12" cy="12" r="4" fill="#ffffff"></circle></svg>
+                        <button type="button" class="chip-close-x" onclick="event.stopPropagation(); this.parentElement.remove(); window.updateSelectedAccountsCount();">×</button>
+                      </div>
+                    </div>
+                    
+                    <svg class="dropdown-chevron-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#94a3b8" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                  </div>
+
+                  <!-- GROUPED LIST (DROPDOWN) -->
+                  <div class="social-grouped-dropdown-list" id="social-grouped-list" style="display: none;">
+                    
+                    <!-- GROUP: INSTAGRAM STORIES -->
+                    <div class="platform-group-block">
+                      <div class="platform-group-header">
+                        <svg class="ig-pink-icon" width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><circle cx="12" cy="12" r="4" fill="#ffffff"></circle></svg>
+                        <span>INSTAGRAM STORIES</span>
+                      </div>
+                      <label class="platform-acc-row selected">
+                        <div class="acc-left-info">
+                          <div class="acc-globe-avatar"></div>
+                          <span class="acc-handle-text">real_factcheck</span>
+                        </div>
+                        <input type="checkbox" class="acc-checkbox-styled" checked onchange="window.toggleSocialAccountSelection('ig-stories-1')">
+                      </label>
+                    </div>
+
+                    <!-- GROUP: REELS -->
+                    <div class="platform-group-block">
+                      <div class="platform-group-header">
+                        <svg class="ig-pink-icon" width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+                        <span>REELS</span>
+                      </div>
+                      <label class="platform-acc-row">
+                        <div class="acc-left-info">
+                          <div class="acc-globe-avatar"></div>
+                          <span class="acc-handle-text">real_factcheck</span>
+                        </div>
+                        <input type="checkbox" class="acc-checkbox-styled" onchange="window.toggleSocialAccountSelection('reels-1')">
+                      </label>
+                    </div>
+
+                    <!-- CONNECT ACCOUNT BUTTON -->
+                    <button type="button" class="btn-connect-new-account" onclick="window.openConnectAccountModal()">
+                      <span class="dashed-plus-circle">+</span>
+                      <span>Connect account</span>
+                    </button>
+
+                  </div>
+                </div>
+              </div>
+
+              <!-- CARD 2: INSTAGRAM STORY OPTIONS -->
+              <div class="sched-compose-card" id="card-ig-story-options">
+                <div class="sched-card-top-row">
+                  <div class="card-title-with-icon">
+                    <svg class="ig-pink-icon" width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><circle cx="12" cy="12" r="4" fill="#ffffff"></circle></svg>
+                    <h3 class="sched-card-heading">Instagram Story options</h3>
+                  </div>
+                </div>
+
+                <div class="form-field-block">
+                  <div class="field-label-row">
+                    <label class="field-label">First comment</label>
+                    <span class="badge-new-yellow">NEW</span>
+                  </div>
+                  <p class="field-help-text">Optional. Posted as a comment on the story right after it goes live.</p>
+                  <textarea class="textarea-storrito" id="sched-first-comment" rows="3" placeholder="Add a comment or #hashtags ..."></textarea>
+                </div>
+
+                <div class="ai-generated-toggle-row">
+                  <input type="checkbox" id="chk-ai-generated" class="storrito-custom-checkbox">
+                  <label for="chk-ai-generated" class="ai-checkbox-label">
+                    <span class="ai-label-title">AI-generated content</span>
+                    <span class="ai-label-desc">Label the story as AI-generated on Instagram</span>
+                  </label>
+                </div>
+              </div>
+
+              <!-- CARD: RENDERREPLY AUTO-DM OPTIONS (MATCHING USER SCREENSHOT EXACTLY) -->
+              <div class="sched-compose-card auto-dm-supercharged-card" id="card-auto-dm-options">
+                <div class="sched-card-top-row">
+                  <div class="card-title-with-icon" style="display: flex; align-items: center; gap: 9px;">
+                    <div class="brand-logo" style="width: 22px; height: 22px; background: #09090b; color: #ffffff; border-radius: 6px; font-size: 12px; font-weight: 800; display: inline-flex; align-items: center; justify-content: center;">R</div>
+                    <h3 class="sched-card-heading" style="color: #09090b; font-size: 16.5px; font-weight: 800;">RenderReply Auto-DM Options</h3>
+                  </div>
+                  <span class="badge-supercharged">Supercharged</span>
+                </div>
+                <p class="sched-card-subheading" style="margin: 4px 0 16px 0; color: #64748b; font-size: 13.5px;">Automatically deliver DMs and smart replies whenever users comment your keyword.</p>
+
+                <div class="auto-dm-compose-form">
+                  <div class="auto-dm-grid-row">
+                    
+                    <!-- TRIGGER KEYWORD -->
+                    <div class="field-col">
+                      <label class="field-label" style="font-weight: 700; color: #0f172a; font-size: 13.5px;">Trigger Keyword:</label>
+                      <div class="input-with-icon">
+                        <span class="input-prefix" style="color: #7e22ce; font-weight: 800; font-size: 15px;">#</span>
+                        <input type="text" class="input-text-modern auto-dm-keyword-input" id="auto-dm-compose-keyword" value="GROWTH" oninput="window.handleAutoDmKeywordInput(this.value)">
+                      </div>
+                    </div>
+
+                    <!-- LINKED DM TEMPLATE -->
+                    <div class="field-col">
+                      <label class="field-label" style="font-weight: 700; color: #0f172a; font-size: 13.5px;">Linked DM Template:</label>
+                      <div class="select-dropdown-wrap" style="display: flex; gap: 8px; align-items: center;">
+                        <select class="select-modern auto-dm-template-select" id="auto-dm-template-select" style="flex: 1;">
+                          <option value="tpl-growth" selected>📦 30-Day Growth Toolkit Delivery</option>
+                          <option value="tpl-store">🎟️ StanStore 20% Discount Link</option>
+                          <option value="tpl-lead">📋 Creator Masterclass Free Access</option>
+                          <option value="tpl-custom">✨ Custom AI Direct Reply</option>
+                        </select>
+                        <button type="button" class="btn-add-dm-template" id="btn-add-dm-template" onclick="window.openCreateDmTemplateModal()" title="Create New DM Template">
+                          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                          <span>Add</span>
+                        </button>
+                      </div>
+                    </div>
+
+                  </div>
+
+                  <!-- PUBLIC COMMENT AUTO-REPLY ROTATION BOX -->
+                  <div class="public-reply-rotation-box">
+                    <div class="pub-reply-header">
+                      <span class="pub-reply-header-text">Public Comment Auto-Reply Rotation:</span>
+                      <span class="badge-anti-spam">AI Anti-Spam Active</span>
+                    </div>
+                    <div class="pub-reply-quote" id="pub-quote-1">
+                      <span class="green-check-icon">✓</span>
+                      <span class="quote-text">"Sent you a DM! Check your inbox with the #GROWTH guide 🚀"</span>
+                    </div>
+                  </div>
+
+                  <!-- SAVE AUTO-DM SETTINGS BUTTON -->
+                  <button type="button" class="btn-save-auto-dm" id="btn-save-auto-dm" onclick="window.saveAutoDmSettings()">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
+                    <span>Save</span>
+                  </button>
+
+                </div>
+              </div>
+
+              <!-- CARD: DATE & TIME -->
+              <div class="sched-compose-card" id="card-date-time">
+                <h3 class="sched-card-heading">Date & time</h3>
+                
+                <div class="datetime-input-wrap">
+                  <input type="datetime-local" class="datetime-text-input" id="sched-datetime-display">
+                  <svg class="calendar-icon-btn" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                    <line x1="16" y1="2" x2="16" y2="6"></line>
+                    <line x1="8" y1="2" x2="8" y2="6"></line>
+                    <line x1="3" y1="10" x2="21" y2="10"></line>
+                  </svg>
+                </div>
+
+                <p class="sched-card-subheading" style="margin-top: 8px;">Choose now or a future date. Existing platform-specific pages remain available for advanced options.</p>
+
+                <!-- LIVE FEEDBACK BANNER (MATCHING SCREENSHOT) -->
+                <div class="sched-feedback-banner" id="sched-feedback-banner" style="display: none;">
+                  <span>Scheduling commands were sent. Check each platform history for final status.</span>
+                </div>
+
+                <!-- POST NOW BUTTON (MATCHING SCREENSHOT) -->
+                <button type="button" class="btn-storrito-post-now" id="btn-post-now-action" onclick="window.executePostNow()">
+                  Post now
+                </button>
+              </div>
+
+              <!-- SCHEDULING ACTIVITY (EXPANDS DYNAMICALLY AFTER POSTING) -->
+              <div class="sched-compose-card" id="card-scheduling-activity" style="display: none;">
+                <h3 class="sched-card-heading">Scheduling activity</h3>
+                <p class="sched-card-subheading">Where this media is scheduled, live, or previously posted.</p>
+                <div class="scheduling-activity-list" id="scheduling-activity-list"></div>
+              </div>
+
+            </div>
+
+            <!-- ================================================================= -->
+            <!-- CREATE NEW DM TEMPLATE MODAL                                      -->
+            <!-- ================================================================= -->
+            <!-- ================================================================= -->
+            <!-- CREATE NEW DM TEMPLATE MODAL                                      -->
+            <!-- ================================================================= -->
+            <!-- ================================================================= -->
+            <!-- CREATE NEW DM TEMPLATE MODAL (BLACK & WHITE THEME)                -->
+            <!-- ================================================================= -->
+            <div class="reels-modal-backdrop" id="modal-create-dm-template" onclick="if(event.target === this) window.closeCreateDmTemplateModal()">
+              <div class="dm-bw-dialog">
+                <!-- Header -->
+                <div class="dm-bw-header">
+                  <div class="modal-title-wrap">
+                    <div class="dm-bw-badge">💬</div>
+                    <div>
+                      <h3 class="dm-bw-title">Create New DM Template</h3>
+                      <p class="dm-bw-sub">Direct message automation for comments & post scheduling</p>
+                    </div>
+                  </div>
+                  <button type="button" class="dm-bw-close" onclick="window.closeCreateDmTemplateModal()" title="Close">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                  </button>
+                </div>
+
+                <!-- Body -->
+                <div class="dm-bw-body">
+                  <!-- Section 1: Template Name & Icon Emoji -->
+                  <div class="dm-bw-section">
+                    <div style="display: flex; gap: 12px; align-items: flex-start;">
+                      <div style="flex: 1;">
+                        <label class="dm-bw-label">Template Name <span class="dm-bw-label-req">*</span></label>
+                        <input type="text" id="new-dm-tpl-name" class="dm-bw-input" placeholder="e.g. Free Ebook Delivery">
+                      </div>
+                      <div style="width: 90px;">
+                        <label class="dm-bw-label" style="justify-content: center;">Icon Emoji</label>
+                        <input type="text" id="new-dm-tpl-emoji" class="dm-bw-input" placeholder="📦" maxlength="4" style="text-align: center; font-size: 18px; padding: 10px 4px;" value="📦">
+                      </div>
+                    </div>
+                    <!-- Quick Icon Emoji Selection -->
+                    <div style="display: flex; align-items: center; gap: 8px; margin-top: 4px;">
+                      <span style="font-size: 11.5px; color: #71717a; font-weight: 600;">Presets:</span>
+                      <div class="dm-bw-emoji-list" id="dm-icon-emoji-presets" style="margin-top: 0; display: inline-flex;">
+                        <button type="button" class="dm-bw-emoji-chip active" onclick="window.selectDmIconEmoji('📦', this)">📦</button>
+                        <button type="button" class="dm-bw-emoji-chip" onclick="window.selectDmIconEmoji('🎁', this)">🎁</button>
+                        <button type="button" class="dm-bw-emoji-chip" onclick="window.selectDmIconEmoji('🚀', this)">🚀</button>
+                        <button type="button" class="dm-bw-emoji-chip" onclick="window.selectDmIconEmoji('💡', this)">💡</button>
+                        <button type="button" class="dm-bw-emoji-chip" onclick="window.selectDmIconEmoji('⚡', this)">⚡</button>
+                        <button type="button" class="dm-bw-emoji-chip" onclick="window.selectDmIconEmoji('📩', this)">📩</button>
+                        <button type="button" class="dm-bw-emoji-chip" onclick="window.selectDmIconEmoji('📄', this)">📄</button>
+                        <button type="button" class="dm-bw-emoji-chip" onclick="window.selectDmIconEmoji('💎', this)">💎</button>
+                        <button type="button" class="dm-bw-emoji-chip" onclick="window.selectDmIconEmoji('🔥', this)">🔥</button>
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- Section 2: Comment Trigger Word / Emoji / All text Matching -->
+                  <div class="dm-bw-section">
+                    <label class="dm-bw-label">
+                      <span>Comment Trigger Match <span class="dm-bw-label-req">*</span></span>
+                      <span style="font-size: 11.5px; color: #71717a; font-weight: normal;">When user comments</span>
+                    </label>
+                    
+                    <!-- Segmented Mode Buttons -->
+                    <div class="dm-bw-segmented">
+                      <button type="button" class="dm-bw-seg-btn active" id="trigger-mode-custom" onclick="window.setDmTriggerMode('custom')">
+                        <span># Custom Word</span>
+                      </button>
+                      <button type="button" class="dm-bw-seg-btn" id="trigger-mode-emoji" onclick="window.setDmTriggerMode('emoji')">
+                        <span>😍 Emoji Match</span>
+                      </button>
+                      <button type="button" class="dm-bw-seg-btn" id="trigger-mode-all" onclick="window.setDmTriggerMode('all')">
+                        <span>💬 All Comments</span>
+                      </button>
+                    </div>
+
+                    <!-- Panel A: Custom Word Mode -->
+                    <div id="trigger-panel-custom" style="display: block; margin-top: 8px;">
+                      <div style="position: relative;">
+                        <span style="position: absolute; left: 14px; top: 50%; transform: translateY(-50%); font-weight: 800; color: #09090b; font-size: 14px;">#</span>
+                        <input type="text" id="new-dm-trigger-word" class="dm-bw-input" placeholder="e.g. GROWTH, PRICE, LINK, GUIDE" style="padding-left: 32px; font-weight: 600; text-transform: uppercase;">
+                      </div>
+                      <div style="display: flex; align-items: center; gap: 6px; margin-top: 6px; flex-wrap: wrap;">
+                        <span style="font-size: 11.5px; color: #71717a;">Suggested:</span>
+                        <button type="button" class="dm-bw-var-pill" onclick="window.setTriggerWordValue('GROWTH')">GROWTH</button>
+                        <button type="button" class="dm-bw-var-pill" onclick="window.setTriggerWordValue('LINK')">LINK</button>
+                        <button type="button" class="dm-bw-var-pill" onclick="window.setTriggerWordValue('PRICE')">PRICE</button>
+                        <button type="button" class="dm-bw-var-pill" onclick="window.setTriggerWordValue('TOOLKIT')">TOOLKIT</button>
+                        <button type="button" class="dm-bw-var-pill" onclick="window.setTriggerWordValue('INFO')">INFO</button>
+                      </div>
+                      <p style="font-size: 11.5px; color: #71717a; margin: 4px 0 0 0;">Trigger DM when comment contains this specific word or phrase.</p>
+                    </div>
+
+                    <!-- Panel B: Emoji Match Mode -->
+                    <div id="trigger-panel-emoji" style="display: none; margin-top: 8px;">
+                      <div style="display: flex; gap: 10px; align-items: center;">
+                        <input type="text" id="new-dm-trigger-emoji" class="dm-bw-input" placeholder="🔥" style="width: 80px; text-align: center; font-size: 18px;" value="🔥">
+                        <span style="font-size: 12px; color: #71717a;">Pick emoji or type your own:</span>
+                      </div>
+                      <div class="dm-bw-emoji-list" id="dm-trigger-emoji-presets" style="margin-top: 8px;">
+                        <button type="button" class="dm-bw-emoji-chip active" onclick="window.selectDmTriggerEmoji('🔥', this)">🔥</button>
+                        <button type="button" class="dm-bw-emoji-chip" onclick="window.selectDmTriggerEmoji('🙌', this)">🙌</button>
+                        <button type="button" class="dm-bw-emoji-chip" onclick="window.selectDmTriggerEmoji('❤️', this)">❤️</button>
+                        <button type="button" class="dm-bw-emoji-chip" onclick="window.selectDmTriggerEmoji('🚀', this)">🚀</button>
+                        <button type="button" class="dm-bw-emoji-chip" onclick="window.selectDmTriggerEmoji('💬', this)">💬</button>
+                        <button type="button" class="dm-bw-emoji-chip" onclick="window.selectDmTriggerEmoji('📦', this)">📦</button>
+                        <button type="button" class="dm-bw-emoji-chip" onclick="window.selectDmTriggerEmoji('💡', this)">💡</button>
+                        <button type="button" class="dm-bw-emoji-chip" onclick="window.selectDmTriggerEmoji('⭐', this)">⭐</button>
+                        <button type="button" class="dm-bw-emoji-chip" onclick="window.selectDmTriggerEmoji('👏', this)">👏</button>
+                        <button type="button" class="dm-bw-emoji-chip" onclick="window.selectDmTriggerEmoji('👇', this)">👇</button>
+                      </div>
+                      <p style="font-size: 11.5px; color: #71717a; margin: 6px 0 0 0;">Trigger DM when user posts comment with this emoji.</p>
+                    </div>
+
+                    <!-- Panel C: All Text Comments Mode -->
+                    <div id="trigger-panel-all" style="display: none; margin-top: 8px;">
+                      <div style="background: #f4f4f5; border: 1px solid #e4e4e7; border-radius: 10px; padding: 12px 14px; display: flex; align-items: center; gap: 10px;">
+                        <span style="font-size: 18px;">⚡</span>
+                        <div style="font-size: 12.5px; color: #09090b;">
+                          <strong>Catch-All Trigger Active:</strong> Will automatically send this DM for <em>every single comment</em> on the post.
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- Section 3: DM Message Body -->
+                  <div class="dm-bw-section">
+                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                      <label class="dm-bw-label">DM Message Body <span class="dm-bw-label-req">*</span></label>
+                      <div style="display: flex; gap: 6px;">
+                        <button type="button" class="dm-bw-var-pill" onclick="window.insertTplVar('{first_name}')" title="Insert first name tag">+{first_name}</button>
+                        <button type="button" class="dm-bw-var-pill" onclick="window.insertTplVar('{link}')" title="Insert link tag">+{link}</button>
+                      </div>
+                    </div>
+                    <textarea id="new-dm-tpl-body" class="dm-bw-textarea" placeholder="Hey {first_name}! Here is your free resource: {link}" rows="4" style="line-height: 1.5;"></textarea>
+                    <p style="font-size: 11.5px; color: #71717a; margin: 4px 0 0 0;">Use <strong>{first_name}</strong> for customer name and <strong>{link}</strong> for the URL below.</p>
+                  </div>
+
+                  <!-- Section 4: Attached Link (Optional) -->
+                  <div class="dm-bw-section">
+                    <label class="dm-bw-label">
+                      <span>Attached Link</span>
+                      <span style="font-size: 11.5px; color: #71717a; font-weight: normal;">Optional</span>
+                    </label>
+                    <input type="url" id="new-dm-tpl-link" class="dm-bw-input" placeholder="https://yoursite.com/free-resource">
+                  </div>
+                </div>
+
+                <!-- Footer -->
+                <div class="dm-bw-footer">
+                  <button type="button" class="dm-bw-btn-cancel" onclick="window.closeCreateDmTemplateModal()">Cancel</button>
+                  <button type="button" class="dm-bw-btn-create" onclick="window.confirmCreateDmTemplate()">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                    <span>Create Template</span>
+                  </button>
+                </div>
+              </div>
+            </div>
+
+          </div>
+
+        </div>
+
+        <!-- ========================================================================= -->
+        <!-- SUB-TAB 3: TRIMMER & VISUAL STUDIO                                        -->
+        <!-- ========================================================================= -->
+        <div class="reels-tab-pane" id="reels-pane-studio">
+          
+          <!-- QUICK SAMPLE PRESETS BAR -->
+          <div class="reels-preset-bar">
+            <div class="reels-preset-label">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg>
+              <span>Quick Demo Video Clips:</span>
+            </div>
+            <div class="reels-preset-buttons">
+              <button type="button" class="reels-preset-btn active" data-preset="1" onclick="window.loadReelPreset(1)">
+                <span class="preset-icon">⚡</span>
+                <span class="preset-name">Growth Hack ($12K DM Strategy)</span>
+              </button>
+              <button type="button" class="reels-preset-btn" data-preset="2" onclick="window.loadReelPreset(2)">
+                <span class="preset-icon">📱</span>
+                <span class="preset-name">AI Workflow & Tools Review</span>
+              </button>
+              <button type="button" class="reels-preset-btn" data-preset="3" onclick="window.loadReelPreset(3)">
+                <span class="preset-icon">🚀</span>
+                <span class="preset-name">High-Converting Storefront Showcase</span>
+              </button>
+              <button type="button" class="reels-preset-btn" data-preset="4" onclick="window.loadReelPreset(4)">
+                <span class="preset-icon">💡</span>
+                <span class="preset-name">Viral Bio Link Setup</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- DUAL COLUMN WORKSPACE -->
+          <div class="reels-studio-workspace">
+            
+            <!-- LEFT COLUMN: 9:16 INTERACTIVE REEL SIMULATOR & PLAYER -->
+            <div class="reels-preview-column">
+              <div class="reels-phone-card">
+                
+                <div class="reels-phone-mockup" id="reels-phone-container">
+                  <!-- DYNAMIC ISLAND / TOP NOTCH -->
+                  <div class="reels-phone-notch">
+                    <span class="notch-speaker"></span>
+                    <span class="notch-camera"></span>
+                  </div>
+
+                  <!-- VIDEO VIEWPORT CONTAINER -->
+                  <div class="reels-video-viewport" id="reels-viewport">
+                    <video id="reels-video-element" playsinline loop muted autoplay></video>
+                    <canvas id="reels-procedural-canvas" width="360" height="640" style="display: none;"></canvas>
+
+                    <!-- ON-SCREEN TEXT OVERLAY LAYER (DRAGGABLE/CUSTOMIZABLE) -->
+                    <div class="reels-text-overlay-wrapper" id="reels-text-overlay-wrapper">
+                      <div class="reels-dynamic-overlay style-yellow-bold pos-top" id="reels-text-overlay-preview">
+                        <span class="overlay-badge-tag" id="reels-badge-tag-preview">🔥 VIRAL HOOK</span>
+                        <span class="overlay-text-content" id="reels-text-content-preview">STOP SCROLLING: How I Automated $12K in DMs</span>
+                      </div>
+                    </div>
+
+                    <!-- REALISTIC INSTAGRAM REELS UI OVERLAY -->
+                    <div class="reels-ig-overlay" id="reels-ig-overlay">
+                      <!-- TOP BAR -->
+                      <div class="reels-ig-top">
+                        <div class="reels-ig-audio-ticker">
+                          <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M9 18V5l12-2v13"></path><circle cx="6" cy="18" r="3"></circle><circle cx="18" cy="16" r="3"></circle></svg>
+                          <span id="reels-ig-sound-title">Trending Beat • Phonk Velocity</span>
+                        </div>
+                        <button type="button" class="reels-ig-icon-btn" title="Camera">
+                          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path><circle cx="12" cy="13" r="4"></circle></svg>
+                        </button>
+                      </div>
+
+                      <!-- RIGHT INTERACTION STACK -->
+                      <div class="reels-ig-actions">
+                        <button type="button" class="reels-ig-action-item" onclick="window.toggleReelsMockLike(event)">
+                          <div class="action-icon-circle" id="reels-like-btn">
+                            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
+                          </div>
+                          <span class="action-count" id="reels-like-count">14.8K</span>
+                        </button>
+                        <button type="button" class="reels-ig-action-item" onclick="window.openReelTestDmModal(event)">
+                          <div class="action-icon-circle">
+                            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
+                          </div>
+                          <span class="action-count" id="reels-comment-count">2,491</span>
+                        </button>
+                        <button type="button" class="reels-ig-action-item">
+                          <div class="action-icon-circle">
+                            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
+                          </div>
+                          <span class="action-count">890</span>
+                        </button>
+                        <button type="button" class="reels-ig-action-item">
+                          <div class="action-icon-circle">
+                            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"></path></svg>
+                          </div>
+                        </button>
+                        <div class="reels-ig-sound-disc" id="reels-sound-disc">
+                          <div class="disc-inner">
+                            <span class="disc-avatar">RR</span>
+                          </div>
+                        </div>
+                      </div>
+
+                      <!-- BOTTOM CREATOR INFO & AUTOMATION HOOK -->
+                      <div class="reels-ig-bottom">
+                        <div class="creator-user-row">
+                          <div class="creator-avatar-sm">RR</div>
+                          <span class="creator-handle" id="reels-ig-handle">@render6457</span>
+                          <span class="creator-follow-badge">Follow</span>
+                        </div>
+                        <div class="creator-caption-snippet" id="reels-ig-caption-preview">
+                          Want the complete automated DM blueprint? Comment <strong class="keyword-highlight" id="reels-keyword-inline">GROWTH</strong> below and I'll send it straight to your DMs! 🚀
+                        </div>
+                        <div class="reels-automation-cta-pill" onclick="window.openReelTestDmModal(event)" title="Click to test comment trigger">
+                          <span class="cta-pulse"></span>
+                          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg>
+                          <span>Comment "<strong id="reels-cta-keyword-text">GROWTH</strong>" for Instant DM</span>
+                        </div>
+                      </div>
+                    </div>
+
+                    <!-- PLAY/PAUSE BIG OVERLAY BUTTON -->
+                    <button type="button" class="reels-play-center-btn" id="reels-play-center-btn" onclick="window.toggleReelPlayback()">
+                      <svg width="28" height="28" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+                    </button>
+                  </div>
+                </div>
+
+                <!-- SLEEK MEDIA PLAYER BAR -->
+                <div class="reels-player-controls-bar">
+                  <div class="controls-top-row">
+                    <button type="button" class="btn-ctrl-icon" id="reels-ctrl-play" onclick="window.toggleReelPlayback()" title="Play / Pause">
+                      <svg id="reels-ctrl-play-icon" width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+                    </button>
+                    <div class="reels-timecode" id="reels-timecode-display">00:00 / 00:30</div>
+                    <div class="reels-scrubber-track">
+                      <input type="range" id="reels-scrubber" min="0" max="30" step="0.1" value="0" oninput="window.handleReelScrub(this.value)">
+                      <div class="scrubber-progress-fill" id="reels-scrubber-fill" style="width: 0%;"></div>
+                    </div>
+                    <button type="button" class="btn-ctrl-icon" id="reels-ctrl-mute" onclick="window.toggleReelMute()" title="Mute / Unmute">
+                      <svg id="reels-ctrl-mute-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><line x1="23" y1="9" x2="17" y2="15"></line><line x1="17" y1="9" x2="23" y2="15"></line></svg>
+                    </button>
+                  </div>
+
+                  <div class="controls-bottom-row">
+                    <button type="button" class="reels-pill-btn active" id="btn-toggle-ig-overlay" onclick="window.toggleReelOverlayUI()">
+                      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+                      <span>Instagram UI</span>
+                    </button>
+                    <div class="aspect-ratio-selector">
+                      <button type="button" class="aspect-btn active" data-aspect="9:16" onclick="window.setReelAspectRatio('9:16', this)">9:16 Reel</button>
+                      <button type="button" class="aspect-btn" data-aspect="1:1" onclick="window.setReelAspectRatio('1:1', this)">1:1 Feed</button>
+                      <button type="button" class="aspect-btn" data-aspect="4:5" onclick="window.setReelAspectRatio('4:5', this)">4:5 Post</button>
+                    </div>
+                  </div>
+                </div>
+
+              </div>
+            </div>
+
+            <!-- RIGHT COLUMN: MULTI-SECTION STUDIO CONTROL DECK -->
+            <div class="reels-controls-column">
+              
+              <!-- ACCORDION SECTION 1: VIDEO TRIMMING & SPEED -->
+              <div class="reels-card-section">
+                <div class="section-head" onclick="window.toggleReelsAccordion(this)">
+                  <div class="section-title-wrap">
+                    <span class="section-icon">✂️</span>
+                    <h3 class="section-title">Video Trimming & Playback Speed</h3>
+                  </div>
+                  <svg class="chevron-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                </div>
+                <div class="section-body open">
+                  <div class="trimmer-sliders-wrap">
+                    <div class="trimmer-row">
+                      <div class="trim-label-row">
+                        <span>Start Cut: <strong id="val-trim-start">0.0s</strong></span>
+                        <span>End Cut: <strong id="val-trim-end">30.0s</strong></span>
+                        <span>Duration: <strong id="val-trim-duration" style="color: #10b981;">30.0s</strong></span>
+                      </div>
+                      <div class="trim-dual-slider-track">
+                        <input type="range" id="reels-trim-start" min="0" max="60" step="0.5" value="0" oninput="window.updateTrimValues()">
+                        <input type="range" id="reels-trim-end" min="0" max="60" step="0.5" value="30" oninput="window.updateTrimValues()">
+                      </div>
+                    </div>
+
+                    <div class="speed-selector-row">
+                      <span class="sub-label">Playback Speed:</span>
+                      <div class="speed-pills">
+                        <button type="button" class="speed-btn" data-speed="0.5" onclick="window.setReelSpeed(0.5, this)">0.5x</button>
+                        <button type="button" class="speed-btn" data-speed="0.75" onclick="window.setReelSpeed(0.75, this)">0.75x</button>
+                        <button type="button" class="speed-btn active" data-speed="1.0" onclick="window.setReelSpeed(1.0, this)">1.0x (Normal)</button>
+                        <button type="button" class="speed-btn" data-speed="1.25" onclick="window.setReelSpeed(1.25, this)">1.25x</button>
+                        <button type="button" class="speed-btn" data-speed="1.5" onclick="window.setReelSpeed(1.5, this)">1.5x</button>
+                        <button type="button" class="speed-btn" data-speed="2.0" onclick="window.setReelSpeed(2.0, this)">2.0x</button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- ACCORDION SECTION 2: COLOR FILTERS & VISUAL ADJUSTMENTS -->
+              <div class="reels-card-section">
+                <div class="section-head" onclick="window.toggleReelsAccordion(this)">
+                  <div class="section-title-wrap">
+                    <span class="section-icon">🎨</span>
+                    <h3 class="section-title">Color Filters & Visual Adjustments</h3>
+                  </div>
+                  <svg class="chevron-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                </div>
+                <div class="section-body open">
+                  <div class="filter-presets-grid">
+                    <button type="button" class="filter-card active" data-filter="normal" onclick="window.applyReelFilter('normal', this)">
+                      <div class="filter-swatch swatch-normal"></div>
+                      <span>Original</span>
+                    </button>
+                    <button type="button" class="filter-card" data-filter="cinematic" onclick="window.applyReelFilter('cinematic', this)">
+                      <div class="filter-swatch swatch-cinematic"></div>
+                      <span>Cinematic Noir</span>
+                    </button>
+                    <button type="button" class="filter-card" data-filter="golden" onclick="window.applyReelFilter('golden', this)">
+                      <div class="filter-swatch swatch-golden"></div>
+                      <span>Golden Hour</span>
+                    </button>
+                    <button type="button" class="filter-card" data-filter="cyberpunk" onclick="window.applyReelFilter('cyberpunk', this)">
+                      <div class="filter-swatch swatch-cyberpunk"></div>
+                      <span>Cyberpunk Neon</span>
+                    </button>
+                    <button type="button" class="filter-card" data-filter="vibrant" onclick="window.applyReelFilter('vibrant', this)">
+                      <div class="filter-swatch swatch-vibrant"></div>
+                      <span>Crisp Vibrant</span>
+                    </button>
+                    <button type="button" class="filter-card" data-filter="vintage" onclick="window.applyReelFilter('vintage', this)">
+                      <div class="filter-swatch swatch-vintage"></div>
+                      <span>Vintage Warm</span>
+                    </button>
+                    <button type="button" class="filter-card" data-filter="bw" onclick="window.applyReelFilter('bw', this)">
+                      <div class="filter-swatch swatch-bw"></div>
+                      <span>B&W High Contrast</span>
+                    </button>
+                    <button type="button" class="filter-card" data-filter="softglow" onclick="window.applyReelFilter('softglow', this)">
+                      <div class="filter-swatch swatch-softglow"></div>
+                      <span>Soft Glow Bloom</span>
+                    </button>
+                  </div>
+
+                  <div class="fine-tune-grid">
+                    <div class="slider-control-item">
+                      <div class="slider-label-row">
+                        <span>Brightness</span>
+                        <strong id="val-brightness">100%</strong>
+                      </div>
+                      <input type="range" id="filter-brightness" min="50" max="180" value="100" oninput="window.updateLiveFilterAdjustment()">
+                    </div>
+                    <div class="slider-control-item">
+                      <div class="slider-label-row">
+                        <span>Contrast</span>
+                        <strong id="val-contrast">100%</strong>
+                      </div>
+                      <input type="range" id="filter-contrast" min="50" max="180" value="100" oninput="window.updateLiveFilterAdjustment()">
+                    </div>
+                    <div class="slider-control-item">
+                      <div class="slider-label-row">
+                        <span>Saturation</span>
+                        <strong id="val-saturate">100%</strong>
+                      </div>
+                      <input type="range" id="filter-saturate" min="0" max="200" value="100" oninput="window.updateLiveFilterAdjustment()">
+                    </div>
+                    <div class="slider-control-item">
+                      <div class="slider-label-row">
+                        <span>Warmth / Sepia</span>
+                        <strong id="val-sepia">0%</strong>
+                      </div>
+                      <input type="range" id="filter-sepia" min="0" max="100" value="0" oninput="window.updateLiveFilterAdjustment()">
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- ACCORDION SECTION 3: TEXT OVERLAYS & VIRAL HOOK BADGES -->
+              <div class="reels-card-section">
+                <div class="section-head" onclick="window.toggleReelsAccordion(this)">
+                  <div class="section-title-wrap">
+                    <span class="section-icon">✨</span>
+                    <h3 class="section-title">On-Screen Text Overlays & Viral Hook Badges</h3>
+                  </div>
+                  <svg class="chevron-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                </div>
+                <div class="section-body open">
+                  <div class="form-group-compact">
+                    <label class="control-label">On-Screen Hook Text:</label>
+                    <input type="text" class="input-text-modern" id="reels-overlay-text-input" value="STOP SCROLLING: How I Automated $12K in DMs" oninput="window.updateOverlayText(this.value)">
+                  </div>
+
+                  <div class="overlay-styling-options">
+                    <div class="option-col">
+                      <label class="control-label">Text Position:</label>
+                      <div class="pill-group">
+                        <button type="button" class="pos-pill active" data-pos="pos-top" onclick="window.setOverlayPosition('pos-top', this)">Top Hook</button>
+                        <button type="button" class="pos-pill" data-pos="pos-center" onclick="window.setOverlayPosition('pos-center', this)">Center</button>
+                        <button type="button" class="pos-pill" data-pos="pos-bottom" onclick="window.setOverlayPosition('pos-bottom', this)">Bottom</button>
+                      </div>
+                    </div>
+
+                    <div class="option-col">
+                      <label class="control-label">Visual Style:</label>
+                      <div class="pill-group">
+                        <button type="button" class="style-pill active" data-style="style-yellow-bold" onclick="window.setOverlayStyle('style-yellow-bold', this)">Bold Yellow</button>
+                        <button type="button" class="style-pill" data-style="style-neon-glow" onclick="window.setOverlayStyle('style-neon-glow', this)">Neon Purple</button>
+                        <button type="button" class="style-pill" data-style="style-clean-dark" onclick="window.setOverlayStyle('style-clean-dark', this)">Dark Glass</button>
+                        <button type="button" class="style-pill" data-style="style-cyber-red" onclick="window.setOverlayStyle('style-cyber-red', this)">Urgent Red</button>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="viral-stickers-row">
+                    <label class="control-label">Quick Viral Sticker Tags:</label>
+                    <div class="sticker-tags-wrap">
+                      <button type="button" class="sticker-tag-btn active" onclick="window.setOverlayTag('🔥 VIRAL HOOK', this)">🔥 VIRAL HOOK</button>
+                      <button type="button" class="sticker-tag-btn" onclick="window.setOverlayTag('👇 COMMENT \'GROWTH\'', this)">👇 COMMENT 'GROWTH'</button>
+                      <button type="button" class="sticker-tag-btn" onclick="window.setOverlayTag('⚡ 100% AUTOMATED', this)">⚡ 100% AUTOMATED</button>
+                      <button type="button" class="sticker-tag-btn" onclick="window.setOverlayTag('💰 $10K CASE STUDY', this)">💰 $10K CASE STUDY</button>
+                      <button type="button" class="sticker-tag-btn" onclick="window.setOverlayTag('🤯 WAIT TILL END', this)">🤯 WAIT TILL END</button>
+                      <button type="button" class="sticker-tag-btn" onclick="window.setOverlayTag('NONE', this)">None</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- ACTION BAR: PROCEED TO SCHEDULER -->
+              <div class="reels-publish-bar">
+                <button type="button" class="btn btn-outline" onclick="window.switchReelsSubTab('gallery')">Back to Gallery</button>
+                <button type="button" class="btn btn-primary" onclick="window.switchReelsSubTab('schedule')">
+                  <span>Proceed to Post Scheduler & Auto-DM</span>
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"></polyline></svg>
+                </button>
+              </div>
+
+            </div>
+          </div>
+
+        </div>
+
+        <!-- ========================================================================= -->
+        <!-- SUB-TAB 4: BULK SCHEDULING QUEUE                                          -->
+        <!-- ========================================================================= -->
+        <div class="reels-tab-pane" id="reels-pane-bulk">
+          <div class="bulk-scheduler-container">
+            <div class="bulk-header-card">
+              <div class="bulk-title-group">
+                <span class="bulk-badge">⚡ Batch Automation</span>
+                <h2>Bulk Social Reel Scheduling</h2>
+                <p>Upload a batch of videos, assign automated comment trigger keywords to each, and schedule cross-platform in one click.</p>
+              </div>
+              <div class="bulk-actions">
+                <button type="button" class="btn btn-outline" onclick="window.downloadBulkTemplate()">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+                  Download CSV Template
+                </button>
+                <button type="button" class="btn btn-primary" onclick="window.triggerReelFileInput()">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>
+                  Batch Upload Videos
+                </button>
+              </div>
+            </div>
+
+            <div class="bulk-queue-table-wrap">
+              <table class="bulk-queue-table">
+                <thead>
+                  <tr>
+                    <th>Media Preview</th>
+                    <th>File Name</th>
+                    <th>Target Platforms</th>
+                    <th>Auto-DM Keyword</th>
+                    <th>Scheduled Date</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="bulk-queue-tbody">
+                  <tr>
+                    <td><div class="bulk-thumb" style="background: linear-gradient(135deg, #1e1b4b, #6366f1); color: #fff;">01</div></td>
+                    <td><strong>Digiproducthub_Growth_01.mp4</strong></td>
+                    <td><span class="platform-tag ig">Stories + Reels</span></td>
+                    <td><span class="kw-tag">#GROWTH</span></td>
+                    <td>2026-09-08 18:45</td>
+                    <td><span class="badge-status-scheduled">Queued</span></td>
+                    <td><button type="button" class="btn btn-outline btn-sm" onclick="window.switchReelsSubTab('schedule')">Edit</button></td>
+                  </tr>
+                  <tr>
+                    <td><div class="bulk-thumb" style="background: linear-gradient(135deg, #0f172a, #0284c7); color: #fff;">02</div></td>
+                    <td><strong>Top_5_AI_Tools_Productivity.mp4</strong></td>
+                    <td><span class="platform-tag ig">Reels + TikTok</span></td>
+                    <td><span class="kw-tag">#AITOOLS</span></td>
+                    <td>2026-09-09 12:30</td>
+                    <td><span class="badge-status-scheduled">Queued</span></td>
+                    <td><button type="button" class="btn btn-outline btn-sm" onclick="window.switchReelsSubTab('schedule')">Edit</button></td>
+                  </tr>
+                  <tr>
+                    <td><div class="bulk-thumb" style="background: linear-gradient(135deg, #14532d, #10b981); color: #fff;">03</div></td>
+                    <td><strong>Bio_Link_Page_Conversion_Demo.mp4</strong></td>
+                    <td><span class="platform-tag ig">Reels + Shorts</span></td>
+                    <td><span class="kw-tag">#TEMPLATE</span></td>
+                    <td>2026-09-10 19:15</td>
+                    <td><span class="badge-status-scheduled">Queued</span></td>
+                    <td><button type="button" class="btn btn-outline btn-sm" onclick="window.switchReelsSubTab('schedule')">Edit</button></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- ========================================================================= -->
+        <!-- SUB-TAB 5: REELS ANALYTICS & ROI                                          -->
+        <!-- ========================================================================= -->
+        <div class="reels-tab-pane" id="reels-pane-analytics">
+          
+          <!-- KPI METRIC CARDS -->
+          <div class="reels-analytics-kpi-grid">
+            <div class="reels-kpi-card">
+              <div class="kpi-header">
+                <span class="kpi-title">Total Reels Views</span>
+                <span class="kpi-icon-wrap" style="background: rgba(168, 85, 247, 0.12); color: #c084fc;">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+                </span>
+              </div>
+              <div class="kpi-val">1,420,850</div>
+              <div class="kpi-trend positive">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline><polyline points="17 6 23 6 23 12"></polyline></svg>
+                <span>+32.4% vs last month</span>
+              </div>
+            </div>
+
+            <div class="reels-kpi-card">
+              <div class="kpi-header">
+                <span class="kpi-title">Automated Comment Replies</span>
+                <span class="kpi-icon-wrap" style="background: rgba(16, 185, 129, 0.12); color: #10b981;">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg>
+                </span>
+              </div>
+              <div class="kpi-val">38,420</div>
+              <div class="kpi-trend positive">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline><polyline points="17 6 23 6 23 12"></polyline></svg>
+                <span>100% response speed (&lt;2s)</span>
+              </div>
+            </div>
+
+            <div class="reels-kpi-card">
+              <div class="kpi-header">
+                <span class="kpi-title">DMs Delivered via Reels</span>
+                <span class="kpi-icon-wrap" style="background: rgba(59, 130, 246, 0.12); color: #3b82f6;">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
+                </span>
+              </div>
+              <div class="kpi-val">29,180</div>
+              <div class="kpi-trend positive">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline><polyline points="17 6 23 6 23 12"></polyline></svg>
+                <span>84.2% open rate</span>
+              </div>
+            </div>
+
+            <div class="reels-kpi-card">
+              <div class="kpi-header">
+                <span class="kpi-title">Revenue Attributed to Reels</span>
+                <span class="kpi-icon-wrap" style="background: rgba(245, 158, 11, 0.12); color: #f59e0b;">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"></line><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>
+                </span>
+              </div>
+              <div class="kpi-val">$19,840.00</div>
+              <div class="kpi-trend positive">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline><polyline points="17 6 23 6 23 12"></polyline></svg>
+                <span>+$4,320 this week</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- ANALYTICS CHARTS & LEADERBOARD -->
+          <div class="reels-analytics-body-grid">
+            <div class="reels-chart-card">
+              <div class="card-head-row">
+                <h3 class="card-title">Reels Reach & DM Conversions (Last 30 Days)</h3>
+                <span class="badge-pill">30 Days Growth</span>
+              </div>
+              <div class="reels-chart-svg-container" id="reels-analytics-chart">
+                <!-- Rendered dynamically via SVG -->
+              </div>
+            </div>
+
+            <div class="reels-keywords-leaderboard-card">
+              <div class="card-head-row">
+                <h3 class="card-title">Top Converting Trigger Keywords</h3>
+                <span class="badge-pill">Live Leaderboard</span>
+              </div>
+              <div class="keywords-table-wrap">
+                <table class="keywords-table">
+                  <thead>
+                    <tr>
+                      <th>Trigger Keyword</th>
+                      <th>Reels</th>
+                      <th>Comments</th>
+                      <th>DMs Sent</th>
+                      <th>Conversion</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td><span class="kw-tag">#GROWTH</span></td>
+                      <td>3 Reels</td>
+                      <td>16,420</td>
+                      <td>14,180</td>
+                      <td><strong style="color: #10b981;">86.3%</strong></td>
+                    </tr>
+                    <tr>
+                      <td><span class="kw-tag">#TEMPLATE</span></td>
+                      <td>2 Reels</td>
+                      <td>11,290</td>
+                      <td>9,650</td>
+                      <td><strong style="color: #10b981;">85.4%</strong></td>
+                    </tr>
+                    <tr>
+                      <td><span class="kw-tag">#FREE</span></td>
+                      <td>1 Reel</td>
+                      <td>7,840</td>
+                      <td>6,510</td>
+                      <td><strong style="color: #10b981;">83.0%</strong></td>
+                    </tr>
+                    <tr>
+                      <td><span class="kw-tag">#STORE</span></td>
+                      <td>2 Reels</td>
+                      <td>2,870</td>
+                      <td>2,410</td>
+                      <td><strong style="color: #10b981;">84.0%</strong></td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- ========================================================================= -->
+        <!-- SUB-TAB 6: AI SCRIPT & HOOK STUDIO                                        -->
+        <!-- ========================================================================= -->
+        <div class="reels-tab-pane" id="reels-pane-scripts">
+          <div class="script-studio-layout">
+            <div class="script-input-panel">
+              <div class="panel-header-title">
+                <span class="panel-icon">✨</span>
+                <h3>AI Script & Hook Generator</h3>
+              </div>
+              <p class="panel-desc">Convert any product, store offering, or topic into a viral 30-second high-converting Reel script.</p>
+
+              <div class="form-group-compact">
+                <label class="control-label">Select Source or Topic:</label>
+                <select class="select-modern" id="script-source-select" onchange="window.handleScriptSourceChange(this.value)">
+                  <option value="store-item-1">📦 Ultimate Creator Notion Hub ($29.00)</option>
+                  <option value="store-item-2">🚀 30-Day DM Automation Playbook ($49.00)</option>
+                  <option value="store-item-3">🎥 Viral Reels Editing LUTs Pack ($19.00)</option>
+                  <option value="custom">✍️ Custom Topic / Growth Idea</option>
+                </select>
+              </div>
+
+              <div class="form-group-compact" id="script-custom-topic-group" style="display: none;">
+                <label class="control-label">Custom Topic Description:</label>
+                <input type="text" class="input-text-modern" id="script-custom-topic-input" placeholder="e.g. How to get 1,000 email subscribers from Instagram Reels in 7 days">
+              </div>
+
+              <div class="form-group-compact">
+                <label class="control-label">Reel Format Framework:</label>
+                <div class="framework-pills">
+                  <button type="button" class="fw-pill active" data-fw="pas" onclick="window.selectScriptFramework('pas', this)">Problem-Agitate-Solve</button>
+                  <button type="button" class="fw-pill" data-fw="tutorial" onclick="window.selectScriptFramework('tutorial', this)">3-Step Actionable Tutorial</button>
+                  <button type="button" class="fw-pill" data-fw="pov" onclick="window.selectScriptFramework('pov', this)">Relatable Creator POV</button>
+                  <button type="button" class="fw-pill" data-fw="myth" onclick="window.selectScriptFramework('myth', this)">Mythbuster Breakdown</button>
+                </div>
+              </div>
+
+              <button type="button" class="btn btn-primary btn-block" id="btn-generate-full-script" onclick="window.generateReelScript()">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg>
+                Generate 30-Second Viral Script
+              </button>
+            </div>
+
+            <div class="script-output-panel">
+              <div class="panel-header-row">
+                <h3 class="panel-title" id="script-output-title">Generated Viral Reel Script</h3>
+                <button type="button" class="btn btn-outline-purple btn-sm" onclick="window.loadScriptIntoEditor()">
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"></polyline></svg>
+                  Load Script into Composer & Studio
+                </button>
+              </div>
+
+              <div class="script-acts-container" id="script-acts-container">
+                <!-- Act 1: Hook -->
+                <div class="script-act-card act-hook">
+                  <div class="act-header">
+                    <span class="act-badge">Act 1: Viral Hook (0:00 - 0:03)</span>
+                    <span class="act-cue">Visual: Point at screen with urgent text</span>
+                  </div>
+                  <div class="act-body">
+                    <strong class="speech-label">Spoken:</strong>
+                    <p class="speech-text" id="script-act1-text">"If you're still replying to every single Instagram DM manually in 2026, you are leaving thousands of dollars on the table."</p>
+                    <div class="on-screen-tag">On-Screen Text: 🚨 STOP LOSING DM SALES</div>
+                  </div>
+                </div>
+
+                <!-- Act 2: Value Body -->
+                <div class="script-act-card act-body">
+                  <div class="act-header">
+                    <span class="act-badge">Act 2: Value Delivery (0:03 - 0:24)</span>
+                    <span class="act-cue">Visual: Screen record RenderReply rule triggering instantly</span>
+                  </div>
+                  <div class="act-body">
+                    <strong class="speech-label">Spoken:</strong>
+                    <p class="speech-text" id="script-act2-text">"Here is the 3-step setup: 1. Set a single trigger word like 'GROWTH'. 2. Attach your free checklist or store product link. 3. Watch RenderReply send instant personal replies within 2 seconds while capturing their email automatically."</p>
+                    <div class="on-screen-tag">On-Screen Text: ⚡ 3-STEP AUTOMATION BLUEPRINT</div>
+                  </div>
+                </div>
+
+                <!-- Act 3: Call to Action -->
+                <div class="script-act-card act-cta">
+                  <div class="act-header">
+                    <span class="act-badge">Act 3: High-Converting CTA (0:24 - 0:30)</span>
+                    <span class="act-cue">Visual: Point down towards comments</span>
+                  </div>
+                  <div class="act-body">
+                    <strong class="speech-label">Spoken:</strong>
+                    <p class="speech-text" id="script-act3-text">"Comment 'GROWTH' below right now and I'll send the entire step-by-step setup directly to your DMs for free!"</p>
+                    <div class="on-screen-tag highlight">On-Screen Text: 👇 COMMENT "GROWTH" FOR FREE DM</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </section>
+
+      <!-- ========================================================================= -->
+      <!-- REELS MODALS: TEST DM SIMULATOR MODAL & NEW FOLDER MODAL                  -->
+      <!-- ========================================================================= -->
+      
+      <!-- MODAL: LIVE COMMENT-TO-DM SIMULATOR -->
+      <div class="reels-modal-backdrop" id="modal-reels-test-dm-backdrop">
+        <div class="reels-modal-dialog" style="max-width: 540px;">
+          <div class="reels-modal-header">
+            <div class="modal-title-wrap">
+              <span class="modal-icon-badge" style="background: rgba(168, 85, 247, 0.15); color: #c084fc;">⚡</span>
+              <h3 class="modal-title">Live Comment-to-DM Simulator</h3>
+            </div>
+            <button type="button" class="btn-close-modal" onclick="window.closeReelsModal('modal-reels-test-dm-backdrop')">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+            </button>
+          </div>
+          <div class="reels-modal-body">
+            <p style="font-size: 13px; color: var(--text-secondary); margin-bottom: 12px;">Type a test comment on this Reel to test instant auto-reply and direct message delivery.</p>
+
+            <div class="sim-comment-input-box">
+              <input type="text" class="input-text-modern" id="sim-comment-text" value="Please send me GROWTH! 🙌">
+              <button type="button" class="btn btn-primary" id="btn-sim-send-comment" onclick="window.runSimulatedReelComment()">
+                Send Test Comment
+              </button>
+            </div>
+
+            <!-- SIMULATION TIMELINE LOG -->
+            <div class="sim-timeline-log" id="sim-timeline-log">
+              <div class="sim-log-step done">
+                <span class="step-num">1</span>
+                <div class="step-content">
+                  <div class="step-title">User Comments on Reel</div>
+                  <div class="step-desc">"@alex_creator: Please send me GROWTH! 🙌"</div>
+                </div>
+              </div>
+              <div class="sim-log-step done">
+                <span class="step-num">2</span>
+                <div class="step-content">
+                  <div class="step-title">RenderReply Rule Match</div>
+                  <div class="step-desc">Detected trigger word <strong>"GROWTH"</strong> in &lt; 0.18s</div>
+                </div>
+              </div>
+              <div class="sim-log-step done">
+                <span class="step-num">3</span>
+                <div class="step-content">
+                  <div class="step-title">Public Comment Auto-Reply Sent</div>
+                  <div class="step-desc">"@render6457: Sent you a DM! Check your inbox with the guide 🚀"</div>
+                </div>
+              </div>
+              <div class="sim-log-step done" style="background: rgba(168, 85, 247, 0.08); border-color: rgba(168, 85, 247, 0.3);">
+                <span class="step-num" style="background: #a855f7;">4</span>
+                <div class="step-content">
+                  <div class="step-title" style="color: #c084fc;">Direct Message Delivered & Lead Captured</div>
+                  <div class="step-desc" style="color: #0f172a;">"Hey Alex! Here is your 30-Day Growth Toolkit. Enjoy! 📦"</div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="reels-modal-footer">
+            <button type="button" class="btn btn-outline" onclick="window.closeReelsModal('modal-reels-test-dm-backdrop')">Close Simulator</button>
+            <button type="button" class="btn btn-primary" onclick="window.closeReelsModal('modal-reels-test-dm-backdrop'); window.showToast('✅ Reel automation rule verified & active!');">
+              Looks Great!
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- MODAL: CREATE NEW FOLDER -->
+      <div class="reels-modal-backdrop" id="modal-new-folder-backdrop" style="display: none;">
+        <div class="reels-modal-dialog" style="max-width: 440px;">
+          <div class="reels-modal-header">
+            <div class="modal-title-wrap">
+              <span class="modal-icon-badge" style="background: #eef2ff; color: #4f46e5;">📁</span>
+              <h3 class="modal-title">Create New Folder</h3>
+            </div>
+            <button type="button" class="btn-close-modal" onclick="window.closeReelsModal('modal-new-folder-backdrop')">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+            </button>
+          </div>
+          <div class="reels-modal-body">
+            <label for="input-new-folder-name" style="display: block; font-size: 13px; font-weight: 700; color: #1e293b; margin-bottom: 6px;">Folder Name</label>
+            <input type="text" class="input-text-modern" id="input-new-folder-name" placeholder="e.g. Summer Campaign 2026" style="width: 100%; border: 1.5px solid #cbd5e1; border-radius: 8px; padding: 10px 14px; font-size: 14px;" onkeydown="if(event.key==='Enter') window.confirmCreateFolder();">
+            <p style="font-size: 12px; color: #64748b; margin: 8px 0 0 0;">Organize your stories and reels by campaign, client, or topic.</p>
+          </div>
+          <div class="reels-modal-footer">
+            <button type="button" class="btn btn-outline" onclick="window.closeReelsModal('modal-new-folder-backdrop')">Cancel</button>
+            <button type="button" class="btn btn-primary" onclick="window.confirmCreateFolder()" style="background: #0f172a;">
+              Create Folder
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- MODAL: NEW EMPTY STORY / REEL -->
+      <div class="reels-modal-backdrop" id="modal-new-empty-reel-backdrop" style="display: none;">
+        <div class="reels-modal-dialog" style="max-width: 480px;">
+          <div class="reels-modal-header">
+            <div class="modal-title-wrap">
+              <span class="modal-icon-badge" style="background: #fdf2f8; color: #db2777;">✨</span>
+              <h3 class="modal-title">New Empty Story</h3>
+            </div>
+            <button type="button" class="btn-close-modal" onclick="window.closeReelsModal('modal-new-empty-reel-backdrop')">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+            </button>
+          </div>
+          <div class="reels-modal-body">
+            <label for="input-empty-reel-title" style="display: block; font-size: 13px; font-weight: 700; color: #1e293b; margin-bottom: 6px;">Story Title / Name</label>
+            <input type="text" class="input-text-modern" id="input-empty-reel-title" placeholder="e.g. Flash Sale Announcement" style="width: 100%; border: 1.5px solid #cbd5e1; border-radius: 8px; padding: 10px 14px; font-size: 14px;" onkeydown="if(event.key==='Enter') window.confirmCreateEmptyReel();">
+            <p style="font-size: 12px; color: #64748b; margin: 8px 0 0 0;">Create a fresh canvas ready to edit in the Studio or Schedule with Auto-DM triggers.</p>
+          </div>
+          <div class="reels-modal-footer">
+            <button type="button" class="btn btn-outline" onclick="window.closeReelsModal('modal-new-empty-reel-backdrop')">Cancel</button>
+            <button type="button" class="btn btn-primary" onclick="window.confirmCreateEmptyReel()" style="background: #e11d48;">
+              Create & Open Editor
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- MODAL: MEDIA PREVIEW & POST ACTION DIALOG (MATCHING USER SCREENSHOT) -->
+      <div class="reels-modal-backdrop" id="modal-media-detail-backdrop" style="display: none;">
+        <div class="reels-modal-dialog" style="max-width: 680px; width: 95%;">
+          
+          <!-- MODAL HEADER: CENTERED TITLE & CLOSE BUTTON -->
+          <div class="media-detail-modal-header">
+            <h3 class="media-detail-modal-title" id="modal-media-title">Digiproducthub (15)</h3>
+            <button type="button" class="btn-close-modal-clean" onclick="window.closeReelsModal('modal-media-detail-backdrop')" title="Close">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+            </button>
+          </div>
+
+          <!-- MODAL BODY: 2-COLUMN SPLIT -->
+          <div class="media-detail-modal-body">
+            
+            <!-- LEFT COLUMN: 9:16 VERTICAL PLAYER PREVIEW -->
+            <div class="media-detail-preview-col">
+              <div class="media-detail-video-wrapper">
+                <video id="modal-detail-video" class="media-detail-video-player" muted controls playsinline style="display: none;"></video>
+                <img id="modal-detail-img" class="media-detail-poster-img" src="goldfish_reel_thumb.jpg" alt="Preview">
+              </div>
+            </div>
+
+            <!-- RIGHT COLUMN: ACTIONS (POST BUTTON + RENDERREPLY AUTOMATIONS) -->
+            <div class="media-detail-actions-col">
+              
+              <!-- POST ACTION CARD -->
+              <div class="media-detail-action-card post-card">
+                <div class="action-card-header">
+                  <div class="card-title-icon-row">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                      <line x1="16" y1="2" x2="16" y2="6"></line>
+                      <line x1="8" y1="2" x2="8" y2="6"></line>
+                      <line x1="3" y1="10" x2="21" y2="10"></line>
+                    </svg>
+                    <span class="action-card-name">Post</span>
+                  </div>
+                  <span class="info-circle-badge" title="Publish or schedule cross-platform">ℹ</span>
+                </div>
+                <p class="action-card-desc">Publish directly to Instagram Stories & Reels, TikTok, and YouTube Shorts.</p>
+                <button type="button" class="btn-detail-post-now" id="btn-modal-action-post" onclick="window.handleModalPostClick()">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                    <line x1="22" y1="2" x2="11" y2="13"></line>
+                    <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+                  </svg>
+                  <span>Post</span>
+                </button>
+              </div>
+
+              <!-- RENDERREPLY AUTO-DM RULES CARD -->
+              <div class="media-detail-action-card dm-card">
+                <div class="action-card-header">
+                  <div class="card-title-icon-row">
+                    <span style="color: #9333ea;">⚡</span>
+                    <span class="action-card-name">Auto-DM Trigger</span>
+                  </div>
+                  <span class="badge-dm-keyword" id="modal-detail-keyword-badge">#GROWTH</span>
+                </div>
+                <p class="action-card-desc">Sends direct messages with your download link automatically when followers comment this trigger keyword.</p>
+                <div class="quick-dm-preview-chip">
+                  <span class="dm-chip-icon">💬</span>
+                  <span class="dm-chip-text" id="modal-detail-dm-preview">"Hey! Here is your toolkit guide. Enjoy! 📦"</span>
+                </div>
+              </div>
+
+              <!-- MEDIA INFO / STATS ROW -->
+              <div class="media-detail-meta-row">
+                <div class="meta-item">
+                  <span class="meta-label">Type</span>
+                  <span class="meta-val" id="modal-detail-type">9:16 Story / Reel</span>
+                </div>
+                <div class="meta-item">
+                  <span class="meta-label">Folder</span>
+                  <span class="meta-val" id="modal-detail-folder">Main Gallery</span>
+                </div>
+                <div class="meta-item">
+                  <span class="meta-label">Size</span>
+                  <span class="meta-val" id="modal-detail-size">14.2 MB</span>
+                </div>
+              </div>
+
+            </div>
+
+          </div>
+
+          <!-- MODAL FOOTER (MATCHING USER SCREENSHOT EXACTLY) -->
+          <div class="media-detail-modal-footer">
+            <div class="detail-footer-left-group">
+              <button type="button" class="btn-footer-action" onclick="window.handleModalDeleteMedia()" title="Delete Media">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
+                <span>Delete</span>
+              </button>
+              <button type="button" class="btn-footer-action" onclick="window.handleModalArchiveMedia()" title="Archive Media">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="21 8 21 21 3 21 3 8"></polyline><rect x="1" y="3" width="22" height="5"></rect><line x1="10" y1="12" x2="14" y2="12"></line></svg>
+                <span>Archive</span>
+              </button>
+              <button type="button" class="btn-footer-action" onclick="window.handleModalDuplicateMedia()" title="Duplicate Media">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+                <span>Duplicate</span>
+              </button>
+              <button type="button" class="btn-footer-action" onclick="window.handleModalDownloadMedia()" title="Download Media">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+                <span>Download</span>
+              </button>
+            </div>
+            <button type="button" class="btn-footer-cancel" onclick="window.closeReelsModal('modal-media-detail-backdrop')">
+              Cancel
+            </button>
+          </div>
+
+        </div>
+      </div>
 
       <!-- TAB 7: CREATOR STOREFRONT VIEW -->
       <section id="creatorstore-view" class="tab-view">
@@ -3828,10 +5307,10 @@
           <div class="dash-stat-card">
             <div class="dash-stat-top">
               <span class="dash-stat-lbl">Top Trigger Magnet</span>
-              <span class="dash-trend pos">#GUIDE (51%)</span>
+              <span class="dash-trend pos" id="leads-top-kw-trend">#GUIDE (51%)</span>
             </div>
-            <div class="dash-stat-val">176 Leads</div>
-            <div class="dash-stat-sub">10x IG Automation Reel</div>
+            <div class="dash-stat-val" id="leads-top-kw-val">176 Leads</div>
+            <div class="dash-stat-sub" id="leads-top-kw-sub">10x IG Automation Reel</div>
           </div>
         </div>
 
@@ -3986,7 +5465,7 @@
         </div>
       </section>
 
-      <!-- TAB 9: LEARN & HELP VIEW (MAIN SECTION) -->
+      <!-- TAB 8: LEARN & HELP VIEW (RESTORED ORIGINAL WITH VIDEO TUTORIALS) -->
       <section id="learn-help-view" class="tab-view">
         <header class="view-header">
           <div class="header-title-group">
@@ -4174,6 +5653,649 @@
                   </svg>
                   Copy Email Address
                 </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- TAB 9: DEDICATED SUPPORT VIEW (OPENED FROM PROFILE MENU "SUPPORT", MATCHING USER SCREENSHOTS) -->
+      <section id="support-view" class="tab-view support-main-view">
+        <div class="support-center-container">
+          <!-- TOP BAR: BACK ARROW & CENTERED SEGMENTED TABS -->
+          <div class="support-top-nav-bar">
+            <button type="button" class="btn-support-back" id="btn-support-back" title="Go Back" aria-label="Go Back">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="19" y1="12" x2="5" y2="12"></line>
+                <polyline points="12 19 5 12 12 5"></polyline>
+              </svg>
+            </button>
+
+            <div class="support-pill-segmented-tabs" id="support-nav-pill-group" role="tablist">
+              <button type="button" class="support-pill-tab-btn active" id="tab-btn-help-resources" role="tab" aria-selected="true" data-support-panel="resources">
+                Help Resources
+              </button>
+              <button type="button" class="support-pill-tab-btn" id="tab-btn-support-tickets" role="tab" aria-selected="false" data-support-panel="tickets">
+                Support Tickets
+              </button>
+            </div>
+
+            <div class="support-top-nav-spacer"></div>
+          </div>
+
+          <!-- ================================================================= -->
+          <!-- PANEL 1: HELP RESOURCES (SCREENSHOT 1) -->
+          <!-- ================================================================= -->
+          <div class="support-panel active" id="support-panel-resources" role="tabpanel">
+            
+            <!-- SECTION 1: REACH US -->
+            <div class="support-section-group">
+              <div class="support-section-header">
+                <span class="support-overline">REACH US</span>
+                <h2 class="support-main-heading">Get in Touch</h2>
+                <p class="support-sub-heading">Choose the fastest way to reach our support team.</p>
+              </div>
+
+              <div class="support-contact-grid">
+                <!-- CARD 1: WhatsApp Support -->
+                <div class="support-reach-card" id="card-reach-whatsapp">
+                  <div class="support-card-icon-wrapper">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path>
+                    </svg>
+                  </div>
+                  <div class="support-card-title-row">
+                    <h3 class="support-reach-title">WhatsApp Support</h3>
+                    <span class="support-dark-badge">INSTANT</span>
+                  </div>
+                  <p class="support-reach-desc">Chat directly with our technical team on WhatsApp for real-time assistance with your automation setup.</p>
+                  <button type="button" class="support-card-action-btn" id="btn-support-chat-whatsapp">
+                    Chat Now <span class="arrow-symbol">→</span>
+                  </button>
+                </div>
+
+                <!-- CARD 2: Email Helpdesk -->
+                <div class="support-reach-card" id="card-reach-email">
+                  <div class="support-card-icon-wrapper">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <rect x="2" y="4" width="20" height="16" rx="2"></rect>
+                      <path d="M22 7l-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"></path>
+                    </svg>
+                  </div>
+                  <div class="support-card-title-row">
+                    <h3 class="support-reach-title">Email Helpdesk</h3>
+                    <span class="support-dark-badge">24/7</span>
+                  </div>
+                  <p class="support-reach-desc">Send us a detailed email and our team will respond with a custom solution within 24 hours.</p>
+                  <a href="mailto:support@renderreply.com" class="support-card-action-btn" id="btn-support-send-email">
+                    Send Email <span class="arrow-symbol">→</span>
+                  </a>
+                </div>
+
+                <!-- CARD 3: Raise a Ticket -->
+                <div class="support-reach-card" id="card-reach-ticket">
+                  <div class="support-card-icon-wrapper">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                      <polyline points="14 2 14 8 20 8"></polyline>
+                      <line x1="16" y1="13" x2="8" y2="13"></line>
+                      <line x1="16" y1="17" x2="8" y2="17"></line>
+                      <polyline points="10 9 9 9 8 9"></polyline>
+                    </svg>
+                  </div>
+                  <div class="support-card-title-row">
+                    <h3 class="support-reach-title">Raise a Ticket</h3>
+                    <span class="support-dark-badge">TRACKED</span>
+                  </div>
+                  <p class="support-reach-desc">Submit a helpdesk request and chat directly with support agents. Track progress and get live updates.</p>
+                  <button type="button" class="support-card-action-btn" id="btn-support-goto-tickets">
+                    Open Tickets Dashboard <span class="arrow-symbol">→</span>
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <!-- SECTION 2: DOCUMENTATION -->
+            <div class="support-section-group">
+              <div class="support-section-header">
+                <span class="support-overline">DOCUMENTATION</span>
+                <h2 class="support-main-heading">Help Resources</h2>
+                <p class="support-sub-heading">Browse our guides, tutorials, and knowledge base articles.</p>
+              </div>
+
+              <div class="support-doc-grid">
+                <!-- DOC 1: Documentation -->
+                <div class="support-doc-card" id="doc-card-general" role="button" tabindex="0" title="Click to view Documentation Guide">
+                  <div class="support-doc-icon">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path>
+                      <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path>
+                    </svg>
+                  </div>
+                  <h4 class="support-doc-title">Documentation</h4>
+                  <p class="support-doc-desc">Step-by-step guides to integrate your Meta API assets and set up automations.</p>
+                </div>
+
+                <!-- DOC 2: Automation Flow -->
+                <div class="support-doc-card" id="doc-card-automation" role="button" tabindex="0" title="Click to view Automation Flow Guide">
+                  <div class="support-doc-icon">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+                    </svg>
+                  </div>
+                  <h4 class="support-doc-title">Automation Flow</h4>
+                  <p class="support-doc-desc">Learn how triggers detect keywords and dispatch DMs in real time.</p>
+                </div>
+
+                <!-- DOC 3: Billing & Plans -->
+                <div class="support-doc-card" id="doc-card-billing" role="button" tabindex="0" title="Click to view Billing & Plans Guide">
+                  <div class="support-doc-icon">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <rect x="1" y="4" width="22" height="16" rx="2" ry="2"></rect>
+                      <line x1="1" y1="10" x2="23" y2="10"></line>
+                    </svg>
+                  </div>
+                  <h4 class="support-doc-title">Billing & Plans</h4>
+                  <p class="support-doc-desc">Manage subscriptions, billing cycles, invoices, and upgrades.</p>
+                </div>
+
+                <!-- DOC 4: Settings Guide -->
+                <div class="support-doc-card" id="doc-card-settings" role="button" tabindex="0" title="Click to view Settings Guide">
+                  <div class="support-doc-icon">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <line x1="4" y1="21" x2="4" y2="14"></line>
+                      <line x1="4" y1="10" x2="4" y2="3"></line>
+                      <line x1="12" y1="21" x2="12" y2="12"></line>
+                      <line x1="12" y1="8" x2="12" y2="3"></line>
+                      <line x1="20" y1="21" x2="20" y2="16"></line>
+                      <line x1="20" y1="12" x2="20" y2="3"></line>
+                      <line x1="1" y1="14" x2="7" y2="14"></line>
+                      <line x1="9" y1="8" x2="15" y2="8"></line>
+                      <line x1="17" y1="16" x2="23" y2="16"></line>
+                    </svg>
+                  </div>
+                  <h4 class="support-doc-title">Settings Guide</h4>
+                  <p class="support-doc-desc">Optimize comment detection rates and fine-tune your inbox workflows.</p>
+                </div>
+              </div>
+            </div>
+
+            <!-- SECTION 3: FAQ -->
+            <div class="support-section-group">
+              <div class="support-faq-wrapper">
+                <!-- Left Column -->
+                <div class="support-faq-left-col">
+                  <span class="support-overline">FAQ</span>
+                  <h2 class="support-main-heading">Frequently Asked Questions</h2>
+                  <p class="support-sub-heading">Can't find the answer? Reach us directly via WhatsApp or email.</p>
+                  
+                  <button type="button" class="btn-faq-whatsapp" id="btn-faq-ask-whatsapp">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <circle cx="12" cy="12" r="10"></circle>
+                      <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path>
+                      <line x1="12" y1="17" x2="12.01" y2="17"></line>
+                    </svg>
+                    Ask on WhatsApp
+                  </button>
+                </div>
+
+                <!-- Right Column: Accordion List -->
+                <div class="support-faq-right-col" id="support-faq-accordion-list">
+                  <!-- Item 1 -->
+                  <div class="support-faq-item">
+                    <button type="button" class="support-faq-question" aria-expanded="false">
+                      <span class="faq-question-text">How does the Instagram Automation work?</span>
+                      <svg class="faq-chevron" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                        <polyline points="6 9 12 15 18 9"></polyline>
+                      </svg>
+                    </button>
+                    <div class="support-faq-answer">
+                      <div class="faq-answer-inner">
+                        RenderReply connects securely to your Instagram Professional or Creator account via the official Meta Graph API. When a follower comments on your post, mentions you in a story, or sends a DM with a configured keyword, our real-time webhook engine detects the event within 500ms and automatically dispatches your custom reply, link, or creator product card.
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- Item 2 -->
+                  <div class="support-faq-item">
+                    <button type="button" class="support-faq-question" aria-expanded="false">
+                      <span class="faq-question-text">Is it safe to connect my Instagram account?</span>
+                      <svg class="faq-chevron" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                        <polyline points="6 9 12 15 18 9"></polyline>
+                      </svg>
+                    </button>
+                    <div class="support-faq-answer">
+                      <div class="faq-answer-inner">
+                        Yes, 100% safe. RenderReply is built strictly on Meta's official Graph API and OAuth 2.0 authorization protocols. We never request or store your Instagram password. All access tokens are secured with AES-256 bank-level encryption, and our webhook dispatching strictly complies with Instagram rate limits to keep your account in pristine standing.
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- Item 3 -->
+                  <div class="support-faq-item">
+                    <button type="button" class="support-faq-question" aria-expanded="false">
+                      <span class="faq-question-text">What are Automation Rules?</span>
+                      <svg class="faq-chevron" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                        <polyline points="6 9 12 15 18 9"></polyline>
+                      </svg>
+                    </button>
+                    <div class="support-faq-answer">
+                      <div class="faq-answer-inner">
+                        Automation Rules are trigger-action workflows that you define. For example: "When someone comments 'PRICE' on any Reel, immediately reply to the comment and send an automated DM with the checkout link." You can specify exact or fuzzy keyword matches, exclude specific words, and add randomized delays to make your messaging feel completely natural.
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- Item 4 -->
+                  <div class="support-faq-item">
+                    <button type="button" class="support-faq-question" aria-expanded="false">
+                      <span class="faq-question-text">Can I cancel my plan at any time?</span>
+                      <svg class="faq-chevron" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                        <polyline points="6 9 12 15 18 9"></polyline>
+                      </svg>
+                    </button>
+                    <div class="support-faq-answer">
+                      <div class="faq-answer-inner">
+                        Yes. You have complete freedom to cancel, upgrade, or downgrade your plan at any time with 1-click inside Account Settings &gt; Billing. There are zero cancellation fees, and your active automations will remain fully operational until the end of your current paid billing period.
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- Item 5 -->
+                  <div class="support-faq-item">
+                    <button type="button" class="support-faq-question" aria-expanded="false">
+                      <span class="faq-question-text">What is the typical response time for support tickets?</span>
+                      <svg class="faq-chevron" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                        <polyline points="6 9 12 15 18 9"></polyline>
+                      </svg>
+                    </button>
+                    <div class="support-faq-answer">
+                      <div class="faq-answer-inner">
+                        Our technical support engineers monitor tickets 24/7. Average response time for support tickets is under 15–45 minutes during active operational hours, with a guaranteed resolution reply within 24 hours. WhatsApp live support connects you instantly to an engineer.
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- Item 6 -->
+                  <div class="support-faq-item">
+                    <button type="button" class="support-faq-question" aria-expanded="false">
+                      <span class="faq-question-text">How many automation rules can I create?</span>
+                      <svg class="faq-chevron" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                        <polyline points="6 9 12 15 18 9"></polyline>
+                      </svg>
+                    </button>
+                    <div class="support-faq-answer">
+                      <div class="faq-answer-inner">
+                        Starter plans include up to 10 active automation rules, Pro plans include up to 50 active rules, and Creator Pro / Agency plans provide unlimited automation rules, unlimited keyword triggers, and dedicated high-priority webhook channels.
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- ================================================================= -->
+          <!-- PANEL 2: SUPPORT TICKETS (SCREENSHOT 2) -->
+          <!-- ================================================================= -->
+          <div class="support-panel" id="support-panel-tickets" role="tabpanel">
+            <div class="support-tickets-split-layout">
+              
+              <!-- LEFT CARD: CREATE SUPPORT TICKET -->
+              <div class="support-ticket-form-card">
+                <div class="ticket-card-header">
+                  <h2 class="ticket-card-main-title">Create Support Ticket</h2>
+                  <p class="ticket-card-sub-title">Fill in the details below to open a new support session.</p>
+                </div>
+
+                <form id="form-create-support-ticket" class="ticket-create-form" onsubmit="window.handleCreateSupportTicket(event)">
+                  <!-- Field 1: SUBJECT -->
+                  <div class="ticket-field-group">
+                    <label class="ticket-field-label" for="ticket-input-subject">SUBJECT</label>
+                    <input type="text" class="ticket-form-input" id="ticket-input-subject" placeholder="Brief title of your issue" required>
+                  </div>
+
+                  <!-- Row: CATEGORY & PRIORITY -->
+                  <div class="ticket-field-row">
+                    <div class="ticket-field-group">
+                      <label class="ticket-field-label" for="ticket-select-category">CATEGORY</label>
+                      <div class="ticket-select-wrap">
+                        <select class="ticket-form-select" id="ticket-select-category">
+                          <option value="General Inquiry">General Inquiry</option>
+                          <option value="Technical Support">Technical Support</option>
+                          <option value="Instagram Automation & API">Instagram Automation & API</option>
+                          <option value="Billing & Subscription">Billing & Subscription</option>
+                          <option value="Creator Storefront">Creator Storefront</option>
+                          <option value="Bio Link Page">Bio Link Page</option>
+                          <option value="Bug Report">Bug Report</option>
+                        </select>
+                        <svg class="select-chevron" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                          <polyline points="6 9 12 15 18 9"></polyline>
+                        </svg>
+                      </div>
+                    </div>
+
+                    <div class="ticket-field-group">
+                      <label class="ticket-field-label" for="ticket-select-priority">PRIORITY</label>
+                      <div class="ticket-select-wrap">
+                        <select class="ticket-form-select" id="ticket-select-priority">
+                          <option value="Low">Low</option>
+                          <option value="Medium" selected>Medium</option>
+                          <option value="High">High</option>
+                          <option value="Urgent">Urgent</option>
+                        </select>
+                        <svg class="select-chevron" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                          <polyline points="6 9 12 15 18 9"></polyline>
+                        </svg>
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- Field 3: DESCRIPTION -->
+                  <div class="ticket-field-group">
+                    <label class="ticket-field-label" for="ticket-textarea-description">DESCRIPTION</label>
+                    <textarea class="ticket-form-textarea" id="ticket-textarea-description" rows="5" placeholder="Describe your issue in detail..." required></textarea>
+                  </div>
+
+                  <!-- Submit Button -->
+                  <button type="submit" class="btn-create-ticket-submit" id="btn-submit-create-ticket">
+                    <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                      <line x1="22" y1="2" x2="11" y2="13"></line>
+                      <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+                    </svg>
+                    Create Ticket
+                  </button>
+                </form>
+              </div>
+
+              <!-- RIGHT CARD: YOUR TICKETS -->
+              <div class="support-your-tickets-card">
+                <div class="ticket-card-header ticket-header-flex">
+                  <div>
+                    <h2 class="ticket-card-main-title">Your Tickets</h2>
+                    <p class="ticket-card-sub-title">Click a ticket to open the support chat.</p>
+                  </div>
+                  <button type="button" class="btn-refresh-tickets" id="btn-refresh-support-tickets" title="Refresh Tickets">
+                    <svg class="refresh-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                      <polyline points="23 4 23 10 17 10"></polyline>
+                      <polyline points="1 20 1 14 7 14"></polyline>
+                      <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path>
+                    </svg>
+                    Refresh
+                  </button>
+                </div>
+
+                <!-- Tickets Content Area -->
+                <div class="tickets-stream-container" id="support-tickets-stream">
+                  <!-- Dynamic Ticket Cards or Empty State rendered via JavaScript -->
+                  <div class="ticket-empty-state" id="ticket-empty-state">
+                    <div class="ticket-empty-icon-box">
+                      <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M2 9a3 3 0 0 1 0 6v2a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-2a3 3 0 0 1 0-6V7a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2z"></path>
+                        <path d="M13 5v2"></path>
+                        <path d="M13 17v2"></path>
+                        <path d="M13 11v2"></path>
+                      </svg>
+                    </div>
+                    <p class="ticket-empty-text">No tickets raised yet.</p>
+                  </div>
+
+                  <div class="tickets-list-wrapper" id="support-tickets-list" style="display: none;"></div>
+                </div>
+              </div>
+
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- TAB 9: ACCOUNT SETTINGS VIEW (MATCHING USER SCREENSHOT) -->
+      <section id="settings-view" class="tab-view">
+        <header class="settings-view-header">
+          <div class="settings-header-title-group">
+            <h1 class="settings-main-title">Account Settings</h1>
+            <p class="settings-main-subtitle">Manage your personal information and preferences.</p>
+          </div>
+        </header>
+
+        <div class="settings-content-stack">
+          <!-- CARD 1: PROFILE INFORMATION (EXACT MATCH TO USER SCREENSHOT) -->
+          <div class="settings-card" id="settings-card-profile">
+            <div class="settings-card-header">
+              <div class="settings-card-icon-title">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" class="settings-icon">
+                  <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+                  <circle cx="12" cy="7" r="4"/>
+                </svg>
+                <h2 class="settings-card-title">Profile Information</h2>
+              </div>
+            </div>
+
+            <div class="settings-form-grid">
+              <!-- Full Name Field -->
+              <div class="settings-field-group">
+                <label class="settings-label" for="acc-settings-fullname">FULL NAME</label>
+                <div class="settings-input-container">
+                  <span class="settings-field-icon">
+                    <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+                      <circle cx="12" cy="7" r="4"/>
+                    </svg>
+                  </span>
+                  <input type="text" class="settings-input" id="acc-settings-fullname" placeholder="Full Name" value="RudRa RR">
+                </div>
+              </div>
+
+              <!-- Email Address Field -->
+              <div class="settings-field-group">
+                <label class="settings-label" for="acc-settings-email">EMAIL ADDRESS</label>
+                <div class="settings-input-container">
+                  <span class="settings-field-icon">
+                    <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <rect x="2" y="4" width="20" height="16" rx="2"/>
+                      <path d="M22 7l-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/>
+                    </svg>
+                  </span>
+                  <input type="email" class="settings-input" id="acc-settings-email" placeholder="Email Address" value="rudrateja08@gmail.com">
+                </div>
+              </div>
+
+              <!-- Sign-in Provider Field -->
+              <div class="settings-field-group">
+                <label class="settings-label">SIGN-IN PROVIDER</label>
+                <div class="settings-input-container settings-readonly-wrap">
+                  <input type="text" class="settings-input settings-readonly-input" id="acc-settings-provider" value="Google Login" readonly>
+                </div>
+              </div>
+
+              <!-- Support ID Field -->
+              <div class="settings-field-group">
+                <label class="settings-label">SUPPORT ID</label>
+                <div class="settings-input-container settings-readonly-wrap">
+                  <input type="text" class="settings-input settings-readonly-input" id="acc-settings-support-id" value="RR-SUP-98421" readonly>
+                </div>
+              </div>
+
+              <!-- User UID Field (Full Row) -->
+              <div class="settings-field-group settings-field-full">
+                <label class="settings-label">USER UID</label>
+                <div class="settings-uid-container">
+                  <input type="text" class="settings-input settings-uid-input" id="acc-settings-uid" value="R3MT1DqCnWYuysMej8IZAw31v583" readonly>
+                  <button type="button" class="btn-copy-uid" id="btn-copy-user-uid" title="Copy UID to Clipboard">
+                    Copy
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <div class="settings-autosave-status" id="settings-autosave-status">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="20 6 9 17 4 12"/>
+              </svg>
+              <span id="settings-autosave-text">Profile changes auto-save active</span>
+            </div>
+          </div>
+
+          <!-- CARD 2: BILLING & SUBSCRIPTION (MATCHING USER SCREENSHOT) -->
+          <div class="settings-card" id="settings-card-billing">
+            <div class="settings-card-header">
+              <div class="settings-card-icon-title">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" class="settings-icon">
+                  <rect x="1" y="4" width="22" height="16" rx="2" ry="2"/>
+                  <line x1="1" y1="10" x2="23" y2="10"/>
+                </svg>
+                <h2 class="settings-card-title">Billing &amp; Subscription</h2>
+              </div>
+              <span class="settings-plan-badge" id="settings-plan-badge">● Active Creator Pro</span>
+            </div>
+
+            <div class="settings-plan-summary-box">
+              <div class="plan-summary-left">
+                <div class="plan-summary-name" id="settings-plan-name">Creator Pro Plan</div>
+                <div class="plan-summary-desc" id="settings-plan-desc">Unlimited Instagram AI automated comment DMs, instant lead capture &amp; custom domain bio link.</div>
+                <div class="plan-summary-meta">
+                  <span class="plan-price" id="settings-plan-price">₹1,499<span class="plan-freq">/month</span></span>
+                  <span class="plan-renewal" id="settings-plan-renewal">Next billing date: <strong>Nov 24, 2026</strong></span>
+                </div>
+              </div>
+              <div class="plan-summary-actions">
+                <button type="button" class="btn btn-outline btn-sm" id="btn-settings-change-plan">Change Plan</button>
+                <button type="button" class="btn btn-primary btn-sm" id="btn-settings-download-invoice">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-right: 4px;"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                  Invoices
+                </button>
+              </div>
+            </div>
+
+            <div class="settings-billing-grid">
+              <div class="billing-info-tile">
+                <span class="billing-tile-lbl">PAYMENT METHOD</span>
+                <div class="billing-tile-val">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
+                  <span id="settings-payment-method">Direct UPI (rudrateja@okaxis)</span>
+                </div>
+              </div>
+              <div class="billing-info-tile">
+                <span class="billing-tile-lbl">MONTHLY AUTOMATION QUOTA</span>
+                <div class="billing-tile-val">
+                  <span class="quota-highlight" id="settings-quota-text" style="color: #10b981; font-weight: 800;">Unlimited Messages / ∞</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- CARD 3: CONNECTED INSTAGRAM & CHANNELS -->
+          <div class="settings-card" id="settings-card-instagram">
+            <div class="settings-card-header">
+              <div class="settings-card-icon-title">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" class="settings-icon">
+                  <rect x="2" y="2" width="20" height="20" rx="5" ry="5"/>
+                  <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/>
+                  <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/>
+                </svg>
+                <h2 class="settings-card-title">Connected Instagram Account</h2>
+              </div>
+              <span class="settings-connected-badge" id="settings-insta-badge">● Synced &amp; Active</span>
+            </div>
+
+            <div class="settings-insta-box">
+              <div class="insta-box-user">
+                <div class="insta-avatar-dot" id="settings-insta-avatar">R</div>
+                <div class="insta-user-meta">
+                  <span class="insta-handle-text" id="settings-insta-handle">@render6457</span>
+                  <span class="insta-status-text">Official Meta Graph API v20.0 Webhook Active</span>
+                </div>
+              </div>
+              <div class="insta-box-actions">
+                <button type="button" class="btn btn-outline btn-sm" id="btn-settings-refresh-token">Refresh Token</button>
+                <button type="button" class="btn btn-outline btn-sm" id="btn-settings-test-webhook">Test Webhook</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- CARD 4: PREFERENCES & AUTOMATION NOTIFICATIONS -->
+          <div class="settings-card" id="settings-card-notifications">
+            <div class="settings-card-header">
+              <div class="settings-card-icon-title">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" class="settings-icon">
+                  <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/>
+                  <path d="M13.73 21a2 2 0 0 1-3.46 0"/>
+                </svg>
+                <h2 class="settings-card-title">Notification &amp; Safety Preferences</h2>
+              </div>
+            </div>
+
+            <div class="settings-toggles-list">
+              <div class="settings-toggle-row">
+                <div class="toggle-text">
+                  <strong class="toggle-title">Instant Lead Capture Alerts</strong>
+                  <span class="toggle-desc">Receive real-time notifications whenever a new email or phone lead is captured from reels.</span>
+                </div>
+                <label class="switch-ui">
+                  <input type="checkbox" id="chk-pref-lead-alerts" checked>
+                  <span class="slider-ui"></span>
+                </label>
+              </div>
+
+              <div class="settings-toggle-row">
+                <div class="toggle-text">
+                  <strong class="toggle-title">Anti-Spam Safety Shield</strong>
+                  <span class="toggle-desc">Smart burst protection that prevents Instagram rate limits by staggering DMs during viral spikes.</span>
+                </div>
+                <label class="switch-ui">
+                  <input type="checkbox" id="chk-pref-spam-shield" checked>
+                  <span class="slider-ui"></span>
+                </label>
+              </div>
+
+              <div class="settings-toggle-row">
+                <div class="toggle-text">
+                  <strong class="toggle-title">Automatic Comment Like Trigger</strong>
+                  <span class="toggle-desc">Automatically like user comments when their automated direct message trigger is executed.</span>
+                </div>
+                <label class="switch-ui">
+                  <input type="checkbox" id="chk-pref-auto-like" checked>
+                  <span class="slider-ui"></span>
+                </label>
+              </div>
+            </div>
+          </div>
+
+          <!-- CARD 5: DEVELOPER API & WEBHOOKS -->
+          <div class="settings-card" id="settings-card-developer">
+            <div class="settings-card-header">
+              <div class="settings-card-icon-title">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" class="settings-icon">
+                  <polyline points="16 18 22 12 16 6"/>
+                  <polyline points="8 6 2 12 8 18"/>
+                </svg>
+                <h2 class="settings-card-title">Developer API Keys &amp; Webhooks</h2>
+              </div>
+            </div>
+
+            <div class="settings-form-grid">
+              <div class="settings-field-group settings-field-full">
+                <label class="settings-label">LIVE API SECRET KEY</label>
+                <div class="settings-uid-container">
+                  <input type="password" class="settings-input settings-uid-input" id="acc-settings-api-key" value="rr_live_9a8f7c6e5d4c3b2a1984029481920" readonly>
+                  <button type="button" class="btn-copy-uid" id="btn-toggle-api-key" style="margin-right: 6px;">
+                    Show
+                  </button>
+                  <button type="button" class="btn-copy-uid" id="btn-copy-api-key">
+                    Copy Key
+                  </button>
+                </div>
+              </div>
+
+              <div class="settings-field-group settings-field-full">
+                <label class="settings-label">INCOMING INSTAGRAM WEBHOOK URL</label>
+                <div class="settings-uid-container">
+                  <input type="text" class="settings-input settings-uid-input" id="acc-settings-webhook-url" value="https://api.renderreply.com/v1/webhooks/instagram/events" readonly>
+                  <button type="button" class="btn-copy-uid" id="btn-copy-webhook-url">
+                    Copy URL
+                  </button>
+                </div>
               </div>
             </div>
           </div>
@@ -5778,6 +7900,488 @@
       <!-- Injected dynamically via JS -->
     </div>
   </aside>
+
+  <!-- ======================================================================
+       ACCOUNT MODALS: SWITCH ACCOUNT, SETTINGS, SUPPORT, SIGN OUT
+       ====================================================================== -->
+
+  <!-- 1. SWITCH ACCOUNT MODAL -->
+  <div class="store-preview-modal-backdrop payment-modal-backdrop" id="modal-switch-account">
+    <div class="store-auth-card" style="max-width: 520px; width: 94%;">
+      <div class="auth-card-header">
+        <div class="auth-title-group">
+          <div style="display: flex; align-items: center; gap: 8px;">
+            <div style="width: 32px; height: 32px; border-radius: 8px; background: rgba(99, 102, 241, 0.12); color: #4f46e5; display: flex; align-items: center; justify-content: center;">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+                <polyline points="17 1 21 5 17 9"></polyline>
+                <path d="M3 11V9a4 4 0 0 1 4-4h14"></path>
+                <polyline points="7 23 3 19 7 15"></polyline>
+                <path d="M21 13v2a4 4 0 0 1-4 4H3"></path>
+              </svg>
+            </div>
+            <h2 class="auth-title">Switch Account</h2>
+          </div>
+          <p class="auth-sub">Select an account or connected workspace to manage automations.</p>
+        </div>
+        <button type="button" class="btn-close-modal" id="btn-close-switch-modal" onclick="window.closeAccountModal('modal-switch-account')" title="Close Modal">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </button>
+      </div>
+
+      <div class="switch-accounts-list" id="switch-accounts-container" style="display: flex; flex-direction: column; gap: 10px; margin: 16px 0;">
+        <!-- Account 1: RudRa RR (Primary) -->
+        <div class="switch-account-item active" id="acc-card-rudra" data-account-id="acc-rudra" onclick="window.switchActiveUserAccount('acc-rudra')" style="display: flex; align-items: center; justify-content: space-between; padding: 12px 14px; border-radius: 12px; border: 1.5px solid #6366f1; background: rgba(99, 102, 241, 0.04); cursor: pointer; transition: all 0.2s ease;">
+          <div style="display: flex; align-items: center; gap: 12px;">
+            <div class="acc-avatar-icon" style="width: 38px; height: 38px; border-radius: 50%; background: #0f172a; color: #ffffff; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 14px;">R</div>
+            <div>
+              <div style="font-weight: 700; font-size: 14px; color: #0f172a; display: flex; align-items: center; gap: 6px;">
+                <span class="acc-name-label">RudRa RR</span>
+                <span class="acc-active-badge" style="background: #10b981; color: #ffffff; font-size: 10px; font-weight: 800; padding: 2px 6px; border-radius: 9999px;">ACTIVE</span>
+              </div>
+              <div style="font-size: 12px; color: #64748b; margin-top: 1px;">rudrateja08@gmail.com • Instagram: @render6457</div>
+            </div>
+          </div>
+          <div class="acc-check-icon" style="color: #6366f1;">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+          </div>
+        </div>
+
+        <!-- Account 2: Sarah Jenkins (Fashion & Lifestyle) -->
+        <div class="switch-account-item" id="acc-card-sarah" data-account-id="acc-sarah" onclick="window.switchActiveUserAccount('acc-sarah')" style="display: flex; align-items: center; justify-content: space-between; padding: 12px 14px; border-radius: 12px; border: 1px solid #e2e8f0; background: #ffffff; cursor: pointer; transition: all 0.2s ease;">
+          <div style="display: flex; align-items: center; gap: 12px;">
+            <div class="acc-avatar-icon" style="width: 38px; height: 38px; border-radius: 50%; background: linear-gradient(135deg, #ec4899, #f43f5e); color: #ffffff; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 14px;">SJ</div>
+            <div>
+              <div style="font-weight: 700; font-size: 14px; color: #0f172a; display: flex; align-items: center; gap: 6px;">
+                <span class="acc-name-label">Sarah Jenkins</span>
+                <span class="acc-active-badge" style="display: none; background: #10b981; color: #ffffff; font-size: 10px; font-weight: 800; padding: 2px 6px; border-radius: 9999px;">ACTIVE</span>
+              </div>
+              <div style="font-size: 12px; color: #64748b; margin-top: 1px;">sarah.lifestyle@gmail.com • Instagram: @sarah_style</div>
+            </div>
+          </div>
+          <button type="button" class="btn btn-outline btn-xs" style="font-weight: 700;">Switch</button>
+        </div>
+
+        <!-- Account 3: Alex Rivera (Fitness & Nutrition Coach) -->
+        <div class="switch-account-item" id="acc-card-alex" data-account-id="acc-alex" onclick="window.switchActiveUserAccount('acc-alex')" style="display: flex; align-items: center; justify-content: space-between; padding: 12px 14px; border-radius: 12px; border: 1px solid #e2e8f0; background: #ffffff; cursor: pointer; transition: all 0.2s ease;">
+          <div style="display: flex; align-items: center; gap: 12px;">
+            <div class="acc-avatar-icon" style="width: 38px; height: 38px; border-radius: 50%; background: linear-gradient(135deg, #10b981, #059669); color: #ffffff; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 14px;">AR</div>
+            <div>
+              <div style="font-weight: 700; font-size: 14px; color: #0f172a; display: flex; align-items: center; gap: 6px;">
+                <span class="acc-name-label">Alex Rivera (Fit Coach)</span>
+                <span class="acc-active-badge" style="display: none; background: #10b981; color: #ffffff; font-size: 10px; font-weight: 800; padding: 2px 6px; border-radius: 9999px;">ACTIVE</span>
+              </div>
+              <div style="font-size: 12px; color: #64748b; margin-top: 1px;">alex.fitness@rivera-fit.io • Instagram: @alex_riverafit</div>
+            </div>
+          </div>
+          <button type="button" class="btn btn-outline btn-xs" style="font-weight: 700;">Switch</button>
+        </div>
+
+        <!-- Account 4: RenderReply Agency Pro (Agency Multi-Client) -->
+        <div class="switch-account-item" id="acc-card-agency" data-account-id="acc-agency" onclick="window.switchActiveUserAccount('acc-agency')" style="display: flex; align-items: center; justify-content: space-between; padding: 12px 14px; border-radius: 12px; border: 1px solid #e2e8f0; background: #ffffff; cursor: pointer; transition: all 0.2s ease;">
+          <div style="display: flex; align-items: center; gap: 12px;">
+            <div class="acc-avatar-icon" style="width: 38px; height: 38px; border-radius: 50%; background: linear-gradient(135deg, #06b6d4, #3b82f6); color: #ffffff; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 14px;">RA</div>
+            <div>
+              <div style="font-weight: 700; font-size: 14px; color: #0f172a; display: flex; align-items: center; gap: 6px;">
+                <span class="acc-name-label">RenderReply Agency Pro</span>
+                <span class="acc-active-badge" style="display: none; background: #10b981; color: #ffffff; font-size: 10px; font-weight: 800; padding: 2px 6px; border-radius: 9999px;">ACTIVE</span>
+              </div>
+              <div style="font-size: 12px; color: #64748b; margin-top: 1px;">agency@renderreply.com • Instagram: @renderagency</div>
+            </div>
+          </div>
+          <button type="button" class="btn btn-outline btn-xs" style="font-weight: 700;">Switch</button>
+        </div>
+      </div>
+
+      <!-- Add Account Section -->
+      <div id="add-account-form-box" style="display: none; padding: 14px; border-radius: 12px; background: #f8fafc; border: 1px dashed #cbd5e1; margin-bottom: 16px;">
+        <div style="font-weight: 700; font-size: 13px; color: #0f172a; margin-bottom: 8px;">Add New Account</div>
+        <div style="display: flex; flex-direction: column; gap: 10px;">
+          <input type="text" id="new-acc-name" class="auto-form-input" placeholder="Account Name (e.g. Rudra Business)" style="background: #ffffff;">
+          <input type="email" id="new-acc-email" class="auto-form-input" placeholder="Account Email (e.g. business@gmail.com)" style="background: #ffffff;">
+          <div style="display: flex; gap: 8px; justify-content: flex-end;">
+            <button type="button" class="btn btn-outline btn-xs" id="btn-cancel-add-acc">Cancel</button>
+            <button type="button" class="btn btn-primary btn-xs" id="btn-confirm-add-acc">Add &amp; Switch</button>
+          </div>
+        </div>
+      </div>
+
+      <div style="display: flex; justify-content: space-between; align-items: center; border-top: 1px solid #f1f5f9; padding-top: 14px; margin-top: 8px;">
+        <button type="button" class="btn btn-outline btn-sm" id="btn-show-add-acc" style="display: flex; align-items: center; gap: 6px;">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          Add Another Account
+        </button>
+        <button type="button" class="btn btn-primary btn-sm" id="btn-done-switch-acc" onclick="window.closeAccountModal('modal-switch-account')">Done</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 2. SETTINGS MODAL -->
+  <div class="store-preview-modal-backdrop payment-modal-backdrop" id="modal-user-settings">
+    <div class="store-auth-card" style="max-width: 640px; width: 94%; max-height: 90vh; display: flex; flex-direction: column;">
+      <div class="auth-card-header">
+        <div class="auth-title-group">
+          <div style="display: flex; align-items: center; gap: 8px;">
+            <div style="width: 32px; height: 32px; border-radius: 8px; background: rgba(15, 23, 42, 0.08); color: #0f172a; display: flex; align-items: center; justify-content: center;">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="12" cy="12" r="3"></circle>
+                <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+              </svg>
+            </div>
+            <h2 class="auth-title">Account &amp; Workspace Settings</h2>
+          </div>
+          <p class="auth-sub">Manage profile information, linked accounts, and notification preferences.</p>
+        </div>
+        <button type="button" class="btn-close-modal" id="btn-close-settings-modal" onclick="window.closeAccountModal('modal-user-settings')" title="Close Modal">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </button>
+      </div>
+
+      <!-- Settings Nav Tabs -->
+      <div style="display: flex; gap: 8px; border-bottom: 1px solid #e2e8f0; margin-bottom: 16px; padding-bottom: 2px;">
+        <button type="button" class="btn-settings-tab active" data-stab="profile" style="background: none; border: none; padding: 8px 12px; font-size: 13px; font-weight: 700; color: #4f46e5; border-bottom: 2px solid #4f46e5; cursor: pointer;">Profile</button>
+        <button type="button" class="btn-settings-tab" data-stab="integrations" style="background: none; border: none; padding: 8px 12px; font-size: 13px; font-weight: 600; color: #64748b; cursor: pointer;">Connected Accounts</button>
+        <button type="button" class="btn-settings-tab" data-stab="notifications" style="background: none; border: none; padding: 8px 12px; font-size: 13px; font-weight: 600; color: #64748b; cursor: pointer;">Notifications</button>
+      </div>
+
+      <!-- Settings Body -->
+      <div style="flex: 1; overflow-y: auto; padding-right: 4px;">
+        <!-- TAB 1: PROFILE -->
+        <div id="stab-pane-profile" class="stab-pane" style="display: flex; flex-direction: column; gap: 14px;">
+          <div class="auto-form-group">
+            <label class="auto-form-label" for="settings-user-name">Full Name / Display Name</label>
+            <input type="text" class="auto-form-input" id="settings-user-name" value="RudRa RR">
+          </div>
+          <div class="auto-form-group">
+            <label class="auto-form-label" for="settings-user-email">Account Email Address</label>
+            <input type="email" class="auto-form-input" id="settings-user-email" value="rudrateja08@gmail.com">
+          </div>
+          <div class="auto-form-group">
+            <label class="auto-form-label" for="settings-user-bio">Creator Bio / Tagline</label>
+            <input type="text" class="auto-form-input" id="settings-user-bio" value="Welcome to my SuperProfile &amp; RenderReply Store!">
+          </div>
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+            <div class="auto-form-group">
+              <label class="auto-form-label">Timezone</label>
+              <select class="auto-form-input" id="settings-user-timezone">
+                <option selected>(UTC+05:30) Asia/Kolkata (IST)</option>
+                <option>(UTC+00:00) London (GMT)</option>
+                <option>(UTC-05:00) New York (EST)</option>
+                <option>(UTC-08:00) Los Angeles (PST)</option>
+              </select>
+            </div>
+            <div class="auto-form-group">
+              <label class="auto-form-label">Default Currency</label>
+              <select class="auto-form-input" id="settings-user-currency">
+                <option selected>INR - Indian Rupee (₹)</option>
+                <option>USD - US Dollar ($)</option>
+                <option>EUR - Euro (€)</option>
+                <option>GBP - British Pound (£)</option>
+              </select>
+            </div>
+          </div>
+          <div style="padding: 12px; background: #f8fafc; border-radius: 10px; border: 1px solid #e2e8f0; display: flex; align-items: center; justify-content: space-between; margin-top: 4px;">
+            <div>
+              <div style="font-weight: 700; font-size: 13px; color: #0f172a;">Creator Storefront Settings</div>
+              <div style="font-size: 11.5px; color: #64748b;">Configure payments, UPI ID, themes, and custom domain.</div>
+            </div>
+            <button type="button" class="btn btn-outline btn-xs" id="btn-jump-store-settings">Open Store Settings →</button>
+          </div>
+        </div>
+
+        <!-- TAB 2: CONNECTED ACCOUNTS -->
+        <div id="stab-pane-integrations" class="stab-pane" style="display: none; flex-direction: column; gap: 12px;">
+          <div style="display: flex; align-items: center; justify-content: space-between; padding: 12px; border-radius: 10px; border: 1px solid #e2e8f0; background: #ffffff;">
+            <div style="display: flex; align-items: center; gap: 10px;">
+              <div style="width: 32px; height: 32px; border-radius: 8px; background: #fdf2f8; color: #db2777; display: flex; align-items: center; justify-content: center;">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
+              </div>
+              <div>
+                <div style="font-weight: 700; font-size: 13px; color: #0f172a; display: flex; align-items: center; gap: 6px;">Instagram Business <span style="background: #10b981; color: #ffffff; font-size: 9px; font-weight: 800; padding: 1px 5px; border-radius: 9999px;">CONNECTED</span></div>
+                <div style="font-size: 11.5px; color: #64748b;">@render6457 • Webhooks Active</div>
+              </div>
+            </div>
+            <button type="button" class="btn btn-outline btn-xs" id="btn-refresh-insta-token">Refresh Token</button>
+          </div>
+
+          <div style="display: flex; align-items: center; justify-content: space-between; padding: 12px; border-radius: 10px; border: 1px solid #e2e8f0; background: #ffffff;">
+            <div style="display: flex; align-items: center; gap: 10px;">
+              <div style="width: 32px; height: 32px; border-radius: 8px; background: #fef2f2; color: #ef4444; display: flex; align-items: center; justify-content: center;">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
+              </div>
+              <div>
+                <div style="font-weight: 700; font-size: 13px; color: #0f172a;">YouTube Channel</div>
+                <div style="font-size: 11.5px; color: #64748b;">youtube.com/@rudrateja</div>
+              </div>
+            </div>
+            <button type="button" class="btn btn-outline btn-xs">Connected</button>
+          </div>
+        </div>
+
+        <!-- TAB 3: NOTIFICATIONS -->
+        <div id="stab-pane-notifications" class="stab-pane" style="display: none; flex-direction: column; gap: 12px;">
+          <div style="display: flex; align-items: center; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid #f1f5f9;">
+            <div>
+              <div style="font-weight: 700; font-size: 13px; color: #0f172a;">Real-time Lead Notifications</div>
+              <div style="font-size: 11.5px; color: #64748b;">Receive instant email alerts whenever a new follower or comment is captured.</div>
+            </div>
+            <input type="checkbox" checked style="width: 16px; height: 16px; accent-color: #4f46e5; cursor: pointer;">
+          </div>
+          <div style="display: flex; align-items: center; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid #f1f5f9;">
+            <div>
+              <div style="font-weight: 700; font-size: 13px; color: #0f172a;">Daily Automation Performance Digest</div>
+              <div style="font-size: 11.5px; color: #64748b;">Summary of DMs sent, conversion rate, and store sales every morning.</div>
+            </div>
+            <input type="checkbox" checked style="width: 16px; height: 16px; accent-color: #4f46e5; cursor: pointer;">
+          </div>
+          <div style="display: flex; align-items: center; justify-content: space-between; padding: 10px 0;">
+            <div>
+              <div style="font-weight: 700; font-size: 13px; color: #0f172a;">Store Payout &amp; Sale Alerts</div>
+              <div style="font-size: 11.5px; color: #64748b;">Instant push confirmation when a digital product is purchased.</div>
+            </div>
+            <input type="checkbox" checked style="width: 16px; height: 16px; accent-color: #4f46e5; cursor: pointer;">
+          </div>
+        </div>
+      </div>
+
+      <!-- Settings Footer -->
+      <div style="display: flex; justify-content: flex-end; gap: 10px; border-top: 1px solid #f1f5f9; padding-top: 14px; margin-top: 14px;">
+        <button type="button" class="btn btn-outline btn-sm" id="btn-cancel-settings" onclick="window.closeAccountModal('modal-user-settings')">Cancel</button>
+        <button type="button" class="btn btn-primary btn-sm" id="btn-save-settings" style="font-weight: 800;">Save Changes</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 3. SUPPORT MODAL -->
+  <div class="store-preview-modal-backdrop payment-modal-backdrop" id="modal-user-support">
+    <div class="store-auth-card" style="max-width: 540px; width: 94%;">
+      <div class="auth-card-header">
+        <div class="auth-title-group">
+          <div style="display: flex; align-items: center; gap: 8px;">
+            <div style="width: 32px; height: 32px; border-radius: 8px; background: rgba(16, 185, 129, 0.12); color: #059669; display: flex; align-items: center; justify-content: center;">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="12" cy="12" r="10"></circle>
+                <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path>
+                <line x1="12" y1="17" x2="12.01" y2="17"></line>
+              </svg>
+            </div>
+            <h2 class="auth-title">RenderReply Support</h2>
+          </div>
+          <p class="auth-sub">Get direct assistance, video guides, and technical help 24/7.</p>
+        </div>
+        <button type="button" class="btn-close-modal" id="btn-close-support-modal" onclick="window.closeAccountModal('modal-user-support')" title="Close Modal">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </button>
+      </div>
+
+      <div style="display: flex; flex-direction: column; gap: 12px; margin: 16px 0;">
+        <!-- Email Card -->
+        <div style="padding: 14px; border-radius: 12px; border: 1px solid #e2e8f0; background: #f8fafc;">
+          <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 6px;">
+            <div style="font-weight: 700; font-size: 14px; color: #0f172a; display: flex; align-items: center; gap: 6px;">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#4f46e5" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+              Direct Email Support
+            </div>
+            <span style="font-size: 11px; background: rgba(16, 185, 129, 0.12); color: #059669; font-weight: 800; padding: 2px 7px; border-radius: 9999px;">&lt; 15 min reply</span>
+          </div>
+          <div style="font-size: 12.5px; color: #64748b; margin-bottom: 10px;">Contact our priority support desk directly at <strong>support@renderreply.com</strong></div>
+          <div style="display: flex; gap: 8px;">
+            <a href="mailto:support@renderreply.com" class="btn btn-primary btn-xs" style="text-decoration: none; font-weight: 700;">Send Email</a>
+            <button type="button" class="btn btn-outline btn-xs" id="btn-modal-copy-support-email">Copy Address</button>
+          </div>
+        </div>
+
+        <!-- Video Tutorials & Help Hub -->
+        <div style="padding: 14px; border-radius: 12px; border: 1px solid #e2e8f0; background: #ffffff; display: flex; align-items: center; justify-content: space-between;">
+          <div>
+            <div style="font-weight: 700; font-size: 13.5px; color: #0f172a;">Learn &amp; Help Video Center</div>
+            <div style="font-size: 12px; color: #64748b; margin-top: 2px;">4 step-by-step masterclass videos for DM automation.</div>
+          </div>
+          <button type="button" class="btn btn-outline btn-xs" id="btn-modal-goto-learn">Open Videos →</button>
+        </div>
+
+        <!-- System Status Indicator -->
+        <div style="padding: 10px 14px; border-radius: 10px; background: rgba(16, 185, 129, 0.08); border: 1px solid rgba(16, 185, 129, 0.2); display: flex; align-items: center; gap: 8px;">
+          <span style="width: 8px; height: 8px; border-radius: 50%; background: #10b981; display: inline-block; box-shadow: 0 0 6px #10b981;"></span>
+          <span style="font-size: 12px; color: #065f46; font-weight: 600;">All Automation Systems &amp; Webhooks Operational (99.98% Uptime)</span>
+        </div>
+      </div>
+
+      <div style="display: flex; justify-content: flex-end; border-top: 1px solid #f1f5f9; padding-top: 12px;">
+        <button type="button" class="btn btn-primary btn-sm" id="btn-close-support-footer" onclick="window.closeAccountModal('modal-user-support')">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 4. SIGN OUT CONFIRMATION MODAL -->
+  <div class="store-preview-modal-backdrop payment-modal-backdrop" id="modal-user-signout">
+    <div class="store-auth-card" style="max-width: 440px; width: 94%;">
+      <div style="text-align: center; padding: 10px 0 6px;">
+        <div style="width: 48px; height: 48px; border-radius: 50%; background: #fee2e2; color: #ef4444; display: inline-flex; align-items: center; justify-content: center; margin-bottom: 12px;">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+            <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+            <polyline points="16 17 21 12 16 7"></polyline>
+            <line x1="21" y1="12" x2="9" y2="12"></line>
+          </svg>
+        </div>
+        <h2 style="font-size: 18px; font-weight: 800; color: #0f172a; margin-bottom: 6px;">Sign Out of RenderReply?</h2>
+        <p style="font-size: 13px; color: #64748b; line-height: 1.5; margin-bottom: 20px;">
+          Are you sure you want to sign out of <strong style="color: #0f172a;" id="signout-modal-user-name">RudRa RR</strong> (<span id="signout-modal-user-email">rudrateja08@gmail.com</span>)? Your scheduled auto-replies will continue running in the cloud.
+        </p>
+      </div>
+
+      <div style="display: flex; gap: 10px; justify-content: center;">
+        <button type="button" class="btn btn-outline btn-sm" id="btn-cancel-signout" onclick="window.closeAccountModal('modal-user-signout')" style="flex: 1; padding: 10px;">Cancel</button>
+        <button type="button" class="btn btn-sm" id="btn-confirm-signout" style="flex: 1; padding: 10px; background: #ef4444; color: #ffffff; border: none; font-weight: 800;">Sign Out</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 6. LIVE SUPPORT TICKET CHAT MODAL -->
+  <div class="store-preview-modal-backdrop payment-modal-backdrop" id="modal-support-ticket-chat" style="display: none; align-items: center; justify-content: center; z-index: 9999;">
+    <div class="support-chat-modal-card" style="max-width: 680px; width: 95%; max-height: 90vh; background: #ffffff; border-radius: 20px; box-shadow: 0 25px 60px -15px rgba(0, 0, 0, 0.3); display: flex; flex-direction: column; overflow: hidden; border: 1px solid #e2e8f0; animation: modalFadeIn 0.25s cubic-bezier(0.16, 1, 0.3, 1);">
+      
+      <!-- Modal Header -->
+      <div class="support-chat-header" style="padding: 18px 24px; border-bottom: 1px solid #f1f5f9; display: flex; align-items: center; justify-content: space-between; background: #ffffff;">
+        <div style="display: flex; align-items: center; gap: 12px; min-width: 0;">
+          <div style="width: 42px; height: 42px; border-radius: 12px; background: #0f172a; color: #ffffff; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 14px; flex-shrink: 0; box-shadow: 0 4px 10px rgba(15,23,42,0.15);">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+            </svg>
+          </div>
+          <div style="min-width: 0;">
+            <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
+              <span id="chat-modal-ticket-id" style="font-size: 13px; font-weight: 800; color: #4f46e5; font-family: monospace;">#RR-8921</span>
+              <span id="chat-modal-ticket-status" class="ticket-status-badge status-open">Open</span>
+              <span id="chat-modal-ticket-priority" class="ticket-priority-badge priority-medium">Medium</span>
+            </div>
+            <h3 id="chat-modal-ticket-subject" style="font-size: 16px; font-weight: 800; color: #0f172a; margin: 3px 0 0 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+              Issue with Automation Rule Trigger
+            </h3>
+          </div>
+        </div>
+
+        <div style="display: flex; align-items: center; gap: 8px;">
+          <button type="button" class="btn btn-outline btn-xs" id="btn-toggle-resolve-ticket" style="font-weight: 700; border-radius: 8px; padding: 6px 12px;">
+            Mark as Resolved
+          </button>
+          <button type="button" class="btn-close-modal" id="btn-close-chat-modal" onclick="window.closeSupportChatModal()" title="Close Chat" style="width: 32px; height: 32px; border-radius: 8px; border: 1px solid #e2e8f0; background: #f8fafc; display: flex; align-items: center; justify-content: center; cursor: pointer;">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+          </button>
+        </div>
+      </div>
+
+      <!-- Ticket Info Bar -->
+      <div style="padding: 10px 24px; background: #f8fafc; border-bottom: 1px solid #edf2f7; display: flex; align-items: center; justify-content: space-between; font-size: 12px; color: #64748b;">
+        <div style="display: flex; align-items: center; gap: 14px; flex-wrap: wrap;">
+          <span>Category: <strong id="chat-modal-category" style="color: #1e293b;">General Inquiry</strong></span>
+          <span>•</span>
+          <span>Created: <strong id="chat-modal-created-time" style="color: #1e293b;">Just now</strong></span>
+          <span>•</span>
+          <span>Support Agent: <strong style="color: #059669;">Sarah M. (Online)</strong></span>
+        </div>
+        <div style="display: flex; align-items: center; gap: 6px;">
+          <span style="width: 7px; height: 7px; border-radius: 50%; background: #10b981; display: inline-block;"></span>
+          <span style="font-size: 11.5px; font-weight: 600; color: #059669;">Live Session Active</span>
+        </div>
+      </div>
+
+      <!-- Messages Stream Area -->
+      <div id="support-chat-messages-container" style="flex: 1; min-height: 300px; max-height: 420px; overflow-y: auto; padding: 20px 24px; display: flex; flex-direction: column; gap: 14px; background: #fafbfc;">
+        <!-- Injected dynamically via JS -->
+      </div>
+
+      <!-- Agent Typing Indicator -->
+      <div id="support-agent-typing-indicator" style="display: none; padding: 6px 24px 10px; font-size: 12px; color: #64748b; align-items: center; gap: 8px; background: #fafbfc;">
+        <span class="typing-dots"><span></span><span></span><span></span></span>
+        <span>Support Agent is typing a response...</span>
+      </div>
+
+      <!-- Quick Reply Action Chips -->
+      <div class="support-quick-chips-row" style="padding: 8px 20px 4px; display: flex; gap: 6px; overflow-x: auto; background: #ffffff; border-top: 1px solid #f1f5f9;">
+        <button type="button" class="quick-reply-chip" onclick="window.insertQuickReply('Is there any update on this issue?')">Is there any update?</button>
+        <button type="button" class="quick-reply-chip" onclick="window.insertQuickReply('Thank you so much, this resolved my problem!')">Resolved, thank you!</button>
+        <button type="button" class="quick-reply-chip" onclick="window.insertQuickReply('Could you check my webhook connection token?')">Check webhook token</button>
+      </div>
+
+      <!-- Message Input Footer -->
+      <div style="padding: 12px 20px 16px; background: #ffffff; border-top: 1px solid #f1f5f9;">
+        <form id="form-support-chat-reply" onsubmit="window.handleSendChatReply(event)" style="display: flex; gap: 10px; align-items: center;">
+          <input type="text" id="input-support-chat-reply" placeholder="Type your reply to the support team..." style="flex: 1; padding: 11px 16px; border-radius: 12px; border: 1.5px solid #e2e8f0; font-size: 13.5px; outline: none; background: #f8fafc; transition: all 0.2s ease;" required>
+          <button type="submit" class="btn btn-primary" id="btn-send-chat-reply" style="background: #0f172a; color: #ffffff; border: none; border-radius: 12px; padding: 11px 18px; font-weight: 700; display: flex; align-items: center; gap: 6px; cursor: pointer; flex-shrink: 0;">
+            <span>Send</span>
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
+          </button>
+        </form>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- 7. INTERACTIVE DOCUMENTATION & GUIDES MODAL -->
+  <div class="store-preview-modal-backdrop payment-modal-backdrop" id="modal-support-guide" style="display: none; align-items: center; justify-content: center; z-index: 9999;">
+    <div class="support-guide-modal-card" style="max-width: 720px; width: 95%; max-height: 88vh; background: #ffffff; border-radius: 20px; box-shadow: 0 25px 60px -15px rgba(0, 0, 0, 0.3); display: flex; flex-direction: column; overflow: hidden; border: 1px solid #e2e8f0; animation: modalFadeIn 0.25s ease;">
+      
+      <!-- Modal Header -->
+      <div style="padding: 20px 24px; border-bottom: 1px solid #f1f5f9; display: flex; align-items: center; justify-content: space-between;">
+        <div style="display: flex; align-items: center; gap: 12px;">
+          <div id="guide-modal-icon" style="width: 38px; height: 38px; border-radius: 10px; background: rgba(79, 70, 229, 0.1); color: #4f46e5; display: flex; align-items: center; justify-content: center;">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path></svg>
+          </div>
+          <div>
+            <h3 id="guide-modal-title" style="font-size: 18px; font-weight: 800; color: #0f172a; margin: 0;">Documentation & Setup Guide</h3>
+            <p id="guide-modal-subtitle" style="font-size: 12.5px; color: #64748b; margin: 2px 0 0 0;">Step-by-step masterclass instructions for RenderReply features.</p>
+          </div>
+        </div>
+        <button type="button" class="btn-close-modal" onclick="window.closeSupportGuideModal()" title="Close Guide" style="width: 32px; height: 32px; border-radius: 8px; border: 1px solid #e2e8f0; background: #f8fafc; display: flex; align-items: center; justify-content: center; cursor: pointer;">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </button>
+      </div>
+
+      <!-- Modal Content Body -->
+      <div id="guide-modal-body" style="flex: 1; overflow-y: auto; padding: 24px; color: #334155; line-height: 1.6; font-size: 14px;">
+        <!-- Injected via JS -->
+      </div>
+
+      <!-- Modal Footer -->
+      <div style="padding: 14px 24px; background: #f8fafc; border-top: 1px solid #f1f5f9; display: flex; justify-content: space-between; align-items: center;">
+        <div style="font-size: 12px; color: #64748b;">Need more custom assistance? <a href="mailto:support@renderreply.com" style="color: #4f46e5; font-weight: 600; text-decoration: none;">Email Support Desk</a></div>
+        <button type="button" class="btn btn-primary btn-sm" onclick="window.closeSupportGuideModal()" style="background: #0f172a; border-radius: 8px; font-weight: 700; padding: 8px 18px;">Got It</button>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- 8. WHATSAPP DIRECT ACTION MODAL -->
+  <div class="store-preview-modal-backdrop payment-modal-backdrop" id="modal-whatsapp-support" style="display: none; align-items: center; justify-content: center; z-index: 9999;">
+    <div class="store-auth-card" style="max-width: 480px; width: 94%; text-align: center;">
+      <div style="width: 56px; height: 56px; border-radius: 50%; background: #dcfce7; color: #16a34a; display: inline-flex; align-items: center; justify-content: center; margin-bottom: 14px;">
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path>
+        </svg>
+      </div>
+      <h2 style="font-size: 20px; font-weight: 800; color: #0f172a; margin-bottom: 6px;">Connect with WhatsApp Support</h2>
+      <p style="font-size: 13.5px; color: #64748b; line-height: 1.5; margin-bottom: 20px;">
+        Our live engineering team is on standby to assist you in real time with automations, webhook tokens, and store setups.
+      </p>
+
+      <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px; padding: 12px 16px; margin-bottom: 20px; text-align: left;">
+        <div style="font-size: 11px; font-weight: 700; color: #94a3b8; text-transform: uppercase; margin-bottom: 4px;">OFFICIAL WHATSAPP HELPLINE</div>
+        <div style="font-size: 15px; font-weight: 800; color: #0f172a; font-family: monospace;">+1 (555) 019-2834 / +91 98450 12890</div>
+        <div style="font-size: 12px; color: #059669; font-weight: 600; margin-top: 4px; display: flex; align-items: center; gap: 4px;">
+          <span style="width: 6px; height: 6px; border-radius: 50%; background: #10b981; display: inline-block;"></span>
+          Average response: &lt; 5 minutes
+        </div>
+      </div>
+
+      <div style="display: flex; gap: 10px;">
+        <button type="button" class="btn btn-outline btn-sm" onclick="window.closeWhatsAppModal()" style="flex: 1; padding: 10px; border-radius: 10px;">Close</button>
+        <button type="button" class="btn btn-sm" id="btn-launch-whatsapp-direct" style="flex: 1.4; padding: 10px; background: #16a34a; color: #ffffff; border: none; font-weight: 800; border-radius: 10px; display: flex; align-items: center; justify-content: center; gap: 6px;">
+          <span>Open WhatsApp</span>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"></polyline></svg>
+        </button>
+      </div>
+    </div>
+  </div>
 
   <script src="./app.js"></script>
 </body>

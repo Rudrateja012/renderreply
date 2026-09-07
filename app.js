@@ -1,16 +1,3151 @@
 /* ==========================================================================
-   STORE PROFILE & OVERVIEW CENTRALIZED SYNCHRONIZATION ENGINE
+   RENDERREPLY MULTI-USER DATA ENGINE & CENTRALIZED SYNCHRONIZATION SYSTEM
    ========================================================================== */
-window.storeProfileState = {
-  name: 'Rudra Teja',
-  avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=250&q=80',
-  bio: 'Welcome to my SuperProfile & RenderReply Store!',
-  insta: '@rudrateja',
-  yt: 'youtube.com/@rudrateja',
-  tw: '@rudrateja'
+
+// Helper SVG Generator for Dual Line Reach & Activity Chart
+function createDualLineChartSvg(options) {
+  const {
+    reachPoints = [18, 28, 38, 32, 44, 42, 48.2],
+    activityPoints = [1.2, 1.8, 2.4, 2.1, 3.0, 2.8, 3.4],
+    xLabels = ['Day 1', 'Day 5', 'Day 10', 'Day 15', 'Day 20', 'Day 25', 'Day 30'],
+    yTop = '50K',
+    yBottom = '0'
+  } = options || {};
+
+  const numPoints = xLabels.length;
+  const paddingLeft = 36;
+  const paddingRight = 310;
+  const availableWidth = paddingRight - paddingLeft;
+  const step = numPoints > 1 ? availableWidth / (numPoints - 1) : 0;
+  const xCoords = xLabels.map((_, i) => paddingLeft + i * step);
+
+  const maxReach = Math.max(...reachPoints, 1);
+  const maxAct = Math.max(...activityPoints, 1);
+
+  const scaleReachY = val => 112 - (val / maxReach) * 82;
+  const scaleActY = val => 112 - (val / maxAct) * 60;
+
+  const reachY = reachPoints.map(v => scaleReachY(v));
+  const actY = activityPoints.map(v => scaleActY(v));
+
+  const reachPathD = reachY.map((y, i) => `${i === 0 ? 'M' : 'L'} ${xCoords[i]},${y}`).join(' ');
+  const reachAreaD = `${reachPathD} L ${xCoords[xCoords.length - 1]},112 L ${xCoords[0]},112 Z`;
+  const actPathD = actY.map((y, i) => `${i === 0 ? 'M' : 'L'} ${xCoords[i]},${y}`).join(' ');
+  const gradId = `reachGrad_${Math.random().toString(36).substr(2, 9)}`;
+
+  return `
+    <svg viewBox="0 0 330 145" class="dual-line-chart-svg" style="width: 100%; height: 100%;">
+      <defs>
+        <linearGradient id="${gradId}" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="#09090b" stop-opacity="0.10"/>
+          <stop offset="100%" stop-color="#09090b" stop-opacity="0.0"/>
+        </linearGradient>
+      </defs>
+      <line x1="32" y1="28" x2="315" y2="28" stroke="#f1f5f9" stroke-width="1" stroke-dasharray="3 3"/>
+      <line x1="32" y1="70" x2="315" y2="70" stroke="#f1f5f9" stroke-width="1" stroke-dasharray="3 3"/>
+      <line x1="32" y1="112" x2="315" y2="112" stroke="#f1f5f9" stroke-width="1"/>
+      <text x="26" y="32" font-family="'Inter', sans-serif" font-size="9" font-weight="700" fill="#71717a" text-anchor="end">${yTop}</text>
+      <text x="26" y="115" font-family="'Inter', sans-serif" font-size="9" font-weight="700" fill="#71717a" text-anchor="end">${yBottom}</text>
+      <path d="${reachAreaD}" fill="url(#${gradId})"/>
+      <path d="${reachPathD}" fill="none" stroke="#09090b" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
+      <path d="${actPathD}" fill="none" stroke="#71717a" stroke-width="1.8" stroke-dasharray="3 3" stroke-linecap="round" stroke-linejoin="round"/>
+      ${reachY.map((y, i) => `
+        <circle class="chart-point-reach pt-reach-${i}" cx="${xCoords[i]}" cy="${y}" r="3.2" fill="#ffffff" stroke="#09090b" stroke-width="2"/>
+        <circle class="chart-point-act pt-act-${i}" cx="${xCoords[i]}" cy="${actY[i]}" r="2.5" fill="#ffffff" stroke="#71717a" stroke-width="1.5"/>
+      `).join('')}
+      ${xLabels.map((lbl, i) => `
+        <text x="${xCoords[i]}" y="132" font-family="'Inter', sans-serif" font-size="9" font-weight="600" fill="#71717a" text-anchor="middle">${lbl}</text>
+      `).join('')}
+      ${xCoords.map((x, i) => `
+        <rect class="chart-hover-trigger" data-idx="${i}" data-label="${xLabels[i]}" data-reach="${reachPoints[i]}K" data-act="${activityPoints[i]}K" data-x="${x}" data-reach-y="${reachY[i]}" data-act-y="${actY[i]}" x="${x - (step || 20) / 2}" y="0" width="${step || 40}" height="145" fill="transparent" style="cursor: crosshair;"/>
+      `).join('')}
+    </svg>
+  `;
+}
+
+// CENTRALIZED 4-USER SIMULATED ACCOUNTS DATABASE (JSON)
+window.USER_ACCOUNTS_DATABASE = {
+  "acc-rudra": {
+    "id": "acc-rudra",
+    "profile": {
+      "name": "RudRa RR",
+      "email": "rudrateja08@gmail.com",
+      "avatar": "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=250&q=80",
+      "bio": "Welcome to my SuperProfile & RenderReply Store! Building AI automations and fullstack dev guides.",
+      "insta": "@render6457",
+      "yt": "youtube.com/@rudrateja",
+      "tw": "@rudrateja",
+      "initials": "R",
+      "badge": "Tech & Automation Creator",
+      "role": "Admin / Full Access"
+    },
+    "dashboard": {
+      "7 Days": {
+        "followers": "48",
+        "following": "12",
+        "views": "380",
+        "comments": "52",
+        "totalReplies": "28",
+        "sentToday": "6",
+        "activeRulesFlat": "3",
+        "capturedLeadsFlat": "9",
+        "reach": "12.4K",
+        "trendReach": "▲ +9.2%",
+        "engaged": "1.4K",
+        "trendEngaged": "▲ +5.6%",
+        "visits": "820",
+        "trendVisits": "▲ +12.4%",
+        "clicks": "210",
+        "trendClicks": "▲ +14.8%",
+        "replies": "310",
+        "trendReplies": "▲ +8.5%",
+        "dmsToday": "18",
+        "trendDmsToday": "▲ +4.0%",
+        "activeRules": "5 Active",
+        "trendRules": "● 100% Uptime",
+        "leads": "84",
+        "trendLeads": "▲ +18.2%",
+        "reachSub": "Instagram reach vs profile activity over the last 7 days.",
+        "legReach": "12.4K",
+        "legAct": "820",
+        "reachSvg": "\n    <svg viewBox=\"0 0 330 145\" class=\"dual-line-chart-svg\" style=\"width: 100%; height: 100%;\">\n      <defs>\n        <linearGradient id=\"reachGrad_stdyd0h02\" x1=\"0\" y1=\"0\" x2=\"0\" y2=\"1\">\n          <stop offset=\"0%\" stop-color=\"#09090b\" stop-opacity=\"0.10\"/>\n          <stop offset=\"100%\" stop-color=\"#09090b\" stop-opacity=\"0.0\"/>\n        </linearGradient>\n      </defs>\n      <line x1=\"32\" y1=\"28\" x2=\"315\" y2=\"28\" stroke=\"#f1f5f9\" stroke-width=\"1\" stroke-dasharray=\"3 3\"/>\n      <line x1=\"32\" y1=\"70\" x2=\"315\" y2=\"70\" stroke=\"#f1f5f9\" stroke-width=\"1\" stroke-dasharray=\"3 3\"/>\n      <line x1=\"32\" y1=\"112\" x2=\"315\" y2=\"112\" stroke=\"#f1f5f9\" stroke-width=\"1\"/>\n      <text x=\"26\" y=\"32\" font-family=\"'Inter', sans-serif\" font-size=\"9\" font-weight=\"700\" fill=\"#71717a\" text-anchor=\"end\">15K</text>\n      <text x=\"26\" y=\"115\" font-family=\"'Inter', sans-serif\" font-size=\"9\" font-weight=\"700\" fill=\"#71717a\" text-anchor=\"end\">0</text>\n      <path d=\"M 36,85.54838709677419 L 81.66666666666666,72.3225806451613 L 127.33333333333333,59.09677419354839 L 173,65.70967741935485 L 218.66666666666666,45.87096774193549 L 264.3333333333333,39.25806451612904 L 310,30 L 310,112 L 36,112 Z\" fill=\"url(#reachGrad_stdyd0h02)\"/>\n      <path d=\"M 36,85.54838709677419 L 81.66666666666666,72.3225806451613 L 127.33333333333333,59.09677419354839 L 173,65.70967741935485 L 218.66666666666666,45.87096774193549 L 264.3333333333333,39.25806451612904 L 310,30\" fill=\"none\" stroke=\"#09090b\" stroke-width=\"2.4\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/>\n      <path d=\"M 36,100 L 81.66666666666666,94 L 127.33333333333333,82 L 173,88 L 218.66666666666666,70 L 264.3333333333333,67 L 310,62.800000000000004\" fill=\"none\" stroke=\"#71717a\" stroke-width=\"1.8\" stroke-dasharray=\"3 3\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/>\n      \n        <circle class=\"chart-point-reach pt-reach-0\" cx=\"36\" cy=\"85.54838709677419\" r=\"3.2\" fill=\"#ffffff\" stroke=\"#09090b\" stroke-width=\"2\"/>\n        <circle class=\"chart-point-act pt-act-0\" cx=\"36\" cy=\"100\" r=\"2.5\" fill=\"#ffffff\" stroke=\"#71717a\" stroke-width=\"1.5\"/>\n      \n        <circle class=\"chart-point-reach pt-reach-1\" cx=\"81.66666666666666\" cy=\"72.3225806451613\" r=\"3.2\" fill=\"#ffffff\" stroke=\"#09090b\" stroke-width=\"2\"/>\n        <circle class=\"chart-point-act pt-act-1\" cx=\"81.66666666666666\" cy=\"94\" r=\"2.5\" fill=\"#ffffff\" stroke=\"#71717a\" stroke-width=\"1.5\"/>\n      \n        <circle class=\"chart-point-reach pt-reach-2\" cx=\"127.33333333333333\" cy=\"59.09677419354839\" r=\"3.2\" fill=\"#ffffff\" stroke=\"#09090b\" stroke-width=\"2\"/>\n        <circle class=\"chart-point-act pt-act-2\" cx=\"127.33333333333333\" cy=\"82\" r=\"2.5\" fill=\"#ffffff\" stroke=\"#71717a\" stroke-width=\"1.5\"/>\n      \n        <circle class=\"chart-point-reach pt-reach-3\" cx=\"173\" cy=\"65.70967741935485\" r=\"3.2\" fill=\"#ffffff\" stroke=\"#09090b\" stroke-width=\"2\"/>\n        <circle class=\"chart-point-act pt-act-3\" cx=\"173\" cy=\"88\" r=\"2.5\" fill=\"#ffffff\" stroke=\"#71717a\" stroke-width=\"1.5\"/>\n      \n        <circle class=\"chart-point-reach pt-reach-4\" cx=\"218.66666666666666\" cy=\"45.87096774193549\" r=\"3.2\" fill=\"#ffffff\" stroke=\"#09090b\" stroke-width=\"2\"/>\n        <circle class=\"chart-point-act pt-act-4\" cx=\"218.66666666666666\" cy=\"70\" r=\"2.5\" fill=\"#ffffff\" stroke=\"#71717a\" stroke-width=\"1.5\"/>\n      \n        <circle class=\"chart-point-reach pt-reach-5\" cx=\"264.3333333333333\" cy=\"39.25806451612904\" r=\"3.2\" fill=\"#ffffff\" stroke=\"#09090b\" stroke-width=\"2\"/>\n        <circle class=\"chart-point-act pt-act-5\" cx=\"264.3333333333333\" cy=\"67\" r=\"2.5\" fill=\"#ffffff\" stroke=\"#71717a\" stroke-width=\"1.5\"/>\n      \n        <circle class=\"chart-point-reach pt-reach-6\" cx=\"310\" cy=\"30\" r=\"3.2\" fill=\"#ffffff\" stroke=\"#09090b\" stroke-width=\"2\"/>\n        <circle class=\"chart-point-act pt-act-6\" cx=\"310\" cy=\"62.800000000000004\" r=\"2.5\" fill=\"#ffffff\" stroke=\"#71717a\" stroke-width=\"1.5\"/>\n      \n      \n        <text x=\"36\" y=\"132\" font-family=\"'Inter', sans-serif\" font-size=\"9\" font-weight=\"600\" fill=\"#71717a\" text-anchor=\"middle\">Day 1</text>\n      \n        <text x=\"81.66666666666666\" y=\"132\" font-family=\"'Inter', sans-serif\" font-size=\"9\" font-weight=\"600\" fill=\"#71717a\" text-anchor=\"middle\">Day 2</text>\n      \n        <text x=\"127.33333333333333\" y=\"132\" font-family=\"'Inter', sans-serif\" font-size=\"9\" font-weight=\"600\" fill=\"#71717a\" text-anchor=\"middle\">Day 3</text>\n      \n        <text x=\"173\" y=\"132\" font-family=\"'Inter', sans-serif\" font-size=\"9\" font-weight=\"600\" fill=\"#71717a\" text-anchor=\"middle\">Day 4</text>\n      \n        <text x=\"218.66666666666666\" y=\"132\" font-family=\"'Inter', sans-serif\" font-size=\"9\" font-weight=\"600\" fill=\"#71717a\" text-anchor=\"middle\">Day 5</text>\n      \n        <text x=\"264.3333333333333\" y=\"132\" font-family=\"'Inter', sans-serif\" font-size=\"9\" font-weight=\"600\" fill=\"#71717a\" text-anchor=\"middle\">Day 6</text>\n      \n        <text x=\"310\" y=\"132\" font-family=\"'Inter', sans-serif\" font-size=\"9\" font-weight=\"600\" fill=\"#71717a\" text-anchor=\"middle\">Day 7</text>\n      \n      \n        <rect class=\"chart-hover-trigger\" data-idx=\"0\" data-label=\"Day 1\" data-reach=\"4K\" data-act=\"0.2K\" data-x=\"36\" data-reach-y=\"85.54838709677419\" data-act-y=\"100\" x=\"13.166666666666668\" y=\"0\" width=\"45.666666666666664\" height=\"145\" fill=\"transparent\" style=\"cursor: crosshair;\"/>\n      \n        <rect class=\"chart-hover-trigger\" data-idx=\"1\" data-label=\"Day 2\" data-reach=\"6K\" data-act=\"0.3K\" data-x=\"81.66666666666666\" data-reach-y=\"72.3225806451613\" data-act-y=\"94\" x=\"58.83333333333333\" y=\"0\" width=\"45.666666666666664\" height=\"145\" fill=\"transparent\" style=\"cursor: crosshair;\"/>\n      \n        <rect class=\"chart-hover-trigger\" data-idx=\"2\" data-label=\"Day 3\" data-reach=\"8K\" data-act=\"0.5K\" data-x=\"127.33333333333333\" data-reach-y=\"59.09677419354839\" data-act-y=\"82\" x=\"104.5\" y=\"0\" width=\"45.666666666666664\" height=\"145\" fill=\"transparent\" style=\"cursor: crosshair;\"/>\n      \n        <rect class=\"chart-hover-trigger\" data-idx=\"3\" data-label=\"Day 4\" data-reach=\"7K\" data-act=\"0.4K\" data-x=\"173\" data-reach-y=\"65.70967741935485\" data-act-y=\"88\" x=\"150.16666666666666\" y=\"0\" width=\"45.666666666666664\" height=\"145\" fill=\"transparent\" style=\"cursor: crosshair;\"/>\n      \n        <rect class=\"chart-hover-trigger\" data-idx=\"4\" data-label=\"Day 5\" data-reach=\"10K\" data-act=\"0.7K\" data-x=\"218.66666666666666\" data-reach-y=\"45.87096774193549\" data-act-y=\"70\" x=\"195.83333333333331\" y=\"0\" width=\"45.666666666666664\" height=\"145\" fill=\"transparent\" style=\"cursor: crosshair;\"/>\n      \n        <rect class=\"chart-hover-trigger\" data-idx=\"5\" data-label=\"Day 6\" data-reach=\"11K\" data-act=\"0.75K\" data-x=\"264.3333333333333\" data-reach-y=\"39.25806451612904\" data-act-y=\"67\" x=\"241.49999999999997\" y=\"0\" width=\"45.666666666666664\" height=\"145\" fill=\"transparent\" style=\"cursor: crosshair;\"/>\n      \n        <rect class=\"chart-hover-trigger\" data-idx=\"6\" data-label=\"Day 7\" data-reach=\"12.4K\" data-act=\"0.82K\" data-x=\"310\" data-reach-y=\"30\" data-act-y=\"62.800000000000004\" x=\"287.1666666666667\" y=\"0\" width=\"45.666666666666664\" height=\"145\" fill=\"transparent\" style=\"cursor: crosshair;\"/>\n      \n    </svg>\n  ",
+        "funnel": {
+          "s1Num": "420",
+          "s1Pct": "100%",
+          "s1Fill": "100%",
+          "s2Num": "310",
+          "s2Pct": "73.8%",
+          "s2Fill": "73.8%",
+          "s3Num": "160",
+          "s3Pct": "38.0%",
+          "s3Fill": "38.0%",
+          "s4Num": "84",
+          "s4Pct": "20.0%",
+          "s4Fill": "20.0%",
+          "rate": "20.0% Total Conv"
+        },
+        "demographics": {
+          "total": "12.4K",
+          "nonFollowers": "62% (7.7K)",
+          "followers": "38% (4.7K)",
+          "us": "40% (5.0K)",
+          "in": "30% (3.7K)",
+          "gb": "15% (1.9K)"
+        }
+      },
+      "14 Days": {
+        "followers": "48",
+        "following": "12",
+        "views": "740",
+        "comments": "110",
+        "totalReplies": "58",
+        "sentToday": "10",
+        "activeRulesFlat": "3",
+        "capturedLeadsFlat": "18",
+        "reach": "24.8K",
+        "trendReach": "▲ +11.5%",
+        "engaged": "2.9K",
+        "trendEngaged": "▲ +7.2%",
+        "visits": "1,680",
+        "trendVisits": "▲ +15.1%",
+        "clicks": "440",
+        "trendClicks": "▲ +18.0%",
+        "replies": "620",
+        "trendReplies": "▲ +10.2%",
+        "dmsToday": "42",
+        "trendDmsToday": "▲ +4.8%",
+        "activeRules": "5 Active",
+        "trendRules": "● 100% Uptime",
+        "leads": "172",
+        "trendLeads": "▲ +24.5%",
+        "reachSub": "Instagram reach vs profile activity over the last 14 days.",
+        "legReach": "24.8K",
+        "legAct": "1.68K",
+        "reachSvg": "\n    <svg viewBox=\"0 0 330 145\" class=\"dual-line-chart-svg\" style=\"width: 100%; height: 100%;\">\n      <defs>\n        <linearGradient id=\"reachGrad_1qe0d7s6k\" x1=\"0\" y1=\"0\" x2=\"0\" y2=\"1\">\n          <stop offset=\"0%\" stop-color=\"#09090b\" stop-opacity=\"0.10\"/>\n          <stop offset=\"100%\" stop-color=\"#09090b\" stop-opacity=\"0.0\"/>\n        </linearGradient>\n      </defs>\n      <line x1=\"32\" y1=\"28\" x2=\"315\" y2=\"28\" stroke=\"#f1f5f9\" stroke-width=\"1\" stroke-dasharray=\"3 3\"/>\n      <line x1=\"32\" y1=\"70\" x2=\"315\" y2=\"70\" stroke=\"#f1f5f9\" stroke-width=\"1\" stroke-dasharray=\"3 3\"/>\n      <line x1=\"32\" y1=\"112\" x2=\"315\" y2=\"112\" stroke=\"#f1f5f9\" stroke-width=\"1\"/>\n      <text x=\"26\" y=\"32\" font-family=\"'Inter', sans-serif\" font-size=\"9\" font-weight=\"700\" fill=\"#71717a\" text-anchor=\"end\">30K</text>\n      <text x=\"26\" y=\"115\" font-family=\"'Inter', sans-serif\" font-size=\"9\" font-weight=\"700\" fill=\"#71717a\" text-anchor=\"end\">0</text>\n      <path d=\"M 36,85.54838709677419 L 81.66666666666666,72.3225806451613 L 127.33333333333333,59.09677419354839 L 173,65.70967741935485 L 218.66666666666666,45.87096774193549 L 264.3333333333333,39.25806451612904 L 310,30 L 310,112 L 36,112 Z\" fill=\"url(#reachGrad_1qe0d7s6k)\"/>\n      <path d=\"M 36,85.54838709677419 L 81.66666666666666,72.3225806451613 L 127.33333333333333,59.09677419354839 L 173,65.70967741935485 L 218.66666666666666,45.87096774193549 L 264.3333333333333,39.25806451612904 L 310,30\" fill=\"none\" stroke=\"#09090b\" stroke-width=\"2.4\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/>\n      <path d=\"M 36,94.14285714285714 L 81.66666666666666,87 L 127.33333333333333,76.28571428571428 L 173,79.85714285714286 L 218.66666666666666,62.00000000000001 L 264.3333333333333,58.42857142857142 L 310,52\" fill=\"none\" stroke=\"#71717a\" stroke-width=\"1.8\" stroke-dasharray=\"3 3\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/>\n      \n        <circle class=\"chart-point-reach pt-reach-0\" cx=\"36\" cy=\"85.54838709677419\" r=\"3.2\" fill=\"#ffffff\" stroke=\"#09090b\" stroke-width=\"2\"/>\n        <circle class=\"chart-point-act pt-act-0\" cx=\"36\" cy=\"94.14285714285714\" r=\"2.5\" fill=\"#ffffff\" stroke=\"#71717a\" stroke-width=\"1.5\"/>\n      \n        <circle class=\"chart-point-reach pt-reach-1\" cx=\"81.66666666666666\" cy=\"72.3225806451613\" r=\"3.2\" fill=\"#ffffff\" stroke=\"#09090b\" stroke-width=\"2\"/>\n        <circle class=\"chart-point-act pt-act-1\" cx=\"81.66666666666666\" cy=\"87\" r=\"2.5\" fill=\"#ffffff\" stroke=\"#71717a\" stroke-width=\"1.5\"/>\n      \n        <circle class=\"chart-point-reach pt-reach-2\" cx=\"127.33333333333333\" cy=\"59.09677419354839\" r=\"3.2\" fill=\"#ffffff\" stroke=\"#09090b\" stroke-width=\"2\"/>\n        <circle class=\"chart-point-act pt-act-2\" cx=\"127.33333333333333\" cy=\"76.28571428571428\" r=\"2.5\" fill=\"#ffffff\" stroke=\"#71717a\" stroke-width=\"1.5\"/>\n      \n        <circle class=\"chart-point-reach pt-reach-3\" cx=\"173\" cy=\"65.70967741935485\" r=\"3.2\" fill=\"#ffffff\" stroke=\"#09090b\" stroke-width=\"2\"/>\n        <circle class=\"chart-point-act pt-act-3\" cx=\"173\" cy=\"79.85714285714286\" r=\"2.5\" fill=\"#ffffff\" stroke=\"#71717a\" stroke-width=\"1.5\"/>\n      \n        <circle class=\"chart-point-reach pt-reach-4\" cx=\"218.66666666666666\" cy=\"45.87096774193549\" r=\"3.2\" fill=\"#ffffff\" stroke=\"#09090b\" stroke-width=\"2\"/>\n        <circle class=\"chart-point-act pt-act-4\" cx=\"218.66666666666666\" cy=\"62.00000000000001\" r=\"2.5\" fill=\"#ffffff\" stroke=\"#71717a\" stroke-width=\"1.5\"/>\n      \n        <circle class=\"chart-point-reach pt-reach-5\" cx=\"264.3333333333333\" cy=\"39.25806451612904\" r=\"3.2\" fill=\"#ffffff\" stroke=\"#09090b\" stroke-width=\"2\"/>\n        <circle class=\"chart-point-act pt-act-5\" cx=\"264.3333333333333\" cy=\"58.42857142857142\" r=\"2.5\" fill=\"#ffffff\" stroke=\"#71717a\" stroke-width=\"1.5\"/>\n      \n        <circle class=\"chart-point-reach pt-reach-6\" cx=\"310\" cy=\"30\" r=\"3.2\" fill=\"#ffffff\" stroke=\"#09090b\" stroke-width=\"2\"/>\n        <circle class=\"chart-point-act pt-act-6\" cx=\"310\" cy=\"52\" r=\"2.5\" fill=\"#ffffff\" stroke=\"#71717a\" stroke-width=\"1.5\"/>\n      \n      \n        <text x=\"36\" y=\"132\" font-family=\"'Inter', sans-serif\" font-size=\"9\" font-weight=\"600\" fill=\"#71717a\" text-anchor=\"middle\">Day 2</text>\n      \n        <text x=\"81.66666666666666\" y=\"132\" font-family=\"'Inter', sans-serif\" font-size=\"9\" font-weight=\"600\" fill=\"#71717a\" text-anchor=\"middle\">Day 4</text>\n      \n        <text x=\"127.33333333333333\" y=\"132\" font-family=\"'Inter', sans-serif\" font-size=\"9\" font-weight=\"600\" fill=\"#71717a\" text-anchor=\"middle\">Day 6</text>\n      \n        <text x=\"173\" y=\"132\" font-family=\"'Inter', sans-serif\" font-size=\"9\" font-weight=\"600\" fill=\"#71717a\" text-anchor=\"middle\">Day 8</text>\n      \n        <text x=\"218.66666666666666\" y=\"132\" font-family=\"'Inter', sans-serif\" font-size=\"9\" font-weight=\"600\" fill=\"#71717a\" text-anchor=\"middle\">Day 10</text>\n      \n        <text x=\"264.3333333333333\" y=\"132\" font-family=\"'Inter', sans-serif\" font-size=\"9\" font-weight=\"600\" fill=\"#71717a\" text-anchor=\"middle\">Day 12</text>\n      \n        <text x=\"310\" y=\"132\" font-family=\"'Inter', sans-serif\" font-size=\"9\" font-weight=\"600\" fill=\"#71717a\" text-anchor=\"middle\">Day 14</text>\n      \n      \n        <rect class=\"chart-hover-trigger\" data-idx=\"0\" data-label=\"Day 2\" data-reach=\"8K\" data-act=\"0.5K\" data-x=\"36\" data-reach-y=\"85.54838709677419\" data-act-y=\"94.14285714285714\" x=\"13.166666666666668\" y=\"0\" width=\"45.666666666666664\" height=\"145\" fill=\"transparent\" style=\"cursor: crosshair;\"/>\n      \n        <rect class=\"chart-hover-trigger\" data-idx=\"1\" data-label=\"Day 4\" data-reach=\"12K\" data-act=\"0.7K\" data-x=\"81.66666666666666\" data-reach-y=\"72.3225806451613\" data-act-y=\"87\" x=\"58.83333333333333\" y=\"0\" width=\"45.666666666666664\" height=\"145\" fill=\"transparent\" style=\"cursor: crosshair;\"/>\n      \n        <rect class=\"chart-hover-trigger\" data-idx=\"2\" data-label=\"Day 6\" data-reach=\"16K\" data-act=\"1K\" data-x=\"127.33333333333333\" data-reach-y=\"59.09677419354839\" data-act-y=\"76.28571428571428\" x=\"104.5\" y=\"0\" width=\"45.666666666666664\" height=\"145\" fill=\"transparent\" style=\"cursor: crosshair;\"/>\n      \n        <rect class=\"chart-hover-trigger\" data-idx=\"3\" data-label=\"Day 8\" data-reach=\"14K\" data-act=\"0.9K\" data-x=\"173\" data-reach-y=\"65.70967741935485\" data-act-y=\"79.85714285714286\" x=\"150.16666666666666\" y=\"0\" width=\"45.666666666666664\" height=\"145\" fill=\"transparent\" style=\"cursor: crosshair;\"/>\n      \n        <rect class=\"chart-hover-trigger\" data-idx=\"4\" data-label=\"Day 10\" data-reach=\"20K\" data-act=\"1.4K\" data-x=\"218.66666666666666\" data-reach-y=\"45.87096774193549\" data-act-y=\"62.00000000000001\" x=\"195.83333333333331\" y=\"0\" width=\"45.666666666666664\" height=\"145\" fill=\"transparent\" style=\"cursor: crosshair;\"/>\n      \n        <rect class=\"chart-hover-trigger\" data-idx=\"5\" data-label=\"Day 12\" data-reach=\"22K\" data-act=\"1.5K\" data-x=\"264.3333333333333\" data-reach-y=\"39.25806451612904\" data-act-y=\"58.42857142857142\" x=\"241.49999999999997\" y=\"0\" width=\"45.666666666666664\" height=\"145\" fill=\"transparent\" style=\"cursor: crosshair;\"/>\n      \n        <rect class=\"chart-hover-trigger\" data-idx=\"6\" data-label=\"Day 14\" data-reach=\"24.8K\" data-act=\"1.68K\" data-x=\"310\" data-reach-y=\"30\" data-act-y=\"52\" x=\"287.1666666666667\" y=\"0\" width=\"45.666666666666664\" height=\"145\" fill=\"transparent\" style=\"cursor: crosshair;\"/>\n      \n    </svg>\n  ",
+        "funnel": {
+          "s1Num": "890",
+          "s1Pct": "100%",
+          "s1Fill": "100%",
+          "s2Num": "620",
+          "s2Pct": "69.6%",
+          "s2Fill": "69.6%",
+          "s3Num": "310",
+          "s3Pct": "34.8%",
+          "s3Fill": "34.8%",
+          "s4Num": "172",
+          "s4Pct": "19.3%",
+          "s4Fill": "19.3%",
+          "rate": "19.3% Total Conv"
+        },
+        "demographics": {
+          "total": "24.8K",
+          "nonFollowers": "63% (15.6K)",
+          "followers": "37% (9.2K)",
+          "us": "41% (10.2K)",
+          "in": "29% (7.2K)",
+          "gb": "14% (3.5K)"
+        }
+      },
+      "30 Days": {
+        "followers": "48",
+        "following": "12",
+        "views": "1,240",
+        "comments": "184",
+        "totalReplies": "96",
+        "sentToday": "14",
+        "activeRulesFlat": "3",
+        "capturedLeadsFlat": "28",
+        "reach": "48.2K",
+        "trendReach": "▲ +14.2%",
+        "engaged": "5.8K",
+        "trendEngaged": "▲ +8.4%",
+        "visits": "3,410",
+        "trendVisits": "▲ +18.0%",
+        "clicks": "890",
+        "trendClicks": "▲ +22.5%",
+        "replies": "1,240",
+        "trendReplies": "▲ +12.8%",
+        "dmsToday": "86",
+        "trendDmsToday": "▲ +5.2%",
+        "activeRules": "5 Active",
+        "trendRules": "● 100% Uptime",
+        "leads": "342",
+        "trendLeads": "▲ +31.4%",
+        "reachSub": "Instagram reach vs profile activity over the last 30 days.",
+        "legReach": "48.2K",
+        "legAct": "3.41K",
+        "reachSvg": "\n    <svg viewBox=\"0 0 330 145\" class=\"dual-line-chart-svg\" style=\"width: 100%; height: 100%;\">\n      <defs>\n        <linearGradient id=\"reachGrad_osmvofx8g\" x1=\"0\" y1=\"0\" x2=\"0\" y2=\"1\">\n          <stop offset=\"0%\" stop-color=\"#09090b\" stop-opacity=\"0.10\"/>\n          <stop offset=\"100%\" stop-color=\"#09090b\" stop-opacity=\"0.0\"/>\n        </linearGradient>\n      </defs>\n      <line x1=\"32\" y1=\"28\" x2=\"315\" y2=\"28\" stroke=\"#f1f5f9\" stroke-width=\"1\" stroke-dasharray=\"3 3\"/>\n      <line x1=\"32\" y1=\"70\" x2=\"315\" y2=\"70\" stroke=\"#f1f5f9\" stroke-width=\"1\" stroke-dasharray=\"3 3\"/>\n      <line x1=\"32\" y1=\"112\" x2=\"315\" y2=\"112\" stroke=\"#f1f5f9\" stroke-width=\"1\"/>\n      <text x=\"26\" y=\"32\" font-family=\"'Inter', sans-serif\" font-size=\"9\" font-weight=\"700\" fill=\"#71717a\" text-anchor=\"end\">50K</text>\n      <text x=\"26\" y=\"115\" font-family=\"'Inter', sans-serif\" font-size=\"9\" font-weight=\"700\" fill=\"#71717a\" text-anchor=\"end\">0</text>\n      <path d=\"M 36,81.37759336099585 L 81.66666666666666,64.36514522821577 L 127.33333333333333,47.35269709543569 L 173,57.560165975103736 L 218.66666666666666,37.14522821576763 L 264.3333333333333,40.547717842323664 L 310,30 L 310,112 L 36,112 Z\" fill=\"url(#reachGrad_osmvofx8g)\"/>\n      <path d=\"M 36,81.37759336099585 L 81.66666666666666,64.36514522821577 L 127.33333333333333,47.35269709543569 L 173,57.560165975103736 L 218.66666666666666,37.14522821576763 L 264.3333333333333,40.547717842323664 L 310,30\" fill=\"none\" stroke=\"#09090b\" stroke-width=\"2.4\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/>\n      <path d=\"M 36,90.88563049853373 L 81.66666666666666,80.32844574780059 L 127.33333333333333,69.77126099706746 L 173,75.04985337243401 L 218.66666666666666,59.21407624633431 L 264.3333333333333,62.733137829912025 L 310,52\" fill=\"none\" stroke=\"#71717a\" stroke-width=\"1.8\" stroke-dasharray=\"3 3\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/>\n      \n        <circle class=\"chart-point-reach pt-reach-0\" cx=\"36\" cy=\"81.37759336099585\" r=\"3.2\" fill=\"#ffffff\" stroke=\"#09090b\" stroke-width=\"2\"/>\n        <circle class=\"chart-point-act pt-act-0\" cx=\"36\" cy=\"90.88563049853373\" r=\"2.5\" fill=\"#ffffff\" stroke=\"#71717a\" stroke-width=\"1.5\"/>\n      \n        <circle class=\"chart-point-reach pt-reach-1\" cx=\"81.66666666666666\" cy=\"64.36514522821577\" r=\"3.2\" fill=\"#ffffff\" stroke=\"#09090b\" stroke-width=\"2\"/>\n        <circle class=\"chart-point-act pt-act-1\" cx=\"81.66666666666666\" cy=\"80.32844574780059\" r=\"2.5\" fill=\"#ffffff\" stroke=\"#71717a\" stroke-width=\"1.5\"/>\n      \n        <circle class=\"chart-point-reach pt-reach-2\" cx=\"127.33333333333333\" cy=\"47.35269709543569\" r=\"3.2\" fill=\"#ffffff\" stroke=\"#09090b\" stroke-width=\"2\"/>\n        <circle class=\"chart-point-act pt-act-2\" cx=\"127.33333333333333\" cy=\"69.77126099706746\" r=\"2.5\" fill=\"#ffffff\" stroke=\"#71717a\" stroke-width=\"1.5\"/>\n      \n        <circle class=\"chart-point-reach pt-reach-3\" cx=\"173\" cy=\"57.560165975103736\" r=\"3.2\" fill=\"#ffffff\" stroke=\"#09090b\" stroke-width=\"2\"/>\n        <circle class=\"chart-point-act pt-act-3\" cx=\"173\" cy=\"75.04985337243401\" r=\"2.5\" fill=\"#ffffff\" stroke=\"#71717a\" stroke-width=\"1.5\"/>\n      \n        <circle class=\"chart-point-reach pt-reach-4\" cx=\"218.66666666666666\" cy=\"37.14522821576763\" r=\"3.2\" fill=\"#ffffff\" stroke=\"#09090b\" stroke-width=\"2\"/>\n        <circle class=\"chart-point-act pt-act-4\" cx=\"218.66666666666666\" cy=\"59.21407624633431\" r=\"2.5\" fill=\"#ffffff\" stroke=\"#71717a\" stroke-width=\"1.5\"/>\n      \n        <circle class=\"chart-point-reach pt-reach-5\" cx=\"264.3333333333333\" cy=\"40.547717842323664\" r=\"3.2\" fill=\"#ffffff\" stroke=\"#09090b\" stroke-width=\"2\"/>\n        <circle class=\"chart-point-act pt-act-5\" cx=\"264.3333333333333\" cy=\"62.733137829912025\" r=\"2.5\" fill=\"#ffffff\" stroke=\"#71717a\" stroke-width=\"1.5\"/>\n      \n        <circle class=\"chart-point-reach pt-reach-6\" cx=\"310\" cy=\"30\" r=\"3.2\" fill=\"#ffffff\" stroke=\"#09090b\" stroke-width=\"2\"/>\n        <circle class=\"chart-point-act pt-act-6\" cx=\"310\" cy=\"52\" r=\"2.5\" fill=\"#ffffff\" stroke=\"#71717a\" stroke-width=\"1.5\"/>\n      \n      \n        <text x=\"36\" y=\"132\" font-family=\"'Inter', sans-serif\" font-size=\"9\" font-weight=\"600\" fill=\"#71717a\" text-anchor=\"middle\">Day 1</text>\n      \n        <text x=\"81.66666666666666\" y=\"132\" font-family=\"'Inter', sans-serif\" font-size=\"9\" font-weight=\"600\" fill=\"#71717a\" text-anchor=\"middle\">Day 5</text>\n      \n        <text x=\"127.33333333333333\" y=\"132\" font-family=\"'Inter', sans-serif\" font-size=\"9\" font-weight=\"600\" fill=\"#71717a\" text-anchor=\"middle\">Day 10</text>\n      \n        <text x=\"173\" y=\"132\" font-family=\"'Inter', sans-serif\" font-size=\"9\" font-weight=\"600\" fill=\"#71717a\" text-anchor=\"middle\">Day 15</text>\n      \n        <text x=\"218.66666666666666\" y=\"132\" font-family=\"'Inter', sans-serif\" font-size=\"9\" font-weight=\"600\" fill=\"#71717a\" text-anchor=\"middle\">Day 20</text>\n      \n        <text x=\"264.3333333333333\" y=\"132\" font-family=\"'Inter', sans-serif\" font-size=\"9\" font-weight=\"600\" fill=\"#71717a\" text-anchor=\"middle\">Day 25</text>\n      \n        <text x=\"310\" y=\"132\" font-family=\"'Inter', sans-serif\" font-size=\"9\" font-weight=\"600\" fill=\"#71717a\" text-anchor=\"middle\">Day 30</text>\n      \n      \n        <rect class=\"chart-hover-trigger\" data-idx=\"0\" data-label=\"Day 1\" data-reach=\"18K\" data-act=\"1.2K\" data-x=\"36\" data-reach-y=\"81.37759336099585\" data-act-y=\"90.88563049853373\" x=\"13.166666666666668\" y=\"0\" width=\"45.666666666666664\" height=\"145\" fill=\"transparent\" style=\"cursor: crosshair;\"/>\n      \n        <rect class=\"chart-hover-trigger\" data-idx=\"1\" data-label=\"Day 5\" data-reach=\"28K\" data-act=\"1.8K\" data-x=\"81.66666666666666\" data-reach-y=\"64.36514522821577\" data-act-y=\"80.32844574780059\" x=\"58.83333333333333\" y=\"0\" width=\"45.666666666666664\" height=\"145\" fill=\"transparent\" style=\"cursor: crosshair;\"/>\n      \n        <rect class=\"chart-hover-trigger\" data-idx=\"2\" data-label=\"Day 10\" data-reach=\"38K\" data-act=\"2.4K\" data-x=\"127.33333333333333\" data-reach-y=\"47.35269709543569\" data-act-y=\"69.77126099706746\" x=\"104.5\" y=\"0\" width=\"45.666666666666664\" height=\"145\" fill=\"transparent\" style=\"cursor: crosshair;\"/>\n      \n        <rect class=\"chart-hover-trigger\" data-idx=\"3\" data-label=\"Day 15\" data-reach=\"32K\" data-act=\"2.1K\" data-x=\"173\" data-reach-y=\"57.560165975103736\" data-act-y=\"75.04985337243401\" x=\"150.16666666666666\" y=\"0\" width=\"45.666666666666664\" height=\"145\" fill=\"transparent\" style=\"cursor: crosshair;\"/>\n      \n        <rect class=\"chart-hover-trigger\" data-idx=\"4\" data-label=\"Day 20\" data-reach=\"44K\" data-act=\"3K\" data-x=\"218.66666666666666\" data-reach-y=\"37.14522821576763\" data-act-y=\"59.21407624633431\" x=\"195.83333333333331\" y=\"0\" width=\"45.666666666666664\" height=\"145\" fill=\"transparent\" style=\"cursor: crosshair;\"/>\n      \n        <rect class=\"chart-hover-trigger\" data-idx=\"5\" data-label=\"Day 25\" data-reach=\"42K\" data-act=\"2.8K\" data-x=\"264.3333333333333\" data-reach-y=\"40.547717842323664\" data-act-y=\"62.733137829912025\" x=\"241.49999999999997\" y=\"0\" width=\"45.666666666666664\" height=\"145\" fill=\"transparent\" style=\"cursor: crosshair;\"/>\n      \n        <rect class=\"chart-hover-trigger\" data-idx=\"6\" data-label=\"Day 30\" data-reach=\"48.2K\" data-act=\"3.41K\" data-x=\"310\" data-reach-y=\"30\" data-act-y=\"52\" x=\"287.1666666666667\" y=\"0\" width=\"45.666666666666664\" height=\"145\" fill=\"transparent\" style=\"cursor: crosshair;\"/>\n      \n    </svg>\n  ",
+        "funnel": {
+          "s1Num": "1,850",
+          "s1Pct": "100%",
+          "s1Fill": "100%",
+          "s2Num": "1,240",
+          "s2Pct": "67.0%",
+          "s2Fill": "67.0%",
+          "s3Num": "620",
+          "s3Pct": "33.5%",
+          "s3Fill": "33.5%",
+          "s4Num": "342",
+          "s4Pct": "18.5%",
+          "s4Fill": "18.5%",
+          "rate": "18.5% Total Conv"
+        },
+        "demographics": {
+          "total": "48.2K",
+          "nonFollowers": "64% (30.8K)",
+          "followers": "36% (17.4K)",
+          "us": "42% (20.2K)",
+          "in": "28% (13.5K)",
+          "gb": "14% (6.7K)"
+        }
+      },
+      "60 Days": {
+        "followers": "48",
+        "following": "12",
+        "views": "2,850",
+        "comments": "410",
+        "totalReplies": "210",
+        "sentToday": "18",
+        "activeRulesFlat": "4",
+        "capturedLeadsFlat": "62",
+        "reach": "92.6K",
+        "trendReach": "▲ +19.4%",
+        "engaged": "11.2K",
+        "trendEngaged": "▲ +12.0%",
+        "visits": "6,890",
+        "trendVisits": "▲ +21.4%",
+        "clicks": "1,740",
+        "trendClicks": "▲ +26.8%",
+        "replies": "2,410",
+        "trendReplies": "▲ +16.5%",
+        "dmsToday": "140",
+        "trendDmsToday": "▲ +6.1%",
+        "activeRules": "5 Active",
+        "trendRules": "● 100% Uptime",
+        "leads": "680",
+        "trendLeads": "▲ +35.2%",
+        "reachSub": "Instagram reach vs profile activity over the last 60 days.",
+        "legReach": "92.6K",
+        "legAct": "6.89K",
+        "reachSvg": "\n    <svg viewBox=\"0 0 330 145\" class=\"dual-line-chart-svg\" style=\"width: 100%; height: 100%;\">\n      <defs>\n        <linearGradient id=\"reachGrad_k8is53afb\" x1=\"0\" y1=\"0\" x2=\"0\" y2=\"1\">\n          <stop offset=\"0%\" stop-color=\"#09090b\" stop-opacity=\"0.10\"/>\n          <stop offset=\"100%\" stop-color=\"#09090b\" stop-opacity=\"0.0\"/>\n        </linearGradient>\n      </defs>\n      <line x1=\"32\" y1=\"28\" x2=\"315\" y2=\"28\" stroke=\"#f1f5f9\" stroke-width=\"1\" stroke-dasharray=\"3 3\"/>\n      <line x1=\"32\" y1=\"70\" x2=\"315\" y2=\"70\" stroke=\"#f1f5f9\" stroke-width=\"1\" stroke-dasharray=\"3 3\"/>\n      <line x1=\"32\" y1=\"112\" x2=\"315\" y2=\"112\" stroke=\"#f1f5f9\" stroke-width=\"1\"/>\n      <text x=\"26\" y=\"32\" font-family=\"'Inter', sans-serif\" font-size=\"9\" font-weight=\"700\" fill=\"#71717a\" text-anchor=\"end\">100K</text>\n      <text x=\"26\" y=\"115\" font-family=\"'Inter', sans-serif\" font-size=\"9\" font-weight=\"700\" fill=\"#71717a\" text-anchor=\"end\">0</text>\n      <path d=\"M 36,81.00647948164146 L 81.66666666666666,67.72354211663065 L 127.33333333333333,51.78401727861771 L 173,57.09719222462203 L 218.66666666666666,41.15766738660906 L 264.3333333333333,36.73002159827213 L 310,30 L 310,112 L 36,112 Z\" fill=\"url(#reachGrad_k8is53afb)\"/>\n      <path d=\"M 36,81.00647948164146 L 81.66666666666666,67.72354211663065 L 127.33333333333333,51.78401727861771 L 173,57.09719222462203 L 218.66666666666666,41.15766738660906 L 264.3333333333333,36.73002159827213 L 310,30\" fill=\"none\" stroke=\"#09090b\" stroke-width=\"2.4\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/>\n      <path d=\"M 36,90.22931785195937 L 81.66666666666666,80.65021770682148 L 127.33333333333333,70.20029027576197 L 173,75.42525399129173 L 218.66666666666666,60.621190130624086 L 264.3333333333333,58.00870827285922 L 310,52\" fill=\"none\" stroke=\"#71717a\" stroke-width=\"1.8\" stroke-dasharray=\"3 3\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/>\n      \n        <circle class=\"chart-point-reach pt-reach-0\" cx=\"36\" cy=\"81.00647948164146\" r=\"3.2\" fill=\"#ffffff\" stroke=\"#09090b\" stroke-width=\"2\"/>\n        <circle class=\"chart-point-act pt-act-0\" cx=\"36\" cy=\"90.22931785195937\" r=\"2.5\" fill=\"#ffffff\" stroke=\"#71717a\" stroke-width=\"1.5\"/>\n      \n        <circle class=\"chart-point-reach pt-reach-1\" cx=\"81.66666666666666\" cy=\"67.72354211663065\" r=\"3.2\" fill=\"#ffffff\" stroke=\"#09090b\" stroke-width=\"2\"/>\n        <circle class=\"chart-point-act pt-act-1\" cx=\"81.66666666666666\" cy=\"80.65021770682148\" r=\"2.5\" fill=\"#ffffff\" stroke=\"#71717a\" stroke-width=\"1.5\"/>\n      \n        <circle class=\"chart-point-reach pt-reach-2\" cx=\"127.33333333333333\" cy=\"51.78401727861771\" r=\"3.2\" fill=\"#ffffff\" stroke=\"#09090b\" stroke-width=\"2\"/>\n        <circle class=\"chart-point-act pt-act-2\" cx=\"127.33333333333333\" cy=\"70.20029027576197\" r=\"2.5\" fill=\"#ffffff\" stroke=\"#71717a\" stroke-width=\"1.5\"/>\n      \n        <circle class=\"chart-point-reach pt-reach-3\" cx=\"173\" cy=\"57.09719222462203\" r=\"3.2\" fill=\"#ffffff\" stroke=\"#09090b\" stroke-width=\"2\"/>\n        <circle class=\"chart-point-act pt-act-3\" cx=\"173\" cy=\"75.42525399129173\" r=\"2.5\" fill=\"#ffffff\" stroke=\"#71717a\" stroke-width=\"1.5\"/>\n      \n        <circle class=\"chart-point-reach pt-reach-4\" cx=\"218.66666666666666\" cy=\"41.15766738660906\" r=\"3.2\" fill=\"#ffffff\" stroke=\"#09090b\" stroke-width=\"2\"/>\n        <circle class=\"chart-point-act pt-act-4\" cx=\"218.66666666666666\" cy=\"60.621190130624086\" r=\"2.5\" fill=\"#ffffff\" stroke=\"#71717a\" stroke-width=\"1.5\"/>\n      \n        <circle class=\"chart-point-reach pt-reach-5\" cx=\"264.3333333333333\" cy=\"36.73002159827213\" r=\"3.2\" fill=\"#ffffff\" stroke=\"#09090b\" stroke-width=\"2\"/>\n        <circle class=\"chart-point-act pt-act-5\" cx=\"264.3333333333333\" cy=\"58.00870827285922\" r=\"2.5\" fill=\"#ffffff\" stroke=\"#71717a\" stroke-width=\"1.5\"/>\n      \n        <circle class=\"chart-point-reach pt-reach-6\" cx=\"310\" cy=\"30\" r=\"3.2\" fill=\"#ffffff\" stroke=\"#09090b\" stroke-width=\"2\"/>\n        <circle class=\"chart-point-act pt-act-6\" cx=\"310\" cy=\"52\" r=\"2.5\" fill=\"#ffffff\" stroke=\"#71717a\" stroke-width=\"1.5\"/>\n      \n      \n        <text x=\"36\" y=\"132\" font-family=\"'Inter', sans-serif\" font-size=\"9\" font-weight=\"600\" fill=\"#71717a\" text-anchor=\"middle\">Day 1</text>\n      \n        <text x=\"81.66666666666666\" y=\"132\" font-family=\"'Inter', sans-serif\" font-size=\"9\" font-weight=\"600\" fill=\"#71717a\" text-anchor=\"middle\">Day 10</text>\n      \n        <text x=\"127.33333333333333\" y=\"132\" font-family=\"'Inter', sans-serif\" font-size=\"9\" font-weight=\"600\" fill=\"#71717a\" text-anchor=\"middle\">Day 20</text>\n      \n        <text x=\"173\" y=\"132\" font-family=\"'Inter', sans-serif\" font-size=\"9\" font-weight=\"600\" fill=\"#71717a\" text-anchor=\"middle\">Day 30</text>\n      \n        <text x=\"218.66666666666666\" y=\"132\" font-family=\"'Inter', sans-serif\" font-size=\"9\" font-weight=\"600\" fill=\"#71717a\" text-anchor=\"middle\">Day 40</text>\n      \n        <text x=\"264.3333333333333\" y=\"132\" font-family=\"'Inter', sans-serif\" font-size=\"9\" font-weight=\"600\" fill=\"#71717a\" text-anchor=\"middle\">Day 50</text>\n      \n        <text x=\"310\" y=\"132\" font-family=\"'Inter', sans-serif\" font-size=\"9\" font-weight=\"600\" fill=\"#71717a\" text-anchor=\"middle\">Day 60</text>\n      \n      \n        <rect class=\"chart-hover-trigger\" data-idx=\"0\" data-label=\"Day 1\" data-reach=\"35K\" data-act=\"2.5K\" data-x=\"36\" data-reach-y=\"81.00647948164146\" data-act-y=\"90.22931785195937\" x=\"13.166666666666668\" y=\"0\" width=\"45.666666666666664\" height=\"145\" fill=\"transparent\" style=\"cursor: crosshair;\"/>\n      \n        <rect class=\"chart-hover-trigger\" data-idx=\"1\" data-label=\"Day 10\" data-reach=\"50K\" data-act=\"3.6K\" data-x=\"81.66666666666666\" data-reach-y=\"67.72354211663065\" data-act-y=\"80.65021770682148\" x=\"58.83333333333333\" y=\"0\" width=\"45.666666666666664\" height=\"145\" fill=\"transparent\" style=\"cursor: crosshair;\"/>\n      \n        <rect class=\"chart-hover-trigger\" data-idx=\"2\" data-label=\"Day 20\" data-reach=\"68K\" data-act=\"4.8K\" data-x=\"127.33333333333333\" data-reach-y=\"51.78401727861771\" data-act-y=\"70.20029027576197\" x=\"104.5\" y=\"0\" width=\"45.666666666666664\" height=\"145\" fill=\"transparent\" style=\"cursor: crosshair;\"/>\n      \n        <rect class=\"chart-hover-trigger\" data-idx=\"3\" data-label=\"Day 30\" data-reach=\"62K\" data-act=\"4.2K\" data-x=\"173\" data-reach-y=\"57.09719222462203\" data-act-y=\"75.42525399129173\" x=\"150.16666666666666\" y=\"0\" width=\"45.666666666666664\" height=\"145\" fill=\"transparent\" style=\"cursor: crosshair;\"/>\n      \n        <rect class=\"chart-hover-trigger\" data-idx=\"4\" data-label=\"Day 40\" data-reach=\"80K\" data-act=\"5.9K\" data-x=\"218.66666666666666\" data-reach-y=\"41.15766738660906\" data-act-y=\"60.621190130624086\" x=\"195.83333333333331\" y=\"0\" width=\"45.666666666666664\" height=\"145\" fill=\"transparent\" style=\"cursor: crosshair;\"/>\n      \n        <rect class=\"chart-hover-trigger\" data-idx=\"5\" data-label=\"Day 50\" data-reach=\"85K\" data-act=\"6.2K\" data-x=\"264.3333333333333\" data-reach-y=\"36.73002159827213\" data-act-y=\"58.00870827285922\" x=\"241.49999999999997\" y=\"0\" width=\"45.666666666666664\" height=\"145\" fill=\"transparent\" style=\"cursor: crosshair;\"/>\n      \n        <rect class=\"chart-hover-trigger\" data-idx=\"6\" data-label=\"Day 60\" data-reach=\"92.6K\" data-act=\"6.89K\" data-x=\"310\" data-reach-y=\"30\" data-act-y=\"52\" x=\"287.1666666666667\" y=\"0\" width=\"45.666666666666664\" height=\"145\" fill=\"transparent\" style=\"cursor: crosshair;\"/>\n      \n    </svg>\n  ",
+        "funnel": {
+          "s1Num": "3,620",
+          "s1Pct": "100%",
+          "s1Fill": "100%",
+          "s2Num": "2,410",
+          "s2Pct": "66.5%",
+          "s2Fill": "66.5%",
+          "s3Num": "1,180",
+          "s3Pct": "32.5%",
+          "s3Fill": "32.5%",
+          "s4Num": "680",
+          "s4Pct": "18.7%",
+          "s4Fill": "18.7%",
+          "rate": "18.7% Total Conv"
+        },
+        "demographics": {
+          "total": "92.6K",
+          "nonFollowers": "65% (60.1K)",
+          "followers": "35% (32.4K)",
+          "us": "43% (39.8K)",
+          "in": "27% (25.0K)",
+          "gb": "15% (13.8K)"
+        }
+      },
+      "90 Days": {
+        "followers": "48",
+        "following": "12",
+        "views": "4,620",
+        "comments": "680",
+        "totalReplies": "340",
+        "sentToday": "22",
+        "activeRulesFlat": "4",
+        "capturedLeadsFlat": "98",
+        "reach": "142.8K",
+        "trendReach": "▲ +24.8%",
+        "engaged": "18.4K",
+        "trendEngaged": "▲ +15.8%",
+        "visits": "10,450",
+        "trendVisits": "▲ +26.0%",
+        "clicks": "2,680",
+        "trendClicks": "▲ +31.2%",
+        "replies": "3,890",
+        "trendReplies": "▲ +21.4%",
+        "dmsToday": "190",
+        "trendDmsToday": "▲ +7.8%",
+        "activeRules": "5 Active",
+        "trendRules": "● 100% Uptime",
+        "leads": "1,120",
+        "trendLeads": "▲ +42.0%",
+        "reachSub": "Instagram reach vs profile activity over the last 90 days.",
+        "legReach": "142.8K",
+        "legAct": "10.45K",
+        "reachSvg": "\n    <svg viewBox=\"0 0 330 145\" class=\"dual-line-chart-svg\" style=\"width: 100%; height: 100%;\">\n      <defs>\n        <linearGradient id=\"reachGrad_k15va78jw\" x1=\"0\" y1=\"0\" x2=\"0\" y2=\"1\">\n          <stop offset=\"0%\" stop-color=\"#09090b\" stop-opacity=\"0.10\"/>\n          <stop offset=\"100%\" stop-color=\"#09090b\" stop-opacity=\"0.0\"/>\n        </linearGradient>\n      </defs>\n      <line x1=\"32\" y1=\"28\" x2=\"315\" y2=\"28\" stroke=\"#f1f5f9\" stroke-width=\"1\" stroke-dasharray=\"3 3\"/>\n      <line x1=\"32\" y1=\"70\" x2=\"315\" y2=\"70\" stroke=\"#f1f5f9\" stroke-width=\"1\" stroke-dasharray=\"3 3\"/>\n      <line x1=\"32\" y1=\"112\" x2=\"315\" y2=\"112\" stroke=\"#f1f5f9\" stroke-width=\"1\"/>\n      <text x=\"26\" y=\"32\" font-family=\"'Inter', sans-serif\" font-size=\"9\" font-weight=\"700\" fill=\"#71717a\" text-anchor=\"end\">160K</text>\n      <text x=\"26\" y=\"115\" font-family=\"'Inter', sans-serif\" font-size=\"9\" font-weight=\"700\" fill=\"#71717a\" text-anchor=\"end\">0</text>\n      <path d=\"M 36,83.28851540616247 L 81.66666666666666,68.9327731092437 L 127.33333333333333,57.44817927170869 L 173,60.319327731092436 L 218.66666666666666,45.96358543417368 L 264.3333333333333,37.350140056022425 L 310,30 L 310,112 L 36,112 Z\" fill=\"url(#reachGrad_k15va78jw)\"/>\n      <path d=\"M 36,83.28851540616247 L 81.66666666666666,68.9327731092437 L 127.33333333333333,57.44817927170869 L 173,60.319327731092436 L 218.66666666666666,45.96358543417368 L 264.3333333333333,37.350140056022425 L 310,30\" fill=\"none\" stroke=\"#09090b\" stroke-width=\"2.4\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/>\n      <path d=\"M 36,90.18181818181819 L 81.66666666666666,82.14354066985646 L 127.33333333333333,71.23444976076556 L 173,72.95693779904306 L 218.66666666666666,60.89952153110047 L 264.3333333333333,58.028708133971286 L 310,52\" fill=\"none\" stroke=\"#71717a\" stroke-width=\"1.8\" stroke-dasharray=\"3 3\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/>\n      \n        <circle class=\"chart-point-reach pt-reach-0\" cx=\"36\" cy=\"83.28851540616247\" r=\"3.2\" fill=\"#ffffff\" stroke=\"#09090b\" stroke-width=\"2\"/>\n        <circle class=\"chart-point-act pt-act-0\" cx=\"36\" cy=\"90.18181818181819\" r=\"2.5\" fill=\"#ffffff\" stroke=\"#71717a\" stroke-width=\"1.5\"/>\n      \n        <circle class=\"chart-point-reach pt-reach-1\" cx=\"81.66666666666666\" cy=\"68.9327731092437\" r=\"3.2\" fill=\"#ffffff\" stroke=\"#09090b\" stroke-width=\"2\"/>\n        <circle class=\"chart-point-act pt-act-1\" cx=\"81.66666666666666\" cy=\"82.14354066985646\" r=\"2.5\" fill=\"#ffffff\" stroke=\"#71717a\" stroke-width=\"1.5\"/>\n      \n        <circle class=\"chart-point-reach pt-reach-2\" cx=\"127.33333333333333\" cy=\"57.44817927170869\" r=\"3.2\" fill=\"#ffffff\" stroke=\"#09090b\" stroke-width=\"2\"/>\n        <circle class=\"chart-point-act pt-act-2\" cx=\"127.33333333333333\" cy=\"71.23444976076556\" r=\"2.5\" fill=\"#ffffff\" stroke=\"#71717a\" stroke-width=\"1.5\"/>\n      \n        <circle class=\"chart-point-reach pt-reach-3\" cx=\"173\" cy=\"60.319327731092436\" r=\"3.2\" fill=\"#ffffff\" stroke=\"#09090b\" stroke-width=\"2\"/>\n        <circle class=\"chart-point-act pt-act-3\" cx=\"173\" cy=\"72.95693779904306\" r=\"2.5\" fill=\"#ffffff\" stroke=\"#71717a\" stroke-width=\"1.5\"/>\n      \n        <circle class=\"chart-point-reach pt-reach-4\" cx=\"218.66666666666666\" cy=\"45.96358543417368\" r=\"3.2\" fill=\"#ffffff\" stroke=\"#09090b\" stroke-width=\"2\"/>\n        <circle class=\"chart-point-act pt-act-4\" cx=\"218.66666666666666\" cy=\"60.89952153110047\" r=\"2.5\" fill=\"#ffffff\" stroke=\"#71717a\" stroke-width=\"1.5\"/>\n      \n        <circle class=\"chart-point-reach pt-reach-5\" cx=\"264.3333333333333\" cy=\"37.350140056022425\" r=\"3.2\" fill=\"#ffffff\" stroke=\"#09090b\" stroke-width=\"2\"/>\n        <circle class=\"chart-point-act pt-act-5\" cx=\"264.3333333333333\" cy=\"58.028708133971286\" r=\"2.5\" fill=\"#ffffff\" stroke=\"#71717a\" stroke-width=\"1.5\"/>\n      \n        <circle class=\"chart-point-reach pt-reach-6\" cx=\"310\" cy=\"30\" r=\"3.2\" fill=\"#ffffff\" stroke=\"#09090b\" stroke-width=\"2\"/>\n        <circle class=\"chart-point-act pt-act-6\" cx=\"310\" cy=\"52\" r=\"2.5\" fill=\"#ffffff\" stroke=\"#71717a\" stroke-width=\"1.5\"/>\n      \n      \n        <text x=\"36\" y=\"132\" font-family=\"'Inter', sans-serif\" font-size=\"9\" font-weight=\"600\" fill=\"#71717a\" text-anchor=\"middle\">Day 1</text>\n      \n        <text x=\"81.66666666666666\" y=\"132\" font-family=\"'Inter', sans-serif\" font-size=\"9\" font-weight=\"600\" fill=\"#71717a\" text-anchor=\"middle\">Day 15</text>\n      \n        <text x=\"127.33333333333333\" y=\"132\" font-family=\"'Inter', sans-serif\" font-size=\"9\" font-weight=\"600\" fill=\"#71717a\" text-anchor=\"middle\">Day 30</text>\n      \n        <text x=\"173\" y=\"132\" font-family=\"'Inter', sans-serif\" font-size=\"9\" font-weight=\"600\" fill=\"#71717a\" text-anchor=\"middle\">Day 45</text>\n      \n        <text x=\"218.66666666666666\" y=\"132\" font-family=\"'Inter', sans-serif\" font-size=\"9\" font-weight=\"600\" fill=\"#71717a\" text-anchor=\"middle\">Day 60</text>\n      \n        <text x=\"264.3333333333333\" y=\"132\" font-family=\"'Inter', sans-serif\" font-size=\"9\" font-weight=\"600\" fill=\"#71717a\" text-anchor=\"middle\">Day 75</text>\n      \n        <text x=\"310\" y=\"132\" font-family=\"'Inter', sans-serif\" font-size=\"9\" font-weight=\"600\" fill=\"#71717a\" text-anchor=\"middle\">Day 90</text>\n      \n      \n        <rect class=\"chart-hover-trigger\" data-idx=\"0\" data-label=\"Day 1\" data-reach=\"50K\" data-act=\"3.8K\" data-x=\"36\" data-reach-y=\"83.28851540616247\" data-act-y=\"90.18181818181819\" x=\"13.166666666666668\" y=\"0\" width=\"45.666666666666664\" height=\"145\" fill=\"transparent\" style=\"cursor: crosshair;\"/>\n      \n        <rect class=\"chart-hover-trigger\" data-idx=\"1\" data-label=\"Day 15\" data-reach=\"75K\" data-act=\"5.2K\" data-x=\"81.66666666666666\" data-reach-y=\"68.9327731092437\" data-act-y=\"82.14354066985646\" x=\"58.83333333333333\" y=\"0\" width=\"45.666666666666664\" height=\"145\" fill=\"transparent\" style=\"cursor: crosshair;\"/>\n      \n        <rect class=\"chart-hover-trigger\" data-idx=\"2\" data-label=\"Day 30\" data-reach=\"95K\" data-act=\"7.1K\" data-x=\"127.33333333333333\" data-reach-y=\"57.44817927170869\" data-act-y=\"71.23444976076556\" x=\"104.5\" y=\"0\" width=\"45.666666666666664\" height=\"145\" fill=\"transparent\" style=\"cursor: crosshair;\"/>\n      \n        <rect class=\"chart-hover-trigger\" data-idx=\"3\" data-label=\"Day 45\" data-reach=\"90K\" data-act=\"6.8K\" data-x=\"173\" data-reach-y=\"60.319327731092436\" data-act-y=\"72.95693779904306\" x=\"150.16666666666666\" y=\"0\" width=\"45.666666666666664\" height=\"145\" fill=\"transparent\" style=\"cursor: crosshair;\"/>\n      \n        <rect class=\"chart-hover-trigger\" data-idx=\"4\" data-label=\"Day 60\" data-reach=\"115K\" data-act=\"8.9K\" data-x=\"218.66666666666666\" data-reach-y=\"45.96358543417368\" data-act-y=\"60.89952153110047\" x=\"195.83333333333331\" y=\"0\" width=\"45.666666666666664\" height=\"145\" fill=\"transparent\" style=\"cursor: crosshair;\"/>\n      \n        <rect class=\"chart-hover-trigger\" data-idx=\"5\" data-label=\"Day 75\" data-reach=\"130K\" data-act=\"9.4K\" data-x=\"264.3333333333333\" data-reach-y=\"37.350140056022425\" data-act-y=\"58.028708133971286\" x=\"241.49999999999997\" y=\"0\" width=\"45.666666666666664\" height=\"145\" fill=\"transparent\" style=\"cursor: crosshair;\"/>\n      \n        <rect class=\"chart-hover-trigger\" data-idx=\"6\" data-label=\"Day 90\" data-reach=\"142.8K\" data-act=\"10.45K\" data-x=\"310\" data-reach-y=\"30\" data-act-y=\"52\" x=\"287.1666666666667\" y=\"0\" width=\"45.666666666666664\" height=\"145\" fill=\"transparent\" style=\"cursor: crosshair;\"/>\n      \n    </svg>\n  ",
+        "funnel": {
+          "s1Num": "5,840",
+          "s1Pct": "100%",
+          "s1Fill": "100%",
+          "s2Num": "3,890",
+          "s2Pct": "66.6%",
+          "s2Fill": "66.6%",
+          "s3Num": "1,890",
+          "s3Pct": "32.3%",
+          "s3Fill": "32.3%",
+          "s4Num": "1,120",
+          "s4Pct": "19.1%",
+          "s4Fill": "19.1%",
+          "rate": "19.1% Total Conv"
+        },
+        "demographics": {
+          "total": "142.8K",
+          "nonFollowers": "66% (94.2K)",
+          "followers": "34% (48.5K)",
+          "us": "44% (62.8K)",
+          "in": "26% (37.1K)",
+          "gb": "16% (22.8K)"
+        }
+      }
+    },
+    "store": [
+      {
+        "id": "prod-1",
+        "title": "Java Full-Stack Developer Roadmap PDF",
+        "price": "₹499",
+        "oldPrice": "₹999",
+        "desc": "Comprehensive guide from Java core syntax to microservices, Spring Boot, and cloud deployment. Includes architecture diagrams, interview questions, and production checklist.",
+        "cta": "Instant Access",
+        "rating": "5.0 (64 customer reviews)",
+        "photos": [
+          "https://images.unsplash.com/photo-1517694712202-14dd9538aa97?auto=format&fit=crop&w=600&q=80",
+          "https://images.unsplash.com/photo-1555066931-4365d14bab8c?auto=format&fit=crop&w=600&q=80",
+          "https://images.unsplash.com/photo-1607799279861-4dd421887fb3?auto=format&fit=crop&w=600&q=80"
+        ]
+      },
+      {
+        "id": "prod-2",
+        "title": "1-on-1 Instagram Strategy Session",
+        "price": "₹1,499",
+        "oldPrice": "₹2,999",
+        "desc": "30-minute private call to audit your Instagram DM automation funnel, optimize bio link conversion, and scale high-ticket lead generation.",
+        "cta": "Book Session",
+        "rating": "4.9 (28 customer reviews)",
+        "photos": [
+          "https://images.unsplash.com/photo-1551836022-d5d88e9218df?auto=format&fit=crop&w=600&q=80",
+          "https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&w=600&q=80"
+        ]
+      },
+      {
+        "id": "prod-3",
+        "title": "Instagram Automation Preset Bundle",
+        "price": "FREE",
+        "oldPrice": "₹499",
+        "desc": "Pre-configured comment triggers, DM copy templates, and Bio link presets ready to import directly into your RenderReply dashboard.",
+        "cta": "Download Now",
+        "rating": "5.0 (112 customer reviews)",
+        "photos": [
+          "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=600&q=80",
+          "https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?auto=format&fit=crop&w=600&q=80"
+        ]
+      }
+    ],
+    "rules": [
+      {
+        "id": "rule-pricing",
+        "name": "Pricing Plans Template",
+        "ruleSub": "Pricing Plans Template",
+        "thumbImg": "https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=600&q=80",
+        "type": "post",
+        "typeName": "Post Comments",
+        "keywords": [
+          "PRICING"
+        ],
+        "target": "POST",
+        "targetType": "POST",
+        "active": true,
+        "sentCount": 2140,
+        "successRate": "99.2%",
+        "response": "Hey {first_name}! Thanks for asking about pricing. Here are our official creator plans and checkout link: {link}",
+        "attachLink": true,
+        "linkUrl": "https://renderreply.com/p/pricing",
+        "linkTitle": "Pricing Plans & Checkout",
+        "commentReply": false,
+        "commentReplyText": ""
+      },
+      {
+        "id": "rule-story",
+        "name": "Story Mention Thank You",
+        "ruleSub": "Story Mention Thank You",
+        "thumbImg": "https://images.unsplash.com/photo-1611162617474-5b21e879e113?auto=format&fit=crop&w=600&q=80",
+        "type": "story",
+        "typeName": "Story Mentions",
+        "keywords": [
+          "STORY_TAG"
+        ],
+        "target": "STORIES",
+        "targetType": "STORIES",
+        "active": true,
+        "sentCount": 1820,
+        "successRate": "98.7%",
+        "response": "Thanks for tagging us in your Story, {username}! Here is an exclusive 15% VIP discount code: VIP15. Link: {link}",
+        "attachLink": true,
+        "linkUrl": "https://renderreply.com/p/vip-pass",
+        "linkTitle": "VIP Pass & Discount",
+        "commentReply": false,
+        "commentReplyText": ""
+      },
+      {
+        "id": "rule-reel",
+        "name": "Free Ebook Reel Auto-DM",
+        "ruleSub": "Free Ebook Reel Auto-DM",
+        "thumbImg": "https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?auto=format&fit=crop&w=600&q=80",
+        "type": "reel",
+        "typeName": "Reels & Live",
+        "keywords": [
+          "GUIDE"
+        ],
+        "target": "REELS",
+        "targetType": "REELS",
+        "active": true,
+        "sentCount": 932,
+        "successRate": "97.9%",
+        "response": "Hey {first_name}! Here is the free Creator Automation Ebook you requested: {link}",
+        "attachLink": true,
+        "linkUrl": "https://renderreply.com/free-guide.pdf",
+        "linkTitle": "Free Creator Ebook PDF",
+        "commentReply": false,
+        "commentReplyText": ""
+      }
+    ],
+    "inbox": {
+      "alex": {
+        "name": "Alex Mercer",
+        "handle": "@alex_creator",
+        "avatar": "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=150&q=80",
+        "followers": "48.2K Followers",
+        "source": "Reel Comment: \"PRICING\"",
+        "status": "attention",
+        "botActive": true,
+        "triggerTitle": "Triggered by Reel: \"Build a 7-Figure IG Automation Engine\" (Keyword: \"PRICING\")",
+        "messages": [
+          {
+            "type": "divider",
+            "text": "TODAY, OCT 24"
+          },
+          {
+            "type": "user",
+            "text": "Hey! Can I get the pricing plans for your creator roadmap and preset packs?",
+            "time": "02:14 PM",
+            "context": "Commented \"PRICING\" on Reel #894"
+          },
+          {
+            "type": "bot",
+            "text": "Hey Alex! Here are our membership options, instant downloads, and 1-on-1 strategy sessions:",
+            "time": "02:14 PM",
+            "flow": "Reel Viral Funnel v2.4",
+            "hasCard": true
+          }
+        ]
+      },
+      "sarah": {
+        "name": "Sarah Miller",
+        "handle": "@sarah_m",
+        "avatar": "https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=150&q=80",
+        "followers": "120K Followers",
+        "source": "Story Mention: \"FREE_CHECKLIST\"",
+        "status": "bot",
+        "botActive": true,
+        "triggerTitle": "Triggered by Story Mention: \"@rudrateja tag on story\"",
+        "messages": [
+          {
+            "type": "divider",
+            "text": "TODAY, OCT 24"
+          },
+          {
+            "type": "user",
+            "text": "Loved your latest story breakdown! Can you send me the free creator checklist you mentioned?",
+            "time": "01:10 PM",
+            "context": "Mentioned you in Story"
+          },
+          {
+            "type": "bot",
+            "text": "Hey Sarah! Thank you so much for the story tag! Here is your exclusive 2026 Instagram Growth Checklist PDF: https://renderreply.com/store/rudrateja/downloads/checklist.pdf",
+            "time": "01:10 PM",
+            "flow": "Story Mention Auto-Thank You v1.8",
+            "hasCard": false
+          }
+        ]
+      },
+      "dev": {
+        "name": "John Doe",
+        "handle": "@dev_johndoe",
+        "avatar": "https://images.unsplash.com/photo-1570295999919-56ceb5ecca61?auto=format&fit=crop&w=150&q=80",
+        "followers": "15.4K Followers",
+        "source": "DM Keyword: \"JAVA\"",
+        "status": "bot",
+        "botActive": true,
+        "triggerTitle": "Triggered by DM Keyword: \"JAVA\"",
+        "messages": [
+          {
+            "type": "divider",
+            "text": "TODAY, OCT 24"
+          },
+          {
+            "type": "user",
+            "text": "JAVA",
+            "time": "11:20 AM",
+            "context": "Sent DM keyword \"JAVA\""
+          },
+          {
+            "type": "bot",
+            "text": "Hey John! Here is the instant access link to the Java Full Stack Roadmap 2026 PDF: https://renderreply.com/store/rudrateja/downloads/java-roadmap.pdf Happy coding!",
+            "time": "11:20 AM",
+            "flow": "Full Stack Roadmap Auto-DM",
+            "hasCard": false
+          }
+        ]
+      },
+      "priya": {
+        "name": "Priya S.",
+        "handle": "@priya_designs",
+        "avatar": "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=150&q=80",
+        "followers": "89K Followers",
+        "source": "Custom Inquiry: Agency License",
+        "status": "attention",
+        "botActive": false,
+        "triggerTitle": "Custom Inquiry: Agency Multi-Account License (Bot Paused)",
+        "messages": [
+          {
+            "type": "divider",
+            "text": "TODAY, OCT 24"
+          },
+          {
+            "type": "user",
+            "text": "Hi Rudra! Can we customize the RenderReply templates for multiple client agencies? Do you have an agency tier?",
+            "time": "09:45 AM",
+            "context": "Custom DM Inquiry"
+          }
+        ]
+      },
+      "vikram": {
+        "name": "Vikram P.",
+        "handle": "@vikram_tech",
+        "avatar": "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=150&q=80",
+        "followers": "210K Followers",
+        "source": "Preset Bundle: Downloaded",
+        "status": "resolved",
+        "botActive": true,
+        "triggerTitle": "Triggered by Reel: \"Instagram Automation Presets 2026\" (Keyword: \"PRESET\")",
+        "messages": [
+          {
+            "type": "divider",
+            "text": "YESTERDAY, OCT 23"
+          },
+          {
+            "type": "user",
+            "text": "PRESET",
+            "time": "04:15 PM",
+            "context": "Commented \"PRESET\" on Reel #890"
+          },
+          {
+            "type": "bot",
+            "text": "Hey Vikram! Here is your free Instagram Automation Preset Bundle: https://renderreply.com/store/rudrateja/downloads/presets.zip",
+            "time": "04:15 PM",
+            "flow": "Preset Distribution Flow",
+            "hasCard": false
+          },
+          {
+            "type": "user",
+            "text": "Thank you so much Rudra! Downloaded presets successfully. They work amazingly well!",
+            "time": "04:30 PM",
+            "context": "Direct DM"
+          },
+          {
+            "type": "human",
+            "text": "Awesome Vikram! Let me know if you need any tweaks for your specific reels setup. Cheers!",
+            "time": "04:35 PM"
+          }
+        ]
+      }
+    },
+    "leads": [
+      {
+        "id": "lead-1",
+        "handle": "@alex_growth",
+        "name": "Alex Miller",
+        "avatar": "AM",
+        "email": "alex.miller@growthagency.io",
+        "phone": "+1 (555) 234-8910",
+        "keyword": "#GUIDE",
+        "campaign": "guide",
+        "status": "Email Captured",
+        "statusClass": "email",
+        "sourceTitle": "10x Instagram Automation Strategy 2026",
+        "sourceThumb": "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=80&q=80",
+        "time": "2m ago",
+        "timestamp": "Today, 2:14 PM",
+        "commentText": "Can you send me the #GUIDE for full funnel setup?",
+        "botReplyText": "Hey Alex! Here is your complete 10x Automation Blueprint & PDF guide: https://renderreply.com/p/guide",
+        "ruleName": "Reel Lead Magnet #GUIDE"
+      },
+      {
+        "id": "lead-2",
+        "handle": "@sarah.designs",
+        "name": "Sarah K.",
+        "avatar": "SK",
+        "email": "sarah.k@designstudio.co",
+        "phone": "+1 (555) 789-1234",
+        "keyword": "PRICING",
+        "campaign": "pricing",
+        "status": "DM Delivered",
+        "statusClass": "",
+        "sourceTitle": "How I Make ₹50,000/mo Selling Digital Products",
+        "sourceThumb": "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=80&q=80",
+        "time": "12m ago",
+        "timestamp": "Today, 2:04 PM",
+        "commentText": "PRICING details please!",
+        "botReplyText": "Hi Sarah! Here is the breakdown of our digital templates & pricing plans: https://renderreply.com/pricing",
+        "ruleName": "Pricing Trigger Rule"
+      },
+      {
+        "id": "lead-3",
+        "handle": "@marcus_dev",
+        "name": "Marcus Vance",
+        "avatar": "MV",
+        "email": "marcus.vance@techlead.dev",
+        "phone": "+44 7911 123456",
+        "keyword": "ROADMAP",
+        "campaign": "roadmap",
+        "status": "Email Captured",
+        "statusClass": "email",
+        "sourceTitle": "Free Java Fullstack Roadmap 2026 PDF",
+        "sourceThumb": "https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?auto=format&fit=crop&w=80&q=80",
+        "time": "28m ago",
+        "timestamp": "Today, 1:48 PM",
+        "commentText": "Sent you ROADMAP on the carousel post",
+        "botReplyText": "Awesome Marcus! The Fullstack 2026 Roadmap PDF has been emailed to you and here is the direct link: https://renderreply.com/p/roadmap-pdf",
+        "ruleName": "Java Roadmap Lead Magnet"
+      },
+      {
+        "id": "lead-4",
+        "handle": "@priya_creates",
+        "name": "Priya Sharma",
+        "avatar": "PS",
+        "email": "priya.sharma@creatorspace.in",
+        "phone": "+91 98765 43210",
+        "keyword": "LINK",
+        "campaign": "story",
+        "status": "DM Delivered",
+        "statusClass": "",
+        "sourceTitle": "Story Automation Blueprint & DM Triggers",
+        "sourceThumb": "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&w=80&q=80",
+        "time": "1h ago",
+        "timestamp": "Today, 1:15 PM",
+        "commentText": "LINK",
+        "botReplyText": "Hey Priya! Here is the instant link you requested from our story: https://renderreply.com/story-blueprint",
+        "ruleName": "Story Reply Automation"
+      }
+    ],
+    "payments": {
+      "totalBalance": 124580,
+      "availableBalance": 98050,
+      "pendingBalance": 26530,
+      "payout": {
+        "upiId": "rudrateja@okaxis",
+        "holderName": "Rudra Teja",
+        "bankName": "HDFC Bank",
+        "accountNumber": "50100293844892",
+        "ifsc": "HDFC0000128",
+        "primaryChannel": "UPI"
+      },
+      "transactions": [
+        {
+          "id": "67300007547192",
+          "date": "Oct 24, 2026 02:15 PM",
+          "type": "Order Sale",
+          "amount": 98050,
+          "status": "Cleared",
+          "customer": "rudrateja.order@gmail.com",
+          "channel": "Direct UPI",
+          "fee": 2941,
+          "gst": 529,
+          "net": 94580
+        },
+        {
+          "id": "67300007547191",
+          "date": "Oct 22, 2026 11:30 AM",
+          "type": "Order Sale",
+          "amount": 49900,
+          "status": "Cleared",
+          "customer": "rudrateja.store@gmail.com",
+          "channel": "Direct UPI",
+          "fee": 1497,
+          "gst": 269,
+          "net": 48134
+        },
+        {
+          "id": "60380007982004",
+          "date": "Oct 23, 2026 06:45 PM",
+          "type": "Creator Fund",
+          "amount": 26530,
+          "status": "Pending",
+          "customer": "RenderReply Partner Fund",
+          "channel": "System Credit",
+          "fee": 0,
+          "gst": 0,
+          "net": 26530
+        },
+        {
+          "id": "89102471029471",
+          "date": "Oct 20, 2026 04:10 PM",
+          "type": "Withdrawal",
+          "amount": -50000,
+          "status": "Cleared",
+          "customer": "Payout to rudrateja@okaxis",
+          "channel": "Direct UPI",
+          "fee": 0,
+          "gst": 0,
+          "net": -50000
+        },
+        {
+          "id": "67300007547188",
+          "date": "Oct 19, 2026 09:20 AM",
+          "type": "Order Sale",
+          "amount": 14990,
+          "status": "Cleared",
+          "customer": "rudrateja.client@gmail.com",
+          "channel": "Bank IMPS",
+          "fee": 449,
+          "gst": 80,
+          "net": 14461
+        },
+        {
+          "id": "OFFLINE-892401",
+          "date": "Oct 18, 2026 05:00 PM",
+          "type": "Manual Credit",
+          "amount": 5000,
+          "status": "Cleared",
+          "customer": "Offline Direct Client",
+          "channel": "Manual Adjustment",
+          "fee": 0,
+          "gst": 0,
+          "net": 5000
+        }
+      ]
+    },
+    "biolink": {
+      "title": "RudRa RR | Tech & Fullstack Automation",
+      "bio": "Building automated Instagram funnels, open-source Java roadmaps, and creator ecosystems.",
+      "links": [
+        {
+          "label": "Java Fullstack Roadmap 2026 PDF",
+          "url": "https://renderreply.com/p/java-roadmap",
+          "color": "accent"
+        },
+        {
+          "label": "Book 1-on-1 Automation Audit",
+          "url": "https://renderreply.com/book-session",
+          "color": "slate"
+        },
+        {
+          "label": "Instagram Automation Presets Pack",
+          "url": "https://renderreply.com/presets",
+          "color": "emerald"
+        }
+      ],
+      "video1": "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
+      "video2": "",
+      "theme": "indigo-slate"
+    }
+  },
+  "acc-sarah": {
+    "id": "acc-sarah",
+    "profile": {
+      "name": "Sarah Jenkins",
+      "email": "sarah.lifestyle@gmail.com",
+      "avatar": "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=250&q=80",
+      "bio": "Fashion stylist, lifestyle vlogger & daily aesthetic outfit links ✨ NYC & Paris.",
+      "insta": "@sarah_style",
+      "yt": "youtube.com/@sarahstyle",
+      "tw": "@sarahjenkins",
+      "initials": "SJ",
+      "badge": "Fashion & Lifestyle",
+      "role": "Verified Creator"
+    },
+    "dashboard": {
+      "7 Days": {
+        "followers": "184K",
+        "following": "420",
+        "views": "92,400",
+        "comments": "3,840",
+        "totalReplies": "2,410",
+        "sentToday": "84",
+        "activeRulesFlat": "4",
+        "capturedLeadsFlat": "680",
+        "reach": "94.2K",
+        "trendReach": "▲ +24.5%",
+        "engaged": "11.8K",
+        "trendEngaged": "▲ +18.2%",
+        "visits": "7,840",
+        "trendVisits": "▲ +22.0%",
+        "clicks": "3,450",
+        "trendClicks": "▲ +28.4%",
+        "replies": "2,410",
+        "trendReplies": "▲ +19.5%",
+        "dmsToday": "110",
+        "trendDmsToday": "▲ +8.2%",
+        "activeRules": "6 Active",
+        "trendRules": "● 100% Uptime",
+        "leads": "740",
+        "trendLeads": "▲ +34.2%",
+        "reachSub": "Fashion lookbook reach vs profile saves over the last 7 days.",
+        "legReach": "94.2K",
+        "legAct": "7.84K",
+        "reachSvg": "\n    <svg viewBox=\"0 0 330 145\" class=\"dual-line-chart-svg\" style=\"width: 100%; height: 100%;\">\n      <defs>\n        <linearGradient id=\"reachGrad_zlr8rzx91\" x1=\"0\" y1=\"0\" x2=\"0\" y2=\"1\">\n          <stop offset=\"0%\" stop-color=\"#09090b\" stop-opacity=\"0.10\"/>\n          <stop offset=\"100%\" stop-color=\"#09090b\" stop-opacity=\"0.0\"/>\n        </linearGradient>\n      </defs>\n      <line x1=\"32\" y1=\"28\" x2=\"315\" y2=\"28\" stroke=\"#f1f5f9\" stroke-width=\"1\" stroke-dasharray=\"3 3\"/>\n      <line x1=\"32\" y1=\"70\" x2=\"315\" y2=\"70\" stroke=\"#f1f5f9\" stroke-width=\"1\" stroke-dasharray=\"3 3\"/>\n      <line x1=\"32\" y1=\"112\" x2=\"315\" y2=\"112\" stroke=\"#f1f5f9\" stroke-width=\"1\"/>\n      <text x=\"26\" y=\"32\" font-family=\"'Inter', sans-serif\" font-size=\"9\" font-weight=\"700\" fill=\"#71717a\" text-anchor=\"end\">100K</text>\n      <text x=\"26\" y=\"115\" font-family=\"'Inter', sans-serif\" font-size=\"9\" font-weight=\"700\" fill=\"#71717a\" text-anchor=\"end\">0</text>\n      <path d=\"M 36,84.1443736730361 L 81.66666666666666,72.828025477707 L 127.33333333333333,61.511677282377924 L 173,58.02972399150743 L 218.66666666666666,47.583864118895974 L 264.3333333333333,38.008492569002115 L 310,30 L 310,112 L 36,112 Z\" fill=\"url(#reachGrad_zlr8rzx91)\"/>\n      <path d=\"M 36,84.1443736730361 L 81.66666666666666,72.828025477707 L 127.33333333333333,61.511677282377924 L 173,58.02972399150743 L 218.66666666666666,47.583864118895974 L 264.3333333333333,38.008492569002115 L 310,30\" fill=\"none\" stroke=\"#09090b\" stroke-width=\"2.4\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/>\n      <path d=\"M 36,90.57142857142857 L 81.66666666666666,82.15306122448979 L 127.33333333333333,75.26530612244898 L 173,72.20408163265306 L 218.66666666666666,63.0204081632653 L 264.3333333333333,57.663265306122454 L 310,52\" fill=\"none\" stroke=\"#71717a\" stroke-width=\"1.8\" stroke-dasharray=\"3 3\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/>\n      \n        <circle class=\"chart-point-reach pt-reach-0\" cx=\"36\" cy=\"84.1443736730361\" r=\"3.2\" fill=\"#ffffff\" stroke=\"#09090b\" stroke-width=\"2\"/>\n        <circle class=\"chart-point-act pt-act-0\" cx=\"36\" cy=\"90.57142857142857\" r=\"2.5\" fill=\"#ffffff\" stroke=\"#71717a\" stroke-width=\"1.5\"/>\n      \n        <circle class=\"chart-point-reach pt-reach-1\" cx=\"81.66666666666666\" cy=\"72.828025477707\" r=\"3.2\" fill=\"#ffffff\" stroke=\"#09090b\" stroke-width=\"2\"/>\n        <circle class=\"chart-point-act pt-act-1\" cx=\"81.66666666666666\" cy=\"82.15306122448979\" r=\"2.5\" fill=\"#ffffff\" stroke=\"#71717a\" stroke-width=\"1.5\"/>\n      \n        <circle class=\"chart-point-reach pt-reach-2\" cx=\"127.33333333333333\" cy=\"61.511677282377924\" r=\"3.2\" fill=\"#ffffff\" stroke=\"#09090b\" stroke-width=\"2\"/>\n        <circle class=\"chart-point-act pt-act-2\" cx=\"127.33333333333333\" cy=\"75.26530612244898\" r=\"2.5\" fill=\"#ffffff\" stroke=\"#71717a\" stroke-width=\"1.5\"/>\n      \n        <circle class=\"chart-point-reach pt-reach-3\" cx=\"173\" cy=\"58.02972399150743\" r=\"3.2\" fill=\"#ffffff\" stroke=\"#09090b\" stroke-width=\"2\"/>\n        <circle class=\"chart-point-act pt-act-3\" cx=\"173\" cy=\"72.20408163265306\" r=\"2.5\" fill=\"#ffffff\" stroke=\"#71717a\" stroke-width=\"1.5\"/>\n      \n        <circle class=\"chart-point-reach pt-reach-4\" cx=\"218.66666666666666\" cy=\"47.583864118895974\" r=\"3.2\" fill=\"#ffffff\" stroke=\"#09090b\" stroke-width=\"2\"/>\n        <circle class=\"chart-point-act pt-act-4\" cx=\"218.66666666666666\" cy=\"63.0204081632653\" r=\"2.5\" fill=\"#ffffff\" stroke=\"#71717a\" stroke-width=\"1.5\"/>\n      \n        <circle class=\"chart-point-reach pt-reach-5\" cx=\"264.3333333333333\" cy=\"38.008492569002115\" r=\"3.2\" fill=\"#ffffff\" stroke=\"#09090b\" stroke-width=\"2\"/>\n        <circle class=\"chart-point-act pt-act-5\" cx=\"264.3333333333333\" cy=\"57.663265306122454\" r=\"2.5\" fill=\"#ffffff\" stroke=\"#71717a\" stroke-width=\"1.5\"/>\n      \n        <circle class=\"chart-point-reach pt-reach-6\" cx=\"310\" cy=\"30\" r=\"3.2\" fill=\"#ffffff\" stroke=\"#09090b\" stroke-width=\"2\"/>\n        <circle class=\"chart-point-act pt-act-6\" cx=\"310\" cy=\"52\" r=\"2.5\" fill=\"#ffffff\" stroke=\"#71717a\" stroke-width=\"1.5\"/>\n      \n      \n        <text x=\"36\" y=\"132\" font-family=\"'Inter', sans-serif\" font-size=\"9\" font-weight=\"600\" fill=\"#71717a\" text-anchor=\"middle\">Day 1</text>\n      \n        <text x=\"81.66666666666666\" y=\"132\" font-family=\"'Inter', sans-serif\" font-size=\"9\" font-weight=\"600\" fill=\"#71717a\" text-anchor=\"middle\">Day 2</text>\n      \n        <text x=\"127.33333333333333\" y=\"132\" font-family=\"'Inter', sans-serif\" font-size=\"9\" font-weight=\"600\" fill=\"#71717a\" text-anchor=\"middle\">Day 3</text>\n      \n        <text x=\"173\" y=\"132\" font-family=\"'Inter', sans-serif\" font-size=\"9\" font-weight=\"600\" fill=\"#71717a\" text-anchor=\"middle\">Day 4</text>\n      \n        <text x=\"218.66666666666666\" y=\"132\" font-family=\"'Inter', sans-serif\" font-size=\"9\" font-weight=\"600\" fill=\"#71717a\" text-anchor=\"middle\">Day 5</text>\n      \n        <text x=\"264.3333333333333\" y=\"132\" font-family=\"'Inter', sans-serif\" font-size=\"9\" font-weight=\"600\" fill=\"#71717a\" text-anchor=\"middle\">Day 6</text>\n      \n        <text x=\"310\" y=\"132\" font-family=\"'Inter', sans-serif\" font-size=\"9\" font-weight=\"600\" fill=\"#71717a\" text-anchor=\"middle\">Day 7</text>\n      \n      \n        <rect class=\"chart-hover-trigger\" data-idx=\"0\" data-label=\"Day 1\" data-reach=\"32K\" data-act=\"2.8K\" data-x=\"36\" data-reach-y=\"84.1443736730361\" data-act-y=\"90.57142857142857\" x=\"13.166666666666668\" y=\"0\" width=\"45.666666666666664\" height=\"145\" fill=\"transparent\" style=\"cursor: crosshair;\"/>\n      \n        <rect class=\"chart-hover-trigger\" data-idx=\"1\" data-label=\"Day 2\" data-reach=\"45K\" data-act=\"3.9K\" data-x=\"81.66666666666666\" data-reach-y=\"72.828025477707\" data-act-y=\"82.15306122448979\" x=\"58.83333333333333\" y=\"0\" width=\"45.666666666666664\" height=\"145\" fill=\"transparent\" style=\"cursor: crosshair;\"/>\n      \n        <rect class=\"chart-hover-trigger\" data-idx=\"2\" data-label=\"Day 3\" data-reach=\"58K\" data-act=\"4.8K\" data-x=\"127.33333333333333\" data-reach-y=\"61.511677282377924\" data-act-y=\"75.26530612244898\" x=\"104.5\" y=\"0\" width=\"45.666666666666664\" height=\"145\" fill=\"transparent\" style=\"cursor: crosshair;\"/>\n      \n        <rect class=\"chart-hover-trigger\" data-idx=\"3\" data-label=\"Day 4\" data-reach=\"62K\" data-act=\"5.2K\" data-x=\"173\" data-reach-y=\"58.02972399150743\" data-act-y=\"72.20408163265306\" x=\"150.16666666666666\" y=\"0\" width=\"45.666666666666664\" height=\"145\" fill=\"transparent\" style=\"cursor: crosshair;\"/>\n      \n        <rect class=\"chart-hover-trigger\" data-idx=\"4\" data-label=\"Day 5\" data-reach=\"74K\" data-act=\"6.4K\" data-x=\"218.66666666666666\" data-reach-y=\"47.583864118895974\" data-act-y=\"63.0204081632653\" x=\"195.83333333333331\" y=\"0\" width=\"45.666666666666664\" height=\"145\" fill=\"transparent\" style=\"cursor: crosshair;\"/>\n      \n        <rect class=\"chart-hover-trigger\" data-idx=\"5\" data-label=\"Day 6\" data-reach=\"85K\" data-act=\"7.1K\" data-x=\"264.3333333333333\" data-reach-y=\"38.008492569002115\" data-act-y=\"57.663265306122454\" x=\"241.49999999999997\" y=\"0\" width=\"45.666666666666664\" height=\"145\" fill=\"transparent\" style=\"cursor: crosshair;\"/>\n      \n        <rect class=\"chart-hover-trigger\" data-idx=\"6\" data-label=\"Day 7\" data-reach=\"94.2K\" data-act=\"7.84K\" data-x=\"310\" data-reach-y=\"30\" data-act-y=\"52\" x=\"287.1666666666667\" y=\"0\" width=\"45.666666666666664\" height=\"145\" fill=\"transparent\" style=\"cursor: crosshair;\"/>\n      \n    </svg>\n  ",
+        "funnel": {
+          "s1Num": "3,840",
+          "s1Pct": "100%",
+          "s1Fill": "100%",
+          "s2Num": "2,920",
+          "s2Pct": "76.0%",
+          "s2Fill": "76.0%",
+          "s3Num": "1,680",
+          "s3Pct": "43.8%",
+          "s3Fill": "43.8%",
+          "s4Num": "740",
+          "s4Pct": "19.3%",
+          "s4Fill": "19.3%",
+          "rate": "19.3% Total Conv"
+        },
+        "demographics": {
+          "total": "94.2K",
+          "nonFollowers": "71% (66.8K)",
+          "followers": "29% (27.4K)",
+          "us": "52% (49.0K)",
+          "in": "14% (13.2K)",
+          "gb": "22% (20.7K)"
+        }
+      },
+      "14 Days": {
+        "followers": "184K",
+        "following": "420",
+        "views": "178,000",
+        "comments": "7,450",
+        "totalReplies": "4,620",
+        "sentToday": "160",
+        "activeRulesFlat": "4",
+        "capturedLeadsFlat": "1,380",
+        "reach": "182.4K",
+        "trendReach": "▲ +26.8%",
+        "engaged": "22.4K",
+        "trendEngaged": "▲ +17.5%",
+        "visits": "15,200",
+        "trendVisits": "▲ +24.1%",
+        "clicks": "6,800",
+        "trendClicks": "▲ +29.0%",
+        "replies": "4,620",
+        "trendReplies": "▲ +21.4%",
+        "dmsToday": "210",
+        "trendDmsToday": "▲ +9.1%",
+        "activeRules": "6 Active",
+        "trendRules": "● 100% Uptime",
+        "leads": "1,480",
+        "trendLeads": "▲ +38.5%",
+        "reachSub": "Fashion lookbook reach vs profile saves over the last 14 days.",
+        "legReach": "182.4K",
+        "legAct": "15.2K",
+        "reachSvg": "\n    <svg viewBox=\"0 0 330 145\" class=\"dual-line-chart-svg\" style=\"width: 100%; height: 100%;\">\n      <defs>\n        <linearGradient id=\"reachGrad_gx5bm839q\" x1=\"0\" y1=\"0\" x2=\"0\" y2=\"1\">\n          <stop offset=\"0%\" stop-color=\"#09090b\" stop-opacity=\"0.10\"/>\n          <stop offset=\"100%\" stop-color=\"#09090b\" stop-opacity=\"0.0\"/>\n        </linearGradient>\n      </defs>\n      <line x1=\"32\" y1=\"28\" x2=\"315\" y2=\"28\" stroke=\"#f1f5f9\" stroke-width=\"1\" stroke-dasharray=\"3 3\"/>\n      <line x1=\"32\" y1=\"70\" x2=\"315\" y2=\"70\" stroke=\"#f1f5f9\" stroke-width=\"1\" stroke-dasharray=\"3 3\"/>\n      <line x1=\"32\" y1=\"112\" x2=\"315\" y2=\"112\" stroke=\"#f1f5f9\" stroke-width=\"1\"/>\n      <text x=\"26\" y=\"32\" font-family=\"'Inter', sans-serif\" font-size=\"9\" font-weight=\"700\" fill=\"#71717a\" text-anchor=\"end\">200K</text>\n      <text x=\"26\" y=\"115\" font-family=\"'Inter', sans-serif\" font-size=\"9\" font-weight=\"700\" fill=\"#71717a\" text-anchor=\"end\">0</text>\n      <path d=\"M 36,85.02631578947368 L 81.66666666666666,73.78728070175438 L 127.33333333333333,62.548245614035096 L 173,55.804824561403514 L 218.66666666666666,44.56578947368422 L 264.3333333333333,36.473684210526315 L 310,30 L 310,112 L 36,112 Z\" fill=\"url(#reachGrad_gx5bm839q)\"/>\n      <path d=\"M 36,85.02631578947368 L 81.66666666666666,73.78728070175438 L 127.33333333333333,62.548245614035096 L 173,55.804824561403514 L 218.66666666666666,44.56578947368422 L 264.3333333333333,36.473684210526315 L 310,30\" fill=\"none\" stroke=\"#09090b\" stroke-width=\"2.4\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/>\n      <path d=\"M 36,91.47368421052632 L 81.66666666666666,83.97368421052632 L 127.33333333333333,74.89473684210526 L 173,69.36842105263158 L 218.66666666666666,62.26315789473684 L 264.3333333333333,56.34210526315789 L 310,52\" fill=\"none\" stroke=\"#71717a\" stroke-width=\"1.8\" stroke-dasharray=\"3 3\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/>\n      \n        <circle class=\"chart-point-reach pt-reach-0\" cx=\"36\" cy=\"85.02631578947368\" r=\"3.2\" fill=\"#ffffff\" stroke=\"#09090b\" stroke-width=\"2\"/>\n        <circle class=\"chart-point-act pt-act-0\" cx=\"36\" cy=\"91.47368421052632\" r=\"2.5\" fill=\"#ffffff\" stroke=\"#71717a\" stroke-width=\"1.5\"/>\n      \n        <circle class=\"chart-point-reach pt-reach-1\" cx=\"81.66666666666666\" cy=\"73.78728070175438\" r=\"3.2\" fill=\"#ffffff\" stroke=\"#09090b\" stroke-width=\"2\"/>\n        <circle class=\"chart-point-act pt-act-1\" cx=\"81.66666666666666\" cy=\"83.97368421052632\" r=\"2.5\" fill=\"#ffffff\" stroke=\"#71717a\" stroke-width=\"1.5\"/>\n      \n        <circle class=\"chart-point-reach pt-reach-2\" cx=\"127.33333333333333\" cy=\"62.548245614035096\" r=\"3.2\" fill=\"#ffffff\" stroke=\"#09090b\" stroke-width=\"2\"/>\n        <circle class=\"chart-point-act pt-act-2\" cx=\"127.33333333333333\" cy=\"74.89473684210526\" r=\"2.5\" fill=\"#ffffff\" stroke=\"#71717a\" stroke-width=\"1.5\"/>\n      \n        <circle class=\"chart-point-reach pt-reach-3\" cx=\"173\" cy=\"55.804824561403514\" r=\"3.2\" fill=\"#ffffff\" stroke=\"#09090b\" stroke-width=\"2\"/>\n        <circle class=\"chart-point-act pt-act-3\" cx=\"173\" cy=\"69.36842105263158\" r=\"2.5\" fill=\"#ffffff\" stroke=\"#71717a\" stroke-width=\"1.5\"/>\n      \n        <circle class=\"chart-point-reach pt-reach-4\" cx=\"218.66666666666666\" cy=\"44.56578947368422\" r=\"3.2\" fill=\"#ffffff\" stroke=\"#09090b\" stroke-width=\"2\"/>\n        <circle class=\"chart-point-act pt-act-4\" cx=\"218.66666666666666\" cy=\"62.26315789473684\" r=\"2.5\" fill=\"#ffffff\" stroke=\"#71717a\" stroke-width=\"1.5\"/>\n      \n        <circle class=\"chart-point-reach pt-reach-5\" cx=\"264.3333333333333\" cy=\"36.473684210526315\" r=\"3.2\" fill=\"#ffffff\" stroke=\"#09090b\" stroke-width=\"2\"/>\n        <circle class=\"chart-point-act pt-act-5\" cx=\"264.3333333333333\" cy=\"56.34210526315789\" r=\"2.5\" fill=\"#ffffff\" stroke=\"#71717a\" stroke-width=\"1.5\"/>\n      \n        <circle class=\"chart-point-reach pt-reach-6\" cx=\"310\" cy=\"30\" r=\"3.2\" fill=\"#ffffff\" stroke=\"#09090b\" stroke-width=\"2\"/>\n        <circle class=\"chart-point-act pt-act-6\" cx=\"310\" cy=\"52\" r=\"2.5\" fill=\"#ffffff\" stroke=\"#71717a\" stroke-width=\"1.5\"/>\n      \n      \n        <text x=\"36\" y=\"132\" font-family=\"'Inter', sans-serif\" font-size=\"9\" font-weight=\"600\" fill=\"#71717a\" text-anchor=\"middle\">Day 2</text>\n      \n        <text x=\"81.66666666666666\" y=\"132\" font-family=\"'Inter', sans-serif\" font-size=\"9\" font-weight=\"600\" fill=\"#71717a\" text-anchor=\"middle\">Day 4</text>\n      \n        <text x=\"127.33333333333333\" y=\"132\" font-family=\"'Inter', sans-serif\" font-size=\"9\" font-weight=\"600\" fill=\"#71717a\" text-anchor=\"middle\">Day 6</text>\n      \n        <text x=\"173\" y=\"132\" font-family=\"'Inter', sans-serif\" font-size=\"9\" font-weight=\"600\" fill=\"#71717a\" text-anchor=\"middle\">Day 8</text>\n      \n        <text x=\"218.66666666666666\" y=\"132\" font-family=\"'Inter', sans-serif\" font-size=\"9\" font-weight=\"600\" fill=\"#71717a\" text-anchor=\"middle\">Day 10</text>\n      \n        <text x=\"264.3333333333333\" y=\"132\" font-family=\"'Inter', sans-serif\" font-size=\"9\" font-weight=\"600\" fill=\"#71717a\" text-anchor=\"middle\">Day 12</text>\n      \n        <text x=\"310\" y=\"132\" font-family=\"'Inter', sans-serif\" font-size=\"9\" font-weight=\"600\" fill=\"#71717a\" text-anchor=\"middle\">Day 14</text>\n      \n      \n        <rect class=\"chart-hover-trigger\" data-idx=\"0\" data-label=\"Day 2\" data-reach=\"60K\" data-act=\"5.2K\" data-x=\"36\" data-reach-y=\"85.02631578947368\" data-act-y=\"91.47368421052632\" x=\"13.166666666666668\" y=\"0\" width=\"45.666666666666664\" height=\"145\" fill=\"transparent\" style=\"cursor: crosshair;\"/>\n      \n        <rect class=\"chart-hover-trigger\" data-idx=\"1\" data-label=\"Day 4\" data-reach=\"85K\" data-act=\"7.1K\" data-x=\"81.66666666666666\" data-reach-y=\"73.78728070175438\" data-act-y=\"83.97368421052632\" x=\"58.83333333333333\" y=\"0\" width=\"45.666666666666664\" height=\"145\" fill=\"transparent\" style=\"cursor: crosshair;\"/>\n      \n        <rect class=\"chart-hover-trigger\" data-idx=\"2\" data-label=\"Day 6\" data-reach=\"110K\" data-act=\"9.4K\" data-x=\"127.33333333333333\" data-reach-y=\"62.548245614035096\" data-act-y=\"74.89473684210526\" x=\"104.5\" y=\"0\" width=\"45.666666666666664\" height=\"145\" fill=\"transparent\" style=\"cursor: crosshair;\"/>\n      \n        <rect class=\"chart-hover-trigger\" data-idx=\"3\" data-label=\"Day 8\" data-reach=\"125K\" data-act=\"10.8K\" data-x=\"173\" data-reach-y=\"55.804824561403514\" data-act-y=\"69.36842105263158\" x=\"150.16666666666666\" y=\"0\" width=\"45.666666666666664\" height=\"145\" fill=\"transparent\" style=\"cursor: crosshair;\"/>\n      \n        <rect class=\"chart-hover-trigger\" data-idx=\"4\" data-label=\"Day 10\" data-reach=\"150K\" data-act=\"12.6K\" data-x=\"218.66666666666666\" data-reach-y=\"44.56578947368422\" data-act-y=\"62.26315789473684\" x=\"195.83333333333331\" y=\"0\" width=\"45.666666666666664\" height=\"145\" fill=\"transparent\" style=\"cursor: crosshair;\"/>\n      \n        <rect class=\"chart-hover-trigger\" data-idx=\"5\" data-label=\"Day 12\" data-reach=\"168K\" data-act=\"14.1K\" data-x=\"264.3333333333333\" data-reach-y=\"36.473684210526315\" data-act-y=\"56.34210526315789\" x=\"241.49999999999997\" y=\"0\" width=\"45.666666666666664\" height=\"145\" fill=\"transparent\" style=\"cursor: crosshair;\"/>\n      \n        <rect class=\"chart-hover-trigger\" data-idx=\"6\" data-label=\"Day 14\" data-reach=\"182.4K\" data-act=\"15.2K\" data-x=\"310\" data-reach-y=\"30\" data-act-y=\"52\" x=\"287.1666666666667\" y=\"0\" width=\"45.666666666666664\" height=\"145\" fill=\"transparent\" style=\"cursor: crosshair;\"/>\n      \n    </svg>\n  ",
+        "funnel": {
+          "s1Num": "7,450",
+          "s1Pct": "100%",
+          "s1Fill": "100%",
+          "s2Num": "5,680",
+          "s2Pct": "76.2%",
+          "s2Fill": "76.2%",
+          "s3Num": "3,290",
+          "s3Pct": "44.2%",
+          "s3Fill": "44.2%",
+          "s4Num": "1,480",
+          "s4Pct": "19.9%",
+          "s4Fill": "19.9%",
+          "rate": "19.9% Total Conv"
+        },
+        "demographics": {
+          "total": "182.4K",
+          "nonFollowers": "72% (131.3K)",
+          "followers": "28% (51.1K)",
+          "us": "53% (96.7K)",
+          "in": "13% (23.7K)",
+          "gb": "23% (42.0K)"
+        }
+      },
+      "30 Days": {
+        "followers": "184K",
+        "following": "420",
+        "views": "342,000",
+        "comments": "14,200",
+        "totalReplies": "8,450",
+        "sentToday": "320",
+        "activeRulesFlat": "4",
+        "capturedLeadsFlat": "2,890",
+        "reach": "348.5K",
+        "trendReach": "▲ +28.4%",
+        "engaged": "42.1K",
+        "trendEngaged": "▲ +19.2%",
+        "visits": "28,400",
+        "trendVisits": "▲ +25.8%",
+        "clicks": "12,800",
+        "trendClicks": "▲ +32.4%",
+        "replies": "8,450",
+        "trendReplies": "▲ +22.0%",
+        "dmsToday": "410",
+        "trendDmsToday": "▲ +11.2%",
+        "activeRules": "6 Active",
+        "trendRules": "● 100% Uptime",
+        "leads": "2,890",
+        "trendLeads": "▲ +42.1%",
+        "reachSub": "Fashion lookbook reach vs profile saves over the last 30 days.",
+        "legReach": "348.5K",
+        "legAct": "28.4K",
+        "reachSvg": "\n    <svg viewBox=\"0 0 330 145\" class=\"dual-line-chart-svg\" style=\"width: 100%; height: 100%;\">\n      <defs>\n        <linearGradient id=\"reachGrad_0bcxwrl32\" x1=\"0\" y1=\"0\" x2=\"0\" y2=\"1\">\n          <stop offset=\"0%\" stop-color=\"#09090b\" stop-opacity=\"0.10\"/>\n          <stop offset=\"100%\" stop-color=\"#09090b\" stop-opacity=\"0.0\"/>\n        </linearGradient>\n      </defs>\n      <line x1=\"32\" y1=\"28\" x2=\"315\" y2=\"28\" stroke=\"#f1f5f9\" stroke-width=\"1\" stroke-dasharray=\"3 3\"/>\n      <line x1=\"32\" y1=\"70\" x2=\"315\" y2=\"70\" stroke=\"#f1f5f9\" stroke-width=\"1\" stroke-dasharray=\"3 3\"/>\n      <line x1=\"32\" y1=\"112\" x2=\"315\" y2=\"112\" stroke=\"#f1f5f9\" stroke-width=\"1\"/>\n      <text x=\"26\" y=\"32\" font-family=\"'Inter', sans-serif\" font-size=\"9\" font-weight=\"700\" fill=\"#71717a\" text-anchor=\"end\">380K</text>\n      <text x=\"26\" y=\"115\" font-family=\"'Inter', sans-serif\" font-size=\"9\" font-weight=\"700\" fill=\"#71717a\" text-anchor=\"end\">0</text>\n      <path d=\"M 36,83.76470588235294 L 81.66666666666666,74.35294117647058 L 127.33333333333333,62.58823529411765 L 173,55.52941176470588 L 218.66666666666666,43.76470588235294 L 264.3333333333333,36.705882352941174 L 310,30 L 310,112 L 36,112 Z\" fill=\"url(#reachGrad_0bcxwrl32)\"/>\n      <path d=\"M 36,83.76470588235294 L 81.66666666666666,74.35294117647058 L 127.33333333333333,62.58823529411765 L 173,55.52941176470588 L 218.66666666666666,43.76470588235294 L 264.3333333333333,36.705882352941174 L 310,30\" fill=\"none\" stroke=\"#09090b\" stroke-width=\"2.4\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/>\n      <path d=\"M 36,94.67605633802816 L 81.66666666666666,87.70422535211267 L 127.33333333333333,80.73239436619718 L 173,73.54929577464789 L 218.66666666666666,64.67605633802818 L 264.3333333333333,58.97183098591549 L 310,52\" fill=\"none\" stroke=\"#71717a\" stroke-width=\"1.8\" stroke-dasharray=\"3 3\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/>\n      \n        <circle class=\"chart-point-reach pt-reach-0\" cx=\"36\" cy=\"83.76470588235294\" r=\"3.2\" fill=\"#ffffff\" stroke=\"#09090b\" stroke-width=\"2\"/>\n        <circle class=\"chart-point-act pt-act-0\" cx=\"36\" cy=\"94.67605633802816\" r=\"2.5\" fill=\"#ffffff\" stroke=\"#71717a\" stroke-width=\"1.5\"/>\n      \n        <circle class=\"chart-point-reach pt-reach-1\" cx=\"81.66666666666666\" cy=\"74.35294117647058\" r=\"3.2\" fill=\"#ffffff\" stroke=\"#09090b\" stroke-width=\"2\"/>\n        <circle class=\"chart-point-act pt-act-1\" cx=\"81.66666666666666\" cy=\"87.70422535211267\" r=\"2.5\" fill=\"#ffffff\" stroke=\"#71717a\" stroke-width=\"1.5\"/>\n      \n        <circle class=\"chart-point-reach pt-reach-2\" cx=\"127.33333333333333\" cy=\"62.58823529411765\" r=\"3.2\" fill=\"#ffffff\" stroke=\"#09090b\" stroke-width=\"2\"/>\n        <circle class=\"chart-point-act pt-act-2\" cx=\"127.33333333333333\" cy=\"80.73239436619718\" r=\"2.5\" fill=\"#ffffff\" stroke=\"#71717a\" stroke-width=\"1.5\"/>\n      \n        <circle class=\"chart-point-reach pt-reach-3\" cx=\"173\" cy=\"55.52941176470588\" r=\"3.2\" fill=\"#ffffff\" stroke=\"#09090b\" stroke-width=\"2\"/>\n        <circle class=\"chart-point-act pt-act-3\" cx=\"173\" cy=\"73.54929577464789\" r=\"2.5\" fill=\"#ffffff\" stroke=\"#71717a\" stroke-width=\"1.5\"/>\n      \n        <circle class=\"chart-point-reach pt-reach-4\" cx=\"218.66666666666666\" cy=\"43.76470588235294\" r=\"3.2\" fill=\"#ffffff\" stroke=\"#09090b\" stroke-width=\"2\"/>\n        <circle class=\"chart-point-act pt-act-4\" cx=\"218.66666666666666\" cy=\"64.67605633802818\" r=\"2.5\" fill=\"#ffffff\" stroke=\"#71717a\" stroke-width=\"1.5\"/>\n      \n        <circle class=\"chart-point-reach pt-reach-5\" cx=\"264.3333333333333\" cy=\"36.705882352941174\" r=\"3.2\" fill=\"#ffffff\" stroke=\"#09090b\" stroke-width=\"2\"/>\n        <circle class=\"chart-point-act pt-act-5\" cx=\"264.3333333333333\" cy=\"58.97183098591549\" r=\"2.5\" fill=\"#ffffff\" stroke=\"#71717a\" stroke-width=\"1.5\"/>\n      \n        <circle class=\"chart-point-reach pt-reach-6\" cx=\"310\" cy=\"30\" r=\"3.2\" fill=\"#ffffff\" stroke=\"#09090b\" stroke-width=\"2\"/>\n        <circle class=\"chart-point-act pt-act-6\" cx=\"310\" cy=\"52\" r=\"2.5\" fill=\"#ffffff\" stroke=\"#71717a\" stroke-width=\"1.5\"/>\n      \n      \n        <text x=\"36\" y=\"132\" font-family=\"'Inter', sans-serif\" font-size=\"9\" font-weight=\"600\" fill=\"#71717a\" text-anchor=\"middle\">Day 1</text>\n      \n        <text x=\"81.66666666666666\" y=\"132\" font-family=\"'Inter', sans-serif\" font-size=\"9\" font-weight=\"600\" fill=\"#71717a\" text-anchor=\"middle\">Day 5</text>\n      \n        <text x=\"127.33333333333333\" y=\"132\" font-family=\"'Inter', sans-serif\" font-size=\"9\" font-weight=\"600\" fill=\"#71717a\" text-anchor=\"middle\">Day 10</text>\n      \n        <text x=\"173\" y=\"132\" font-family=\"'Inter', sans-serif\" font-size=\"9\" font-weight=\"600\" fill=\"#71717a\" text-anchor=\"middle\">Day 15</text>\n      \n        <text x=\"218.66666666666666\" y=\"132\" font-family=\"'Inter', sans-serif\" font-size=\"9\" font-weight=\"600\" fill=\"#71717a\" text-anchor=\"middle\">Day 20</text>\n      \n        <text x=\"264.3333333333333\" y=\"132\" font-family=\"'Inter', sans-serif\" font-size=\"9\" font-weight=\"600\" fill=\"#71717a\" text-anchor=\"middle\">Day 25</text>\n      \n        <text x=\"310\" y=\"132\" font-family=\"'Inter', sans-serif\" font-size=\"9\" font-weight=\"600\" fill=\"#71717a\" text-anchor=\"middle\">Day 30</text>\n      \n      \n        <rect class=\"chart-hover-trigger\" data-idx=\"0\" data-label=\"Day 1\" data-reach=\"120K\" data-act=\"8.2K\" data-x=\"36\" data-reach-y=\"83.76470588235294\" data-act-y=\"94.67605633802816\" x=\"13.166666666666668\" y=\"0\" width=\"45.666666666666664\" height=\"145\" fill=\"transparent\" style=\"cursor: crosshair;\"/>\n      \n        <rect class=\"chart-hover-trigger\" data-idx=\"1\" data-label=\"Day 5\" data-reach=\"160K\" data-act=\"11.5K\" data-x=\"81.66666666666666\" data-reach-y=\"74.35294117647058\" data-act-y=\"87.70422535211267\" x=\"58.83333333333333\" y=\"0\" width=\"45.666666666666664\" height=\"145\" fill=\"transparent\" style=\"cursor: crosshair;\"/>\n      \n        <rect class=\"chart-hover-trigger\" data-idx=\"2\" data-label=\"Day 10\" data-reach=\"210K\" data-act=\"14.8K\" data-x=\"127.33333333333333\" data-reach-y=\"62.58823529411765\" data-act-y=\"80.73239436619718\" x=\"104.5\" y=\"0\" width=\"45.666666666666664\" height=\"145\" fill=\"transparent\" style=\"cursor: crosshair;\"/>\n      \n        <rect class=\"chart-hover-trigger\" data-idx=\"3\" data-label=\"Day 15\" data-reach=\"240K\" data-act=\"18.2K\" data-x=\"173\" data-reach-y=\"55.52941176470588\" data-act-y=\"73.54929577464789\" x=\"150.16666666666666\" y=\"0\" width=\"45.666666666666664\" height=\"145\" fill=\"transparent\" style=\"cursor: crosshair;\"/>\n      \n        <rect class=\"chart-hover-trigger\" data-idx=\"4\" data-label=\"Day 20\" data-reach=\"290K\" data-act=\"22.4K\" data-x=\"218.66666666666666\" data-reach-y=\"43.76470588235294\" data-act-y=\"64.67605633802818\" x=\"195.83333333333331\" y=\"0\" width=\"45.666666666666664\" height=\"145\" fill=\"transparent\" style=\"cursor: crosshair;\"/>\n      \n        <rect class=\"chart-hover-trigger\" data-idx=\"5\" data-label=\"Day 25\" data-reach=\"320K\" data-act=\"25.1K\" data-x=\"264.3333333333333\" data-reach-y=\"36.705882352941174\" data-act-y=\"58.97183098591549\" x=\"241.49999999999997\" y=\"0\" width=\"45.666666666666664\" height=\"145\" fill=\"transparent\" style=\"cursor: crosshair;\"/>\n      \n        <rect class=\"chart-hover-trigger\" data-idx=\"6\" data-label=\"Day 30\" data-reach=\"348.5K\" data-act=\"28.4K\" data-x=\"310\" data-reach-y=\"30\" data-act-y=\"52\" x=\"287.1666666666667\" y=\"0\" width=\"45.666666666666664\" height=\"145\" fill=\"transparent\" style=\"cursor: crosshair;\"/>\n      \n    </svg>\n  ",
+        "funnel": {
+          "s1Num": "14,200",
+          "s1Pct": "100%",
+          "s1Fill": "100%",
+          "s2Num": "10,800",
+          "s2Pct": "76.1%",
+          "s2Fill": "76.1%",
+          "s3Num": "6,400",
+          "s3Pct": "45.1%",
+          "s3Fill": "45.1%",
+          "s4Num": "2,890",
+          "s4Pct": "20.3%",
+          "s4Fill": "20.3%",
+          "rate": "20.3% Total Conv"
+        },
+        "demographics": {
+          "total": "348.5K",
+          "nonFollowers": "72% (250.9K)",
+          "followers": "28% (97.6K)",
+          "us": "54% (188.2K)",
+          "in": "12% (41.8K)",
+          "gb": "22% (76.7K)"
+        }
+      },
+      "60 Days": {
+        "followers": "184K",
+        "following": "420",
+        "views": "685,000",
+        "comments": "28,100",
+        "totalReplies": "16,900",
+        "sentToday": "480",
+        "activeRulesFlat": "5",
+        "capturedLeadsFlat": "5,840",
+        "reach": "692.0K",
+        "trendReach": "▲ +34.2%",
+        "engaged": "84.0K",
+        "trendEngaged": "▲ +24.1%",
+        "visits": "56,200",
+        "trendVisits": "▲ +30.2%",
+        "clicks": "25,400",
+        "trendClicks": "▲ +36.8%",
+        "replies": "16,900",
+        "trendReplies": "▲ +26.4%",
+        "dmsToday": "620",
+        "trendDmsToday": "▲ +14.5%",
+        "activeRules": "6 Active",
+        "trendRules": "● 100% Uptime",
+        "leads": "5,840",
+        "trendLeads": "▲ +48.0%",
+        "reachSub": "Fashion lookbook reach vs profile saves over the last 60 days.",
+        "legReach": "692.0K",
+        "legAct": "56.2K",
+        "reachSvg": "\n    <svg viewBox=\"0 0 330 145\" class=\"dual-line-chart-svg\" style=\"width: 100%; height: 100%;\">\n      <defs>\n        <linearGradient id=\"reachGrad_r5l1pjrx0\" x1=\"0\" y1=\"0\" x2=\"0\" y2=\"1\">\n          <stop offset=\"0%\" stop-color=\"#09090b\" stop-opacity=\"0.10\"/>\n          <stop offset=\"100%\" stop-color=\"#09090b\" stop-opacity=\"0.0\"/>\n        </linearGradient>\n      </defs>\n      <line x1=\"32\" y1=\"28\" x2=\"315\" y2=\"28\" stroke=\"#f1f5f9\" stroke-width=\"1\" stroke-dasharray=\"3 3\"/>\n      <line x1=\"32\" y1=\"70\" x2=\"315\" y2=\"70\" stroke=\"#f1f5f9\" stroke-width=\"1\" stroke-dasharray=\"3 3\"/>\n      <line x1=\"32\" y1=\"112\" x2=\"315\" y2=\"112\" stroke=\"#f1f5f9\" stroke-width=\"1\"/>\n      <text x=\"26\" y=\"32\" font-family=\"'Inter', sans-serif\" font-size=\"9\" font-weight=\"700\" fill=\"#71717a\" text-anchor=\"end\">750K</text>\n      <text x=\"26\" y=\"115\" font-family=\"'Inter', sans-serif\" font-size=\"9\" font-weight=\"700\" fill=\"#71717a\" text-anchor=\"end\">0</text>\n      <path d=\"M 36,83.5606936416185 L 81.66666666666666,74.08092485549133 L 127.33333333333333,62.23121387283237 L 173,53.9364161849711 L 218.66666666666666,43.27167630057804 L 264.3333333333333,36.161849710982665 L 310,30 L 310,112 L 36,112 Z\" fill=\"url(#reachGrad_r5l1pjrx0)\"/>\n      <path d=\"M 36,83.5606936416185 L 81.66666666666666,74.08092485549133 L 127.33333333333333,62.23121387283237 L 173,53.9364161849711 L 218.66666666666666,43.27167630057804 L 264.3333333333333,36.161849710982665 L 310,30\" fill=\"none\" stroke=\"#09090b\" stroke-width=\"2.4\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/>\n      <path d=\"M 36,92.7829181494662 L 81.66666666666666,86.37722419928826 L 127.33333333333333,77.83629893238435 L 173,71.4306049822064 L 218.66666666666666,62.8896797153025 L 264.3333333333333,56.48398576512456 L 310,52\" fill=\"none\" stroke=\"#71717a\" stroke-width=\"1.8\" stroke-dasharray=\"3 3\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/>\n      \n        <circle class=\"chart-point-reach pt-reach-0\" cx=\"36\" cy=\"83.5606936416185\" r=\"3.2\" fill=\"#ffffff\" stroke=\"#09090b\" stroke-width=\"2\"/>\n        <circle class=\"chart-point-act pt-act-0\" cx=\"36\" cy=\"92.7829181494662\" r=\"2.5\" fill=\"#ffffff\" stroke=\"#71717a\" stroke-width=\"1.5\"/>\n      \n        <circle class=\"chart-point-reach pt-reach-1\" cx=\"81.66666666666666\" cy=\"74.08092485549133\" r=\"3.2\" fill=\"#ffffff\" stroke=\"#09090b\" stroke-width=\"2\"/>\n        <circle class=\"chart-point-act pt-act-1\" cx=\"81.66666666666666\" cy=\"86.37722419928826\" r=\"2.5\" fill=\"#ffffff\" stroke=\"#71717a\" stroke-width=\"1.5\"/>\n      \n        <circle class=\"chart-point-reach pt-reach-2\" cx=\"127.33333333333333\" cy=\"62.23121387283237\" r=\"3.2\" fill=\"#ffffff\" stroke=\"#09090b\" stroke-width=\"2\"/>\n        <circle class=\"chart-point-act pt-act-2\" cx=\"127.33333333333333\" cy=\"77.83629893238435\" r=\"2.5\" fill=\"#ffffff\" stroke=\"#71717a\" stroke-width=\"1.5\"/>\n      \n        <circle class=\"chart-point-reach pt-reach-3\" cx=\"173\" cy=\"53.9364161849711\" r=\"3.2\" fill=\"#ffffff\" stroke=\"#09090b\" stroke-width=\"2\"/>\n        <circle class=\"chart-point-act pt-act-3\" cx=\"173\" cy=\"71.4306049822064\" r=\"2.5\" fill=\"#ffffff\" stroke=\"#71717a\" stroke-width=\"1.5\"/>\n      \n        <circle class=\"chart-point-reach pt-reach-4\" cx=\"218.66666666666666\" cy=\"43.27167630057804\" r=\"3.2\" fill=\"#ffffff\" stroke=\"#09090b\" stroke-width=\"2\"/>\n        <circle class=\"chart-point-act pt-act-4\" cx=\"218.66666666666666\" cy=\"62.8896797153025\" r=\"2.5\" fill=\"#ffffff\" stroke=\"#71717a\" stroke-width=\"1.5\"/>\n      \n        <circle class=\"chart-point-reach pt-reach-5\" cx=\"264.3333333333333\" cy=\"36.161849710982665\" r=\"3.2\" fill=\"#ffffff\" stroke=\"#09090b\" stroke-width=\"2\"/>\n        <circle class=\"chart-point-act pt-act-5\" cx=\"264.3333333333333\" cy=\"56.48398576512456\" r=\"2.5\" fill=\"#ffffff\" stroke=\"#71717a\" stroke-width=\"1.5\"/>\n      \n        <circle class=\"chart-point-reach pt-reach-6\" cx=\"310\" cy=\"30\" r=\"3.2\" fill=\"#ffffff\" stroke=\"#09090b\" stroke-width=\"2\"/>\n        <circle class=\"chart-point-act pt-act-6\" cx=\"310\" cy=\"52\" r=\"2.5\" fill=\"#ffffff\" stroke=\"#71717a\" stroke-width=\"1.5\"/>\n      \n      \n        <text x=\"36\" y=\"132\" font-family=\"'Inter', sans-serif\" font-size=\"9\" font-weight=\"600\" fill=\"#71717a\" text-anchor=\"middle\">Day 1</text>\n      \n        <text x=\"81.66666666666666\" y=\"132\" font-family=\"'Inter', sans-serif\" font-size=\"9\" font-weight=\"600\" fill=\"#71717a\" text-anchor=\"middle\">Day 10</text>\n      \n        <text x=\"127.33333333333333\" y=\"132\" font-family=\"'Inter', sans-serif\" font-size=\"9\" font-weight=\"600\" fill=\"#71717a\" text-anchor=\"middle\">Day 20</text>\n      \n        <text x=\"173\" y=\"132\" font-family=\"'Inter', sans-serif\" font-size=\"9\" font-weight=\"600\" fill=\"#71717a\" text-anchor=\"middle\">Day 30</text>\n      \n        <text x=\"218.66666666666666\" y=\"132\" font-family=\"'Inter', sans-serif\" font-size=\"9\" font-weight=\"600\" fill=\"#71717a\" text-anchor=\"middle\">Day 40</text>\n      \n        <text x=\"264.3333333333333\" y=\"132\" font-family=\"'Inter', sans-serif\" font-size=\"9\" font-weight=\"600\" fill=\"#71717a\" text-anchor=\"middle\">Day 50</text>\n      \n        <text x=\"310\" y=\"132\" font-family=\"'Inter', sans-serif\" font-size=\"9\" font-weight=\"600\" fill=\"#71717a\" text-anchor=\"middle\">Day 60</text>\n      \n      \n        <rect class=\"chart-hover-trigger\" data-idx=\"0\" data-label=\"Day 1\" data-reach=\"240K\" data-act=\"18K\" data-x=\"36\" data-reach-y=\"83.5606936416185\" data-act-y=\"92.7829181494662\" x=\"13.166666666666668\" y=\"0\" width=\"45.666666666666664\" height=\"145\" fill=\"transparent\" style=\"cursor: crosshair;\"/>\n      \n        <rect class=\"chart-hover-trigger\" data-idx=\"1\" data-label=\"Day 10\" data-reach=\"320K\" data-act=\"24K\" data-x=\"81.66666666666666\" data-reach-y=\"74.08092485549133\" data-act-y=\"86.37722419928826\" x=\"58.83333333333333\" y=\"0\" width=\"45.666666666666664\" height=\"145\" fill=\"transparent\" style=\"cursor: crosshair;\"/>\n      \n        <rect class=\"chart-hover-trigger\" data-idx=\"2\" data-label=\"Day 20\" data-reach=\"420K\" data-act=\"32K\" data-x=\"127.33333333333333\" data-reach-y=\"62.23121387283237\" data-act-y=\"77.83629893238435\" x=\"104.5\" y=\"0\" width=\"45.666666666666664\" height=\"145\" fill=\"transparent\" style=\"cursor: crosshair;\"/>\n      \n        <rect class=\"chart-hover-trigger\" data-idx=\"3\" data-label=\"Day 30\" data-reach=\"490K\" data-act=\"38K\" data-x=\"173\" data-reach-y=\"53.9364161849711\" data-act-y=\"71.4306049822064\" x=\"150.16666666666666\" y=\"0\" width=\"45.666666666666664\" height=\"145\" fill=\"transparent\" style=\"cursor: crosshair;\"/>\n      \n        <rect class=\"chart-hover-trigger\" data-idx=\"4\" data-label=\"Day 40\" data-reach=\"580K\" data-act=\"46K\" data-x=\"218.66666666666666\" data-reach-y=\"43.27167630057804\" data-act-y=\"62.8896797153025\" x=\"195.83333333333331\" y=\"0\" width=\"45.666666666666664\" height=\"145\" fill=\"transparent\" style=\"cursor: crosshair;\"/>\n      \n        <rect class=\"chart-hover-trigger\" data-idx=\"5\" data-label=\"Day 50\" data-reach=\"640K\" data-act=\"52K\" data-x=\"264.3333333333333\" data-reach-y=\"36.161849710982665\" data-act-y=\"56.48398576512456\" x=\"241.49999999999997\" y=\"0\" width=\"45.666666666666664\" height=\"145\" fill=\"transparent\" style=\"cursor: crosshair;\"/>\n      \n        <rect class=\"chart-hover-trigger\" data-idx=\"6\" data-label=\"Day 60\" data-reach=\"692K\" data-act=\"56.2K\" data-x=\"310\" data-reach-y=\"30\" data-act-y=\"52\" x=\"287.1666666666667\" y=\"0\" width=\"45.666666666666664\" height=\"145\" fill=\"transparent\" style=\"cursor: crosshair;\"/>\n      \n    </svg>\n  ",
+        "funnel": {
+          "s1Num": "28,100",
+          "s1Pct": "100%",
+          "s1Fill": "100%",
+          "s2Num": "21,400",
+          "s2Pct": "76.2%",
+          "s2Fill": "76.2%",
+          "s3Num": "12,800",
+          "s3Pct": "45.6%",
+          "s3Fill": "45.6%",
+          "s4Num": "5,840",
+          "s4Pct": "20.8%",
+          "s4Fill": "20.8%",
+          "rate": "20.8% Total Conv"
+        },
+        "demographics": {
+          "total": "692.0K",
+          "nonFollowers": "74% (512.1K)",
+          "followers": "26% (179.9K)",
+          "us": "55% (380.6K)",
+          "in": "11% (76.1K)",
+          "gb": "24% (166.1K)"
+        }
+      },
+      "90 Days": {
+        "followers": "184K",
+        "following": "420",
+        "views": "1,050,000",
+        "comments": "42,800",
+        "totalReplies": "25,400",
+        "sentToday": "640",
+        "activeRulesFlat": "5",
+        "capturedLeadsFlat": "8,920",
+        "reach": "1.04M",
+        "trendReach": "▲ +39.5%",
+        "engaged": "128.0K",
+        "trendEngaged": "▲ +28.0%",
+        "visits": "84,000",
+        "trendVisits": "▲ +34.5%",
+        "clicks": "38,200",
+        "trendClicks": "▲ +41.0%",
+        "replies": "25,400",
+        "trendReplies": "▲ +30.2%",
+        "dmsToday": "890",
+        "trendDmsToday": "▲ +16.8%",
+        "activeRules": "6 Active",
+        "trendRules": "● 100% Uptime",
+        "leads": "8,920",
+        "trendLeads": "▲ +54.2%",
+        "reachSub": "Fashion lookbook reach vs profile saves over the last 90 days.",
+        "legReach": "1.04M",
+        "legAct": "84.0K",
+        "reachSvg": "\n    <svg viewBox=\"0 0 330 145\" class=\"dual-line-chart-svg\" style=\"width: 100%; height: 100%;\">\n      <defs>\n        <linearGradient id=\"reachGrad_l6rqtw90e\" x1=\"0\" y1=\"0\" x2=\"0\" y2=\"1\">\n          <stop offset=\"0%\" stop-color=\"#09090b\" stop-opacity=\"0.10\"/>\n          <stop offset=\"100%\" stop-color=\"#09090b\" stop-opacity=\"0.0\"/>\n        </linearGradient>\n      </defs>\n      <line x1=\"32\" y1=\"28\" x2=\"315\" y2=\"28\" stroke=\"#f1f5f9\" stroke-width=\"1\" stroke-dasharray=\"3 3\"/>\n      <line x1=\"32\" y1=\"70\" x2=\"315\" y2=\"70\" stroke=\"#f1f5f9\" stroke-width=\"1\" stroke-dasharray=\"3 3\"/>\n      <line x1=\"32\" y1=\"112\" x2=\"315\" y2=\"112\" stroke=\"#f1f5f9\" stroke-width=\"1\"/>\n      <text x=\"26\" y=\"32\" font-family=\"'Inter', sans-serif\" font-size=\"9\" font-weight=\"700\" fill=\"#71717a\" text-anchor=\"end\">1.2M</text>\n      <text x=\"26\" y=\"115\" font-family=\"'Inter', sans-serif\" font-size=\"9\" font-weight=\"700\" fill=\"#71717a\" text-anchor=\"end\">0</text>\n      <path d=\"M 36,84.40384615384616 L 81.66666666666666,74.15384615384616 L 127.33333333333333,63.11538461538461 L 173,53.65384615384615 L 218.66666666666666,44.19230769230769 L 264.3333333333333,36.30769230769231 L 310,30 L 310,112 L 36,112 Z\" fill=\"url(#reachGrad_l6rqtw90e)\"/>\n      <path d=\"M 36,84.40384615384616 L 81.66666666666666,74.15384615384616 L 127.33333333333333,63.11538461538461 L 173,53.65384615384615 L 218.66666666666666,44.19230769230769 L 264.3333333333333,36.30769230769231 L 310,30\" fill=\"none\" stroke=\"#09090b\" stroke-width=\"2.4\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/>\n      <path d=\"M 36,92 L 81.66666666666666,84.85714285714286 L 127.33333333333333,76.28571428571428 L 173,69.85714285714286 L 218.66666666666666,62.714285714285715 L 264.3333333333333,56.285714285714285 L 310,52\" fill=\"none\" stroke=\"#71717a\" stroke-width=\"1.8\" stroke-dasharray=\"3 3\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/>\n      \n        <circle class=\"chart-point-reach pt-reach-0\" cx=\"36\" cy=\"84.40384615384616\" r=\"3.2\" fill=\"#ffffff\" stroke=\"#09090b\" stroke-width=\"2\"/>\n        <circle class=\"chart-point-act pt-act-0\" cx=\"36\" cy=\"92\" r=\"2.5\" fill=\"#ffffff\" stroke=\"#71717a\" stroke-width=\"1.5\"/>\n      \n        <circle class=\"chart-point-reach pt-reach-1\" cx=\"81.66666666666666\" cy=\"74.15384615384616\" r=\"3.2\" fill=\"#ffffff\" stroke=\"#09090b\" stroke-width=\"2\"/>\n        <circle class=\"chart-point-act pt-act-1\" cx=\"81.66666666666666\" cy=\"84.85714285714286\" r=\"2.5\" fill=\"#ffffff\" stroke=\"#71717a\" stroke-width=\"1.5\"/>\n      \n        <circle class=\"chart-point-reach pt-reach-2\" cx=\"127.33333333333333\" cy=\"63.11538461538461\" r=\"3.2\" fill=\"#ffffff\" stroke=\"#09090b\" stroke-width=\"2\"/>\n        <circle class=\"chart-point-act pt-act-2\" cx=\"127.33333333333333\" cy=\"76.28571428571428\" r=\"2.5\" fill=\"#ffffff\" stroke=\"#71717a\" stroke-width=\"1.5\"/>\n      \n        <circle class=\"chart-point-reach pt-reach-3\" cx=\"173\" cy=\"53.65384615384615\" r=\"3.2\" fill=\"#ffffff\" stroke=\"#09090b\" stroke-width=\"2\"/>\n        <circle class=\"chart-point-act pt-act-3\" cx=\"173\" cy=\"69.85714285714286\" r=\"2.5\" fill=\"#ffffff\" stroke=\"#71717a\" stroke-width=\"1.5\"/>\n      \n        <circle class=\"chart-point-reach pt-reach-4\" cx=\"218.66666666666666\" cy=\"44.19230769230769\" r=\"3.2\" fill=\"#ffffff\" stroke=\"#09090b\" stroke-width=\"2\"/>\n        <circle class=\"chart-point-act pt-act-4\" cx=\"218.66666666666666\" cy=\"62.714285714285715\" r=\"2.5\" fill=\"#ffffff\" stroke=\"#71717a\" stroke-width=\"1.5\"/>\n      \n        <circle class=\"chart-point-reach pt-reach-5\" cx=\"264.3333333333333\" cy=\"36.30769230769231\" r=\"3.2\" fill=\"#ffffff\" stroke=\"#09090b\" stroke-width=\"2\"/>\n        <circle class=\"chart-point-act pt-act-5\" cx=\"264.3333333333333\" cy=\"56.285714285714285\" r=\"2.5\" fill=\"#ffffff\" stroke=\"#71717a\" stroke-width=\"1.5\"/>\n      \n        <circle class=\"chart-point-reach pt-reach-6\" cx=\"310\" cy=\"30\" r=\"3.2\" fill=\"#ffffff\" stroke=\"#09090b\" stroke-width=\"2\"/>\n        <circle class=\"chart-point-act pt-act-6\" cx=\"310\" cy=\"52\" r=\"2.5\" fill=\"#ffffff\" stroke=\"#71717a\" stroke-width=\"1.5\"/>\n      \n      \n        <text x=\"36\" y=\"132\" font-family=\"'Inter', sans-serif\" font-size=\"9\" font-weight=\"600\" fill=\"#71717a\" text-anchor=\"middle\">Day 1</text>\n      \n        <text x=\"81.66666666666666\" y=\"132\" font-family=\"'Inter', sans-serif\" font-size=\"9\" font-weight=\"600\" fill=\"#71717a\" text-anchor=\"middle\">Day 15</text>\n      \n        <text x=\"127.33333333333333\" y=\"132\" font-family=\"'Inter', sans-serif\" font-size=\"9\" font-weight=\"600\" fill=\"#71717a\" text-anchor=\"middle\">Day 30</text>\n      \n        <text x=\"173\" y=\"132\" font-family=\"'Inter', sans-serif\" font-size=\"9\" font-weight=\"600\" fill=\"#71717a\" text-anchor=\"middle\">Day 45</text>\n      \n        <text x=\"218.66666666666666\" y=\"132\" font-family=\"'Inter', sans-serif\" font-size=\"9\" font-weight=\"600\" fill=\"#71717a\" text-anchor=\"middle\">Day 60</text>\n      \n        <text x=\"264.3333333333333\" y=\"132\" font-family=\"'Inter', sans-serif\" font-size=\"9\" font-weight=\"600\" fill=\"#71717a\" text-anchor=\"middle\">Day 75</text>\n      \n        <text x=\"310\" y=\"132\" font-family=\"'Inter', sans-serif\" font-size=\"9\" font-weight=\"600\" fill=\"#71717a\" text-anchor=\"middle\">Day 90</text>\n      \n      \n        <rect class=\"chart-hover-trigger\" data-idx=\"0\" data-label=\"Day 1\" data-reach=\"350K\" data-act=\"28K\" data-x=\"36\" data-reach-y=\"84.40384615384616\" data-act-y=\"92\" x=\"13.166666666666668\" y=\"0\" width=\"45.666666666666664\" height=\"145\" fill=\"transparent\" style=\"cursor: crosshair;\"/>\n      \n        <rect class=\"chart-hover-trigger\" data-idx=\"1\" data-label=\"Day 15\" data-reach=\"480K\" data-act=\"38K\" data-x=\"81.66666666666666\" data-reach-y=\"74.15384615384616\" data-act-y=\"84.85714285714286\" x=\"58.83333333333333\" y=\"0\" width=\"45.666666666666664\" height=\"145\" fill=\"transparent\" style=\"cursor: crosshair;\"/>\n      \n        <rect class=\"chart-hover-trigger\" data-idx=\"2\" data-label=\"Day 30\" data-reach=\"620K\" data-act=\"50K\" data-x=\"127.33333333333333\" data-reach-y=\"63.11538461538461\" data-act-y=\"76.28571428571428\" x=\"104.5\" y=\"0\" width=\"45.666666666666664\" height=\"145\" fill=\"transparent\" style=\"cursor: crosshair;\"/>\n      \n        <rect class=\"chart-hover-trigger\" data-idx=\"3\" data-label=\"Day 45\" data-reach=\"740K\" data-act=\"59K\" data-x=\"173\" data-reach-y=\"53.65384615384615\" data-act-y=\"69.85714285714286\" x=\"150.16666666666666\" y=\"0\" width=\"45.666666666666664\" height=\"145\" fill=\"transparent\" style=\"cursor: crosshair;\"/>\n      \n        <rect class=\"chart-hover-trigger\" data-idx=\"4\" data-label=\"Day 60\" data-reach=\"860K\" data-act=\"69K\" data-x=\"218.66666666666666\" data-reach-y=\"44.19230769230769\" data-act-y=\"62.714285714285715\" x=\"195.83333333333331\" y=\"0\" width=\"45.666666666666664\" height=\"145\" fill=\"transparent\" style=\"cursor: crosshair;\"/>\n      \n        <rect class=\"chart-hover-trigger\" data-idx=\"5\" data-label=\"Day 75\" data-reach=\"960K\" data-act=\"78K\" data-x=\"264.3333333333333\" data-reach-y=\"36.30769230769231\" data-act-y=\"56.285714285714285\" x=\"241.49999999999997\" y=\"0\" width=\"45.666666666666664\" height=\"145\" fill=\"transparent\" style=\"cursor: crosshair;\"/>\n      \n        <rect class=\"chart-hover-trigger\" data-idx=\"6\" data-label=\"Day 90\" data-reach=\"1040K\" data-act=\"84K\" data-x=\"310\" data-reach-y=\"30\" data-act-y=\"52\" x=\"287.1666666666667\" y=\"0\" width=\"45.666666666666664\" height=\"145\" fill=\"transparent\" style=\"cursor: crosshair;\"/>\n      \n    </svg>\n  ",
+        "funnel": {
+          "s1Num": "42,800",
+          "s1Pct": "100%",
+          "s1Fill": "100%",
+          "s2Num": "32,500",
+          "s2Pct": "75.9%",
+          "s2Fill": "75.9%",
+          "s3Num": "19,200",
+          "s3Pct": "44.9%",
+          "s3Fill": "44.9%",
+          "s4Num": "8,920",
+          "s4Pct": "20.8%",
+          "s4Fill": "20.8%",
+          "rate": "20.8% Total Conv"
+        },
+        "demographics": {
+          "total": "1.04M",
+          "nonFollowers": "75% (780.0K)",
+          "followers": "25% (260.0K)",
+          "us": "56% (582.4K)",
+          "in": "10% (104.0K)",
+          "gb": "25% (260.0K)"
+        }
+      }
+    },
+    "store": [
+      {
+        "id": "prod-s1",
+        "title": "Summer 2026 Capsule Wardrobe & Lookbook",
+        "price": "₹799",
+        "oldPrice": "₹1,499",
+        "desc": "Over 45 curated high-street & designer outfit pairings, direct shopping links with discount codes, and color coordination styling guides.",
+        "cta": "Get Lookbook",
+        "rating": "4.9 (184 reviews)",
+        "photos": [
+          "https://images.unsplash.com/photo-1490481651871-ab68de25d43d?auto=format&fit=crop&w=600&q=80",
+          "https://images.unsplash.com/photo-1445205170230-053b83016050?auto=format&fit=crop&w=600&q=80"
+        ]
+      },
+      {
+        "id": "prod-s2",
+        "title": "Moody Warm Lightroom Mobile Presets (10-Pack)",
+        "price": "₹399",
+        "oldPrice": "₹899",
+        "desc": "One-click aesthetic photo filters designed for golden hour lighting, café moments, and street style photography. Compatible with free Lightroom mobile app.",
+        "cta": "Download Presets",
+        "rating": "5.0 (312 reviews)",
+        "photos": [
+          "https://images.unsplash.com/photo-1509631179647-0177331693ae?auto=format&fit=crop&w=600&q=80",
+          "https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?auto=format&fit=crop&w=600&q=80"
+        ]
+      },
+      {
+        "id": "prod-s3",
+        "title": "1-on-1 Personal Styling Consultation",
+        "price": "₹3,499",
+        "oldPrice": "₹5,999",
+        "desc": "Private 45-minute virtual wardrobe audit, personalized moodboard for your body type, and custom event outfit sourcing.",
+        "cta": "Book Consultation",
+        "rating": "5.0 (42 reviews)",
+        "photos": [
+          "https://images.unsplash.com/photo-1483985988355-763728e1935b?auto=format&fit=crop&w=600&q=80"
+        ]
+      },
+      {
+        "id": "prod-s4",
+        "title": "Free Daily Outfit Checklist & Zara Dupes Guide",
+        "price": "FREE",
+        "oldPrice": "₹299",
+        "desc": "Free downloadable mini-guide featuring 15 luxury designer clothing dupes from high street brands under ₹2,000.",
+        "cta": "Get Free Guide",
+        "rating": "4.8 (520 reviews)",
+        "photos": [
+          "https://images.unsplash.com/photo-1469334031218-e382a71b716b?auto=format&fit=crop&w=600&q=80"
+        ]
+      }
+    ],
+    "rules": [
+      {
+        "id": "rule-s-outfit",
+        "name": "Reel OOTD Links Auto-DM",
+        "ruleSub": "Reel OOTD Links Auto-DM",
+        "thumbImg": "https://images.unsplash.com/photo-1490481651871-ab68de25d43d?auto=format&fit=crop&w=600&q=80",
+        "type": "reel",
+        "typeName": "Reels & Live",
+        "keywords": [
+          "OUTFIT",
+          "LINKS"
+        ],
+        "target": "REELS",
+        "targetType": "REELS",
+        "active": true,
+        "sentCount": 8420,
+        "successRate": "99.4%",
+        "response": "Hey gorgeous {first_name}! Here are all the direct product links to today’s reel outfit: {link} Enjoy shopping! ✨",
+        "attachLink": true,
+        "linkUrl": "https://renderreply.com/sarah/ootd-links",
+        "linkTitle": "Shop Today’s Reel Outfit",
+        "commentReply": true,
+        "commentReplyText": "Sent all outfit links directly to your DMs babe! 💕"
+      },
+      {
+        "id": "rule-s-lookbook",
+        "name": "Summer Lookbook Download",
+        "ruleSub": "Summer Lookbook Download",
+        "thumbImg": "https://images.unsplash.com/photo-1445205170230-053b83016050?auto=format&fit=crop&w=600&q=80",
+        "type": "post",
+        "typeName": "Post Comments",
+        "keywords": [
+          "LOOKBOOK"
+        ],
+        "target": "POST",
+        "targetType": "POST",
+        "active": true,
+        "sentCount": 4120,
+        "successRate": "98.9%",
+        "response": "Hi {first_name}! Here is the link to download my complete Summer 2026 Capsule Lookbook: {link}",
+        "attachLink": true,
+        "linkUrl": "https://renderreply.com/sarah/lookbook",
+        "linkTitle": "Summer 2026 Lookbook PDF",
+        "commentReply": false,
+        "commentReplyText": ""
+      },
+      {
+        "id": "rule-s-preset",
+        "name": "Free Preset Sample Auto-DM",
+        "ruleSub": "Free Preset Sample Auto-DM",
+        "thumbImg": "https://images.unsplash.com/photo-1509631179647-0177331693ae?auto=format&fit=crop&w=600&q=80",
+        "type": "dm",
+        "typeName": "Direct Messages",
+        "keywords": [
+          "PRESET"
+        ],
+        "target": "DIRECT_MESSAGES",
+        "targetType": "DIRECT_MESSAGES",
+        "active": true,
+        "sentCount": 3210,
+        "successRate": "99.1%",
+        "response": "Hey {first_name}! Here is your free Lightroom mobile aesthetic preset DNG file: {link} Can’t wait to see your edits!",
+        "attachLink": true,
+        "linkUrl": "https://renderreply.com/sarah/free-preset",
+        "linkTitle": "Download Free Preset",
+        "commentReply": false,
+        "commentReplyText": ""
+      }
+    ],
+    "inbox": {
+      "jessica": {
+        "name": "Jessica Taylor",
+        "handle": "@jess_style",
+        "avatar": "https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&w=150&q=80",
+        "followers": "64.5K Followers",
+        "source": "Reel Comment: \"#OUTFIT\"",
+        "status": "attention",
+        "botActive": true,
+        "triggerTitle": "Triggered by Reel: \"Fall Blazer & Linen Pants Styling\" (Keyword: \"#OUTFIT\")",
+        "messages": [
+          {
+            "type": "divider",
+            "text": "TODAY, 11:30 AM"
+          },
+          {
+            "type": "user",
+            "text": "Where did you get the oversized beige trench coat from? Love it!",
+            "time": "11:30 AM",
+            "context": "Commented \"#OUTFIT\" on Reel #412"
+          },
+          {
+            "type": "bot",
+            "text": "Hey Jessica! The beige trench coat is from Mango (on sale right now) and pants are Zara! Direct links here: https://renderreply.com/sarah/ootd-links",
+            "time": "11:30 AM",
+            "flow": "OOTD Auto-DM Flow",
+            "hasCard": true
+          }
+        ]
+      },
+      "chloe": {
+        "name": "Chloe Dupont",
+        "handle": "@chloe.mode",
+        "avatar": "https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&w=150&q=80",
+        "followers": "190K Followers",
+        "source": "Reel Comment: \"#LOOKBOOK\"",
+        "status": "bot",
+        "botActive": true,
+        "triggerTitle": "Triggered by Post: \"Paris Fashion Week Moodboard\"",
+        "messages": [
+          {
+            "type": "divider",
+            "text": "TODAY, 10:15 AM"
+          },
+          {
+            "type": "user",
+            "text": "LOOKBOOK please!",
+            "time": "10:15 AM",
+            "context": "Commented \"LOOKBOOK\""
+          },
+          {
+            "type": "bot",
+            "text": "Bonjour Chloe! Here is your private link to the Summer & Paris Lookbook: https://renderreply.com/sarah/lookbook ✨",
+            "time": "10:15 AM",
+            "flow": "Lookbook Automated Delivery",
+            "hasCard": false
+          }
+        ]
+      },
+      "maya": {
+        "name": "Maya Lin",
+        "handle": "@maya_aesthetics",
+        "avatar": "https://images.unsplash.com/photo-1524504388940-b1c1722653e1?auto=format&fit=crop&w=150&q=80",
+        "followers": "42K Followers",
+        "source": "DM Keyword: \"PRESET\"",
+        "status": "resolved",
+        "botActive": true,
+        "triggerTitle": "Triggered by DM Keyword \"PRESET\"",
+        "messages": [
+          {
+            "type": "divider",
+            "text": "YESTERDAY"
+          },
+          {
+            "type": "user",
+            "text": "PRESET",
+            "time": "05:40 PM",
+            "context": "Direct message"
+          },
+          {
+            "type": "bot",
+            "text": "Hey Maya! Here is your free golden preset pack: https://renderreply.com/sarah/free-preset",
+            "time": "05:40 PM",
+            "flow": "Preset Auto Delivery",
+            "hasCard": false
+          },
+          {
+            "type": "user",
+            "text": "Thank you Sarah, my photos look stunning with this!",
+            "time": "06:10 PM"
+          }
+        ]
+      }
+    },
+    "leads": [
+      {
+        "id": "lead-s1",
+        "handle": "@jess_style",
+        "name": "Jessica Taylor",
+        "avatar": "JT",
+        "email": "jess.taylor@gmail.com",
+        "phone": "+1 (555) 948-2910",
+        "keyword": "#OUTFIT",
+        "campaign": "outfit",
+        "status": "Email Captured",
+        "statusClass": "email",
+        "sourceTitle": "Fall Blazer & Linen Pants Styling Reel",
+        "sourceThumb": "https://images.unsplash.com/photo-1490481651871-ab68de25d43d?auto=format&fit=crop&w=80&q=80",
+        "time": "1m ago",
+        "timestamp": "Today, 11:30 AM",
+        "commentText": "Where did you get the oversized trench coat? #OUTFIT",
+        "botReplyText": "Hey Jessica! Here are all links: https://renderreply.com/sarah/ootd-links",
+        "ruleName": "Reel OOTD Links Auto-DM"
+      },
+      {
+        "id": "lead-s2",
+        "handle": "@chloe.mode",
+        "name": "Chloe Dupont",
+        "avatar": "CD",
+        "email": "chloe.dupont@vogue-paris.fr",
+        "phone": "+33 6 12 34 56 78",
+        "keyword": "LOOKBOOK",
+        "campaign": "lookbook",
+        "status": "DM Delivered",
+        "statusClass": "",
+        "sourceTitle": "Paris Fashion Week Capsule Moodboard",
+        "sourceThumb": "https://images.unsplash.com/photo-1445205170230-053b83016050?auto=format&fit=crop&w=80&q=80",
+        "time": "8m ago",
+        "timestamp": "Today, 10:15 AM",
+        "commentText": "LOOKBOOK please!",
+        "botReplyText": "Bonjour Chloe! Here is your lookbook link: https://renderreply.com/sarah/lookbook",
+        "ruleName": "Summer Lookbook Download"
+      },
+      {
+        "id": "lead-s3",
+        "handle": "@maya_aesthetics",
+        "name": "Maya Lin",
+        "avatar": "ML",
+        "email": "maya.lin@nyu.edu",
+        "phone": "+1 (555) 392-1849",
+        "keyword": "PRESET",
+        "campaign": "preset",
+        "status": "Converted",
+        "statusClass": "email",
+        "sourceTitle": "Golden Hour Lightroom Mobile Presets Pack",
+        "sourceThumb": "https://images.unsplash.com/photo-1509631179647-0177331693ae?auto=format&fit=crop&w=80&q=80",
+        "time": "15m ago",
+        "timestamp": "Today, 09:40 AM",
+        "commentText": "PRESET",
+        "botReplyText": "Hey Maya! Here is your free preset: https://renderreply.com/sarah/free-preset",
+        "ruleName": "Free Preset Sample Auto-DM"
+      }
+    ],
+    "payments": {
+      "totalBalance": 385400,
+      "availableBalance": 312000,
+      "pendingBalance": 73400,
+      "payout": {
+        "upiId": "sarahstyle@okhdfcbank",
+        "holderName": "Sarah Jenkins",
+        "bankName": "HDFC Bank",
+        "accountNumber": "50100481928371",
+        "ifsc": "HDFC0000411",
+        "primaryChannel": "UPI"
+      },
+      "transactions": [
+        {
+          "id": "79201948192831",
+          "date": "Oct 24, 2026 11:45 AM",
+          "type": "Order Sale",
+          "amount": 34990,
+          "status": "Cleared",
+          "customer": "vip.client@styling.com",
+          "channel": "Direct UPI",
+          "fee": 1049,
+          "gst": 189,
+          "net": 33752
+        },
+        {
+          "id": "79201948192828",
+          "date": "Oct 23, 2026 04:20 PM",
+          "type": "Order Sale",
+          "amount": 7990,
+          "status": "Cleared",
+          "customer": "emma.fashion@gmail.com",
+          "channel": "Direct UPI",
+          "fee": 239,
+          "gst": 43,
+          "net": 7708
+        },
+        {
+          "id": "79201948192820",
+          "date": "Oct 22, 2026 09:10 AM",
+          "type": "Order Sale",
+          "amount": 3990,
+          "status": "Cleared",
+          "customer": "lookbook.buyer@nyu.edu",
+          "channel": "Direct UPI",
+          "fee": 119,
+          "gst": 21,
+          "net": 3850
+        },
+        {
+          "id": "89102471928410",
+          "date": "Oct 20, 2026 03:00 PM",
+          "type": "Withdrawal",
+          "amount": -150000,
+          "status": "Cleared",
+          "customer": "Payout to sarahstyle@okhdfcbank",
+          "channel": "Direct UPI",
+          "fee": 0,
+          "gst": 0,
+          "net": -150000
+        }
+      ]
+    },
+    "biolink": {
+      "title": "Sarah Jenkins | Fashion & Daily Style 🌸",
+      "bio": "Shop my daily outfits, download my signature presets, and book private styling.",
+      "links": [
+        {
+          "label": "Shop Today’s Reel Outfits ✨",
+          "url": "https://renderreply.com/sarah/ootd",
+          "color": "accent"
+        },
+        {
+          "label": "Summer 2026 Lookbook PDF",
+          "url": "https://renderreply.com/sarah/lookbook",
+          "color": "slate"
+        },
+        {
+          "label": "Moody Lightroom Presets (10-Pack)",
+          "url": "https://renderreply.com/sarah/presets",
+          "color": "emerald"
+        },
+        {
+          "label": "Book 1-on-1 Personal Styling",
+          "url": "https://renderreply.com/sarah/styling",
+          "color": "amber"
+        }
+      ],
+      "video1": "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
+      "video2": "",
+      "theme": "rose-gold"
+    }
+  },
+  "acc-alex": {
+    "id": "acc-alex",
+    "profile": {
+      "name": "Alex Rivera (Fit Coach)",
+      "email": "alex.fitness@rivera-fit.io",
+      "avatar": "https://images.unsplash.com/photo-1570295999919-56ceb5ecca61?auto=format&fit=crop&w=250&q=80",
+      "bio": "Certified Strength Coach & High-Performance Nutritionist 🏋️‍♂️ 1000+ Body Transformations.",
+      "insta": "@alex_riverafit",
+      "yt": "youtube.com/@alexriverafit",
+      "tw": "@alexriverafit",
+      "initials": "AR",
+      "badge": "Fitness & Health Coach",
+      "role": "Head Coach"
+    },
+    "dashboard": {
+      "7 Days": {
+        "followers": "92.4K",
+        "following": "210",
+        "views": "48,200",
+        "comments": "1,840",
+        "totalReplies": "1,120",
+        "sentToday": "48",
+        "activeRulesFlat": "4",
+        "capturedLeadsFlat": "380",
+        "reach": "52.4K",
+        "trendReach": "▲ +18.2%",
+        "engaged": "6.8K",
+        "trendEngaged": "▲ +12.4%",
+        "visits": "4,450",
+        "trendVisits": "▲ +16.0%",
+        "clicks": "1,920",
+        "trendClicks": "▲ +21.5%",
+        "replies": "1,120",
+        "trendReplies": "▲ +14.8%",
+        "dmsToday": "64",
+        "trendDmsToday": "▲ +6.5%",
+        "activeRules": "4 Active",
+        "trendRules": "● 100% Uptime",
+        "leads": "380",
+        "trendLeads": "▲ +28.4%",
+        "reachSub": "Workout reels reach vs program clicks over the last 7 days.",
+        "legReach": "52.4K",
+        "legAct": "4.45K",
+        "reachSvg": "\n    <svg viewBox=\"0 0 330 145\" class=\"dual-line-chart-svg\" style=\"width: 100%; height: 100%;\">\n      <defs>\n        <linearGradient id=\"reachGrad_6d0hg8sj8\" x1=\"0\" y1=\"0\" x2=\"0\" y2=\"1\">\n          <stop offset=\"0%\" stop-color=\"#09090b\" stop-opacity=\"0.10\"/>\n          <stop offset=\"100%\" stop-color=\"#09090b\" stop-opacity=\"0.0\"/>\n        </linearGradient>\n      </defs>\n      <line x1=\"32\" y1=\"28\" x2=\"315\" y2=\"28\" stroke=\"#f1f5f9\" stroke-width=\"1\" stroke-dasharray=\"3 3\"/>\n      <line x1=\"32\" y1=\"70\" x2=\"315\" y2=\"70\" stroke=\"#f1f5f9\" stroke-width=\"1\" stroke-dasharray=\"3 3\"/>\n      <line x1=\"32\" y1=\"112\" x2=\"315\" y2=\"112\" stroke=\"#f1f5f9\" stroke-width=\"1\"/>\n      <text x=\"26\" y=\"32\" font-family=\"'Inter', sans-serif\" font-size=\"9\" font-weight=\"700\" fill=\"#71717a\" text-anchor=\"end\">60K</text>\n      <text x=\"26\" y=\"115\" font-family=\"'Inter', sans-serif\" font-size=\"9\" font-weight=\"700\" fill=\"#71717a\" text-anchor=\"end\">0</text>\n      <path d=\"M 36,83.83206106870229 L 81.66666666666666,72.87786259541986 L 127.33333333333333,61.9236641221374 L 173,52.53435114503817 L 218.66666666666666,46.27480916030534 L 264.3333333333333,36.885496183206115 L 310,30 L 310,112 L 36,112 Z\" fill=\"url(#reachGrad_6d0hg8sj8)\"/>\n      <path d=\"M 36,83.83206106870229 L 81.66666666666666,72.87786259541986 L 127.33333333333333,61.9236641221374 L 173,52.53435114503817 L 218.66666666666666,46.27480916030534 L 264.3333333333333,36.885496183206115 L 310,30\" fill=\"none\" stroke=\"#09090b\" stroke-width=\"2.4\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/>\n      <path d=\"M 36,91.7752808988764 L 81.66666666666666,83.68539325842697 L 127.33333333333333,74.24719101123596 L 173,68.85393258426967 L 218.66666666666666,60.764044943820224 L 264.3333333333333,56.71910112359551 L 310,52\" fill=\"none\" stroke=\"#71717a\" stroke-width=\"1.8\" stroke-dasharray=\"3 3\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/>\n      \n        <circle class=\"chart-point-reach pt-reach-0\" cx=\"36\" cy=\"83.83206106870229\" r=\"3.2\" fill=\"#ffffff\" stroke=\"#09090b\" stroke-width=\"2\"/>\n        <circle class=\"chart-point-act pt-act-0\" cx=\"36\" cy=\"91.7752808988764\" r=\"2.5\" fill=\"#ffffff\" stroke=\"#71717a\" stroke-width=\"1.5\"/>\n      \n        <circle class=\"chart-point-reach pt-reach-1\" cx=\"81.66666666666666\" cy=\"72.87786259541986\" r=\"3.2\" fill=\"#ffffff\" stroke=\"#09090b\" stroke-width=\"2\"/>\n        <circle class=\"chart-point-act pt-act-1\" cx=\"81.66666666666666\" cy=\"83.68539325842697\" r=\"2.5\" fill=\"#ffffff\" stroke=\"#71717a\" stroke-width=\"1.5\"/>\n      \n        <circle class=\"chart-point-reach pt-reach-2\" cx=\"127.33333333333333\" cy=\"61.9236641221374\" r=\"3.2\" fill=\"#ffffff\" stroke=\"#09090b\" stroke-width=\"2\"/>\n        <circle class=\"chart-point-act pt-act-2\" cx=\"127.33333333333333\" cy=\"74.24719101123596\" r=\"2.5\" fill=\"#ffffff\" stroke=\"#71717a\" stroke-width=\"1.5\"/>\n      \n        <circle class=\"chart-point-reach pt-reach-3\" cx=\"173\" cy=\"52.53435114503817\" r=\"3.2\" fill=\"#ffffff\" stroke=\"#09090b\" stroke-width=\"2\"/>\n        <circle class=\"chart-point-act pt-act-3\" cx=\"173\" cy=\"68.85393258426967\" r=\"2.5\" fill=\"#ffffff\" stroke=\"#71717a\" stroke-width=\"1.5\"/>\n      \n        <circle class=\"chart-point-reach pt-reach-4\" cx=\"218.66666666666666\" cy=\"46.27480916030534\" r=\"3.2\" fill=\"#ffffff\" stroke=\"#09090b\" stroke-width=\"2\"/>\n        <circle class=\"chart-point-act pt-act-4\" cx=\"218.66666666666666\" cy=\"60.764044943820224\" r=\"2.5\" fill=\"#ffffff\" stroke=\"#71717a\" stroke-width=\"1.5\"/>\n      \n        <circle class=\"chart-point-reach pt-reach-5\" cx=\"264.3333333333333\" cy=\"36.885496183206115\" r=\"3.2\" fill=\"#ffffff\" stroke=\"#09090b\" stroke-width=\"2\"/>\n        <circle class=\"chart-point-act pt-act-5\" cx=\"264.3333333333333\" cy=\"56.71910112359551\" r=\"2.5\" fill=\"#ffffff\" stroke=\"#71717a\" stroke-width=\"1.5\"/>\n      \n        <circle class=\"chart-point-reach pt-reach-6\" cx=\"310\" cy=\"30\" r=\"3.2\" fill=\"#ffffff\" stroke=\"#09090b\" stroke-width=\"2\"/>\n        <circle class=\"chart-point-act pt-act-6\" cx=\"310\" cy=\"52\" r=\"2.5\" fill=\"#ffffff\" stroke=\"#71717a\" stroke-width=\"1.5\"/>\n      \n      \n        <text x=\"36\" y=\"132\" font-family=\"'Inter', sans-serif\" font-size=\"9\" font-weight=\"600\" fill=\"#71717a\" text-anchor=\"middle\">Day 1</text>\n      \n        <text x=\"81.66666666666666\" y=\"132\" font-family=\"'Inter', sans-serif\" font-size=\"9\" font-weight=\"600\" fill=\"#71717a\" text-anchor=\"middle\">Day 2</text>\n      \n        <text x=\"127.33333333333333\" y=\"132\" font-family=\"'Inter', sans-serif\" font-size=\"9\" font-weight=\"600\" fill=\"#71717a\" text-anchor=\"middle\">Day 3</text>\n      \n        <text x=\"173\" y=\"132\" font-family=\"'Inter', sans-serif\" font-size=\"9\" font-weight=\"600\" fill=\"#71717a\" text-anchor=\"middle\">Day 4</text>\n      \n        <text x=\"218.66666666666666\" y=\"132\" font-family=\"'Inter', sans-serif\" font-size=\"9\" font-weight=\"600\" fill=\"#71717a\" text-anchor=\"middle\">Day 5</text>\n      \n        <text x=\"264.3333333333333\" y=\"132\" font-family=\"'Inter', sans-serif\" font-size=\"9\" font-weight=\"600\" fill=\"#71717a\" text-anchor=\"middle\">Day 6</text>\n      \n        <text x=\"310\" y=\"132\" font-family=\"'Inter', sans-serif\" font-size=\"9\" font-weight=\"600\" fill=\"#71717a\" text-anchor=\"middle\">Day 7</text>\n      \n      \n        <rect class=\"chart-hover-trigger\" data-idx=\"0\" data-label=\"Day 1\" data-reach=\"18K\" data-act=\"1.5K\" data-x=\"36\" data-reach-y=\"83.83206106870229\" data-act-y=\"91.7752808988764\" x=\"13.166666666666668\" y=\"0\" width=\"45.666666666666664\" height=\"145\" fill=\"transparent\" style=\"cursor: crosshair;\"/>\n      \n        <rect class=\"chart-hover-trigger\" data-idx=\"1\" data-label=\"Day 2\" data-reach=\"25K\" data-act=\"2.1K\" data-x=\"81.66666666666666\" data-reach-y=\"72.87786259541986\" data-act-y=\"83.68539325842697\" x=\"58.83333333333333\" y=\"0\" width=\"45.666666666666664\" height=\"145\" fill=\"transparent\" style=\"cursor: crosshair;\"/>\n      \n        <rect class=\"chart-hover-trigger\" data-idx=\"2\" data-label=\"Day 3\" data-reach=\"32K\" data-act=\"2.8K\" data-x=\"127.33333333333333\" data-reach-y=\"61.9236641221374\" data-act-y=\"74.24719101123596\" x=\"104.5\" y=\"0\" width=\"45.666666666666664\" height=\"145\" fill=\"transparent\" style=\"cursor: crosshair;\"/>\n      \n        <rect class=\"chart-hover-trigger\" data-idx=\"3\" data-label=\"Day 4\" data-reach=\"38K\" data-act=\"3.2K\" data-x=\"173\" data-reach-y=\"52.53435114503817\" data-act-y=\"68.85393258426967\" x=\"150.16666666666666\" y=\"0\" width=\"45.666666666666664\" height=\"145\" fill=\"transparent\" style=\"cursor: crosshair;\"/>\n      \n        <rect class=\"chart-hover-trigger\" data-idx=\"4\" data-label=\"Day 5\" data-reach=\"42K\" data-act=\"3.8K\" data-x=\"218.66666666666666\" data-reach-y=\"46.27480916030534\" data-act-y=\"60.764044943820224\" x=\"195.83333333333331\" y=\"0\" width=\"45.666666666666664\" height=\"145\" fill=\"transparent\" style=\"cursor: crosshair;\"/>\n      \n        <rect class=\"chart-hover-trigger\" data-idx=\"5\" data-label=\"Day 6\" data-reach=\"48K\" data-act=\"4.1K\" data-x=\"264.3333333333333\" data-reach-y=\"36.885496183206115\" data-act-y=\"56.71910112359551\" x=\"241.49999999999997\" y=\"0\" width=\"45.666666666666664\" height=\"145\" fill=\"transparent\" style=\"cursor: crosshair;\"/>\n      \n        <rect class=\"chart-hover-trigger\" data-idx=\"6\" data-label=\"Day 7\" data-reach=\"52.4K\" data-act=\"4.45K\" data-x=\"310\" data-reach-y=\"30\" data-act-y=\"52\" x=\"287.1666666666667\" y=\"0\" width=\"45.666666666666664\" height=\"145\" fill=\"transparent\" style=\"cursor: crosshair;\"/>\n      \n    </svg>\n  ",
+        "funnel": {
+          "s1Num": "1,840",
+          "s1Pct": "100%",
+          "s1Fill": "100%",
+          "s2Num": "1,320",
+          "s2Pct": "71.7%",
+          "s2Fill": "71.7%",
+          "s3Num": "760",
+          "s3Pct": "41.3%",
+          "s3Fill": "41.3%",
+          "s4Num": "380",
+          "s4Pct": "20.6%",
+          "s4Fill": "20.6%",
+          "rate": "20.6% Total Conv"
+        },
+        "demographics": {
+          "total": "52.4K",
+          "nonFollowers": "66% (34.6K)",
+          "followers": "34% (17.8K)",
+          "us": "60% (31.4K)",
+          "in": "15% (7.9K)",
+          "gb": "16% (8.4K)"
+        }
+      },
+      "14 Days": {
+        "followers": "92.4K",
+        "following": "210",
+        "views": "98,000",
+        "comments": "3,620",
+        "totalReplies": "2,240",
+        "sentToday": "96",
+        "activeRulesFlat": "4",
+        "capturedLeadsFlat": "740",
+        "reach": "104.0K",
+        "trendReach": "▲ +20.1%",
+        "engaged": "13.4K",
+        "trendEngaged": "▲ +13.8%",
+        "visits": "8,900",
+        "trendVisits": "▲ +18.2%",
+        "clicks": "3,840",
+        "trendClicks": "▲ +24.0%",
+        "replies": "2,240",
+        "trendReplies": "▲ +16.0%",
+        "dmsToday": "120",
+        "trendDmsToday": "▲ +7.8%",
+        "activeRules": "4 Active",
+        "trendRules": "● 100% Uptime",
+        "leads": "740",
+        "trendLeads": "▲ +31.2%",
+        "reachSub": "Workout reels reach vs program clicks over the last 14 days.",
+        "legReach": "104.0K",
+        "legAct": "8.9K",
+        "reachSvg": "\n    <svg viewBox=\"0 0 330 145\" class=\"dual-line-chart-svg\" style=\"width: 100%; height: 100%;\">\n      <defs>\n        <linearGradient id=\"reachGrad_u1tfeqhue\" x1=\"0\" y1=\"0\" x2=\"0\" y2=\"1\">\n          <stop offset=\"0%\" stop-color=\"#09090b\" stop-opacity=\"0.10\"/>\n          <stop offset=\"100%\" stop-color=\"#09090b\" stop-opacity=\"0.0\"/>\n        </linearGradient>\n      </defs>\n      <line x1=\"32\" y1=\"28\" x2=\"315\" y2=\"28\" stroke=\"#f1f5f9\" stroke-width=\"1\" stroke-dasharray=\"3 3\"/>\n      <line x1=\"32\" y1=\"70\" x2=\"315\" y2=\"70\" stroke=\"#f1f5f9\" stroke-width=\"1\" stroke-dasharray=\"3 3\"/>\n      <line x1=\"32\" y1=\"112\" x2=\"315\" y2=\"112\" stroke=\"#f1f5f9\" stroke-width=\"1\"/>\n      <text x=\"26\" y=\"32\" font-family=\"'Inter', sans-serif\" font-size=\"9\" font-weight=\"700\" fill=\"#71717a\" text-anchor=\"end\">120K</text>\n      <text x=\"26\" y=\"115\" font-family=\"'Inter', sans-serif\" font-size=\"9\" font-weight=\"700\" fill=\"#71717a\" text-anchor=\"end\">0</text>\n      <path d=\"M 36,84.40384615384616 L 81.66666666666666,74.15384615384616 L 127.33333333333333,63.11538461538461 L 173,53.65384615384615 L 218.66666666666666,44.980769230769226 L 264.3333333333333,36.30769230769231 L 310,30 L 310,112 L 36,112 Z\" fill=\"url(#reachGrad_u1tfeqhue)\"/>\n      <path d=\"M 36,84.40384615384616 L 81.66666666666666,74.15384615384616 L 127.33333333333333,63.11538461538461 L 173,53.65384615384615 L 218.66666666666666,44.980769230769226 L 264.3333333333333,36.30769230769231 L 310,30\" fill=\"none\" stroke=\"#09090b\" stroke-width=\"2.4\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/>\n      <path d=\"M 36,91.10112359550561 L 81.66666666666666,83.68539325842697 L 127.33333333333333,74.92134831460675 L 173,68.85393258426967 L 218.66666666666666,62.1123595505618 L 264.3333333333333,56.71910112359551 L 310,52\" fill=\"none\" stroke=\"#71717a\" stroke-width=\"1.8\" stroke-dasharray=\"3 3\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/>\n      \n        <circle class=\"chart-point-reach pt-reach-0\" cx=\"36\" cy=\"84.40384615384616\" r=\"3.2\" fill=\"#ffffff\" stroke=\"#09090b\" stroke-width=\"2\"/>\n        <circle class=\"chart-point-act pt-act-0\" cx=\"36\" cy=\"91.10112359550561\" r=\"2.5\" fill=\"#ffffff\" stroke=\"#71717a\" stroke-width=\"1.5\"/>\n      \n        <circle class=\"chart-point-reach pt-reach-1\" cx=\"81.66666666666666\" cy=\"74.15384615384616\" r=\"3.2\" fill=\"#ffffff\" stroke=\"#09090b\" stroke-width=\"2\"/>\n        <circle class=\"chart-point-act pt-act-1\" cx=\"81.66666666666666\" cy=\"83.68539325842697\" r=\"2.5\" fill=\"#ffffff\" stroke=\"#71717a\" stroke-width=\"1.5\"/>\n      \n        <circle class=\"chart-point-reach pt-reach-2\" cx=\"127.33333333333333\" cy=\"63.11538461538461\" r=\"3.2\" fill=\"#ffffff\" stroke=\"#09090b\" stroke-width=\"2\"/>\n        <circle class=\"chart-point-act pt-act-2\" cx=\"127.33333333333333\" cy=\"74.92134831460675\" r=\"2.5\" fill=\"#ffffff\" stroke=\"#71717a\" stroke-width=\"1.5\"/>\n      \n        <circle class=\"chart-point-reach pt-reach-3\" cx=\"173\" cy=\"53.65384615384615\" r=\"3.2\" fill=\"#ffffff\" stroke=\"#09090b\" stroke-width=\"2\"/>\n        <circle class=\"chart-point-act pt-act-3\" cx=\"173\" cy=\"68.85393258426967\" r=\"2.5\" fill=\"#ffffff\" stroke=\"#71717a\" stroke-width=\"1.5\"/>\n      \n        <circle class=\"chart-point-reach pt-reach-4\" cx=\"218.66666666666666\" cy=\"44.980769230769226\" r=\"3.2\" fill=\"#ffffff\" stroke=\"#09090b\" stroke-width=\"2\"/>\n        <circle class=\"chart-point-act pt-act-4\" cx=\"218.66666666666666\" cy=\"62.1123595505618\" r=\"2.5\" fill=\"#ffffff\" stroke=\"#71717a\" stroke-width=\"1.5\"/>\n      \n        <circle class=\"chart-point-reach pt-reach-5\" cx=\"264.3333333333333\" cy=\"36.30769230769231\" r=\"3.2\" fill=\"#ffffff\" stroke=\"#09090b\" stroke-width=\"2\"/>\n        <circle class=\"chart-point-act pt-act-5\" cx=\"264.3333333333333\" cy=\"56.71910112359551\" r=\"2.5\" fill=\"#ffffff\" stroke=\"#71717a\" stroke-width=\"1.5\"/>\n      \n        <circle class=\"chart-point-reach pt-reach-6\" cx=\"310\" cy=\"30\" r=\"3.2\" fill=\"#ffffff\" stroke=\"#09090b\" stroke-width=\"2\"/>\n        <circle class=\"chart-point-act pt-act-6\" cx=\"310\" cy=\"52\" r=\"2.5\" fill=\"#ffffff\" stroke=\"#71717a\" stroke-width=\"1.5\"/>\n      \n      \n        <text x=\"36\" y=\"132\" font-family=\"'Inter', sans-serif\" font-size=\"9\" font-weight=\"600\" fill=\"#71717a\" text-anchor=\"middle\">Day 2</text>\n      \n        <text x=\"81.66666666666666\" y=\"132\" font-family=\"'Inter', sans-serif\" font-size=\"9\" font-weight=\"600\" fill=\"#71717a\" text-anchor=\"middle\">Day 4</text>\n      \n        <text x=\"127.33333333333333\" y=\"132\" font-family=\"'Inter', sans-serif\" font-size=\"9\" font-weight=\"600\" fill=\"#71717a\" text-anchor=\"middle\">Day 6</text>\n      \n        <text x=\"173\" y=\"132\" font-family=\"'Inter', sans-serif\" font-size=\"9\" font-weight=\"600\" fill=\"#71717a\" text-anchor=\"middle\">Day 8</text>\n      \n        <text x=\"218.66666666666666\" y=\"132\" font-family=\"'Inter', sans-serif\" font-size=\"9\" font-weight=\"600\" fill=\"#71717a\" text-anchor=\"middle\">Day 10</text>\n      \n        <text x=\"264.3333333333333\" y=\"132\" font-family=\"'Inter', sans-serif\" font-size=\"9\" font-weight=\"600\" fill=\"#71717a\" text-anchor=\"middle\">Day 12</text>\n      \n        <text x=\"310\" y=\"132\" font-family=\"'Inter', sans-serif\" font-size=\"9\" font-weight=\"600\" fill=\"#71717a\" text-anchor=\"middle\">Day 14</text>\n      \n      \n        <rect class=\"chart-hover-trigger\" data-idx=\"0\" data-label=\"Day 2\" data-reach=\"35K\" data-act=\"3.1K\" data-x=\"36\" data-reach-y=\"84.40384615384616\" data-act-y=\"91.10112359550561\" x=\"13.166666666666668\" y=\"0\" width=\"45.666666666666664\" height=\"145\" fill=\"transparent\" style=\"cursor: crosshair;\"/>\n      \n        <rect class=\"chart-hover-trigger\" data-idx=\"1\" data-label=\"Day 4\" data-reach=\"48K\" data-act=\"4.2K\" data-x=\"81.66666666666666\" data-reach-y=\"74.15384615384616\" data-act-y=\"83.68539325842697\" x=\"58.83333333333333\" y=\"0\" width=\"45.666666666666664\" height=\"145\" fill=\"transparent\" style=\"cursor: crosshair;\"/>\n      \n        <rect class=\"chart-hover-trigger\" data-idx=\"2\" data-label=\"Day 6\" data-reach=\"62K\" data-act=\"5.5K\" data-x=\"127.33333333333333\" data-reach-y=\"63.11538461538461\" data-act-y=\"74.92134831460675\" x=\"104.5\" y=\"0\" width=\"45.666666666666664\" height=\"145\" fill=\"transparent\" style=\"cursor: crosshair;\"/>\n      \n        <rect class=\"chart-hover-trigger\" data-idx=\"3\" data-label=\"Day 8\" data-reach=\"74K\" data-act=\"6.4K\" data-x=\"173\" data-reach-y=\"53.65384615384615\" data-act-y=\"68.85393258426967\" x=\"150.16666666666666\" y=\"0\" width=\"45.666666666666664\" height=\"145\" fill=\"transparent\" style=\"cursor: crosshair;\"/>\n      \n        <rect class=\"chart-hover-trigger\" data-idx=\"4\" data-label=\"Day 10\" data-reach=\"85K\" data-act=\"7.4K\" data-x=\"218.66666666666666\" data-reach-y=\"44.980769230769226\" data-act-y=\"62.1123595505618\" x=\"195.83333333333331\" y=\"0\" width=\"45.666666666666664\" height=\"145\" fill=\"transparent\" style=\"cursor: crosshair;\"/>\n      \n        <rect class=\"chart-hover-trigger\" data-idx=\"5\" data-label=\"Day 12\" data-reach=\"96K\" data-act=\"8.2K\" data-x=\"264.3333333333333\" data-reach-y=\"36.30769230769231\" data-act-y=\"56.71910112359551\" x=\"241.49999999999997\" y=\"0\" width=\"45.666666666666664\" height=\"145\" fill=\"transparent\" style=\"cursor: crosshair;\"/>\n      \n        <rect class=\"chart-hover-trigger\" data-idx=\"6\" data-label=\"Day 14\" data-reach=\"104K\" data-act=\"8.9K\" data-x=\"310\" data-reach-y=\"30\" data-act-y=\"52\" x=\"287.1666666666667\" y=\"0\" width=\"45.666666666666664\" height=\"145\" fill=\"transparent\" style=\"cursor: crosshair;\"/>\n      \n    </svg>\n  ",
+        "funnel": {
+          "s1Num": "3,620",
+          "s1Pct": "100%",
+          "s1Fill": "100%",
+          "s2Num": "2,590",
+          "s2Pct": "71.5%",
+          "s2Fill": "71.5%",
+          "s3Num": "1,490",
+          "s3Pct": "41.2%",
+          "s3Fill": "41.2%",
+          "s4Num": "740",
+          "s4Pct": "20.4%",
+          "s4Fill": "20.4%",
+          "rate": "20.4% Total Conv"
+        },
+        "demographics": {
+          "total": "104.0K",
+          "nonFollowers": "67% (69.7K)",
+          "followers": "33% (34.3K)",
+          "us": "61% (63.4K)",
+          "in": "14% (14.6K)",
+          "gb": "15% (15.6K)"
+        }
+      },
+      "30 Days": {
+        "followers": "92.4K",
+        "following": "210",
+        "views": "184,000",
+        "comments": "6,840",
+        "totalReplies": "4,210",
+        "sentToday": "180",
+        "activeRulesFlat": "4",
+        "capturedLeadsFlat": "1,420",
+        "reach": "189.4K",
+        "trendReach": "▲ +22.1%",
+        "engaged": "24.8K",
+        "trendEngaged": "▲ +14.5%",
+        "visits": "16,400",
+        "trendVisits": "▲ +20.4%",
+        "clicks": "7,200",
+        "trendClicks": "▲ +27.2%",
+        "replies": "4,210",
+        "trendReplies": "▲ +17.8%",
+        "dmsToday": "240",
+        "trendDmsToday": "▲ +8.9%",
+        "activeRules": "4 Active",
+        "trendRules": "● 100% Uptime",
+        "leads": "1,420",
+        "trendLeads": "▲ +35.8%",
+        "reachSub": "Workout reels reach vs program clicks over the last 30 days.",
+        "legReach": "189.4K",
+        "legAct": "16.4K",
+        "reachSvg": "\n    <svg viewBox=\"0 0 330 145\" class=\"dual-line-chart-svg\" style=\"width: 100%; height: 100%;\">\n      <defs>\n        <linearGradient id=\"reachGrad_jl1mh3iau\" x1=\"0\" y1=\"0\" x2=\"0\" y2=\"1\">\n          <stop offset=\"0%\" stop-color=\"#09090b\" stop-opacity=\"0.10\"/>\n          <stop offset=\"100%\" stop-color=\"#09090b\" stop-opacity=\"0.0\"/>\n        </linearGradient>\n      </defs>\n      <line x1=\"32\" y1=\"28\" x2=\"315\" y2=\"28\" stroke=\"#f1f5f9\" stroke-width=\"1\" stroke-dasharray=\"3 3\"/>\n      <line x1=\"32\" y1=\"70\" x2=\"315\" y2=\"70\" stroke=\"#f1f5f9\" stroke-width=\"1\" stroke-dasharray=\"3 3\"/>\n      <line x1=\"32\" y1=\"112\" x2=\"315\" y2=\"112\" stroke=\"#f1f5f9\" stroke-width=\"1\"/>\n      <text x=\"26\" y=\"32\" font-family=\"'Inter', sans-serif\" font-size=\"9\" font-weight=\"700\" fill=\"#71717a\" text-anchor=\"end\">200K</text>\n      <text x=\"26\" y=\"115\" font-family=\"'Inter', sans-serif\" font-size=\"9\" font-weight=\"700\" fill=\"#71717a\" text-anchor=\"end\">0</text>\n      <path d=\"M 36,83.85850052798311 L 81.66666666666666,73.90073917634636 L 127.33333333333333,64.37592397043295 L 173,53.552270327349525 L 218.66666666666666,44.89334741288279 L 264.3333333333333,37.533262935586066 L 310,30 L 310,112 L 36,112 Z\" fill=\"url(#reachGrad_jl1mh3iau)\"/>\n      <path d=\"M 36,83.85850052798311 L 81.66666666666666,73.90073917634636 L 127.33333333333333,64.37592397043295 L 173,53.552270327349525 L 218.66666666666666,44.89334741288279 L 264.3333333333333,37.533262935586066 L 310,30\" fill=\"none\" stroke=\"#09090b\" stroke-width=\"2.4\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/>\n      <path d=\"M 36,96.6341463414634 L 81.66666666666666,89.6829268292683 L 127.33333333333333,81.26829268292683 L 173,73.58536585365854 L 218.66666666666666,65.17073170731706 L 264.3333333333333,58.58536585365854 L 310,52\" fill=\"none\" stroke=\"#71717a\" stroke-width=\"1.8\" stroke-dasharray=\"3 3\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/>\n      \n        <circle class=\"chart-point-reach pt-reach-0\" cx=\"36\" cy=\"83.85850052798311\" r=\"3.2\" fill=\"#ffffff\" stroke=\"#09090b\" stroke-width=\"2\"/>\n        <circle class=\"chart-point-act pt-act-0\" cx=\"36\" cy=\"96.6341463414634\" r=\"2.5\" fill=\"#ffffff\" stroke=\"#71717a\" stroke-width=\"1.5\"/>\n      \n        <circle class=\"chart-point-reach pt-reach-1\" cx=\"81.66666666666666\" cy=\"73.90073917634636\" r=\"3.2\" fill=\"#ffffff\" stroke=\"#09090b\" stroke-width=\"2\"/>\n        <circle class=\"chart-point-act pt-act-1\" cx=\"81.66666666666666\" cy=\"89.6829268292683\" r=\"2.5\" fill=\"#ffffff\" stroke=\"#71717a\" stroke-width=\"1.5\"/>\n      \n        <circle class=\"chart-point-reach pt-reach-2\" cx=\"127.33333333333333\" cy=\"64.37592397043295\" r=\"3.2\" fill=\"#ffffff\" stroke=\"#09090b\" stroke-width=\"2\"/>\n        <circle class=\"chart-point-act pt-act-2\" cx=\"127.33333333333333\" cy=\"81.26829268292683\" r=\"2.5\" fill=\"#ffffff\" stroke=\"#71717a\" stroke-width=\"1.5\"/>\n      \n        <circle class=\"chart-point-reach pt-reach-3\" cx=\"173\" cy=\"53.552270327349525\" r=\"3.2\" fill=\"#ffffff\" stroke=\"#09090b\" stroke-width=\"2\"/>\n        <circle class=\"chart-point-act pt-act-3\" cx=\"173\" cy=\"73.58536585365854\" r=\"2.5\" fill=\"#ffffff\" stroke=\"#71717a\" stroke-width=\"1.5\"/>\n      \n        <circle class=\"chart-point-reach pt-reach-4\" cx=\"218.66666666666666\" cy=\"44.89334741288279\" r=\"3.2\" fill=\"#ffffff\" stroke=\"#09090b\" stroke-width=\"2\"/>\n        <circle class=\"chart-point-act pt-act-4\" cx=\"218.66666666666666\" cy=\"65.17073170731706\" r=\"2.5\" fill=\"#ffffff\" stroke=\"#71717a\" stroke-width=\"1.5\"/>\n      \n        <circle class=\"chart-point-reach pt-reach-5\" cx=\"264.3333333333333\" cy=\"37.533262935586066\" r=\"3.2\" fill=\"#ffffff\" stroke=\"#09090b\" stroke-width=\"2\"/>\n        <circle class=\"chart-point-act pt-act-5\" cx=\"264.3333333333333\" cy=\"58.58536585365854\" r=\"2.5\" fill=\"#ffffff\" stroke=\"#71717a\" stroke-width=\"1.5\"/>\n      \n        <circle class=\"chart-point-reach pt-reach-6\" cx=\"310\" cy=\"30\" r=\"3.2\" fill=\"#ffffff\" stroke=\"#09090b\" stroke-width=\"2\"/>\n        <circle class=\"chart-point-act pt-act-6\" cx=\"310\" cy=\"52\" r=\"2.5\" fill=\"#ffffff\" stroke=\"#71717a\" stroke-width=\"1.5\"/>\n      \n      \n        <text x=\"36\" y=\"132\" font-family=\"'Inter', sans-serif\" font-size=\"9\" font-weight=\"600\" fill=\"#71717a\" text-anchor=\"middle\">Day 1</text>\n      \n        <text x=\"81.66666666666666\" y=\"132\" font-family=\"'Inter', sans-serif\" font-size=\"9\" font-weight=\"600\" fill=\"#71717a\" text-anchor=\"middle\">Day 5</text>\n      \n        <text x=\"127.33333333333333\" y=\"132\" font-family=\"'Inter', sans-serif\" font-size=\"9\" font-weight=\"600\" fill=\"#71717a\" text-anchor=\"middle\">Day 10</text>\n      \n        <text x=\"173\" y=\"132\" font-family=\"'Inter', sans-serif\" font-size=\"9\" font-weight=\"600\" fill=\"#71717a\" text-anchor=\"middle\">Day 15</text>\n      \n        <text x=\"218.66666666666666\" y=\"132\" font-family=\"'Inter', sans-serif\" font-size=\"9\" font-weight=\"600\" fill=\"#71717a\" text-anchor=\"middle\">Day 20</text>\n      \n        <text x=\"264.3333333333333\" y=\"132\" font-family=\"'Inter', sans-serif\" font-size=\"9\" font-weight=\"600\" fill=\"#71717a\" text-anchor=\"middle\">Day 25</text>\n      \n        <text x=\"310\" y=\"132\" font-family=\"'Inter', sans-serif\" font-size=\"9\" font-weight=\"600\" fill=\"#71717a\" text-anchor=\"middle\">Day 30</text>\n      \n      \n        <rect class=\"chart-hover-trigger\" data-idx=\"0\" data-label=\"Day 1\" data-reach=\"65K\" data-act=\"4.2K\" data-x=\"36\" data-reach-y=\"83.85850052798311\" data-act-y=\"96.6341463414634\" x=\"13.166666666666668\" y=\"0\" width=\"45.666666666666664\" height=\"145\" fill=\"transparent\" style=\"cursor: crosshair;\"/>\n      \n        <rect class=\"chart-hover-trigger\" data-idx=\"1\" data-label=\"Day 5\" data-reach=\"88K\" data-act=\"6.1K\" data-x=\"81.66666666666666\" data-reach-y=\"73.90073917634636\" data-act-y=\"89.6829268292683\" x=\"58.83333333333333\" y=\"0\" width=\"45.666666666666664\" height=\"145\" fill=\"transparent\" style=\"cursor: crosshair;\"/>\n      \n        <rect class=\"chart-hover-trigger\" data-idx=\"2\" data-label=\"Day 10\" data-reach=\"110K\" data-act=\"8.4K\" data-x=\"127.33333333333333\" data-reach-y=\"64.37592397043295\" data-act-y=\"81.26829268292683\" x=\"104.5\" y=\"0\" width=\"45.666666666666664\" height=\"145\" fill=\"transparent\" style=\"cursor: crosshair;\"/>\n      \n        <rect class=\"chart-hover-trigger\" data-idx=\"3\" data-label=\"Day 15\" data-reach=\"135K\" data-act=\"10.5K\" data-x=\"173\" data-reach-y=\"53.552270327349525\" data-act-y=\"73.58536585365854\" x=\"150.16666666666666\" y=\"0\" width=\"45.666666666666664\" height=\"145\" fill=\"transparent\" style=\"cursor: crosshair;\"/>\n      \n        <rect class=\"chart-hover-trigger\" data-idx=\"4\" data-label=\"Day 20\" data-reach=\"155K\" data-act=\"12.8K\" data-x=\"218.66666666666666\" data-reach-y=\"44.89334741288279\" data-act-y=\"65.17073170731706\" x=\"195.83333333333331\" y=\"0\" width=\"45.666666666666664\" height=\"145\" fill=\"transparent\" style=\"cursor: crosshair;\"/>\n      \n        <rect class=\"chart-hover-trigger\" data-idx=\"5\" data-label=\"Day 25\" data-reach=\"172K\" data-act=\"14.6K\" data-x=\"264.3333333333333\" data-reach-y=\"37.533262935586066\" data-act-y=\"58.58536585365854\" x=\"241.49999999999997\" y=\"0\" width=\"45.666666666666664\" height=\"145\" fill=\"transparent\" style=\"cursor: crosshair;\"/>\n      \n        <rect class=\"chart-hover-trigger\" data-idx=\"6\" data-label=\"Day 30\" data-reach=\"189.4K\" data-act=\"16.4K\" data-x=\"310\" data-reach-y=\"30\" data-act-y=\"52\" x=\"287.1666666666667\" y=\"0\" width=\"45.666666666666664\" height=\"145\" fill=\"transparent\" style=\"cursor: crosshair;\"/>\n      \n    </svg>\n  ",
+        "funnel": {
+          "s1Num": "6,840",
+          "s1Pct": "100%",
+          "s1Fill": "100%",
+          "s2Num": "4,920",
+          "s2Pct": "71.9%",
+          "s2Fill": "71.9%",
+          "s3Num": "2,840",
+          "s3Pct": "41.5%",
+          "s3Fill": "41.5%",
+          "s4Num": "1,420",
+          "s4Pct": "20.8%",
+          "s4Fill": "20.8%",
+          "rate": "20.8% Total Conv"
+        },
+        "demographics": {
+          "total": "189.4K",
+          "nonFollowers": "68% (128.8K)",
+          "followers": "32% (60.6K)",
+          "us": "62% (117.4K)",
+          "in": "14% (26.5K)",
+          "gb": "14% (26.5K)"
+        }
+      },
+      "60 Days": {
+        "followers": "92.4K",
+        "following": "210",
+        "views": "372,000",
+        "comments": "13,900",
+        "totalReplies": "8,540",
+        "sentToday": "280",
+        "activeRulesFlat": "4",
+        "capturedLeadsFlat": "2,890",
+        "reach": "382.0K",
+        "trendReach": "▲ +26.4%",
+        "engaged": "49.0K",
+        "trendEngaged": "▲ +18.0%",
+        "visits": "33,000",
+        "trendVisits": "▲ +24.8%",
+        "clicks": "14,800",
+        "trendClicks": "▲ +32.0%",
+        "replies": "8,540",
+        "trendReplies": "▲ +21.5%",
+        "dmsToday": "380",
+        "trendDmsToday": "▲ +11.4%",
+        "activeRules": "4 Active",
+        "trendRules": "● 100% Uptime",
+        "leads": "2,890",
+        "trendLeads": "▲ +41.5%",
+        "reachSub": "Workout reels reach vs program clicks over the last 60 days.",
+        "legReach": "382.0K",
+        "legAct": "33.0K",
+        "reachSvg": "\n    <svg viewBox=\"0 0 330 145\" class=\"dual-line-chart-svg\" style=\"width: 100%; height: 100%;\">\n      <defs>\n        <linearGradient id=\"reachGrad_0kz6qfkp5\" x1=\"0\" y1=\"0\" x2=\"0\" y2=\"1\">\n          <stop offset=\"0%\" stop-color=\"#09090b\" stop-opacity=\"0.10\"/>\n          <stop offset=\"100%\" stop-color=\"#09090b\" stop-opacity=\"0.0\"/>\n        </linearGradient>\n      </defs>\n      <line x1=\"32\" y1=\"28\" x2=\"315\" y2=\"28\" stroke=\"#f1f5f9\" stroke-width=\"1\" stroke-dasharray=\"3 3\"/>\n      <line x1=\"32\" y1=\"70\" x2=\"315\" y2=\"70\" stroke=\"#f1f5f9\" stroke-width=\"1\" stroke-dasharray=\"3 3\"/>\n      <line x1=\"32\" y1=\"112\" x2=\"315\" y2=\"112\" stroke=\"#f1f5f9\" stroke-width=\"1\"/>\n      <text x=\"26\" y=\"32\" font-family=\"'Inter', sans-serif\" font-size=\"9\" font-weight=\"700\" fill=\"#71717a\" text-anchor=\"end\">400K</text>\n      <text x=\"26\" y=\"115\" font-family=\"'Inter', sans-serif\" font-size=\"9\" font-weight=\"700\" fill=\"#71717a\" text-anchor=\"end\">0</text>\n      <path d=\"M 36,84.09424083769633 L 81.66666666666666,73.36125654450262 L 127.33333333333333,62.6282722513089 L 173,52.968586387434556 L 218.66666666666666,44.38219895287958 L 264.3333333333333,36.86910994764398 L 310,30 L 310,112 L 36,112 Z\" fill=\"url(#reachGrad_0kz6qfkp5)\"/>\n      <path d=\"M 36,84.09424083769633 L 81.66666666666666,73.36125654450262 L 127.33333333333333,62.6282722513089 L 173,52.968586387434556 L 218.66666666666666,44.38219895287958 L 264.3333333333333,36.86910994764398 L 310,30\" fill=\"none\" stroke=\"#09090b\" stroke-width=\"2.4\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/>\n      <path d=\"M 36,95.63636363636364 L 81.66666666666666,88.36363636363636 L 127.33333333333333,81.0909090909091 L 173,73.81818181818181 L 218.66666666666666,64.72727272727272 L 264.3333333333333,57.45454545454545 L 310,52\" fill=\"none\" stroke=\"#71717a\" stroke-width=\"1.8\" stroke-dasharray=\"3 3\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/>\n      \n        <circle class=\"chart-point-reach pt-reach-0\" cx=\"36\" cy=\"84.09424083769633\" r=\"3.2\" fill=\"#ffffff\" stroke=\"#09090b\" stroke-width=\"2\"/>\n        <circle class=\"chart-point-act pt-act-0\" cx=\"36\" cy=\"95.63636363636364\" r=\"2.5\" fill=\"#ffffff\" stroke=\"#71717a\" stroke-width=\"1.5\"/>\n      \n        <circle class=\"chart-point-reach pt-reach-1\" cx=\"81.66666666666666\" cy=\"73.36125654450262\" r=\"3.2\" fill=\"#ffffff\" stroke=\"#09090b\" stroke-width=\"2\"/>\n        <circle class=\"chart-point-act pt-act-1\" cx=\"81.66666666666666\" cy=\"88.36363636363636\" r=\"2.5\" fill=\"#ffffff\" stroke=\"#71717a\" stroke-width=\"1.5\"/>\n      \n        <circle class=\"chart-point-reach pt-reach-2\" cx=\"127.33333333333333\" cy=\"62.6282722513089\" r=\"3.2\" fill=\"#ffffff\" stroke=\"#09090b\" stroke-width=\"2\"/>\n        <circle class=\"chart-point-act pt-act-2\" cx=\"127.33333333333333\" cy=\"81.0909090909091\" r=\"2.5\" fill=\"#ffffff\" stroke=\"#71717a\" stroke-width=\"1.5\"/>\n      \n        <circle class=\"chart-point-reach pt-reach-3\" cx=\"173\" cy=\"52.968586387434556\" r=\"3.2\" fill=\"#ffffff\" stroke=\"#09090b\" stroke-width=\"2\"/>\n        <circle class=\"chart-point-act pt-act-3\" cx=\"173\" cy=\"73.81818181818181\" r=\"2.5\" fill=\"#ffffff\" stroke=\"#71717a\" stroke-width=\"1.5\"/>\n      \n        <circle class=\"chart-point-reach pt-reach-4\" cx=\"218.66666666666666\" cy=\"44.38219895287958\" r=\"3.2\" fill=\"#ffffff\" stroke=\"#09090b\" stroke-width=\"2\"/>\n        <circle class=\"chart-point-act pt-act-4\" cx=\"218.66666666666666\" cy=\"64.72727272727272\" r=\"2.5\" fill=\"#ffffff\" stroke=\"#71717a\" stroke-width=\"1.5\"/>\n      \n        <circle class=\"chart-point-reach pt-reach-5\" cx=\"264.3333333333333\" cy=\"36.86910994764398\" r=\"3.2\" fill=\"#ffffff\" stroke=\"#09090b\" stroke-width=\"2\"/>\n        <circle class=\"chart-point-act pt-act-5\" cx=\"264.3333333333333\" cy=\"57.45454545454545\" r=\"2.5\" fill=\"#ffffff\" stroke=\"#71717a\" stroke-width=\"1.5\"/>\n      \n        <circle class=\"chart-point-reach pt-reach-6\" cx=\"310\" cy=\"30\" r=\"3.2\" fill=\"#ffffff\" stroke=\"#09090b\" stroke-width=\"2\"/>\n        <circle class=\"chart-point-act pt-act-6\" cx=\"310\" cy=\"52\" r=\"2.5\" fill=\"#ffffff\" stroke=\"#71717a\" stroke-width=\"1.5\"/>\n      \n      \n        <text x=\"36\" y=\"132\" font-family=\"'Inter', sans-serif\" font-size=\"9\" font-weight=\"600\" fill=\"#71717a\" text-anchor=\"middle\">Day 1</text>\n      \n        <text x=\"81.66666666666666\" y=\"132\" font-family=\"'Inter', sans-serif\" font-size=\"9\" font-weight=\"600\" fill=\"#71717a\" text-anchor=\"middle\">Day 10</text>\n      \n        <text x=\"127.33333333333333\" y=\"132\" font-family=\"'Inter', sans-serif\" font-size=\"9\" font-weight=\"600\" fill=\"#71717a\" text-anchor=\"middle\">Day 20</text>\n      \n        <text x=\"173\" y=\"132\" font-family=\"'Inter', sans-serif\" font-size=\"9\" font-weight=\"600\" fill=\"#71717a\" text-anchor=\"middle\">Day 30</text>\n      \n        <text x=\"218.66666666666666\" y=\"132\" font-family=\"'Inter', sans-serif\" font-size=\"9\" font-weight=\"600\" fill=\"#71717a\" text-anchor=\"middle\">Day 40</text>\n      \n        <text x=\"264.3333333333333\" y=\"132\" font-family=\"'Inter', sans-serif\" font-size=\"9\" font-weight=\"600\" fill=\"#71717a\" text-anchor=\"middle\">Day 50</text>\n      \n        <text x=\"310\" y=\"132\" font-family=\"'Inter', sans-serif\" font-size=\"9\" font-weight=\"600\" fill=\"#71717a\" text-anchor=\"middle\">Day 60</text>\n      \n      \n        <rect class=\"chart-hover-trigger\" data-idx=\"0\" data-label=\"Day 1\" data-reach=\"130K\" data-act=\"9K\" data-x=\"36\" data-reach-y=\"84.09424083769633\" data-act-y=\"95.63636363636364\" x=\"13.166666666666668\" y=\"0\" width=\"45.666666666666664\" height=\"145\" fill=\"transparent\" style=\"cursor: crosshair;\"/>\n      \n        <rect class=\"chart-hover-trigger\" data-idx=\"1\" data-label=\"Day 10\" data-reach=\"180K\" data-act=\"13K\" data-x=\"81.66666666666666\" data-reach-y=\"73.36125654450262\" data-act-y=\"88.36363636363636\" x=\"58.83333333333333\" y=\"0\" width=\"45.666666666666664\" height=\"145\" fill=\"transparent\" style=\"cursor: crosshair;\"/>\n      \n        <rect class=\"chart-hover-trigger\" data-idx=\"2\" data-label=\"Day 20\" data-reach=\"230K\" data-act=\"17K\" data-x=\"127.33333333333333\" data-reach-y=\"62.6282722513089\" data-act-y=\"81.0909090909091\" x=\"104.5\" y=\"0\" width=\"45.666666666666664\" height=\"145\" fill=\"transparent\" style=\"cursor: crosshair;\"/>\n      \n        <rect class=\"chart-hover-trigger\" data-idx=\"3\" data-label=\"Day 30\" data-reach=\"275K\" data-act=\"21K\" data-x=\"173\" data-reach-y=\"52.968586387434556\" data-act-y=\"73.81818181818181\" x=\"150.16666666666666\" y=\"0\" width=\"45.666666666666664\" height=\"145\" fill=\"transparent\" style=\"cursor: crosshair;\"/>\n      \n        <rect class=\"chart-hover-trigger\" data-idx=\"4\" data-label=\"Day 40\" data-reach=\"315K\" data-act=\"26K\" data-x=\"218.66666666666666\" data-reach-y=\"44.38219895287958\" data-act-y=\"64.72727272727272\" x=\"195.83333333333331\" y=\"0\" width=\"45.666666666666664\" height=\"145\" fill=\"transparent\" style=\"cursor: crosshair;\"/>\n      \n        <rect class=\"chart-hover-trigger\" data-idx=\"5\" data-label=\"Day 50\" data-reach=\"350K\" data-act=\"30K\" data-x=\"264.3333333333333\" data-reach-y=\"36.86910994764398\" data-act-y=\"57.45454545454545\" x=\"241.49999999999997\" y=\"0\" width=\"45.666666666666664\" height=\"145\" fill=\"transparent\" style=\"cursor: crosshair;\"/>\n      \n        <rect class=\"chart-hover-trigger\" data-idx=\"6\" data-label=\"Day 60\" data-reach=\"382K\" data-act=\"33K\" data-x=\"310\" data-reach-y=\"30\" data-act-y=\"52\" x=\"287.1666666666667\" y=\"0\" width=\"45.666666666666664\" height=\"145\" fill=\"transparent\" style=\"cursor: crosshair;\"/>\n      \n    </svg>\n  ",
+        "funnel": {
+          "s1Num": "13,900",
+          "s1Pct": "100%",
+          "s1Fill": "100%",
+          "s2Num": "10,000",
+          "s2Pct": "71.9%",
+          "s2Fill": "71.9%",
+          "s3Num": "5,800",
+          "s3Pct": "41.7%",
+          "s3Fill": "41.7%",
+          "s4Num": "2,890",
+          "s4Pct": "20.8%",
+          "s4Fill": "20.8%",
+          "rate": "20.8% Total Conv"
+        },
+        "demographics": {
+          "total": "382.0K",
+          "nonFollowers": "69% (263.6K)",
+          "followers": "31% (118.4K)",
+          "us": "63% (240.7K)",
+          "in": "13% (49.7K)",
+          "gb": "14% (53.5K)"
+        }
+      },
+      "90 Days": {
+        "followers": "92.4K",
+        "following": "210",
+        "views": "580,000",
+        "comments": "21,400",
+        "totalReplies": "13,200",
+        "sentToday": "380",
+        "activeRulesFlat": "4",
+        "capturedLeadsFlat": "4,450",
+        "reach": "592.0K",
+        "trendReach": "▲ +31.0%",
+        "engaged": "76.0K",
+        "trendEngaged": "▲ +22.4%",
+        "visits": "51,000",
+        "trendVisits": "▲ +28.9%",
+        "clicks": "22,900",
+        "trendClicks": "▲ +36.5%",
+        "replies": "13,200",
+        "trendReplies": "▲ +25.8%",
+        "dmsToday": "520",
+        "trendDmsToday": "▲ +14.2%",
+        "activeRules": "4 Active",
+        "trendRules": "● 100% Uptime",
+        "leads": "4,450",
+        "trendLeads": "▲ +49.0%",
+        "reachSub": "Workout reels reach vs program clicks over the last 90 days.",
+        "legReach": "592.0K",
+        "legAct": "51.0K",
+        "reachSvg": "\n    <svg viewBox=\"0 0 330 145\" class=\"dual-line-chart-svg\" style=\"width: 100%; height: 100%;\">\n      <defs>\n        <linearGradient id=\"reachGrad_5a43mmgga\" x1=\"0\" y1=\"0\" x2=\"0\" y2=\"1\">\n          <stop offset=\"0%\" stop-color=\"#09090b\" stop-opacity=\"0.10\"/>\n          <stop offset=\"100%\" stop-color=\"#09090b\" stop-opacity=\"0.0\"/>\n        </linearGradient>\n      </defs>\n      <line x1=\"32\" y1=\"28\" x2=\"315\" y2=\"28\" stroke=\"#f1f5f9\" stroke-width=\"1\" stroke-dasharray=\"3 3\"/>\n      <line x1=\"32\" y1=\"70\" x2=\"315\" y2=\"70\" stroke=\"#f1f5f9\" stroke-width=\"1\" stroke-dasharray=\"3 3\"/>\n      <line x1=\"32\" y1=\"112\" x2=\"315\" y2=\"112\" stroke=\"#f1f5f9\" stroke-width=\"1\"/>\n      <text x=\"26\" y=\"32\" font-family=\"'Inter', sans-serif\" font-size=\"9\" font-weight=\"700\" fill=\"#71717a\" text-anchor=\"end\">650K</text>\n      <text x=\"26\" y=\"115\" font-family=\"'Inter', sans-serif\" font-size=\"9\" font-weight=\"700\" fill=\"#71717a\" text-anchor=\"end\">0</text>\n      <path d=\"M 36,84.29729729729729 L 81.66666666666666,73.21621621621622 L 127.33333333333333,62.13513513513514 L 173,52.43918918918919 L 218.66666666666666,43.43581081081081 L 264.3333333333333,35.817567567567565 L 310,30 L 310,112 L 36,112 Z\" fill=\"url(#reachGrad_5a43mmgga)\"/>\n      <path d=\"M 36,84.29729729729729 L 81.66666666666666,73.21621621621622 L 127.33333333333333,62.13513513513514 L 173,52.43918918918919 L 218.66666666666666,43.43581081081081 L 264.3333333333333,35.817567567567565 L 310,30\" fill=\"none\" stroke=\"#09090b\" stroke-width=\"2.4\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/>\n      <path d=\"M 36,95.52941176470588 L 81.66666666666666,88.47058823529412 L 127.33333333333333,80.23529411764706 L 173,73.17647058823529 L 218.66666666666666,64.94117647058823 L 264.3333333333333,56.70588235294118 L 310,52\" fill=\"none\" stroke=\"#71717a\" stroke-width=\"1.8\" stroke-dasharray=\"3 3\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/>\n      \n        <circle class=\"chart-point-reach pt-reach-0\" cx=\"36\" cy=\"84.29729729729729\" r=\"3.2\" fill=\"#ffffff\" stroke=\"#09090b\" stroke-width=\"2\"/>\n        <circle class=\"chart-point-act pt-act-0\" cx=\"36\" cy=\"95.52941176470588\" r=\"2.5\" fill=\"#ffffff\" stroke=\"#71717a\" stroke-width=\"1.5\"/>\n      \n        <circle class=\"chart-point-reach pt-reach-1\" cx=\"81.66666666666666\" cy=\"73.21621621621622\" r=\"3.2\" fill=\"#ffffff\" stroke=\"#09090b\" stroke-width=\"2\"/>\n        <circle class=\"chart-point-act pt-act-1\" cx=\"81.66666666666666\" cy=\"88.47058823529412\" r=\"2.5\" fill=\"#ffffff\" stroke=\"#71717a\" stroke-width=\"1.5\"/>\n      \n        <circle class=\"chart-point-reach pt-reach-2\" cx=\"127.33333333333333\" cy=\"62.13513513513514\" r=\"3.2\" fill=\"#ffffff\" stroke=\"#09090b\" stroke-width=\"2\"/>\n        <circle class=\"chart-point-act pt-act-2\" cx=\"127.33333333333333\" cy=\"80.23529411764706\" r=\"2.5\" fill=\"#ffffff\" stroke=\"#71717a\" stroke-width=\"1.5\"/>\n      \n        <circle class=\"chart-point-reach pt-reach-3\" cx=\"173\" cy=\"52.43918918918919\" r=\"3.2\" fill=\"#ffffff\" stroke=\"#09090b\" stroke-width=\"2\"/>\n        <circle class=\"chart-point-act pt-act-3\" cx=\"173\" cy=\"73.17647058823529\" r=\"2.5\" fill=\"#ffffff\" stroke=\"#71717a\" stroke-width=\"1.5\"/>\n      \n        <circle class=\"chart-point-reach pt-reach-4\" cx=\"218.66666666666666\" cy=\"43.43581081081081\" r=\"3.2\" fill=\"#ffffff\" stroke=\"#09090b\" stroke-width=\"2\"/>\n        <circle class=\"chart-point-act pt-act-4\" cx=\"218.66666666666666\" cy=\"64.94117647058823\" r=\"2.5\" fill=\"#ffffff\" stroke=\"#71717a\" stroke-width=\"1.5\"/>\n      \n        <circle class=\"chart-point-reach pt-reach-5\" cx=\"264.3333333333333\" cy=\"35.817567567567565\" r=\"3.2\" fill=\"#ffffff\" stroke=\"#09090b\" stroke-width=\"2\"/>\n        <circle class=\"chart-point-act pt-act-5\" cx=\"264.3333333333333\" cy=\"56.70588235294118\" r=\"2.5\" fill=\"#ffffff\" stroke=\"#71717a\" stroke-width=\"1.5\"/>\n      \n        <circle class=\"chart-point-reach pt-reach-6\" cx=\"310\" cy=\"30\" r=\"3.2\" fill=\"#ffffff\" stroke=\"#09090b\" stroke-width=\"2\"/>\n        <circle class=\"chart-point-act pt-act-6\" cx=\"310\" cy=\"52\" r=\"2.5\" fill=\"#ffffff\" stroke=\"#71717a\" stroke-width=\"1.5\"/>\n      \n      \n        <text x=\"36\" y=\"132\" font-family=\"'Inter', sans-serif\" font-size=\"9\" font-weight=\"600\" fill=\"#71717a\" text-anchor=\"middle\">Day 1</text>\n      \n        <text x=\"81.66666666666666\" y=\"132\" font-family=\"'Inter', sans-serif\" font-size=\"9\" font-weight=\"600\" fill=\"#71717a\" text-anchor=\"middle\">Day 15</text>\n      \n        <text x=\"127.33333333333333\" y=\"132\" font-family=\"'Inter', sans-serif\" font-size=\"9\" font-weight=\"600\" fill=\"#71717a\" text-anchor=\"middle\">Day 30</text>\n      \n        <text x=\"173\" y=\"132\" font-family=\"'Inter', sans-serif\" font-size=\"9\" font-weight=\"600\" fill=\"#71717a\" text-anchor=\"middle\">Day 45</text>\n      \n        <text x=\"218.66666666666666\" y=\"132\" font-family=\"'Inter', sans-serif\" font-size=\"9\" font-weight=\"600\" fill=\"#71717a\" text-anchor=\"middle\">Day 60</text>\n      \n        <text x=\"264.3333333333333\" y=\"132\" font-family=\"'Inter', sans-serif\" font-size=\"9\" font-weight=\"600\" fill=\"#71717a\" text-anchor=\"middle\">Day 75</text>\n      \n        <text x=\"310\" y=\"132\" font-family=\"'Inter', sans-serif\" font-size=\"9\" font-weight=\"600\" fill=\"#71717a\" text-anchor=\"middle\">Day 90</text>\n      \n      \n        <rect class=\"chart-hover-trigger\" data-idx=\"0\" data-label=\"Day 1\" data-reach=\"200K\" data-act=\"14K\" data-x=\"36\" data-reach-y=\"84.29729729729729\" data-act-y=\"95.52941176470588\" x=\"13.166666666666668\" y=\"0\" width=\"45.666666666666664\" height=\"145\" fill=\"transparent\" style=\"cursor: crosshair;\"/>\n      \n        <rect class=\"chart-hover-trigger\" data-idx=\"1\" data-label=\"Day 15\" data-reach=\"280K\" data-act=\"20K\" data-x=\"81.66666666666666\" data-reach-y=\"73.21621621621622\" data-act-y=\"88.47058823529412\" x=\"58.83333333333333\" y=\"0\" width=\"45.666666666666664\" height=\"145\" fill=\"transparent\" style=\"cursor: crosshair;\"/>\n      \n        <rect class=\"chart-hover-trigger\" data-idx=\"2\" data-label=\"Day 30\" data-reach=\"360K\" data-act=\"27K\" data-x=\"127.33333333333333\" data-reach-y=\"62.13513513513514\" data-act-y=\"80.23529411764706\" x=\"104.5\" y=\"0\" width=\"45.666666666666664\" height=\"145\" fill=\"transparent\" style=\"cursor: crosshair;\"/>\n      \n        <rect class=\"chart-hover-trigger\" data-idx=\"3\" data-label=\"Day 45\" data-reach=\"430K\" data-act=\"33K\" data-x=\"173\" data-reach-y=\"52.43918918918919\" data-act-y=\"73.17647058823529\" x=\"150.16666666666666\" y=\"0\" width=\"45.666666666666664\" height=\"145\" fill=\"transparent\" style=\"cursor: crosshair;\"/>\n      \n        <rect class=\"chart-hover-trigger\" data-idx=\"4\" data-label=\"Day 60\" data-reach=\"495K\" data-act=\"40K\" data-x=\"218.66666666666666\" data-reach-y=\"43.43581081081081\" data-act-y=\"64.94117647058823\" x=\"195.83333333333331\" y=\"0\" width=\"45.666666666666664\" height=\"145\" fill=\"transparent\" style=\"cursor: crosshair;\"/>\n      \n        <rect class=\"chart-hover-trigger\" data-idx=\"5\" data-label=\"Day 75\" data-reach=\"550K\" data-act=\"47K\" data-x=\"264.3333333333333\" data-reach-y=\"35.817567567567565\" data-act-y=\"56.70588235294118\" x=\"241.49999999999997\" y=\"0\" width=\"45.666666666666664\" height=\"145\" fill=\"transparent\" style=\"cursor: crosshair;\"/>\n      \n        <rect class=\"chart-hover-trigger\" data-idx=\"6\" data-label=\"Day 90\" data-reach=\"592K\" data-act=\"51K\" data-x=\"310\" data-reach-y=\"30\" data-act-y=\"52\" x=\"287.1666666666667\" y=\"0\" width=\"45.666666666666664\" height=\"145\" fill=\"transparent\" style=\"cursor: crosshair;\"/>\n      \n    </svg>\n  ",
+        "funnel": {
+          "s1Num": "21,400",
+          "s1Pct": "100%",
+          "s1Fill": "100%",
+          "s2Num": "15,400",
+          "s2Pct": "72.0%",
+          "s2Fill": "72.0%",
+          "s3Num": "8,900",
+          "s3Pct": "41.6%",
+          "s3Fill": "41.6%",
+          "s4Num": "4,450",
+          "s4Pct": "20.8%",
+          "s4Fill": "20.8%",
+          "rate": "20.8% Total Conv"
+        },
+        "demographics": {
+          "total": "592.0K",
+          "nonFollowers": "70% (414.4K)",
+          "followers": "30% (177.6K)",
+          "us": "64% (378.9K)",
+          "in": "12% (71.0K)",
+          "gb": "14% (82.9K)"
+        }
+      }
+    },
+    "store": [
+      {
+        "id": "prod-a1",
+        "title": "12-Week Lean Muscle Transformation Blueprint",
+        "price": "₹1,999",
+        "oldPrice": "₹3,999",
+        "desc": "Complete progressive overload workout regime, macro targets, video exercise breakdowns, and weekly check-in templates for rapid body recomposition.",
+        "cta": "Join Program",
+        "rating": "5.0 (98 reviews)",
+        "photos": [
+          "https://images.unsplash.com/photo-1534438327276-14e5300c3a48?auto=format&fit=crop&w=600&q=80",
+          "https://images.unsplash.com/photo-1581009146145-b5ef050c2e1e?auto=format&fit=crop&w=600&q=80"
+        ]
+      },
+      {
+        "id": "prod-a2",
+        "title": "Custom Macro & Nutrition Meal Planner",
+        "price": "₹999",
+        "oldPrice": "₹1,899",
+        "desc": "Personalized calorie and macro calculation spreadsheet with 60 high-protein recipes, grocery shopping lists, and supplement guide.",
+        "cta": "Get Meal Plan",
+        "rating": "4.9 (145 reviews)",
+        "photos": [
+          "https://images.unsplash.com/photo-1490645935967-10de6ba17061?auto=format&fit=crop&w=600&q=80"
+        ]
+      },
+      {
+        "id": "prod-a3",
+        "title": "1-on-1 Monthly VIP Online Coaching",
+        "price": "₹9,999",
+        "oldPrice": "₹14,999",
+        "desc": "Dedicated private WhatsApp coaching, custom workout programming updated weekly, form review videos, and bi-weekly Zoom consultations.",
+        "cta": "Apply for Coaching",
+        "rating": "5.0 (24 reviews)",
+        "photos": [
+          "https://images.unsplash.com/photo-1571019614242-c5c5dee9f50b?auto=format&fit=crop&w=600&q=80"
+        ]
+      },
+      {
+        "id": "prod-a4",
+        "title": "Free 5-Day Shred Workout PDF",
+        "price": "FREE",
+        "oldPrice": "₹499",
+        "desc": "5 high-intensity gym routines to kickstart fat loss and build shoulder & core definition.",
+        "cta": "Download PDF",
+        "rating": "4.9 (680 reviews)",
+        "photos": [
+          "https://images.unsplash.com/photo-1517838277536-f5f99be501cd?auto=format&fit=crop&w=600&q=80"
+        ]
+      }
+    ],
+    "rules": [
+      {
+        "id": "rule-a-workout",
+        "name": "Free 5-Day Shred Workout PDF",
+        "ruleSub": "Free 5-Day Shred Workout PDF",
+        "thumbImg": "https://images.unsplash.com/photo-1534438327276-14e5300c3a48?auto=format&fit=crop&w=600&q=80",
+        "type": "reel",
+        "typeName": "Reels & Live",
+        "keywords": [
+          "WORKOUT",
+          "SHRED"
+        ],
+        "target": "REELS",
+        "targetType": "REELS",
+        "active": true,
+        "sentCount": 5410,
+        "successRate": "99.5%",
+        "response": "Let’s get after it {first_name}! 💥 Here is your free 5-Day Shred Workout Program PDF: {link} Save it to your phone and crush your next workout!",
+        "attachLink": true,
+        "linkUrl": "https://renderreply.com/alex/shred-program.pdf",
+        "linkTitle": "Free 5-Day Shred Workout PDF",
+        "commentReply": true,
+        "commentReplyText": "Sent the 5-day workout plan directly to your DMs brother! Check messages 👊"
+      },
+      {
+        "id": "rule-a-diet",
+        "name": "Macro Calculator & Nutrition Guide",
+        "ruleSub": "Macro Calculator & Nutrition Guide",
+        "thumbImg": "https://images.unsplash.com/photo-1490645935967-10de6ba17061?auto=format&fit=crop&w=600&q=80",
+        "type": "post",
+        "typeName": "Post Comments",
+        "keywords": [
+          "DIET",
+          "MACROS"
+        ],
+        "target": "POST",
+        "targetType": "POST",
+        "active": true,
+        "sentCount": 3820,
+        "successRate": "98.8%",
+        "response": "Hey {first_name}! Here is the link to access the High-Protein Meal Planner and Macro Calculator: {link}",
+        "attachLink": true,
+        "linkUrl": "https://renderreply.com/alex/macros-guide",
+        "linkTitle": "Macro Calculator & Meal Plan",
+        "commentReply": false,
+        "commentReplyText": ""
+      },
+      {
+        "id": "rule-a-coach",
+        "name": "VIP 1-on-1 Coaching Application",
+        "ruleSub": "VIP 1-on-1 Coaching Application",
+        "thumbImg": "https://images.unsplash.com/photo-1571019614242-c5c5dee9f50b?auto=format&fit=crop&w=600&q=80",
+        "type": "dm",
+        "typeName": "Direct Messages",
+        "keywords": [
+          "COACHING"
+        ],
+        "target": "DIRECT_MESSAGES",
+        "targetType": "DIRECT_MESSAGES",
+        "active": true,
+        "sentCount": 1240,
+        "successRate": "99.2%",
+        "response": "Hey {first_name}! Ready to transform your physique? Fill out our 2-minute VIP Coaching application here: {link} I review every application personally.",
+        "attachLink": true,
+        "linkUrl": "https://renderreply.com/alex/apply",
+        "linkTitle": "Apply for VIP Coaching",
+        "commentReply": false,
+        "commentReplyText": ""
+      }
+    ],
+    "inbox": {
+      "david": {
+        "name": "David Miller",
+        "handle": "@david_lifts",
+        "avatar": "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=150&q=80",
+        "followers": "32K Followers",
+        "source": "Reel Comment: \"#WORKOUT\"",
+        "status": "attention",
+        "botActive": true,
+        "triggerTitle": "Triggered by Reel: \"3 Chest Exercises to Build Upper Pecs\" (Keyword: \"#WORKOUT\")",
+        "messages": [
+          {
+            "type": "divider",
+            "text": "TODAY, 09:20 AM"
+          },
+          {
+            "type": "user",
+            "text": "WORKOUT! Can you send the PDF?",
+            "time": "09:20 AM",
+            "context": "Commented on chest reel"
+          },
+          {
+            "type": "bot",
+            "text": "Hey David! Here is the free 5-Day Shred Workout PDF: https://renderreply.com/alex/shred-program.pdf Let’s get those gains!",
+            "time": "09:20 AM",
+            "flow": "Fitness Lead Magnet Flow",
+            "hasCard": true
+          }
+        ]
+      },
+      "ryan": {
+        "name": "Ryan Chen",
+        "handle": "@ryan_fitlife",
+        "avatar": "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?auto=format&fit=crop&w=150&q=80",
+        "followers": "78K Followers",
+        "source": "Reel Comment: \"#DIET\"",
+        "status": "bot",
+        "botActive": true,
+        "triggerTitle": "Triggered by Reel: \"What I Eat in a Day for 180g Protein\"",
+        "messages": [
+          {
+            "type": "divider",
+            "text": "TODAY, 08:15 AM"
+          },
+          {
+            "type": "user",
+            "text": "DIET info please!",
+            "time": "08:15 AM",
+            "context": "Commented \"#DIET\""
+          },
+          {
+            "type": "bot",
+            "text": "Hey Ryan! Here is your custom macro calculator and 60-recipe meal guide: https://renderreply.com/alex/macros-guide",
+            "time": "08:15 AM",
+            "flow": "Nutrition Automation Flow",
+            "hasCard": false
+          }
+        ]
+      },
+      "brody": {
+        "name": "Marcus Brody",
+        "handle": "@brody_fitness",
+        "avatar": "https://images.unsplash.com/photo-1492562080023-ab3db95bfbce?auto=format&fit=crop&w=150&q=80",
+        "followers": "110K Followers",
+        "source": "DM Keyword: \"#COACHING\"",
+        "status": "resolved",
+        "botActive": true,
+        "triggerTitle": "VIP Coaching Inquiry",
+        "messages": [
+          {
+            "type": "divider",
+            "text": "YESTERDAY"
+          },
+          {
+            "type": "user",
+            "text": "COACHING",
+            "time": "06:12 PM",
+            "context": "Direct message"
+          },
+          {
+            "type": "bot",
+            "text": "Hey Marcus! Fill out our VIP coaching application: https://renderreply.com/alex/apply",
+            "time": "06:12 PM",
+            "flow": "Coaching Funnel",
+            "hasCard": false
+          },
+          {
+            "type": "user",
+            "text": "Submitted application! Looking forward to working with you.",
+            "time": "06:30 PM"
+          }
+        ]
+      }
+    },
+    "leads": [
+      {
+        "id": "lead-a1",
+        "handle": "@david_lifts",
+        "name": "David Miller",
+        "avatar": "DM",
+        "email": "david.miller@techcorp.com",
+        "phone": "+1 (555) 345-6789",
+        "keyword": "#WORKOUT",
+        "campaign": "workout",
+        "status": "Email Captured",
+        "statusClass": "email",
+        "sourceTitle": "3 Chest Exercises to Build Upper Pecs Reel",
+        "sourceThumb": "https://images.unsplash.com/photo-1534438327276-14e5300c3a48?auto=format&fit=crop&w=80&q=80",
+        "time": "4m ago",
+        "timestamp": "Today, 09:20 AM",
+        "commentText": "WORKOUT! Can you send the PDF?",
+        "botReplyText": "Hey David! Here is your PDF: https://renderreply.com/alex/shred-program.pdf",
+        "ruleName": "Free 5-Day Shred Workout PDF"
+      },
+      {
+        "id": "lead-a2",
+        "handle": "@ryan_fitlife",
+        "name": "Ryan Chen",
+        "avatar": "RC",
+        "email": "ryan.chen@berkeley.edu",
+        "phone": "+1 (555) 912-4820",
+        "keyword": "DIET",
+        "campaign": "diet",
+        "status": "DM Delivered",
+        "statusClass": "",
+        "sourceTitle": "What I Eat in a Day for 180g Protein Post",
+        "sourceThumb": "https://images.unsplash.com/photo-1490645935967-10de6ba17061?auto=format&fit=crop&w=80&q=80",
+        "time": "18m ago",
+        "timestamp": "Today, 08:15 AM",
+        "commentText": "DIET info please!",
+        "botReplyText": "Hey Ryan! Here is the nutrition link: https://renderreply.com/alex/macros-guide",
+        "ruleName": "Macro Calculator & Nutrition Guide"
+      }
+    ],
+    "payments": {
+      "totalBalance": 412500,
+      "availableBalance": 345000,
+      "pendingBalance": 67500,
+      "payout": {
+        "upiId": "alexriverafit@okhdfcbank",
+        "holderName": "Alex Rivera",
+        "bankName": "HDFC Bank",
+        "accountNumber": "50100998811234",
+        "ifsc": "HDFC0000892",
+        "primaryChannel": "UPI"
+      },
+      "transactions": [
+        {
+          "id": "88401948192019",
+          "date": "Oct 24, 2026 09:30 AM",
+          "type": "Order Sale",
+          "amount": 99990,
+          "status": "Cleared",
+          "customer": "marcus.brody@gymshark.com",
+          "channel": "Direct UPI",
+          "fee": 2999,
+          "gst": 540,
+          "net": 96451
+        },
+        {
+          "id": "88401948192015",
+          "date": "Oct 23, 2026 02:10 PM",
+          "type": "Order Sale",
+          "amount": 19990,
+          "status": "Cleared",
+          "customer": "david.miller@techcorp.com",
+          "channel": "Direct UPI",
+          "fee": 599,
+          "gst": 108,
+          "net": 19283
+        },
+        {
+          "id": "88401948192008",
+          "date": "Oct 22, 2026 04:45 PM",
+          "type": "Order Sale",
+          "amount": 9990,
+          "status": "Cleared",
+          "customer": "ryan.chen@berkeley.edu",
+          "channel": "Direct UPI",
+          "fee": 299,
+          "gst": 54,
+          "net": 9637
+        },
+        {
+          "id": "89102471928001",
+          "date": "Oct 20, 2026 01:15 PM",
+          "type": "Withdrawal",
+          "amount": -200000,
+          "status": "Cleared",
+          "customer": "Payout to alexriverafit@okhdfcbank",
+          "channel": "Direct UPI",
+          "fee": 0,
+          "gst": 0,
+          "net": -200000
+        }
+      ]
+    },
+    "biolink": {
+      "title": "Alex Rivera | Elite Strength & Nutrition 💥",
+      "bio": "Transform your body with science-backed training programs and personalized coaching.",
+      "links": [
+        {
+          "label": "Join 12-Week Transformation Challenge 🏋️",
+          "url": "https://renderreply.com/alex/12-weeks",
+          "color": "accent"
+        },
+        {
+          "label": "Apply for 1-on-1 VIP Online Coaching",
+          "url": "https://renderreply.com/alex/apply",
+          "color": "slate"
+        },
+        {
+          "label": "Free 5-Day Shred Workout PDF",
+          "url": "https://renderreply.com/alex/shred-pdf",
+          "color": "emerald"
+        },
+        {
+          "label": "Calculate Your Daily Macros Free",
+          "url": "https://renderreply.com/alex/macros",
+          "color": "amber"
+        }
+      ],
+      "video1": "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
+      "video2": "",
+      "theme": "midnight-emerald"
+    }
+  },
+  "acc-agency": {
+    "id": "acc-agency",
+    "profile": {
+      "name": "RenderReply Agency Pro",
+      "email": "agency@renderreply.com",
+      "avatar": "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=250&q=80",
+      "bio": "Enterprise Instagram Growth & DM Automation Infrastructure for Brands & Agencies 🚀 Managing 25+ creators.",
+      "insta": "@renderagency",
+      "yt": "youtube.com/@renderagency",
+      "tw": "@renderagency",
+      "initials": "RA",
+      "badge": "Enterprise Agency Tier",
+      "role": "Agency Admin"
+    },
+    "dashboard": {
+      "7 Days": {
+        "followers": "540K",
+        "following": "85",
+        "views": "480,000",
+        "comments": "18,400",
+        "totalReplies": "11,200",
+        "sentToday": "480",
+        "activeRulesFlat": "12",
+        "capturedLeadsFlat": "3,840",
+        "reach": "390.0K",
+        "trendReach": "▲ +38.2%",
+        "engaged": "48.2K",
+        "trendEngaged": "▲ +24.5%",
+        "visits": "26,400",
+        "trendVisits": "▲ +32.0%",
+        "clicks": "12,900",
+        "trendClicks": "▲ +38.4%",
+        "replies": "11,200",
+        "trendReplies": "▲ +28.5%",
+        "dmsToday": "480",
+        "trendDmsToday": "▲ +14.2%",
+        "activeRules": "12 Active",
+        "trendRules": "● 100% Uptime",
+        "leads": "3,840",
+        "trendLeads": "▲ +48.0%",
+        "reachSub": "Combined multi-client reach vs lead conversions over the last 7 days.",
+        "legReach": "390.0K",
+        "legAct": "26.4K",
+        "reachSvg": "\n    <svg viewBox=\"0 0 330 145\" class=\"dual-line-chart-svg\" style=\"width: 100%; height: 100%;\">\n      <defs>\n        <linearGradient id=\"reachGrad_6hlta3m3y\" x1=\"0\" y1=\"0\" x2=\"0\" y2=\"1\">\n          <stop offset=\"0%\" stop-color=\"#09090b\" stop-opacity=\"0.10\"/>\n          <stop offset=\"100%\" stop-color=\"#09090b\" stop-opacity=\"0.0\"/>\n        </linearGradient>\n      </defs>\n      <line x1=\"32\" y1=\"28\" x2=\"315\" y2=\"28\" stroke=\"#f1f5f9\" stroke-width=\"1\" stroke-dasharray=\"3 3\"/>\n      <line x1=\"32\" y1=\"70\" x2=\"315\" y2=\"70\" stroke=\"#f1f5f9\" stroke-width=\"1\" stroke-dasharray=\"3 3\"/>\n      <line x1=\"32\" y1=\"112\" x2=\"315\" y2=\"112\" stroke=\"#f1f5f9\" stroke-width=\"1\"/>\n      <text x=\"26\" y=\"32\" font-family=\"'Inter', sans-serif\" font-size=\"9\" font-weight=\"700\" fill=\"#71717a\" text-anchor=\"end\">450K</text>\n      <text x=\"26\" y=\"115\" font-family=\"'Inter', sans-serif\" font-size=\"9\" font-weight=\"700\" fill=\"#71717a\" text-anchor=\"end\">0</text>\n      <path d=\"M 36,86.76923076923077 L 81.66666666666666,76.25641025641025 L 127.33333333333333,65.74358974358975 L 173,55.23076923076923 L 218.66666666666666,46.82051282051282 L 264.3333333333333,37.358974358974365 L 310,30 L 310,112 L 36,112 Z\" fill=\"url(#reachGrad_6hlta3m3y)\"/>\n      <path d=\"M 36,86.76923076923077 L 81.66666666666666,76.25641025641025 L 127.33333333333333,65.74358974358975 L 173,55.23076923076923 L 218.66666666666666,46.82051282051282 L 264.3333333333333,37.358974358974365 L 310,30\" fill=\"none\" stroke=\"#09090b\" stroke-width=\"2.4\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/>\n      <path d=\"M 36,92.68181818181819 L 81.66666666666666,84.5 L 127.33333333333333,76.0909090909091 L 173,67.9090909090909 L 218.66666666666666,61.772727272727266 L 264.3333333333333,55.63636363636363 L 310,52\" fill=\"none\" stroke=\"#71717a\" stroke-width=\"1.8\" stroke-dasharray=\"3 3\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/>\n      \n        <circle class=\"chart-point-reach pt-reach-0\" cx=\"36\" cy=\"86.76923076923077\" r=\"3.2\" fill=\"#ffffff\" stroke=\"#09090b\" stroke-width=\"2\"/>\n        <circle class=\"chart-point-act pt-act-0\" cx=\"36\" cy=\"92.68181818181819\" r=\"2.5\" fill=\"#ffffff\" stroke=\"#71717a\" stroke-width=\"1.5\"/>\n      \n        <circle class=\"chart-point-reach pt-reach-1\" cx=\"81.66666666666666\" cy=\"76.25641025641025\" r=\"3.2\" fill=\"#ffffff\" stroke=\"#09090b\" stroke-width=\"2\"/>\n        <circle class=\"chart-point-act pt-act-1\" cx=\"81.66666666666666\" cy=\"84.5\" r=\"2.5\" fill=\"#ffffff\" stroke=\"#71717a\" stroke-width=\"1.5\"/>\n      \n        <circle class=\"chart-point-reach pt-reach-2\" cx=\"127.33333333333333\" cy=\"65.74358974358975\" r=\"3.2\" fill=\"#ffffff\" stroke=\"#09090b\" stroke-width=\"2\"/>\n        <circle class=\"chart-point-act pt-act-2\" cx=\"127.33333333333333\" cy=\"76.0909090909091\" r=\"2.5\" fill=\"#ffffff\" stroke=\"#71717a\" stroke-width=\"1.5\"/>\n      \n        <circle class=\"chart-point-reach pt-reach-3\" cx=\"173\" cy=\"55.23076923076923\" r=\"3.2\" fill=\"#ffffff\" stroke=\"#09090b\" stroke-width=\"2\"/>\n        <circle class=\"chart-point-act pt-act-3\" cx=\"173\" cy=\"67.9090909090909\" r=\"2.5\" fill=\"#ffffff\" stroke=\"#71717a\" stroke-width=\"1.5\"/>\n      \n        <circle class=\"chart-point-reach pt-reach-4\" cx=\"218.66666666666666\" cy=\"46.82051282051282\" r=\"3.2\" fill=\"#ffffff\" stroke=\"#09090b\" stroke-width=\"2\"/>\n        <circle class=\"chart-point-act pt-act-4\" cx=\"218.66666666666666\" cy=\"61.772727272727266\" r=\"2.5\" fill=\"#ffffff\" stroke=\"#71717a\" stroke-width=\"1.5\"/>\n      \n        <circle class=\"chart-point-reach pt-reach-5\" cx=\"264.3333333333333\" cy=\"37.358974358974365\" r=\"3.2\" fill=\"#ffffff\" stroke=\"#09090b\" stroke-width=\"2\"/>\n        <circle class=\"chart-point-act pt-act-5\" cx=\"264.3333333333333\" cy=\"55.63636363636363\" r=\"2.5\" fill=\"#ffffff\" stroke=\"#71717a\" stroke-width=\"1.5\"/>\n      \n        <circle class=\"chart-point-reach pt-reach-6\" cx=\"310\" cy=\"30\" r=\"3.2\" fill=\"#ffffff\" stroke=\"#09090b\" stroke-width=\"2\"/>\n        <circle class=\"chart-point-act pt-act-6\" cx=\"310\" cy=\"52\" r=\"2.5\" fill=\"#ffffff\" stroke=\"#71717a\" stroke-width=\"1.5\"/>\n      \n      \n        <text x=\"36\" y=\"132\" font-family=\"'Inter', sans-serif\" font-size=\"9\" font-weight=\"600\" fill=\"#71717a\" text-anchor=\"middle\">Day 1</text>\n      \n        <text x=\"81.66666666666666\" y=\"132\" font-family=\"'Inter', sans-serif\" font-size=\"9\" font-weight=\"600\" fill=\"#71717a\" text-anchor=\"middle\">Day 2</text>\n      \n        <text x=\"127.33333333333333\" y=\"132\" font-family=\"'Inter', sans-serif\" font-size=\"9\" font-weight=\"600\" fill=\"#71717a\" text-anchor=\"middle\">Day 3</text>\n      \n        <text x=\"173\" y=\"132\" font-family=\"'Inter', sans-serif\" font-size=\"9\" font-weight=\"600\" fill=\"#71717a\" text-anchor=\"middle\">Day 4</text>\n      \n        <text x=\"218.66666666666666\" y=\"132\" font-family=\"'Inter', sans-serif\" font-size=\"9\" font-weight=\"600\" fill=\"#71717a\" text-anchor=\"middle\">Day 5</text>\n      \n        <text x=\"264.3333333333333\" y=\"132\" font-family=\"'Inter', sans-serif\" font-size=\"9\" font-weight=\"600\" fill=\"#71717a\" text-anchor=\"middle\">Day 6</text>\n      \n        <text x=\"310\" y=\"132\" font-family=\"'Inter', sans-serif\" font-size=\"9\" font-weight=\"600\" fill=\"#71717a\" text-anchor=\"middle\">Day 7</text>\n      \n      \n        <rect class=\"chart-hover-trigger\" data-idx=\"0\" data-label=\"Day 1\" data-reach=\"120K\" data-act=\"8.5K\" data-x=\"36\" data-reach-y=\"86.76923076923077\" data-act-y=\"92.68181818181819\" x=\"13.166666666666668\" y=\"0\" width=\"45.666666666666664\" height=\"145\" fill=\"transparent\" style=\"cursor: crosshair;\"/>\n      \n        <rect class=\"chart-hover-trigger\" data-idx=\"1\" data-label=\"Day 2\" data-reach=\"170K\" data-act=\"12.1K\" data-x=\"81.66666666666666\" data-reach-y=\"76.25641025641025\" data-act-y=\"84.5\" x=\"58.83333333333333\" y=\"0\" width=\"45.666666666666664\" height=\"145\" fill=\"transparent\" style=\"cursor: crosshair;\"/>\n      \n        <rect class=\"chart-hover-trigger\" data-idx=\"2\" data-label=\"Day 3\" data-reach=\"220K\" data-act=\"15.8K\" data-x=\"127.33333333333333\" data-reach-y=\"65.74358974358975\" data-act-y=\"76.0909090909091\" x=\"104.5\" y=\"0\" width=\"45.666666666666664\" height=\"145\" fill=\"transparent\" style=\"cursor: crosshair;\"/>\n      \n        <rect class=\"chart-hover-trigger\" data-idx=\"3\" data-label=\"Day 4\" data-reach=\"270K\" data-act=\"19.4K\" data-x=\"173\" data-reach-y=\"55.23076923076923\" data-act-y=\"67.9090909090909\" x=\"150.16666666666666\" y=\"0\" width=\"45.666666666666664\" height=\"145\" fill=\"transparent\" style=\"cursor: crosshair;\"/>\n      \n        <rect class=\"chart-hover-trigger\" data-idx=\"4\" data-label=\"Day 5\" data-reach=\"310K\" data-act=\"22.1K\" data-x=\"218.66666666666666\" data-reach-y=\"46.82051282051282\" data-act-y=\"61.772727272727266\" x=\"195.83333333333331\" y=\"0\" width=\"45.666666666666664\" height=\"145\" fill=\"transparent\" style=\"cursor: crosshair;\"/>\n      \n        <rect class=\"chart-hover-trigger\" data-idx=\"5\" data-label=\"Day 6\" data-reach=\"355K\" data-act=\"24.8K\" data-x=\"264.3333333333333\" data-reach-y=\"37.358974358974365\" data-act-y=\"55.63636363636363\" x=\"241.49999999999997\" y=\"0\" width=\"45.666666666666664\" height=\"145\" fill=\"transparent\" style=\"cursor: crosshair;\"/>\n      \n        <rect class=\"chart-hover-trigger\" data-idx=\"6\" data-label=\"Day 7\" data-reach=\"390K\" data-act=\"26.4K\" data-x=\"310\" data-reach-y=\"30\" data-act-y=\"52\" x=\"287.1666666666667\" y=\"0\" width=\"45.666666666666664\" height=\"145\" fill=\"transparent\" style=\"cursor: crosshair;\"/>\n      \n    </svg>\n  ",
+        "funnel": {
+          "s1Num": "18,400",
+          "s1Pct": "100%",
+          "s1Fill": "100%",
+          "s2Num": "12,900",
+          "s2Pct": "70.1%",
+          "s2Fill": "70.1%",
+          "s3Num": "7,600",
+          "s3Pct": "41.3%",
+          "s3Fill": "41.3%",
+          "s4Num": "3,840",
+          "s4Pct": "20.9%",
+          "s4Fill": "20.9%",
+          "rate": "20.9% Total Conv"
+        },
+        "demographics": {
+          "total": "390.0K",
+          "nonFollowers": "76% (296.4K)",
+          "followers": "24% (93.6K)",
+          "us": "46% (179.4K)",
+          "in": "22% (85.8K)",
+          "gb": "18% (70.2K)"
+        }
+      },
+      "14 Days": {
+        "followers": "540K",
+        "following": "85",
+        "views": "920,000",
+        "comments": "35,600",
+        "totalReplies": "22,400",
+        "sentToday": "940",
+        "activeRulesFlat": "12",
+        "capturedLeadsFlat": "7,480",
+        "reach": "760.0K",
+        "trendReach": "▲ +42.0%",
+        "engaged": "96.0K",
+        "trendEngaged": "▲ +26.8%",
+        "visits": "52,000",
+        "trendVisits": "▲ +36.4%",
+        "clicks": "25,400",
+        "trendClicks": "▲ +42.0%",
+        "replies": "22,400",
+        "trendReplies": "▲ +32.0%",
+        "dmsToday": "940",
+        "trendDmsToday": "▲ +16.0%",
+        "activeRules": "12 Active",
+        "trendRules": "● 100% Uptime",
+        "leads": "7,480",
+        "trendLeads": "▲ +51.2%",
+        "reachSub": "Combined multi-client reach vs lead conversions over the last 14 days.",
+        "legReach": "760.0K",
+        "legAct": "52.0K",
+        "reachSvg": "\n    <svg viewBox=\"0 0 330 145\" class=\"dual-line-chart-svg\" style=\"width: 100%; height: 100%;\">\n      <defs>\n        <linearGradient id=\"reachGrad_c3f14vfm1\" x1=\"0\" y1=\"0\" x2=\"0\" y2=\"1\">\n          <stop offset=\"0%\" stop-color=\"#09090b\" stop-opacity=\"0.10\"/>\n          <stop offset=\"100%\" stop-color=\"#09090b\" stop-opacity=\"0.0\"/>\n        </linearGradient>\n      </defs>\n      <line x1=\"32\" y1=\"28\" x2=\"315\" y2=\"28\" stroke=\"#f1f5f9\" stroke-width=\"1\" stroke-dasharray=\"3 3\"/>\n      <line x1=\"32\" y1=\"70\" x2=\"315\" y2=\"70\" stroke=\"#f1f5f9\" stroke-width=\"1\" stroke-dasharray=\"3 3\"/>\n      <line x1=\"32\" y1=\"112\" x2=\"315\" y2=\"112\" stroke=\"#f1f5f9\" stroke-width=\"1\"/>\n      <text x=\"26\" y=\"32\" font-family=\"'Inter', sans-serif\" font-size=\"9\" font-weight=\"700\" fill=\"#71717a\" text-anchor=\"end\">850K</text>\n      <text x=\"26\" y=\"115\" font-family=\"'Inter', sans-serif\" font-size=\"9\" font-weight=\"700\" fill=\"#71717a\" text-anchor=\"end\">0</text>\n      <path d=\"M 36,86.10526315789474 L 81.66666666666666,75.31578947368422 L 127.33333333333333,64.52631578947368 L 173,54.81578947368421 L 218.66666666666666,45.10526315789474 L 264.3333333333333,36.473684210526315 L 310,30 L 310,112 L 36,112 Z\" fill=\"url(#reachGrad_c3f14vfm1)\"/>\n      <path d=\"M 36,86.10526315789474 L 81.66666666666666,75.31578947368422 L 127.33333333333333,64.52631578947368 L 173,54.81578947368421 L 218.66666666666666,45.10526315789474 L 264.3333333333333,36.473684210526315 L 310,30\" fill=\"none\" stroke=\"#09090b\" stroke-width=\"2.4\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/>\n      <path d=\"M 36,93.53846153846153 L 81.66666666666666,84.3076923076923 L 127.33333333333333,76.23076923076923 L 173,68.15384615384616 L 218.66666666666666,61.23076923076923 L 264.3333333333333,55.46153846153846 L 310,52\" fill=\"none\" stroke=\"#71717a\" stroke-width=\"1.8\" stroke-dasharray=\"3 3\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/>\n      \n        <circle class=\"chart-point-reach pt-reach-0\" cx=\"36\" cy=\"86.10526315789474\" r=\"3.2\" fill=\"#ffffff\" stroke=\"#09090b\" stroke-width=\"2\"/>\n        <circle class=\"chart-point-act pt-act-0\" cx=\"36\" cy=\"93.53846153846153\" r=\"2.5\" fill=\"#ffffff\" stroke=\"#71717a\" stroke-width=\"1.5\"/>\n      \n        <circle class=\"chart-point-reach pt-reach-1\" cx=\"81.66666666666666\" cy=\"75.31578947368422\" r=\"3.2\" fill=\"#ffffff\" stroke=\"#09090b\" stroke-width=\"2\"/>\n        <circle class=\"chart-point-act pt-act-1\" cx=\"81.66666666666666\" cy=\"84.3076923076923\" r=\"2.5\" fill=\"#ffffff\" stroke=\"#71717a\" stroke-width=\"1.5\"/>\n      \n        <circle class=\"chart-point-reach pt-reach-2\" cx=\"127.33333333333333\" cy=\"64.52631578947368\" r=\"3.2\" fill=\"#ffffff\" stroke=\"#09090b\" stroke-width=\"2\"/>\n        <circle class=\"chart-point-act pt-act-2\" cx=\"127.33333333333333\" cy=\"76.23076923076923\" r=\"2.5\" fill=\"#ffffff\" stroke=\"#71717a\" stroke-width=\"1.5\"/>\n      \n        <circle class=\"chart-point-reach pt-reach-3\" cx=\"173\" cy=\"54.81578947368421\" r=\"3.2\" fill=\"#ffffff\" stroke=\"#09090b\" stroke-width=\"2\"/>\n        <circle class=\"chart-point-act pt-act-3\" cx=\"173\" cy=\"68.15384615384616\" r=\"2.5\" fill=\"#ffffff\" stroke=\"#71717a\" stroke-width=\"1.5\"/>\n      \n        <circle class=\"chart-point-reach pt-reach-4\" cx=\"218.66666666666666\" cy=\"45.10526315789474\" r=\"3.2\" fill=\"#ffffff\" stroke=\"#09090b\" stroke-width=\"2\"/>\n        <circle class=\"chart-point-act pt-act-4\" cx=\"218.66666666666666\" cy=\"61.23076923076923\" r=\"2.5\" fill=\"#ffffff\" stroke=\"#71717a\" stroke-width=\"1.5\"/>\n      \n        <circle class=\"chart-point-reach pt-reach-5\" cx=\"264.3333333333333\" cy=\"36.473684210526315\" r=\"3.2\" fill=\"#ffffff\" stroke=\"#09090b\" stroke-width=\"2\"/>\n        <circle class=\"chart-point-act pt-act-5\" cx=\"264.3333333333333\" cy=\"55.46153846153846\" r=\"2.5\" fill=\"#ffffff\" stroke=\"#71717a\" stroke-width=\"1.5\"/>\n      \n        <circle class=\"chart-point-reach pt-reach-6\" cx=\"310\" cy=\"30\" r=\"3.2\" fill=\"#ffffff\" stroke=\"#09090b\" stroke-width=\"2\"/>\n        <circle class=\"chart-point-act pt-act-6\" cx=\"310\" cy=\"52\" r=\"2.5\" fill=\"#ffffff\" stroke=\"#71717a\" stroke-width=\"1.5\"/>\n      \n      \n        <text x=\"36\" y=\"132\" font-family=\"'Inter', sans-serif\" font-size=\"9\" font-weight=\"600\" fill=\"#71717a\" text-anchor=\"middle\">Day 2</text>\n      \n        <text x=\"81.66666666666666\" y=\"132\" font-family=\"'Inter', sans-serif\" font-size=\"9\" font-weight=\"600\" fill=\"#71717a\" text-anchor=\"middle\">Day 4</text>\n      \n        <text x=\"127.33333333333333\" y=\"132\" font-family=\"'Inter', sans-serif\" font-size=\"9\" font-weight=\"600\" fill=\"#71717a\" text-anchor=\"middle\">Day 6</text>\n      \n        <text x=\"173\" y=\"132\" font-family=\"'Inter', sans-serif\" font-size=\"9\" font-weight=\"600\" fill=\"#71717a\" text-anchor=\"middle\">Day 8</text>\n      \n        <text x=\"218.66666666666666\" y=\"132\" font-family=\"'Inter', sans-serif\" font-size=\"9\" font-weight=\"600\" fill=\"#71717a\" text-anchor=\"middle\">Day 10</text>\n      \n        <text x=\"264.3333333333333\" y=\"132\" font-family=\"'Inter', sans-serif\" font-size=\"9\" font-weight=\"600\" fill=\"#71717a\" text-anchor=\"middle\">Day 12</text>\n      \n        <text x=\"310\" y=\"132\" font-family=\"'Inter', sans-serif\" font-size=\"9\" font-weight=\"600\" fill=\"#71717a\" text-anchor=\"middle\">Day 14</text>\n      \n      \n        <rect class=\"chart-hover-trigger\" data-idx=\"0\" data-label=\"Day 2\" data-reach=\"240K\" data-act=\"16K\" data-x=\"36\" data-reach-y=\"86.10526315789474\" data-act-y=\"93.53846153846153\" x=\"13.166666666666668\" y=\"0\" width=\"45.666666666666664\" height=\"145\" fill=\"transparent\" style=\"cursor: crosshair;\"/>\n      \n        <rect class=\"chart-hover-trigger\" data-idx=\"1\" data-label=\"Day 4\" data-reach=\"340K\" data-act=\"24K\" data-x=\"81.66666666666666\" data-reach-y=\"75.31578947368422\" data-act-y=\"84.3076923076923\" x=\"58.83333333333333\" y=\"0\" width=\"45.666666666666664\" height=\"145\" fill=\"transparent\" style=\"cursor: crosshair;\"/>\n      \n        <rect class=\"chart-hover-trigger\" data-idx=\"2\" data-label=\"Day 6\" data-reach=\"440K\" data-act=\"31K\" data-x=\"127.33333333333333\" data-reach-y=\"64.52631578947368\" data-act-y=\"76.23076923076923\" x=\"104.5\" y=\"0\" width=\"45.666666666666664\" height=\"145\" fill=\"transparent\" style=\"cursor: crosshair;\"/>\n      \n        <rect class=\"chart-hover-trigger\" data-idx=\"3\" data-label=\"Day 8\" data-reach=\"530K\" data-act=\"38K\" data-x=\"173\" data-reach-y=\"54.81578947368421\" data-act-y=\"68.15384615384616\" x=\"150.16666666666666\" y=\"0\" width=\"45.666666666666664\" height=\"145\" fill=\"transparent\" style=\"cursor: crosshair;\"/>\n      \n        <rect class=\"chart-hover-trigger\" data-idx=\"4\" data-label=\"Day 10\" data-reach=\"620K\" data-act=\"44K\" data-x=\"218.66666666666666\" data-reach-y=\"45.10526315789474\" data-act-y=\"61.23076923076923\" x=\"195.83333333333331\" y=\"0\" width=\"45.666666666666664\" height=\"145\" fill=\"transparent\" style=\"cursor: crosshair;\"/>\n      \n        <rect class=\"chart-hover-trigger\" data-idx=\"5\" data-label=\"Day 12\" data-reach=\"700K\" data-act=\"49K\" data-x=\"264.3333333333333\" data-reach-y=\"36.473684210526315\" data-act-y=\"55.46153846153846\" x=\"241.49999999999997\" y=\"0\" width=\"45.666666666666664\" height=\"145\" fill=\"transparent\" style=\"cursor: crosshair;\"/>\n      \n        <rect class=\"chart-hover-trigger\" data-idx=\"6\" data-label=\"Day 14\" data-reach=\"760K\" data-act=\"52K\" data-x=\"310\" data-reach-y=\"30\" data-act-y=\"52\" x=\"287.1666666666667\" y=\"0\" width=\"45.666666666666664\" height=\"145\" fill=\"transparent\" style=\"cursor: crosshair;\"/>\n      \n    </svg>\n  ",
+        "funnel": {
+          "s1Num": "35,600",
+          "s1Pct": "100%",
+          "s1Fill": "100%",
+          "s2Num": "25,100",
+          "s2Pct": "70.5%",
+          "s2Fill": "70.5%",
+          "s3Num": "14,800",
+          "s3Pct": "41.6%",
+          "s3Fill": "41.6%",
+          "s4Num": "7,480",
+          "s4Pct": "21.0%",
+          "s4Fill": "21.0%",
+          "rate": "21.0% Total Conv"
+        },
+        "demographics": {
+          "total": "760.0K",
+          "nonFollowers": "77% (585.2K)",
+          "followers": "23% (174.8K)",
+          "us": "47% (357.2K)",
+          "in": "21% (159.6K)",
+          "gb": "18% (136.8K)"
+        }
+      },
+      "30 Days": {
+        "followers": "540K",
+        "following": "85",
+        "views": "1,840,000",
+        "comments": "68,400",
+        "totalReplies": "42,900",
+        "sentToday": "1,840",
+        "activeRulesFlat": "12",
+        "capturedLeadsFlat": "14,850",
+        "reach": "1.42M",
+        "trendReach": "▲ +45.2%",
+        "engaged": "184.2K",
+        "trendEngaged": "▲ +28.4%",
+        "visits": "98,400",
+        "trendVisits": "▲ +41.5%",
+        "clicks": "48,200",
+        "trendClicks": "▲ +46.8%",
+        "replies": "42,900",
+        "trendReplies": "▲ +35.2%",
+        "dmsToday": "1,840",
+        "trendDmsToday": "▲ +18.4%",
+        "activeRules": "12 Active",
+        "trendRules": "● 100% Uptime",
+        "leads": "14,850",
+        "trendLeads": "▲ +54.2%",
+        "reachSub": "Combined multi-client reach vs lead conversions over the last 30 days.",
+        "legReach": "1.42M",
+        "legAct": "98.4K",
+        "reachSvg": "\n    <svg viewBox=\"0 0 330 145\" class=\"dual-line-chart-svg\" style=\"width: 100%; height: 100%;\">\n      <defs>\n        <linearGradient id=\"reachGrad_krmsf4ws4\" x1=\"0\" y1=\"0\" x2=\"0\" y2=\"1\">\n          <stop offset=\"0%\" stop-color=\"#09090b\" stop-opacity=\"0.10\"/>\n          <stop offset=\"100%\" stop-color=\"#09090b\" stop-opacity=\"0.0\"/>\n        </linearGradient>\n      </defs>\n      <line x1=\"32\" y1=\"28\" x2=\"315\" y2=\"28\" stroke=\"#f1f5f9\" stroke-width=\"1\" stroke-dasharray=\"3 3\"/>\n      <line x1=\"32\" y1=\"70\" x2=\"315\" y2=\"70\" stroke=\"#f1f5f9\" stroke-width=\"1\" stroke-dasharray=\"3 3\"/>\n      <line x1=\"32\" y1=\"112\" x2=\"315\" y2=\"112\" stroke=\"#f1f5f9\" stroke-width=\"1\"/>\n      <text x=\"26\" y=\"32\" font-family=\"'Inter', sans-serif\" font-size=\"9\" font-weight=\"700\" fill=\"#71717a\" text-anchor=\"end\">1.6M</text>\n      <text x=\"26\" y=\"115\" font-family=\"'Inter', sans-serif\" font-size=\"9\" font-weight=\"700\" fill=\"#71717a\" text-anchor=\"end\">0</text>\n      <path d=\"M 36,84.28169014084507 L 81.66666666666666,76.19718309859155 L 127.33333333333333,65.22535211267606 L 173,57.140845070422536 L 218.66666666666666,46.16901408450704 L 264.3333333333333,37.50704225352112 L 310,30 L 310,112 L 36,112 Z\" fill=\"url(#reachGrad_krmsf4ws4)\"/>\n      <path d=\"M 36,84.28169014084507 L 81.66666666666666,76.19718309859155 L 127.33333333333333,65.22535211267606 L 173,57.140845070422536 L 218.66666666666666,46.16901408450704 L 264.3333333333333,37.50704225352112 L 310,30\" fill=\"none\" stroke=\"#09090b\" stroke-width=\"2.4\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/>\n      <path d=\"M 36,92.48780487804878 L 81.66666666666666,84.5609756097561 L 127.33333333333333,76.63414634146342 L 173,68.70731707317073 L 218.66666666666666,60.78048780487805 L 264.3333333333333,56.51219512195122 L 310,52\" fill=\"none\" stroke=\"#71717a\" stroke-width=\"1.8\" stroke-dasharray=\"3 3\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/>\n      \n        <circle class=\"chart-point-reach pt-reach-0\" cx=\"36\" cy=\"84.28169014084507\" r=\"3.2\" fill=\"#ffffff\" stroke=\"#09090b\" stroke-width=\"2\"/>\n        <circle class=\"chart-point-act pt-act-0\" cx=\"36\" cy=\"92.48780487804878\" r=\"2.5\" fill=\"#ffffff\" stroke=\"#71717a\" stroke-width=\"1.5\"/>\n      \n        <circle class=\"chart-point-reach pt-reach-1\" cx=\"81.66666666666666\" cy=\"76.19718309859155\" r=\"3.2\" fill=\"#ffffff\" stroke=\"#09090b\" stroke-width=\"2\"/>\n        <circle class=\"chart-point-act pt-act-1\" cx=\"81.66666666666666\" cy=\"84.5609756097561\" r=\"2.5\" fill=\"#ffffff\" stroke=\"#71717a\" stroke-width=\"1.5\"/>\n      \n        <circle class=\"chart-point-reach pt-reach-2\" cx=\"127.33333333333333\" cy=\"65.22535211267606\" r=\"3.2\" fill=\"#ffffff\" stroke=\"#09090b\" stroke-width=\"2\"/>\n        <circle class=\"chart-point-act pt-act-2\" cx=\"127.33333333333333\" cy=\"76.63414634146342\" r=\"2.5\" fill=\"#ffffff\" stroke=\"#71717a\" stroke-width=\"1.5\"/>\n      \n        <circle class=\"chart-point-reach pt-reach-3\" cx=\"173\" cy=\"57.140845070422536\" r=\"3.2\" fill=\"#ffffff\" stroke=\"#09090b\" stroke-width=\"2\"/>\n        <circle class=\"chart-point-act pt-act-3\" cx=\"173\" cy=\"68.70731707317073\" r=\"2.5\" fill=\"#ffffff\" stroke=\"#71717a\" stroke-width=\"1.5\"/>\n      \n        <circle class=\"chart-point-reach pt-reach-4\" cx=\"218.66666666666666\" cy=\"46.16901408450704\" r=\"3.2\" fill=\"#ffffff\" stroke=\"#09090b\" stroke-width=\"2\"/>\n        <circle class=\"chart-point-act pt-act-4\" cx=\"218.66666666666666\" cy=\"60.78048780487805\" r=\"2.5\" fill=\"#ffffff\" stroke=\"#71717a\" stroke-width=\"1.5\"/>\n      \n        <circle class=\"chart-point-reach pt-reach-5\" cx=\"264.3333333333333\" cy=\"37.50704225352112\" r=\"3.2\" fill=\"#ffffff\" stroke=\"#09090b\" stroke-width=\"2\"/>\n        <circle class=\"chart-point-act pt-act-5\" cx=\"264.3333333333333\" cy=\"56.51219512195122\" r=\"2.5\" fill=\"#ffffff\" stroke=\"#71717a\" stroke-width=\"1.5\"/>\n      \n        <circle class=\"chart-point-reach pt-reach-6\" cx=\"310\" cy=\"30\" r=\"3.2\" fill=\"#ffffff\" stroke=\"#09090b\" stroke-width=\"2\"/>\n        <circle class=\"chart-point-act pt-act-6\" cx=\"310\" cy=\"52\" r=\"2.5\" fill=\"#ffffff\" stroke=\"#71717a\" stroke-width=\"1.5\"/>\n      \n      \n        <text x=\"36\" y=\"132\" font-family=\"'Inter', sans-serif\" font-size=\"9\" font-weight=\"600\" fill=\"#71717a\" text-anchor=\"middle\">Day 1</text>\n      \n        <text x=\"81.66666666666666\" y=\"132\" font-family=\"'Inter', sans-serif\" font-size=\"9\" font-weight=\"600\" fill=\"#71717a\" text-anchor=\"middle\">Day 5</text>\n      \n        <text x=\"127.33333333333333\" y=\"132\" font-family=\"'Inter', sans-serif\" font-size=\"9\" font-weight=\"600\" fill=\"#71717a\" text-anchor=\"middle\">Day 10</text>\n      \n        <text x=\"173\" y=\"132\" font-family=\"'Inter', sans-serif\" font-size=\"9\" font-weight=\"600\" fill=\"#71717a\" text-anchor=\"middle\">Day 15</text>\n      \n        <text x=\"218.66666666666666\" y=\"132\" font-family=\"'Inter', sans-serif\" font-size=\"9\" font-weight=\"600\" fill=\"#71717a\" text-anchor=\"middle\">Day 20</text>\n      \n        <text x=\"264.3333333333333\" y=\"132\" font-family=\"'Inter', sans-serif\" font-size=\"9\" font-weight=\"600\" fill=\"#71717a\" text-anchor=\"middle\">Day 25</text>\n      \n        <text x=\"310\" y=\"132\" font-family=\"'Inter', sans-serif\" font-size=\"9\" font-weight=\"600\" fill=\"#71717a\" text-anchor=\"middle\">Day 30</text>\n      \n      \n        <rect class=\"chart-hover-trigger\" data-idx=\"0\" data-label=\"Day 1\" data-reach=\"480K\" data-act=\"32K\" data-x=\"36\" data-reach-y=\"84.28169014084507\" data-act-y=\"92.48780487804878\" x=\"13.166666666666668\" y=\"0\" width=\"45.666666666666664\" height=\"145\" fill=\"transparent\" style=\"cursor: crosshair;\"/>\n      \n        <rect class=\"chart-hover-trigger\" data-idx=\"1\" data-label=\"Day 5\" data-reach=\"620K\" data-act=\"45K\" data-x=\"81.66666666666666\" data-reach-y=\"76.19718309859155\" data-act-y=\"84.5609756097561\" x=\"58.83333333333333\" y=\"0\" width=\"45.666666666666664\" height=\"145\" fill=\"transparent\" style=\"cursor: crosshair;\"/>\n      \n        <rect class=\"chart-hover-trigger\" data-idx=\"2\" data-label=\"Day 10\" data-reach=\"810K\" data-act=\"58K\" data-x=\"127.33333333333333\" data-reach-y=\"65.22535211267606\" data-act-y=\"76.63414634146342\" x=\"104.5\" y=\"0\" width=\"45.666666666666664\" height=\"145\" fill=\"transparent\" style=\"cursor: crosshair;\"/>\n      \n        <rect class=\"chart-hover-trigger\" data-idx=\"3\" data-label=\"Day 15\" data-reach=\"950K\" data-act=\"71K\" data-x=\"173\" data-reach-y=\"57.140845070422536\" data-act-y=\"68.70731707317073\" x=\"150.16666666666666\" y=\"0\" width=\"45.666666666666664\" height=\"145\" fill=\"transparent\" style=\"cursor: crosshair;\"/>\n      \n        <rect class=\"chart-hover-trigger\" data-idx=\"4\" data-label=\"Day 20\" data-reach=\"1140K\" data-act=\"84K\" data-x=\"218.66666666666666\" data-reach-y=\"46.16901408450704\" data-act-y=\"60.78048780487805\" x=\"195.83333333333331\" y=\"0\" width=\"45.666666666666664\" height=\"145\" fill=\"transparent\" style=\"cursor: crosshair;\"/>\n      \n        <rect class=\"chart-hover-trigger\" data-idx=\"5\" data-label=\"Day 25\" data-reach=\"1290K\" data-act=\"91K\" data-x=\"264.3333333333333\" data-reach-y=\"37.50704225352112\" data-act-y=\"56.51219512195122\" x=\"241.49999999999997\" y=\"0\" width=\"45.666666666666664\" height=\"145\" fill=\"transparent\" style=\"cursor: crosshair;\"/>\n      \n        <rect class=\"chart-hover-trigger\" data-idx=\"6\" data-label=\"Day 30\" data-reach=\"1420K\" data-act=\"98.4K\" data-x=\"310\" data-reach-y=\"30\" data-act-y=\"52\" x=\"287.1666666666667\" y=\"0\" width=\"45.666666666666664\" height=\"145\" fill=\"transparent\" style=\"cursor: crosshair;\"/>\n      \n    </svg>\n  ",
+        "funnel": {
+          "s1Num": "68,400",
+          "s1Pct": "100%",
+          "s1Fill": "100%",
+          "s2Num": "48,200",
+          "s2Pct": "70.5%",
+          "s2Fill": "70.5%",
+          "s3Num": "28,400",
+          "s3Pct": "41.5%",
+          "s3Fill": "41.5%",
+          "s4Num": "14,850",
+          "s4Pct": "21.7%",
+          "s4Fill": "21.7%",
+          "rate": "21.7% Total Conv"
+        },
+        "demographics": {
+          "total": "1.42M",
+          "nonFollowers": "78% (1.11M)",
+          "followers": "22% (312K)",
+          "us": "48% (681.6K)",
+          "in": "20% (284.0K)",
+          "gb": "19% (269.8K)"
+        }
+      },
+      "60 Days": {
+        "followers": "540K",
+        "following": "85",
+        "views": "3,750,000",
+        "comments": "138,000",
+        "totalReplies": "86,500",
+        "sentToday": "2,900",
+        "activeRulesFlat": "12",
+        "capturedLeadsFlat": "29,800",
+        "reach": "2.85M",
+        "trendReach": "▲ +52.0%",
+        "engaged": "372.0K",
+        "trendEngaged": "▲ +34.0%",
+        "visits": "198,000",
+        "trendVisits": "▲ +48.0%",
+        "clicks": "98,000",
+        "trendClicks": "▲ +54.0%",
+        "replies": "86,500",
+        "trendReplies": "▲ +42.0%",
+        "dmsToday": "2,900",
+        "trendDmsToday": "▲ +22.0%",
+        "activeRules": "12 Active",
+        "trendRules": "● 100% Uptime",
+        "leads": "29,800",
+        "trendLeads": "▲ +62.0%",
+        "reachSub": "Combined multi-client reach vs lead conversions over the last 60 days.",
+        "legReach": "2.85M",
+        "legAct": "198K",
+        "reachSvg": "\n    <svg viewBox=\"0 0 330 145\" class=\"dual-line-chart-svg\" style=\"width: 100%; height: 100%;\">\n      <defs>\n        <linearGradient id=\"reachGrad_s6wzxygkq\" x1=\"0\" y1=\"0\" x2=\"0\" y2=\"1\">\n          <stop offset=\"0%\" stop-color=\"#09090b\" stop-opacity=\"0.10\"/>\n          <stop offset=\"100%\" stop-color=\"#09090b\" stop-opacity=\"0.0\"/>\n        </linearGradient>\n      </defs>\n      <line x1=\"32\" y1=\"28\" x2=\"315\" y2=\"28\" stroke=\"#f1f5f9\" stroke-width=\"1\" stroke-dasharray=\"3 3\"/>\n      <line x1=\"32\" y1=\"70\" x2=\"315\" y2=\"70\" stroke=\"#f1f5f9\" stroke-width=\"1\" stroke-dasharray=\"3 3\"/>\n      <line x1=\"32\" y1=\"112\" x2=\"315\" y2=\"112\" stroke=\"#f1f5f9\" stroke-width=\"1\"/>\n      <text x=\"26\" y=\"32\" font-family=\"'Inter', sans-serif\" font-size=\"9\" font-weight=\"700\" fill=\"#71717a\" text-anchor=\"end\">3.2M</text>\n      <text x=\"26\" y=\"115\" font-family=\"'Inter', sans-serif\" font-size=\"9\" font-weight=\"700\" fill=\"#71717a\" text-anchor=\"end\">0</text>\n      <path d=\"M 36,84.37894736842105 L 81.66666666666666,75.1719298245614 L 127.33333333333333,64.8140350877193 L 173,55.031578947368416 L 218.66666666666666,45.24912280701754 L 264.3333333333333,36.61754385964913 L 310,30 L 310,112 L 36,112 Z\" fill=\"url(#reachGrad_s6wzxygkq)\"/>\n      <path d=\"M 36,84.37894736842105 L 81.66666666666666,75.1719298245614 L 127.33333333333333,64.8140350877193 L 173,55.031578947368416 L 218.66666666666666,45.24912280701754 L 264.3333333333333,36.61754385964913 L 310,30\" fill=\"none\" stroke=\"#09090b\" stroke-width=\"2.4\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/>\n      <path d=\"M 36,92.30303030303031 L 81.66666666666666,85.33333333333334 L 127.33333333333333,76.24242424242425 L 173,68.96969696969697 L 218.66666666666666,61.090909090909086 L 264.3333333333333,55.93939393939394 L 310,52\" fill=\"none\" stroke=\"#71717a\" stroke-width=\"1.8\" stroke-dasharray=\"3 3\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/>\n      \n        <circle class=\"chart-point-reach pt-reach-0\" cx=\"36\" cy=\"84.37894736842105\" r=\"3.2\" fill=\"#ffffff\" stroke=\"#09090b\" stroke-width=\"2\"/>\n        <circle class=\"chart-point-act pt-act-0\" cx=\"36\" cy=\"92.30303030303031\" r=\"2.5\" fill=\"#ffffff\" stroke=\"#71717a\" stroke-width=\"1.5\"/>\n      \n        <circle class=\"chart-point-reach pt-reach-1\" cx=\"81.66666666666666\" cy=\"75.1719298245614\" r=\"3.2\" fill=\"#ffffff\" stroke=\"#09090b\" stroke-width=\"2\"/>\n        <circle class=\"chart-point-act pt-act-1\" cx=\"81.66666666666666\" cy=\"85.33333333333334\" r=\"2.5\" fill=\"#ffffff\" stroke=\"#71717a\" stroke-width=\"1.5\"/>\n      \n        <circle class=\"chart-point-reach pt-reach-2\" cx=\"127.33333333333333\" cy=\"64.8140350877193\" r=\"3.2\" fill=\"#ffffff\" stroke=\"#09090b\" stroke-width=\"2\"/>\n        <circle class=\"chart-point-act pt-act-2\" cx=\"127.33333333333333\" cy=\"76.24242424242425\" r=\"2.5\" fill=\"#ffffff\" stroke=\"#71717a\" stroke-width=\"1.5\"/>\n      \n        <circle class=\"chart-point-reach pt-reach-3\" cx=\"173\" cy=\"55.031578947368416\" r=\"3.2\" fill=\"#ffffff\" stroke=\"#09090b\" stroke-width=\"2\"/>\n        <circle class=\"chart-point-act pt-act-3\" cx=\"173\" cy=\"68.96969696969697\" r=\"2.5\" fill=\"#ffffff\" stroke=\"#71717a\" stroke-width=\"1.5\"/>\n      \n        <circle class=\"chart-point-reach pt-reach-4\" cx=\"218.66666666666666\" cy=\"45.24912280701754\" r=\"3.2\" fill=\"#ffffff\" stroke=\"#09090b\" stroke-width=\"2\"/>\n        <circle class=\"chart-point-act pt-act-4\" cx=\"218.66666666666666\" cy=\"61.090909090909086\" r=\"2.5\" fill=\"#ffffff\" stroke=\"#71717a\" stroke-width=\"1.5\"/>\n      \n        <circle class=\"chart-point-reach pt-reach-5\" cx=\"264.3333333333333\" cy=\"36.61754385964913\" r=\"3.2\" fill=\"#ffffff\" stroke=\"#09090b\" stroke-width=\"2\"/>\n        <circle class=\"chart-point-act pt-act-5\" cx=\"264.3333333333333\" cy=\"55.93939393939394\" r=\"2.5\" fill=\"#ffffff\" stroke=\"#71717a\" stroke-width=\"1.5\"/>\n      \n        <circle class=\"chart-point-reach pt-reach-6\" cx=\"310\" cy=\"30\" r=\"3.2\" fill=\"#ffffff\" stroke=\"#09090b\" stroke-width=\"2\"/>\n        <circle class=\"chart-point-act pt-act-6\" cx=\"310\" cy=\"52\" r=\"2.5\" fill=\"#ffffff\" stroke=\"#71717a\" stroke-width=\"1.5\"/>\n      \n      \n        <text x=\"36\" y=\"132\" font-family=\"'Inter', sans-serif\" font-size=\"9\" font-weight=\"600\" fill=\"#71717a\" text-anchor=\"middle\">Day 1</text>\n      \n        <text x=\"81.66666666666666\" y=\"132\" font-family=\"'Inter', sans-serif\" font-size=\"9\" font-weight=\"600\" fill=\"#71717a\" text-anchor=\"middle\">Day 10</text>\n      \n        <text x=\"127.33333333333333\" y=\"132\" font-family=\"'Inter', sans-serif\" font-size=\"9\" font-weight=\"600\" fill=\"#71717a\" text-anchor=\"middle\">Day 20</text>\n      \n        <text x=\"173\" y=\"132\" font-family=\"'Inter', sans-serif\" font-size=\"9\" font-weight=\"600\" fill=\"#71717a\" text-anchor=\"middle\">Day 30</text>\n      \n        <text x=\"218.66666666666666\" y=\"132\" font-family=\"'Inter', sans-serif\" font-size=\"9\" font-weight=\"600\" fill=\"#71717a\" text-anchor=\"middle\">Day 40</text>\n      \n        <text x=\"264.3333333333333\" y=\"132\" font-family=\"'Inter', sans-serif\" font-size=\"9\" font-weight=\"600\" fill=\"#71717a\" text-anchor=\"middle\">Day 50</text>\n      \n        <text x=\"310\" y=\"132\" font-family=\"'Inter', sans-serif\" font-size=\"9\" font-weight=\"600\" fill=\"#71717a\" text-anchor=\"middle\">Day 60</text>\n      \n      \n        <rect class=\"chart-hover-trigger\" data-idx=\"0\" data-label=\"Day 1\" data-reach=\"960K\" data-act=\"65K\" data-x=\"36\" data-reach-y=\"84.37894736842105\" data-act-y=\"92.30303030303031\" x=\"13.166666666666668\" y=\"0\" width=\"45.666666666666664\" height=\"145\" fill=\"transparent\" style=\"cursor: crosshair;\"/>\n      \n        <rect class=\"chart-hover-trigger\" data-idx=\"1\" data-label=\"Day 10\" data-reach=\"1280K\" data-act=\"88K\" data-x=\"81.66666666666666\" data-reach-y=\"75.1719298245614\" data-act-y=\"85.33333333333334\" x=\"58.83333333333333\" y=\"0\" width=\"45.666666666666664\" height=\"145\" fill=\"transparent\" style=\"cursor: crosshair;\"/>\n      \n        <rect class=\"chart-hover-trigger\" data-idx=\"2\" data-label=\"Day 20\" data-reach=\"1640K\" data-act=\"118K\" data-x=\"127.33333333333333\" data-reach-y=\"64.8140350877193\" data-act-y=\"76.24242424242425\" x=\"104.5\" y=\"0\" width=\"45.666666666666664\" height=\"145\" fill=\"transparent\" style=\"cursor: crosshair;\"/>\n      \n        <rect class=\"chart-hover-trigger\" data-idx=\"3\" data-label=\"Day 30\" data-reach=\"1980K\" data-act=\"142K\" data-x=\"173\" data-reach-y=\"55.031578947368416\" data-act-y=\"68.96969696969697\" x=\"150.16666666666666\" y=\"0\" width=\"45.666666666666664\" height=\"145\" fill=\"transparent\" style=\"cursor: crosshair;\"/>\n      \n        <rect class=\"chart-hover-trigger\" data-idx=\"4\" data-label=\"Day 40\" data-reach=\"2320K\" data-act=\"168K\" data-x=\"218.66666666666666\" data-reach-y=\"45.24912280701754\" data-act-y=\"61.090909090909086\" x=\"195.83333333333331\" y=\"0\" width=\"45.666666666666664\" height=\"145\" fill=\"transparent\" style=\"cursor: crosshair;\"/>\n      \n        <rect class=\"chart-hover-trigger\" data-idx=\"5\" data-label=\"Day 50\" data-reach=\"2620K\" data-act=\"185K\" data-x=\"264.3333333333333\" data-reach-y=\"36.61754385964913\" data-act-y=\"55.93939393939394\" x=\"241.49999999999997\" y=\"0\" width=\"45.666666666666664\" height=\"145\" fill=\"transparent\" style=\"cursor: crosshair;\"/>\n      \n        <rect class=\"chart-hover-trigger\" data-idx=\"6\" data-label=\"Day 60\" data-reach=\"2850K\" data-act=\"198K\" data-x=\"310\" data-reach-y=\"30\" data-act-y=\"52\" x=\"287.1666666666667\" y=\"0\" width=\"45.666666666666664\" height=\"145\" fill=\"transparent\" style=\"cursor: crosshair;\"/>\n      \n    </svg>\n  ",
+        "funnel": {
+          "s1Num": "138,000",
+          "s1Pct": "100%",
+          "s1Fill": "100%",
+          "s2Num": "98,000",
+          "s2Pct": "71.0%",
+          "s2Fill": "71.0%",
+          "s3Num": "58,000",
+          "s3Pct": "42.0%",
+          "s3Fill": "42.0%",
+          "s4Num": "29,800",
+          "s4Pct": "21.6%",
+          "s4Fill": "21.6%",
+          "rate": "21.6% Total Conv"
+        },
+        "demographics": {
+          "total": "2.85M",
+          "nonFollowers": "79% (2.25M)",
+          "followers": "21% (598K)",
+          "us": "49% (1.40M)",
+          "in": "19% (541.5K)",
+          "gb": "20% (570.0K)"
+        }
+      },
+      "90 Days": {
+        "followers": "540K",
+        "following": "85",
+        "views": "5,800,000",
+        "comments": "214,000",
+        "totalReplies": "134,000",
+        "sentToday": "4,100",
+        "activeRulesFlat": "12",
+        "capturedLeadsFlat": "46,200",
+        "reach": "4.42M",
+        "trendReach": "▲ +59.0%",
+        "engaged": "580.0K",
+        "trendEngaged": "▲ +39.0%",
+        "visits": "310,000",
+        "trendVisits": "▲ +55.0%",
+        "clicks": "154,000",
+        "trendClicks": "▲ +62.0%",
+        "replies": "134,000",
+        "trendReplies": "▲ +48.0%",
+        "dmsToday": "4,100",
+        "trendDmsToday": "▲ +26.0%",
+        "activeRules": "12 Active",
+        "trendRules": "● 100% Uptime",
+        "leads": "46,200",
+        "trendLeads": "▲ +71.0%",
+        "reachSub": "Combined multi-client reach vs lead conversions over the last 90 days.",
+        "legReach": "4.42M",
+        "legAct": "310K",
+        "reachSvg": "\n    <svg viewBox=\"0 0 330 145\" class=\"dual-line-chart-svg\" style=\"width: 100%; height: 100%;\">\n      <defs>\n        <linearGradient id=\"reachGrad_zqq3rsync\" x1=\"0\" y1=\"0\" x2=\"0\" y2=\"1\">\n          <stop offset=\"0%\" stop-color=\"#09090b\" stop-opacity=\"0.10\"/>\n          <stop offset=\"100%\" stop-color=\"#09090b\" stop-opacity=\"0.0\"/>\n        </linearGradient>\n      </defs>\n      <line x1=\"32\" y1=\"28\" x2=\"315\" y2=\"28\" stroke=\"#f1f5f9\" stroke-width=\"1\" stroke-dasharray=\"3 3\"/>\n      <line x1=\"32\" y1=\"70\" x2=\"315\" y2=\"70\" stroke=\"#f1f5f9\" stroke-width=\"1\" stroke-dasharray=\"3 3\"/>\n      <line x1=\"32\" y1=\"112\" x2=\"315\" y2=\"112\" stroke=\"#f1f5f9\" stroke-width=\"1\"/>\n      <text x=\"26\" y=\"32\" font-family=\"'Inter', sans-serif\" font-size=\"9\" font-weight=\"700\" fill=\"#71717a\" text-anchor=\"end\">5.0M</text>\n      <text x=\"26\" y=\"115\" font-family=\"'Inter', sans-serif\" font-size=\"9\" font-weight=\"700\" fill=\"#71717a\" text-anchor=\"end\">0</text>\n      <path d=\"M 36,85.09954751131221 L 81.66666666666666,75.26696832579185 L 127.33333333333333,64.87782805429865 L 173,54.488687782805435 L 218.66666666666666,44.84162895927602 L 264.3333333333333,36.30769230769231 L 310,30 L 310,112 L 36,112 Z\" fill=\"url(#reachGrad_zqq3rsync)\"/>\n      <path d=\"M 36,85.09954751131221 L 81.66666666666666,75.26696832579185 L 127.33333333333333,64.87782805429865 L 173,54.488687782805435 L 218.66666666666666,44.84162895927602 L 264.3333333333333,36.30769230769231 L 310,30\" fill=\"none\" stroke=\"#09090b\" stroke-width=\"2.4\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/>\n      <path d=\"M 36,93.03225806451613 L 81.66666666666666,85.29032258064515 L 127.33333333333333,76.7741935483871 L 173,68.64516129032259 L 218.66666666666666,60.70967741935484 L 264.3333333333333,55.87096774193549 L 310,52\" fill=\"none\" stroke=\"#71717a\" stroke-width=\"1.8\" stroke-dasharray=\"3 3\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/>\n      \n        <circle class=\"chart-point-reach pt-reach-0\" cx=\"36\" cy=\"85.09954751131221\" r=\"3.2\" fill=\"#ffffff\" stroke=\"#09090b\" stroke-width=\"2\"/>\n        <circle class=\"chart-point-act pt-act-0\" cx=\"36\" cy=\"93.03225806451613\" r=\"2.5\" fill=\"#ffffff\" stroke=\"#71717a\" stroke-width=\"1.5\"/>\n      \n        <circle class=\"chart-point-reach pt-reach-1\" cx=\"81.66666666666666\" cy=\"75.26696832579185\" r=\"3.2\" fill=\"#ffffff\" stroke=\"#09090b\" stroke-width=\"2\"/>\n        <circle class=\"chart-point-act pt-act-1\" cx=\"81.66666666666666\" cy=\"85.29032258064515\" r=\"2.5\" fill=\"#ffffff\" stroke=\"#71717a\" stroke-width=\"1.5\"/>\n      \n        <circle class=\"chart-point-reach pt-reach-2\" cx=\"127.33333333333333\" cy=\"64.87782805429865\" r=\"3.2\" fill=\"#ffffff\" stroke=\"#09090b\" stroke-width=\"2\"/>\n        <circle class=\"chart-point-act pt-act-2\" cx=\"127.33333333333333\" cy=\"76.7741935483871\" r=\"2.5\" fill=\"#ffffff\" stroke=\"#71717a\" stroke-width=\"1.5\"/>\n      \n        <circle class=\"chart-point-reach pt-reach-3\" cx=\"173\" cy=\"54.488687782805435\" r=\"3.2\" fill=\"#ffffff\" stroke=\"#09090b\" stroke-width=\"2\"/>\n        <circle class=\"chart-point-act pt-act-3\" cx=\"173\" cy=\"68.64516129032259\" r=\"2.5\" fill=\"#ffffff\" stroke=\"#71717a\" stroke-width=\"1.5\"/>\n      \n        <circle class=\"chart-point-reach pt-reach-4\" cx=\"218.66666666666666\" cy=\"44.84162895927602\" r=\"3.2\" fill=\"#ffffff\" stroke=\"#09090b\" stroke-width=\"2\"/>\n        <circle class=\"chart-point-act pt-act-4\" cx=\"218.66666666666666\" cy=\"60.70967741935484\" r=\"2.5\" fill=\"#ffffff\" stroke=\"#71717a\" stroke-width=\"1.5\"/>\n      \n        <circle class=\"chart-point-reach pt-reach-5\" cx=\"264.3333333333333\" cy=\"36.30769230769231\" r=\"3.2\" fill=\"#ffffff\" stroke=\"#09090b\" stroke-width=\"2\"/>\n        <circle class=\"chart-point-act pt-act-5\" cx=\"264.3333333333333\" cy=\"55.87096774193549\" r=\"2.5\" fill=\"#ffffff\" stroke=\"#71717a\" stroke-width=\"1.5\"/>\n      \n        <circle class=\"chart-point-reach pt-reach-6\" cx=\"310\" cy=\"30\" r=\"3.2\" fill=\"#ffffff\" stroke=\"#09090b\" stroke-width=\"2\"/>\n        <circle class=\"chart-point-act pt-act-6\" cx=\"310\" cy=\"52\" r=\"2.5\" fill=\"#ffffff\" stroke=\"#71717a\" stroke-width=\"1.5\"/>\n      \n      \n        <text x=\"36\" y=\"132\" font-family=\"'Inter', sans-serif\" font-size=\"9\" font-weight=\"600\" fill=\"#71717a\" text-anchor=\"middle\">Day 1</text>\n      \n        <text x=\"81.66666666666666\" y=\"132\" font-family=\"'Inter', sans-serif\" font-size=\"9\" font-weight=\"600\" fill=\"#71717a\" text-anchor=\"middle\">Day 15</text>\n      \n        <text x=\"127.33333333333333\" y=\"132\" font-family=\"'Inter', sans-serif\" font-size=\"9\" font-weight=\"600\" fill=\"#71717a\" text-anchor=\"middle\">Day 30</text>\n      \n        <text x=\"173\" y=\"132\" font-family=\"'Inter', sans-serif\" font-size=\"9\" font-weight=\"600\" fill=\"#71717a\" text-anchor=\"middle\">Day 45</text>\n      \n        <text x=\"218.66666666666666\" y=\"132\" font-family=\"'Inter', sans-serif\" font-size=\"9\" font-weight=\"600\" fill=\"#71717a\" text-anchor=\"middle\">Day 60</text>\n      \n        <text x=\"264.3333333333333\" y=\"132\" font-family=\"'Inter', sans-serif\" font-size=\"9\" font-weight=\"600\" fill=\"#71717a\" text-anchor=\"middle\">Day 75</text>\n      \n        <text x=\"310\" y=\"132\" font-family=\"'Inter', sans-serif\" font-size=\"9\" font-weight=\"600\" fill=\"#71717a\" text-anchor=\"middle\">Day 90</text>\n      \n      \n        <rect class=\"chart-hover-trigger\" data-idx=\"0\" data-label=\"Day 1\" data-reach=\"1450K\" data-act=\"98K\" data-x=\"36\" data-reach-y=\"85.09954751131221\" data-act-y=\"93.03225806451613\" x=\"13.166666666666668\" y=\"0\" width=\"45.666666666666664\" height=\"145\" fill=\"transparent\" style=\"cursor: crosshair;\"/>\n      \n        <rect class=\"chart-hover-trigger\" data-idx=\"1\" data-label=\"Day 15\" data-reach=\"1980K\" data-act=\"138K\" data-x=\"81.66666666666666\" data-reach-y=\"75.26696832579185\" data-act-y=\"85.29032258064515\" x=\"58.83333333333333\" y=\"0\" width=\"45.666666666666664\" height=\"145\" fill=\"transparent\" style=\"cursor: crosshair;\"/>\n      \n        <rect class=\"chart-hover-trigger\" data-idx=\"2\" data-label=\"Day 30\" data-reach=\"2540K\" data-act=\"182K\" data-x=\"127.33333333333333\" data-reach-y=\"64.87782805429865\" data-act-y=\"76.7741935483871\" x=\"104.5\" y=\"0\" width=\"45.666666666666664\" height=\"145\" fill=\"transparent\" style=\"cursor: crosshair;\"/>\n      \n        <rect class=\"chart-hover-trigger\" data-idx=\"3\" data-label=\"Day 45\" data-reach=\"3100K\" data-act=\"224K\" data-x=\"173\" data-reach-y=\"54.488687782805435\" data-act-y=\"68.64516129032259\" x=\"150.16666666666666\" y=\"0\" width=\"45.666666666666664\" height=\"145\" fill=\"transparent\" style=\"cursor: crosshair;\"/>\n      \n        <rect class=\"chart-hover-trigger\" data-idx=\"4\" data-label=\"Day 60\" data-reach=\"3620K\" data-act=\"265K\" data-x=\"218.66666666666666\" data-reach-y=\"44.84162895927602\" data-act-y=\"60.70967741935484\" x=\"195.83333333333331\" y=\"0\" width=\"45.666666666666664\" height=\"145\" fill=\"transparent\" style=\"cursor: crosshair;\"/>\n      \n        <rect class=\"chart-hover-trigger\" data-idx=\"5\" data-label=\"Day 75\" data-reach=\"4080K\" data-act=\"290K\" data-x=\"264.3333333333333\" data-reach-y=\"36.30769230769231\" data-act-y=\"55.87096774193549\" x=\"241.49999999999997\" y=\"0\" width=\"45.666666666666664\" height=\"145\" fill=\"transparent\" style=\"cursor: crosshair;\"/>\n      \n        <rect class=\"chart-hover-trigger\" data-idx=\"6\" data-label=\"Day 90\" data-reach=\"4420K\" data-act=\"310K\" data-x=\"310\" data-reach-y=\"30\" data-act-y=\"52\" x=\"287.1666666666667\" y=\"0\" width=\"45.666666666666664\" height=\"145\" fill=\"transparent\" style=\"cursor: crosshair;\"/>\n      \n    </svg>\n  ",
+        "funnel": {
+          "s1Num": "214,000",
+          "s1Pct": "100%",
+          "s1Fill": "100%",
+          "s2Num": "152,000",
+          "s2Pct": "71.0%",
+          "s2Fill": "71.0%",
+          "s3Num": "90,000",
+          "s3Pct": "42.1%",
+          "s3Fill": "42.1%",
+          "s4Num": "46,200",
+          "s4Pct": "21.6%",
+          "s4Fill": "21.6%",
+          "rate": "21.6% Total Conv"
+        },
+        "demographics": {
+          "total": "4.42M",
+          "nonFollowers": "80% (3.54M)",
+          "followers": "20% (884K)",
+          "us": "50% (2.21M)",
+          "in": "18% (795.6K)",
+          "gb": "20% (884.0K)"
+        }
+      }
+    },
+    "store": [
+      {
+        "id": "prod-ag1",
+        "title": "Agency Whitelabel Multi-Client License",
+        "price": "₹24,999",
+        "oldPrice": "₹49,999",
+        "desc": "Deploy unlimited client Instagram accounts with custom domain branding, high-speed webhook relays, and multi-user team seats.",
+        "cta": "Get Agency License",
+        "rating": "5.0 (46 agency partners)",
+        "photos": [
+          "https://images.unsplash.com/photo-1551836022-d5d88e9218df?auto=format&fit=crop&w=600&q=80",
+          "https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&w=600&q=80"
+        ]
+      },
+      {
+        "id": "prod-ag2",
+        "title": "Enterprise Instagram Funnel Playbook 2026",
+        "price": "₹4,999",
+        "oldPrice": "₹9,999",
+        "desc": "120-page blueprint detailing SOPs, DM sales scripts, and conversion rate optimization benchmarks for 7-figure creator brands.",
+        "cta": "Download Playbook",
+        "rating": "5.0 (82 reviews)",
+        "photos": [
+          "https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=600&q=80"
+        ]
+      },
+      {
+        "id": "prod-ag3",
+        "title": "High-Ticket Client Acquisition DM Scripts",
+        "price": "₹2,499",
+        "oldPrice": "₹4,999",
+        "desc": "Tested outbound & inbound conversation frameworks to close $3,000–$10,000 agency retainers inside Instagram DMs.",
+        "cta": "Access Scripts",
+        "rating": "4.9 (110 reviews)",
+        "photos": [
+          "https://images.unsplash.com/photo-1552664730-d307ca884978?auto=format&fit=crop&w=600&q=80"
+        ]
+      },
+      {
+        "id": "prod-ag4",
+        "title": "Agency Automation Demo & Starter Template Pack",
+        "price": "FREE",
+        "oldPrice": "₹1,999",
+        "desc": "Interactive demo bot schema and 5 starter automation flows ready to deploy for your first agency client.",
+        "cta": "Free Demo Access",
+        "rating": "5.0 (340 reviews)",
+        "photos": [
+          "https://images.unsplash.com/photo-1519389950473-47ba0277781c?auto=format&fit=crop&w=600&q=80"
+        ]
+      }
+    ],
+    "rules": [
+      {
+        "id": "rule-ag-scale",
+        "name": "Agency Multi-Client Scaling System",
+        "ruleSub": "Agency Multi-Client Scaling System",
+        "thumbImg": "https://images.unsplash.com/photo-1551836022-d5d88e9218df?auto=format&fit=crop&w=600&q=80",
+        "type": "post",
+        "typeName": "Post Comments",
+        "keywords": [
+          "SCALE",
+          "AGENCY"
+        ],
+        "target": "POST",
+        "targetType": "POST",
+        "active": true,
+        "sentCount": 18420,
+        "successRate": "99.8%",
+        "response": "Welcome {first_name}! Here is the complete RenderReply Agency Scaling infrastructure and demo access: {link}",
+        "attachLink": true,
+        "linkUrl": "https://renderreply.com/agency/scale",
+        "linkTitle": "Agency Scaling Portal",
+        "commentReply": true,
+        "commentReplyText": "Check your DMs for the full agency breakdown! 🚀"
+      },
+      {
+        "id": "rule-ag-demo",
+        "name": "Live Interactive Demo Bot",
+        "ruleSub": "Live Interactive Demo Bot",
+        "thumbImg": "https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=600&q=80",
+        "type": "dm",
+        "typeName": "Direct Messages",
+        "keywords": [
+          "DEMO"
+        ],
+        "target": "DIRECT_MESSAGES",
+        "targetType": "DIRECT_MESSAGES",
+        "active": true,
+        "sentCount": 12400,
+        "successRate": "99.1%",
+        "response": "Hey {first_name}! You are testing our live automated enterprise relay. Here is your interactive client demo environment: {link}",
+        "attachLink": true,
+        "linkUrl": "https://renderreply.com/agency/live-demo",
+        "linkTitle": "Launch Interactive Demo",
+        "commentReply": false,
+        "commentReplyText": ""
+      },
+      {
+        "id": "rule-ag-audit",
+        "name": "Free 7-Figure Account DM Audit",
+        "ruleSub": "Free 7-Figure Account DM Audit",
+        "thumbImg": "https://images.unsplash.com/photo-1552664730-d307ca884978?auto=format&fit=crop&w=600&q=80",
+        "type": "reel",
+        "typeName": "Reels & Live",
+        "keywords": [
+          "AUDIT"
+        ],
+        "target": "REELS",
+        "targetType": "REELS",
+        "active": true,
+        "sentCount": 6120,
+        "successRate": "98.6%",
+        "response": "Hey {first_name}! Book your agency’s complimentary 30-minute Instagram funnel audit: {link}",
+        "attachLink": true,
+        "linkUrl": "https://renderreply.com/agency/book-audit",
+        "linkTitle": "Schedule Funnel Audit",
+        "commentReply": false,
+        "commentReplyText": ""
+      }
+    ],
+    "inbox": {
+      "daniel": {
+        "name": "Daniel Vance",
+        "handle": "@vance_media",
+        "avatar": "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=150&q=80",
+        "followers": "280K Followers",
+        "source": "Inquiry: Agency Whitelabel 10-Seat Tier",
+        "status": "attention",
+        "botActive": true,
+        "triggerTitle": "Triggered by Reel: \"How We Scale 20+ Creators to $50k/mo\" (Keyword: \"#SCALE\")",
+        "messages": [
+          {
+            "type": "divider",
+            "text": "TODAY, 02:00 PM"
+          },
+          {
+            "type": "user",
+            "text": "SCALE! We have 14 clients and want to onboard them all to RenderReply this week. Can we speak with your partner lead?",
+            "time": "02:00 PM",
+            "context": "Agency Lead"
+          },
+          {
+            "type": "bot",
+            "text": "Hey Daniel! Absolutely! Here is direct access to our Agency Partner Portal and priority booking link: https://renderreply.com/agency/scale",
+            "time": "02:00 PM",
+            "flow": "Enterprise Inbound Flow",
+            "hasCard": true
+          }
+        ]
+      },
+      "sophie": {
+        "name": "Sophie Laurent",
+        "handle": "@sophie_growth",
+        "avatar": "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=150&q=80",
+        "followers": "150K Followers",
+        "source": "Reel Trigger: \"#DEMO\"",
+        "status": "bot",
+        "botActive": true,
+        "triggerTitle": "Triggered by DM Keyword \"DEMO\"",
+        "messages": [
+          {
+            "type": "divider",
+            "text": "TODAY, 01:10 PM"
+          },
+          {
+            "type": "user",
+            "text": "DEMO",
+            "time": "01:10 PM",
+            "context": "Demo Bot Keyword"
+          },
+          {
+            "type": "bot",
+            "text": "Hey Sophie! Launching your custom client sandbox now: https://renderreply.com/agency/live-demo",
+            "time": "01:10 PM",
+            "flow": "Sandbox Generator",
+            "hasCard": false
+          }
+        ]
+      },
+      "kevin": {
+        "name": "Kevin Ortiz",
+        "handle": "@kevin_ecom",
+        "avatar": "https://images.unsplash.com/photo-1522075469751-3a6694fb2f61?auto=format&fit=crop&w=150&q=80",
+        "followers": "410K Followers",
+        "source": "Whitelabel Contract: Signed",
+        "status": "resolved",
+        "botActive": false,
+        "triggerTitle": "Enterprise Whitelabel Partner",
+        "messages": [
+          {
+            "type": "divider",
+            "text": "YESTERDAY"
+          },
+          {
+            "type": "user",
+            "text": "Contract signed and invoice paid for the annual 25-seat whitelabel tier!",
+            "time": "04:15 PM"
+          },
+          {
+            "type": "human",
+            "text": "Welcome aboard Kevin! Your dedicated Slack channel and API tokens are live. Let’s crush it!",
+            "time": "04:20 PM"
+          }
+        ]
+      }
+    },
+    "leads": [
+      {
+        "id": "lead-ag1",
+        "handle": "@vance_media",
+        "name": "Daniel Vance",
+        "avatar": "DV",
+        "email": "daniel@vancemedia.agency",
+        "phone": "+1 (555) 892-1049",
+        "keyword": "#SCALE",
+        "campaign": "scale",
+        "status": "Email Captured",
+        "statusClass": "email",
+        "sourceTitle": "How We Scale 20+ Creators to $50k/mo Reel",
+        "sourceThumb": "https://images.unsplash.com/photo-1551836022-d5d88e9218df?auto=format&fit=crop&w=80&q=80",
+        "time": "2m ago",
+        "timestamp": "Today, 02:00 PM",
+        "commentText": "SCALE! We have 14 clients and want to onboard them all.",
+        "botReplyText": "Hey Daniel! Here is the partner portal link: https://renderreply.com/agency/scale",
+        "ruleName": "Agency Multi-Client Scaling System"
+      },
+      {
+        "id": "lead-ag2",
+        "handle": "@sophie_growth",
+        "name": "Sophie Laurent",
+        "avatar": "SL",
+        "email": "sophie@elevateagency.co",
+        "phone": "+33 6 98 76 54 32",
+        "keyword": "DEMO",
+        "campaign": "demo",
+        "status": "DM Delivered",
+        "statusClass": "",
+        "sourceTitle": "Live Interactive Interactive Demo Bot",
+        "sourceThumb": "https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=80&q=80",
+        "time": "10m ago",
+        "timestamp": "Today, 01:10 PM",
+        "commentText": "DEMO",
+        "botReplyText": "Hey Sophie! Here is your demo link: https://renderreply.com/agency/live-demo",
+        "ruleName": "Live Interactive Demo Bot"
+      }
+    ],
+    "payments": {
+      "totalBalance": 842000,
+      "availableBalance": 695000,
+      "pendingBalance": 147000,
+      "payout": {
+        "upiId": "renderagency@icici",
+        "holderName": "RenderReply Agency Pro",
+        "bankName": "ICICI Bank",
+        "accountNumber": "001928471629",
+        "ifsc": "ICIC0000019",
+        "primaryChannel": "Direct Bank"
+      },
+      "transactions": [
+        {
+          "id": "99201948192801",
+          "date": "Oct 24, 2026 01:45 PM",
+          "type": "Order Sale",
+          "amount": 249990,
+          "status": "Cleared",
+          "customer": "kevin@apexbrandgroup.com",
+          "channel": "Bank NEFT",
+          "fee": 0,
+          "gst": 44998,
+          "net": 249990
+        },
+        {
+          "id": "99201948192795",
+          "date": "Oct 23, 2026 11:15 AM",
+          "type": "Order Sale",
+          "amount": 49990,
+          "status": "Cleared",
+          "customer": "daniel@vancemedia.agency",
+          "channel": "Direct UPI",
+          "fee": 1499,
+          "gst": 270,
+          "net": 48221
+        },
+        {
+          "id": "99201948192780",
+          "date": "Oct 21, 2026 03:30 PM",
+          "type": "Order Sale",
+          "amount": 24990,
+          "status": "Cleared",
+          "customer": "sophie@elevateagency.co",
+          "channel": "Direct UPI",
+          "fee": 749,
+          "gst": 135,
+          "net": 24106
+        },
+        {
+          "id": "89102471928999",
+          "date": "Oct 19, 2026 10:00 AM",
+          "type": "Withdrawal",
+          "amount": -400000,
+          "status": "Cleared",
+          "customer": "Payout to ICICI Bank ••••1629",
+          "channel": "Bank IMPS",
+          "fee": 0,
+          "gst": 0,
+          "net": -400000
+        }
+      ]
+    },
+    "biolink": {
+      "title": "RenderReply Agency Pro | Enterprise Automations 🚀",
+      "bio": "Automating high-converting Instagram DM funnels for top creators, founders & 7-figure agencies.",
+      "links": [
+        {
+          "label": "Book Agency Whitelabel Demo 🚀",
+          "url": "https://renderreply.com/agency/demo",
+          "color": "accent"
+        },
+        {
+          "label": "Download 2026 Funnel Playbook PDF",
+          "url": "https://renderreply.com/agency/playbook",
+          "color": "slate"
+        },
+        {
+          "label": "Apply for Agency Partner Program",
+          "url": "https://renderreply.com/agency/apply",
+          "color": "emerald"
+        },
+        {
+          "label": "Client Onboarding Portal",
+          "url": "https://renderreply.com/agency/login",
+          "color": "amber"
+        }
+      ],
+      "video1": "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
+      "video2": "",
+      "theme": "royal-indigo"
+    }
+  }
 };
 
+// ACTIVE USER STATE MANAGEMENT (Synced with localStorage)
+window.currentActiveUserId = (function () {
+  try {
+    return localStorage.getItem('renderreply_active_user') || 'acc-rudra';
+  } catch (e) {
+    return 'acc-rudra';
+  }
+})();
+
+window.getActiveUserData = function () {
+  return window.USER_ACCOUNTS_DATABASE[window.currentActiveUserId] || window.USER_ACCOUNTS_DATABASE['acc-rudra'];
+};
+
+window.storeProfileState = window.getActiveUserData().profile;
+window.paymentState = window.getActiveUserData().payments;
 window.storeProfileDraft = null;
+
+/* ==========================================================================
+   GLOBAL USER PROFILE POPUP & MODAL CONTROLLER
+   ========================================================================== */
+window.toggleUserProfilePopup = function (e) {
+  if (e && typeof e.stopPropagation === 'function') e.stopPropagation();
+  const popup = document.getElementById('user-profile-popup');
+  if (!popup) return;
+
+  const isVisible = popup.classList.contains('active') || popup.style.display === 'block';
+  if (isVisible) {
+    window.closeUserProfilePopup();
+  } else {
+    window.openUserProfilePopup();
+  }
+};
+
+window.openUserProfilePopup = function () {
+  const popup = document.getElementById('user-profile-popup');
+  const trigger = document.getElementById('sidebar-user-profile-btn');
+  if (!popup) return;
+  popup.classList.add('active');
+  popup.style.display = 'block';
+  popup.style.opacity = '1';
+  popup.style.visibility = 'visible';
+  popup.style.pointerEvents = 'auto';
+  popup.setAttribute('aria-hidden', 'false');
+  if (trigger) {
+    trigger.classList.add('active');
+    trigger.setAttribute('aria-expanded', 'true');
+  }
+};
+
+window.closeUserProfilePopup = function () {
+  const popup = document.getElementById('user-profile-popup');
+  const trigger = document.getElementById('sidebar-user-profile-btn');
+  if (!popup) return;
+  popup.classList.remove('active');
+  popup.style.display = 'none';
+  popup.style.opacity = '0';
+  popup.style.visibility = 'hidden';
+  popup.style.pointerEvents = 'none';
+  popup.setAttribute('aria-hidden', 'true');
+  if (trigger) {
+    trigger.classList.remove('active');
+    trigger.setAttribute('aria-expanded', 'false');
+  }
+};
+
+window.openSwitchAccountModal = function (e) {
+  if (e && typeof e.stopPropagation === 'function') e.stopPropagation();
+  window.closeUserProfilePopup();
+  const modal = document.getElementById('modal-switch-account');
+  if (modal) {
+    modal.classList.add('active');
+    modal.style.display = 'flex';
+    modal.style.opacity = '1';
+    modal.style.pointerEvents = 'auto';
+  }
+};
+
+window.openAccountSettingsView = function (e) {
+  if (e && typeof e.stopPropagation === 'function') e.stopPropagation();
+  window.closeUserProfilePopup();
+  window.closeAccountModal('modal-switch-account');
+  window.closeAccountModal('modal-user-settings');
+  window.closeAccountModal('modal-user-support');
+  window.closeAccountModal('modal-user-signout');
+
+  // Deactivate all sidebar nav items & main tab views
+  const navItems = document.querySelectorAll('.sidebar-nav .nav-item');
+  const tabViews = document.querySelectorAll('.main-wrapper .tab-view');
+
+  navItems.forEach(n => n.classList.remove('active'));
+  tabViews.forEach(v => {
+    if (v.id === 'settings-view') {
+      v.classList.add('active');
+    } else {
+      v.classList.remove('active');
+    }
+  });
+
+  const indicator = document.getElementById('sidebar-pill-indicator');
+  if (indicator) indicator.style.opacity = '0';
+
+  window.syncSettingsForActiveUser();
+
+  const mainWrap = document.querySelector('.main-wrapper');
+  if (mainWrap) mainWrap.scrollTo({ top: 0, behavior: 'smooth' });
+
+  // Close mobile drawer if on mobile
+  if (window.innerWidth <= 1024) {
+    const sidebar = document.getElementById('app-sidebar');
+    const backdrop = document.getElementById('sidebar-backdrop');
+    if (sidebar) sidebar.classList.remove('mobile-open');
+    if (backdrop) backdrop.classList.remove('active');
+  }
+};
+
+window.openUserSettingsModal = window.openAccountSettingsView;
+
+window.syncSettingsForActiveUser = function () {
+  const active = (window.getActiveUserData ? window.getActiveUserData() : null) || {};
+  if (!active || !active.profile) return;
+  const profile = active.profile;
+  const uidKey = (active.id || window.currentActiveUserId || '').toLowerCase();
+
+  // 1. Profile Information
+  const fName = document.getElementById('acc-settings-fullname');
+  const fEmail = document.getElementById('acc-settings-email');
+  const fProvider = document.getElementById('acc-settings-provider');
+  const fSupport = document.getElementById('acc-settings-support-id');
+  const fUid = document.getElementById('acc-settings-uid');
+
+  if (fName) fName.value = profile.name || 'RudRa RR';
+  if (fEmail) fEmail.value = profile.email || 'rudrateja08@gmail.com';
+
+  let providerVal = 'Google Login';
+  let supportIdVal = 'RR-SUP-98421';
+  let uidVal = 'R3MT1DqCnWYuysMej8IZAw31v583';
+  let planNameVal = 'Creator Pro Plan';
+  let planDescVal = 'Unlimited Instagram AI automated comment DMs, instant lead capture & custom domain bio link.';
+  let planPriceVal = '₹1,499';
+  let planBadgeVal = '● Active Creator Pro';
+  let renewalVal = 'Next billing date: <strong>Nov 24, 2026</strong>';
+
+  if (uidKey.includes('sarah')) {
+    providerVal = 'Google Login (Verified)';
+    supportIdVal = 'RR-SUP-41908';
+    uidVal = 'S8KJ9PqMnWYsarahMej7BZ2v901';
+    planNameVal = 'VIP Influencer Pro Plan';
+    planDescVal = 'High-capacity viral DM triggers, automated lookbook distribution & priority inbox AI.';
+    planPriceVal = '₹2,999';
+    planBadgeVal = '● Active VIP Influencer';
+    renewalVal = 'Next billing date: <strong>Nov 28, 2026</strong>';
+  } else if (uidKey.includes('alex')) {
+    providerVal = 'Google Login';
+    supportIdVal = 'RR-SUP-33012';
+    uidVal = 'A4LV8KqPnWYalexMej5CR1w874';
+    planNameVal = 'Coach & Fitness Creator Plan';
+    planDescVal = 'Full coaching funnel automation, automated macro calculator delivery & store integration.';
+    planPriceVal = '₹1,999';
+    planBadgeVal = '● Active Coach Tier';
+    renewalVal = 'Next billing date: <strong>Dec 04, 2026</strong>';
+  } else if (uidKey.includes('agency')) {
+    providerVal = 'Google Workspace Enterprise SSO';
+    supportIdVal = 'RR-SUP-00109';
+    uidVal = 'G9AG2XqRnWYagencyMej9EZ9q312';
+    planNameVal = 'Enterprise Agency Tier';
+    planDescVal = 'Multi-account management (25+ Instagram accounts), dedicated IP webhooks & white-label portal.';
+    planPriceVal = '₹9,999';
+    planBadgeVal = '● Enterprise Agency';
+    renewalVal = 'Next billing date: <strong>Dec 15, 2026</strong>';
+  }
+
+  if (fProvider) fProvider.value = providerVal;
+  if (fSupport) fSupport.value = supportIdVal;
+  if (fUid) fUid.value = uidVal;
+
+  // 2. Billing & Subscription
+  const pBadge = document.getElementById('settings-plan-badge');
+  const pName = document.getElementById('settings-plan-name');
+  const pDesc = document.getElementById('settings-plan-desc');
+  const pPrice = document.getElementById('settings-plan-price');
+  const pRenewal = document.getElementById('settings-plan-renewal');
+  const pMethod = document.getElementById('settings-payment-method');
+
+  if (pBadge) pBadge.textContent = planBadgeVal;
+  if (pName) pName.textContent = planNameVal;
+  if (pDesc) pDesc.textContent = planDescVal;
+  if (pPrice) pPrice.innerHTML = `${planPriceVal}<span class="plan-freq">/month</span>`;
+  if (pRenewal) pRenewal.innerHTML = renewalVal;
+
+  if (pMethod && active.payments && active.payments.payout) {
+    if (active.payments.payout.upiId) {
+      pMethod.textContent = `Direct UPI (${active.payments.payout.upiId})`;
+    } else if (active.payments.payout.accountNumber) {
+      pMethod.textContent = `${active.payments.payout.bankName} (•••• ${active.payments.payout.accountNumber.slice(-4)})`;
+    }
+  }
+
+  // 3. Connected Instagram Account
+  const iHandle = document.getElementById('settings-insta-handle');
+  const iAvatar = document.getElementById('settings-insta-avatar');
+  const initial = profile.initials || (profile.name ? profile.name[0] : 'R');
+
+  if (iHandle) iHandle.textContent = profile.insta || '@render6457';
+  if (iAvatar) {
+    iAvatar.textContent = initial;
+    if (uidKey.includes('sarah')) iAvatar.style.background = 'linear-gradient(135deg, #ec4899, #f43f5e)';
+    else if (uidKey.includes('alex')) iAvatar.style.background = 'linear-gradient(135deg, #10b981, #059669)';
+    else if (uidKey.includes('agency')) iAvatar.style.background = 'linear-gradient(135deg, #06b6d4, #3b82f6)';
+    else iAvatar.style.background = 'linear-gradient(135deg, #4f46e5, #7c3aed)';
+  }
+};
+
+window.openSupportCenterView = function (e, targetSubPanel) {
+  if (e && typeof e.stopPropagation === 'function') e.stopPropagation();
+  if (typeof window.closeUserProfilePopup === 'function') window.closeUserProfilePopup();
+  if (typeof window.closeAccountModal === 'function') {
+    window.closeAccountModal('modal-switch-account');
+    window.closeAccountModal('modal-user-settings');
+    window.closeAccountModal('modal-user-support');
+    window.closeAccountModal('modal-user-signout');
+  }
+
+  // Record previous active view if not already on support-view
+  const currentActiveView = document.querySelector('.main-wrapper .tab-view.active');
+  if (currentActiveView && currentActiveView.id !== 'support-view') {
+    window.supportPreviousViewId = currentActiveView.id.replace('-view', '') || 'dashboard';
+  }
+
+  // Deactivate all sidebar nav items & tab views
+  const navItems = document.querySelectorAll('.sidebar-nav .nav-item');
+  const tabViews = document.querySelectorAll('.main-wrapper .tab-view');
+
+  navItems.forEach(n => n.classList.remove('active'));
+  tabViews.forEach(v => {
+    if (v.id === 'support-view') {
+      v.classList.add('active');
+    } else {
+      v.classList.remove('active');
+    }
+  });
+
+  const indicator = document.getElementById('sidebar-pill-indicator');
+  if (indicator) indicator.style.opacity = '0';
+
+  // Switch to specific sub-panel if requested (resources or tickets)
+  if (targetSubPanel === 'tickets') {
+    window.switchSupportSubPanel('tickets');
+  } else {
+    window.switchSupportSubPanel('resources');
+  }
+
+  // Render tickets list
+  if (typeof window.renderSupportTicketsList === 'function') {
+    window.renderSupportTicketsList();
+  }
+
+  const mainWrap = document.querySelector('.main-wrapper');
+  if (mainWrap) mainWrap.scrollTo({ top: 0, behavior: 'smooth' });
+
+  // Close mobile drawer if on mobile
+  if (window.innerWidth <= 1024) {
+    const sidebar = document.getElementById('app-sidebar');
+    const backdrop = document.getElementById('sidebar-backdrop');
+    if (sidebar) sidebar.classList.remove('mobile-open');
+    if (backdrop) backdrop.classList.remove('active');
+  }
+};
+
+window.openUserSupportModal = window.openSupportCenterView;
+
+window.openUserSignoutModal = function (e) {
+  if (e && typeof e.stopPropagation === 'function') e.stopPropagation();
+  window.closeUserProfilePopup();
+  const modal = document.getElementById('modal-user-signout');
+  if (modal) {
+    modal.classList.add('active');
+    modal.style.display = 'flex';
+    modal.style.opacity = '1';
+    modal.style.pointerEvents = 'auto';
+  }
+};
+
+window.closeAccountModal = function (modalId) {
+  const modal = document.getElementById(modalId);
+  if (modal) {
+    modal.classList.remove('active');
+    modal.style.display = 'none';
+    modal.style.opacity = '0';
+    modal.style.pointerEvents = 'none';
+  }
+};
+
+/* ==========================================================================
+   CENTRALIZED REAL-TIME ACCOUNT SWITCHING ENGINE
+   ========================================================================== */
+window.updateSidebarUserProfileUI = function (userData) {
+  const user = userData || (window.getActiveUserData ? window.getActiveUserData() : null);
+  if (!user || !user.profile) return;
+  const profile = user.profile;
+  const initial = profile.initials || (profile.name ? (profile.name.trim().split(' ').map(n => n[0]).join('').slice(0, 2).toUpperCase()) : 'RR');
+
+  // Custom account background gradients
+  let bgGradient = 'linear-gradient(135deg, #4f46e5, #7c3aed)';
+  const uid = (user.id || window.currentActiveUserId || '').toLowerCase();
+  const uname = (profile.name || '').toLowerCase();
+  if (uid.includes('sarah') || uname.includes('sarah')) {
+    bgGradient = 'linear-gradient(135deg, #ec4899, #f43f5e)';
+  } else if (uid.includes('alex') || uname.includes('alex')) {
+    bgGradient = 'linear-gradient(135deg, #10b981, #059669)';
+  } else if (uid.includes('agency') || uname.includes('agency')) {
+    bgGradient = 'linear-gradient(135deg, #06b6d4, #3b82f6)';
+  } else {
+    bgGradient = 'linear-gradient(135deg, #4f46e5, #7c3aed)';
+  }
+
+  // 1. Sidebar User Name & Handle Subtitle
+  const sbName = document.getElementById('sidebar-user-name');
+  const sbSub = document.getElementById('sidebar-user-sub');
+  if (sbName) sbName.textContent = profile.name || 'RudRa RR';
+  if (sbSub) sbSub.textContent = profile.insta || profile.badge || '@render6457';
+
+  // 2. Sidebar Avatar
+  const sbAvatar = document.getElementById('sidebar-user-avatar');
+  if (sbAvatar) {
+    sbAvatar.style.background = bgGradient;
+    if (profile.avatar) {
+      sbAvatar.innerHTML = `
+        <img src="${profile.avatar}" alt="${profile.name || 'User'}" class="user-avatar-img" onerror="this.style.display='none'; if (this.nextElementSibling) this.nextElementSibling.style.display='block';" style="width: 100%; height: 100%; object-fit: cover; border-radius: 50%; display: block;"/>
+        <span class="user-avatar-text" style="display: none; font-weight: 800; font-size: 11.5px; color: #ffffff;">${initial}</span>
+      `;
+    } else {
+      sbAvatar.innerHTML = `<span class="user-avatar-text" style="font-weight: 800; font-size: 11.5px; color: #ffffff;">${initial}</span>`;
+    }
+  }
+
+  // 3. Mobile Top Bar Avatar
+  const mobileAvatar = document.querySelector('.mobile-top-bar .user-avatar');
+  if (mobileAvatar) {
+    mobileAvatar.style.background = bgGradient;
+    if (profile.avatar) {
+      mobileAvatar.innerHTML = `
+        <img src="${profile.avatar}" alt="${profile.name || 'User'}" class="user-avatar-img" onerror="this.style.display='none'; if (this.nextElementSibling) this.nextElementSibling.style.display='block';" style="width: 100%; height: 100%; object-fit: cover; border-radius: 50%; display: block;"/>
+        <span class="user-avatar-text" style="display: none; font-weight: 800; font-size: 12px; color: #ffffff;">${initial}</span>
+      `;
+    } else {
+      mobileAvatar.innerHTML = `<span class="user-avatar-text" style="font-weight: 800; font-size: 12px; color: #ffffff;">${initial}</span>`;
+    }
+  }
+
+  // 4. Popup Header info
+  const uppName = document.getElementById('upp-user-name');
+  const uppEmail = document.getElementById('upp-user-email');
+  if (uppName) uppName.textContent = profile.name || 'RudRa RR';
+  if (uppEmail) uppEmail.textContent = profile.email || 'rudrateja08@gmail.com';
+};
+
+window.switchActiveUserAccount = function (userId) {
+  if (!window.USER_ACCOUNTS_DATABASE[userId]) return;
+  window.currentActiveUserId = userId;
+  try {
+    localStorage.setItem('renderreply_active_user', userId);
+  } catch (err) { }
+
+  const activeUser = window.getActiveUserData();
+  window.storeProfileState = activeUser.profile;
+  window.paymentState = activeUser.payments;
+
+  // 1. Update Sidebar & Mobile Header UI
+  window.updateSidebarUserProfileUI(activeUser);
+
+  // 2. Update Switch Account Modal Item Badges and States
+  document.querySelectorAll('.switch-account-item').forEach(item => {
+    const itemId = item.getAttribute('data-account-id');
+    const isActive = itemId === userId;
+    item.classList.toggle('active', isActive);
+    const badge = item.querySelector('.acc-active-badge');
+    const checkOrBtn = item.querySelector('.acc-check-icon') || item.querySelector('button.btn');
+
+    if (isActive) {
+      item.style.border = '1.5px solid #6366f1';
+      item.style.background = 'rgba(99, 102, 241, 0.05)';
+      if (badge) badge.style.display = 'inline-block';
+      if (checkOrBtn) {
+        checkOrBtn.outerHTML = `<div class="acc-check-icon" style="color: #6366f1;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg></div>`;
+      }
+    } else {
+      item.style.border = '1px solid #e2e8f0';
+      item.style.background = '#ffffff';
+      if (badge) badge.style.display = 'none';
+      if (checkOrBtn && checkOrBtn.classList.contains('acc-check-icon')) {
+        checkOrBtn.outerHTML = `<button type="button" class="btn btn-outline btn-xs" style="font-weight: 700;">Switch</button>`;
+      }
+    }
+  });
+
+  // 4. Update Settings Modal Inputs
+  const sName = document.getElementById('settings-user-name');
+  const sEmail = document.getElementById('settings-user-email');
+  const sBio = document.getElementById('settings-user-bio');
+  if (sName) sName.value = activeUser.profile.name;
+  if (sEmail) sEmail.value = activeUser.profile.email;
+  if (sBio) sBio.value = activeUser.profile.bio;
+
+  // 5. Reactive Module View Synchronizations
+  if (typeof window.syncStoreProfileToUI === 'function') {
+    try { window.syncStoreProfileToUI(); } catch (e) { console.error(e); }
+  }
+  if (typeof window.syncDashboardForActiveUser === 'function') {
+    try { window.syncDashboardForActiveUser(); } catch (e) { console.error(e); }
+  }
+  if (typeof window.syncLeadsForActiveUser === 'function') {
+    try { window.syncLeadsForActiveUser(); } catch (e) { console.error(e); }
+  }
+  if (typeof window.syncRulesForActiveUser === 'function') {
+    try { window.syncRulesForActiveUser(); } catch (e) { console.error(e); }
+  }
+  if (typeof window.syncInboxForActiveUser === 'function') {
+    try { window.syncInboxForActiveUser(); } catch (e) { console.error(e); }
+  }
+  if (typeof window.syncStoreProductsForActiveUser === 'function') {
+    try { window.syncStoreProductsForActiveUser(); } catch (e) { console.error(e); }
+  }
+  if (typeof window.syncPaymentsForActiveUser === 'function') {
+    try { window.syncPaymentsForActiveUser(); } catch (e) { console.error(e); }
+  }
+  if (typeof window.syncBioLinkForActiveUser === 'function') {
+    try { window.syncBioLinkForActiveUser(); } catch (e) { console.error(e); }
+  }
+  if (typeof window.syncSettingsForActiveUser === 'function') {
+    try { window.syncSettingsForActiveUser(); } catch (e) { console.error(e); }
+  }
+
+  // 6. User Feedback Toast & Modal Dismissal
+  if (typeof showToast === 'function') {
+    showToast(`Switched to workspace: ${activeUser.profile.name}`);
+  }
+  window.closeAccountModal('modal-switch-account');
+};
+
+// Global click outside listener for popup
+document.addEventListener('click', function (e) {
+  const popup = document.getElementById('user-profile-popup');
+  const trigger = document.getElementById('sidebar-user-profile-btn');
+  if (popup && (popup.classList.contains('active') || popup.style.display === 'block')) {
+    if (!popup.contains(e.target) && (!trigger || !trigger.contains(e.target))) {
+      window.closeUserProfilePopup();
+    }
+  }
+});
+
 
 function formatSocialUrl(platform, handle) {
   if (!handle) return '#';
@@ -68,21 +3203,32 @@ function renderStoreSocialIcons(insta, yt, tw) {
   container.innerHTML = html;
 }
 
-window.syncStoreProfileToUI = function(data) {
-  const profile = data || window.storeProfileState;
-  
-  // 1. Store Overview summary card
+window.syncStoreProfileToUI = function (data) {
+  const profile = data || (window.getActiveUserData ? window.getActiveUserData().profile : window.storeProfileState);
+  if (!profile) return;
+
+  // 1. Dashboard Account Bar Info
+  const dashHandle = document.getElementById('dashboard-account-handle');
+  const dashAccIcon = document.querySelector('#account-info-container .account-icon');
+  const phoneHandle = document.getElementById('phone-display-handle');
+  const initial = profile.initials || (profile.name ? profile.name.charAt(0) : 'R');
+
+  if (dashHandle) dashHandle.textContent = profile.insta || '@render6457';
+  if (dashAccIcon) dashAccIcon.textContent = initial;
+  if (phoneHandle) phoneHandle.textContent = profile.insta || '@render6457';
+
+  // 2. Store Overview summary card
   const nameTxt = document.getElementById('store-display-name-txt');
   const bioTxt = document.getElementById('store-bio-text-txt');
   const avatarImg = document.getElementById('store-avatar-img');
-  
-  if (nameTxt) nameTxt.textContent = profile.name || 'Rudra Teja';
+
+  if (nameTxt) nameTxt.textContent = profile.name || 'RudRa RR';
   if (bioTxt) bioTxt.textContent = profile.bio || '';
   if (avatarImg && profile.avatar) avatarImg.src = profile.avatar;
 
   renderStoreSocialIcons(profile.insta, profile.yt, profile.tw);
 
-  // 2. Setup form inputs
+  // 3. Setup form inputs
   const setupName = document.getElementById('setup-input-name');
   const setupAvatar = document.getElementById('setup-input-avatar');
   const setupBio = document.getElementById('setup-input-bio');
@@ -97,7 +3243,7 @@ window.syncStoreProfileToUI = function(data) {
   if (setupYt && document.activeElement !== setupYt) setupYt.value = profile.yt || '';
   if (setupTw && document.activeElement !== setupTw) setupTw.value = profile.tw || '';
 
-  // 3. Brand Identity Tab (Store Settings)
+  // 4. Brand Identity Tab (Store Settings)
   const csName = document.getElementById('cs-input-store-name');
   const csBio = document.getElementById('cs-input-store-bio');
   const csLogo = document.getElementById('cs-logo-img');
@@ -113,35 +3259,44 @@ window.syncStoreProfileToUI = function(data) {
   if (csInsta && document.activeElement !== csInsta) csInsta.value = profile.insta?.replace(/^@/, '') || '';
   if (csYt && document.activeElement !== csYt) csYt.value = profile.yt || '';
   if (csTw && document.activeElement !== csTw) csTw.value = profile.tw?.replace(/^@/, '') || '';
-  if (csPrevName) csPrevName.textContent = profile.name || 'Rudra Teja';
+  if (csPrevName) csPrevName.textContent = profile.name || 'RudRa RR';
   if (csPrevAvatar && profile.avatar) csPrevAvatar.src = profile.avatar;
 
-  // 4. Mobile / Phone Previews
+  // 5. Mobile / Phone Previews
   const dspName = document.getElementById('dsp-name-el');
   const dspBio = document.getElementById('dsp-bio-el');
   const dspAvatar = document.getElementById('dsp-avatar-el');
 
-  if (dspName) dspName.textContent = profile.name || 'Rudra Teja';
+  if (dspName) dspName.textContent = profile.name || 'RudRa RR';
   if (dspBio) dspBio.textContent = profile.bio || '';
   if (dspAvatar && profile.avatar) dspAvatar.src = profile.avatar;
 
-  // 5. Live Storefront Modal Preview
+  // 6. Live Storefront Modal Preview
   const spmName = document.getElementById('spm-creator-name');
   const spmBio = document.getElementById('spm-creator-bio');
   const spmAvatar = document.getElementById('spm-avatar-img');
 
-  if (spmName) spmName.textContent = profile.name || 'Rudra Teja';
+  if (spmName) spmName.textContent = profile.name || 'RudRa RR';
   if (spmBio) spmBio.textContent = profile.bio || '';
   if (spmAvatar && profile.avatar) spmAvatar.src = profile.avatar;
 
-  // 6. Top Navbar / User Profile Header
+  // 7. Top Navbar / User Profile Header & Dropdown
   const userNameEl = document.querySelector('.user-name');
   const unifiedAvatar = document.getElementById('unified-avatar-el');
-  if (userNameEl) userNameEl.textContent = profile.name || 'Rudra Teja';
+  const signoutName = document.getElementById('signout-modal-user-name');
+  const signoutEmail = document.getElementById('signout-modal-user-email');
+
+  if (userNameEl) userNameEl.textContent = profile.name || 'RudRa RR';
+  if (signoutName) signoutName.textContent = profile.name || 'RudRa RR';
+  if (signoutEmail) signoutEmail.textContent = profile.email || 'rudrateja08@gmail.com';
   if (unifiedAvatar && profile.avatar) unifiedAvatar.src = profile.avatar;
+
+  if (typeof window.updateSidebarUserProfileUI === 'function') {
+    window.updateSidebarUserProfileUI({ id: window.currentActiveUserId, profile: profile });
+  }
 };
 
-window.syncStoreProfileLiveFromSetupInputs = function() {
+window.syncStoreProfileLiveFromSetupInputs = function () {
   const setupName = document.getElementById('setup-input-name')?.value;
   const setupAvatar = document.getElementById('setup-input-avatar')?.value;
   const setupBio = document.getElementById('setup-input-bio')?.value;
@@ -322,175 +3477,14 @@ function initApp() {
 
         <!-- Invisible Hover Trigger Strips -->
         ${xCoords.map((x, i) => `
-          <rect class="chart-hover-trigger" data-idx="${i}" data-label="${xLabels[i]}" data-reach="${reachPoints[i]}K" data-act="${activityPoints[i]}K" data-x="${x}" data-reach-y="${reachY[i]}" data-act-y="${actY[i]}" x="${x - (step || 20)/2}" y="0" width="${step || 40}" height="145" fill="transparent" style="cursor: crosshair;"/>
+          <rect class="chart-hover-trigger" data-idx="${i}" data-label="${xLabels[i]}" data-reach="${reachPoints[i]}K" data-act="${activityPoints[i]}K" data-x="${x}" data-reach-y="${reachY[i]}" data-act-y="${actY[i]}" x="${x - (step || 20) / 2}" y="0" width="${step || 40}" height="145" fill="transparent" style="cursor: crosshair;"/>
         `).join('')}
       </svg>
     `;
   }
 
   // COMPREHENSIVE DATA FOR TIME RANGES (4-SECTION SAAS SYSTEM)
-  const DASHBOARD_DATA = {
-    '7 Days': {
-      followers: '48', following: '12', views: '380', comments: '52',
-      totalReplies: '28', sentToday: '6', activeRulesFlat: '3', capturedLeadsFlat: '9',
-      reach: '12.4K', trendReach: '▲ +9.2%',
-      engaged: '1.4K', trendEngaged: '▲ +5.6%',
-      visits: '820', trendVisits: '▲ +12.4%',
-      clicks: '210', trendClicks: '▲ +14.8%',
-      replies: '310', trendReplies: '▲ +8.5%',
-      dmsToday: '18', trendDmsToday: '▲ +4.0%',
-      activeRules: '5 Active', trendRules: '● 100% Uptime',
-      leads: '84', trendLeads: '▲ +18.2%',
-      reachSub: 'Instagram reach vs profile activity over the last 7 days.',
-      legReach: '12.4K', legAct: '820',
-      reachSvg: createDualLineChartSvg({
-        reachPoints: [4, 6, 8, 7, 10, 11, 12.4],
-        activityPoints: [0.2, 0.3, 0.5, 0.4, 0.7, 0.75, 0.82],
-        xLabels: ['Day 1', 'Day 2', 'Day 3', 'Day 4', 'Day 5', 'Day 6', 'Day 7'],
-        yTop: '15K', yBottom: '0'
-      }),
-      funnel: {
-        s1Num: '420', s1Pct: '100%', s1Fill: '100%',
-        s2Num: '310', s2Pct: '73.8%', s2Fill: '73.8%',
-        s3Num: '160', s3Pct: '38.0%', s3Fill: '38.0%',
-        s4Num: '84',  s4Pct: '20.0%', s4Fill: '20.0%',
-        rate: '20.0% Total Conv'
-      },
-      demographics: {
-        total: '12.4K',
-        nonFollowers: '62% (7.7K)', followers: '38% (4.7K)',
-        us: '40% (5.0K)', in: '30% (3.7K)', gb: '15% (1.9K)'
-      }
-    },
-    '14 Days': {
-      followers: '48', following: '12', views: '740', comments: '110',
-      totalReplies: '58', sentToday: '10', activeRulesFlat: '3', capturedLeadsFlat: '18',
-      reach: '24.8K', trendReach: '▲ +11.5%',
-      engaged: '2.9K', trendEngaged: '▲ +7.2%',
-      visits: '1,680', trendVisits: '▲ +15.1%',
-      clicks: '440', trendClicks: '▲ +18.0%',
-      replies: '620', trendReplies: '▲ +10.2%',
-      dmsToday: '42', trendDmsToday: '▲ +4.8%',
-      activeRules: '5 Active', trendRules: '● 100% Uptime',
-      leads: '172', trendLeads: '▲ +24.5%',
-      reachSub: 'Instagram reach vs profile activity over the last 14 days.',
-      legReach: '24.8K', legAct: '1.68K',
-      reachSvg: createDualLineChartSvg({
-        reachPoints: [8, 12, 16, 14, 20, 22, 24.8],
-        activityPoints: [0.5, 0.7, 1.0, 0.9, 1.4, 1.5, 1.68],
-        xLabels: ['Day 2', 'Day 4', 'Day 6', 'Day 8', 'Day 10', 'Day 12', 'Day 14'],
-        yTop: '30K', yBottom: '0'
-      }),
-      funnel: {
-        s1Num: '890', s1Pct: '100%', s1Fill: '100%',
-        s2Num: '620', s2Pct: '69.6%', s2Fill: '69.6%',
-        s3Num: '310', s3Pct: '34.8%', s3Fill: '34.8%',
-        s4Num: '172', s4Pct: '19.3%', s4Fill: '19.3%',
-        rate: '19.3% Total Conv'
-      },
-      demographics: {
-        total: '24.8K',
-        nonFollowers: '63% (15.6K)', followers: '37% (9.2K)',
-        us: '41% (10.2K)', in: '29% (7.2K)', gb: '14% (3.5K)'
-      }
-    },
-    '30 Days': {
-      followers: '48', following: '12', views: '1,240', comments: '184',
-      totalReplies: '96', sentToday: '14', activeRulesFlat: '3', capturedLeadsFlat: '28',
-      reach: '48.2K', trendReach: '▲ +14.2%',
-      engaged: '5.8K', trendEngaged: '▲ +8.4%',
-      visits: '3,410', trendVisits: '▲ +18.0%',
-      clicks: '890', trendClicks: '▲ +22.5%',
-      replies: '1,240', trendReplies: '▲ +12.8%',
-      dmsToday: '86', trendDmsToday: '▲ +5.2%',
-      activeRules: '5 Active', trendRules: '● 100% Uptime',
-      leads: '342', trendLeads: '▲ +31.4%',
-      reachSub: 'Instagram reach vs profile activity over the last 30 days.',
-      legReach: '48.2K', legAct: '3.41K',
-      reachSvg: createDualLineChartSvg({
-        reachPoints: [18, 28, 38, 32, 44, 42, 48.2],
-        activityPoints: [1.2, 1.8, 2.4, 2.1, 3.0, 2.8, 3.41],
-        xLabels: ['Day 1', 'Day 5', 'Day 10', 'Day 15', 'Day 20', 'Day 25', 'Day 30'],
-        yTop: '50K', yBottom: '0'
-      }),
-      funnel: {
-        s1Num: '1,850', s1Pct: '100%', s1Fill: '100%',
-        s2Num: '1,240', s2Pct: '67.0%', s2Fill: '67.0%',
-        s3Num: '620',   s3Pct: '33.5%', s3Fill: '33.5%',
-        s4Num: '342',   s4Pct: '18.5%', s4Fill: '18.5%',
-        rate: '18.5% Total Conv'
-      },
-      demographics: {
-        total: '48.2K',
-        nonFollowers: '64% (30.8K)', followers: '36% (17.4K)',
-        us: '42% (20.2K)', in: '28% (13.5K)', gb: '14% (6.7K)'
-      }
-    },
-    '60 Days': {
-      followers: '48', following: '12', views: '2,850', comments: '410',
-      totalReplies: '210', sentToday: '18', activeRulesFlat: '4', capturedLeadsFlat: '62',
-      reach: '92.6K', trendReach: '▲ +19.4%',
-      engaged: '11.2K', trendEngaged: '▲ +12.0%',
-      visits: '6,890', trendVisits: '▲ +21.4%',
-      clicks: '1,740', trendClicks: '▲ +26.8%',
-      replies: '2,410', trendReplies: '▲ +16.5%',
-      dmsToday: '140', trendDmsToday: '▲ +6.1%',
-      activeRules: '5 Active', trendRules: '● 100% Uptime',
-      leads: '680', trendLeads: '▲ +35.2%',
-      reachSub: 'Instagram reach vs profile activity over the last 60 days.',
-      legReach: '92.6K', legAct: '6.89K',
-      reachSvg: createDualLineChartSvg({
-        reachPoints: [35, 50, 68, 62, 80, 85, 92.6],
-        activityPoints: [2.5, 3.6, 4.8, 4.2, 5.9, 6.2, 6.89],
-        xLabels: ['Day 1', 'Day 10', 'Day 20', 'Day 30', 'Day 40', 'Day 50', 'Day 60'],
-        yTop: '100K', yBottom: '0'
-      }),
-      funnel: {
-        s1Num: '3,620', s1Pct: '100%', s1Fill: '100%',
-        s2Num: '2,410', s2Pct: '66.5%', s2Fill: '66.5%',
-        s3Num: '1,220', s3Pct: '33.7%', s3Fill: '33.7%',
-        s4Num: '680',   s4Pct: '18.7%', s4Fill: '18.7%',
-        rate: '18.7% Total Conv'
-      },
-      demographics: {
-        total: '92.6K',
-        nonFollowers: '65% (60.2K)', followers: '35% (32.4K)',
-        us: '43% (39.8K)', in: '28% (25.9K)', gb: '13% (12.0K)'
-      }
-    },
-    '90 Days': {
-      followers: '48', following: '12', views: '4,920', comments: '680',
-      totalReplies: '340', sentToday: '22', activeRulesFlat: '5', capturedLeadsFlat: '104',
-      reach: '142.8K', trendReach: '▲ +24.8%',
-      engaged: '17.4K', trendEngaged: '▲ +15.2%',
-      visits: '10,450', trendVisits: '▲ +25.0%',
-      clicks: '2,680', trendClicks: '▲ +30.2%',
-      replies: '3,820', trendReplies: '▲ +19.4%',
-      dmsToday: '185', trendDmsToday: '▲ +7.0%',
-      activeRules: '5 Active', trendRules: '● 100% Uptime',
-      leads: '1,040', trendLeads: '▲ +39.0%',
-      reachSub: 'Instagram reach vs profile activity over the last 90 days.',
-      legReach: '142.8K', legAct: '10.4K',
-      reachSvg: createDualLineChartSvg({
-        reachPoints: [50, 75, 95, 90, 115, 128, 142.8],
-        activityPoints: [3.8, 5.2, 7.0, 6.8, 8.5, 9.6, 10.45],
-        xLabels: ['Day 1', 'Day 15', 'Day 30', 'Day 45', 'Day 60', 'Day 75', 'Day 90'],
-        yTop: '150K', yBottom: '0'
-      }),
-      funnel: {
-        s1Num: '5,740', s1Pct: '100%', s1Fill: '100%',
-        s2Num: '3,820', s2Pct: '66.5%', s2Fill: '66.5%',
-        s3Num: '1,940', s3Pct: '33.8%', s3Fill: '33.8%',
-        s4Num: '1,040', s4Pct: '18.1%', s4Fill: '18.1%',
-        rate: '18.1% Total Conv'
-      },
-      demographics: {
-        total: '142.8K',
-        nonFollowers: '66% (94.2K)', followers: '34% (48.6K)',
-        us: '44% (62.8K)', in: '27% (38.5K)', gb: '13% (18.6K)'
-      }
-    }
-  };
+  let DASHBOARD_DATA = window.getActiveUserData().dashboard;
 
   // DOM ELEMENTS
   const navItems = document.querySelectorAll('.nav-item');
@@ -688,10 +3682,14 @@ function initApp() {
     if (!accountInfoContainer || !accountActionContainer) return;
 
     if (isConnected) {
+      const activeProf = (window.getActiveUserData && window.getActiveUserData().profile) || (window.storeProfileState || { initials: 'R', insta: '@render6457', name: 'RudRa RR' });
+      const avatarInitial = activeProf.initials || (activeProf.name ? activeProf.name.charAt(0) : 'R');
+      const handle = activeProf.insta || '@render6457';
+
       accountInfoContainer.innerHTML = `
-        <div class="account-icon">R</div>
+        <div class="account-icon">${avatarInitial}</div>
         <div class="account-details">
-          <span class="account-handle" id="dashboard-account-handle">@render6457</span>
+          <span class="account-handle" id="dashboard-account-handle">${handle}</span>
           <span class="account-status">Instagram Connected</span>
         </div>`;
 
@@ -718,10 +3716,11 @@ function initApp() {
   }
 
   function handleDisconnectClick() {
+    const activeProf = (window.getActiveUserData && window.getActiveUserData().profile) || (window.storeProfileState || { insta: '@render6457' });
     isConnected = false;
     updateConnectionUI();
     loadDashboardData(currentRange);
-    showToast('Disconnected account @render6457');
+    showToast(`Disconnected account ${activeProf.insta || '@render6457'}`);
   }
 
   // 4. TAB NAVIGATION WITH RELOAD ANIMATION
@@ -817,7 +3816,7 @@ function initApp() {
     }
     const elList = Array.isArray(elements) ? elements : Array.from(elements);
     const validEls = elList.filter(el => el && el instanceof HTMLElement);
-    
+
     validEls.forEach(el => {
       el.classList.add('skeleton-loading');
     });
@@ -1771,164 +4770,264 @@ function initApp() {
   // ==========================================================================
   // CAPTURED LEADS VIEW TAB ENGINE & CONTROLLER
   // ==========================================================================
-  const CAPTURED_LEADS_DATABASE = [
-    {
-      id: 'lead-1',
-      handle: '@alex_growth',
-      name: 'Alex Miller',
-      avatar: 'AM',
-      email: 'alex.miller@growthagency.io',
-      phone: '+1 (555) 234-8910',
-      keyword: '#GUIDE',
-      campaign: 'guide',
-      status: 'Email Captured',
-      statusClass: 'email',
-      sourceTitle: '10x Instagram Automation Strategy 2026',
-      sourceThumb: 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=80&q=80',
-      time: '2m ago',
-      timestamp: 'Today, 2:14 PM',
-      commentText: 'Can you send me the #GUIDE for full funnel setup?',
-      botReplyText: 'Hey Alex! Here is your complete 10x Automation Blueprint & PDF guide: https://renderreply.com/p/guide',
-      ruleName: 'Reel Lead Magnet #GUIDE'
-    },
-    {
-      id: 'lead-2',
-      handle: '@sarah.designs',
-      name: 'Sarah K.',
-      avatar: 'SK',
-      email: 'sarah.k@designstudio.co',
-      phone: '+1 (555) 789-1234',
-      keyword: 'PRICING',
-      campaign: 'pricing',
-      status: 'DM Delivered',
-      statusClass: '',
-      sourceTitle: 'How I Make ₹50,000/mo Selling Digital Products',
-      sourceThumb: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=80&q=80',
-      time: '12m ago',
-      timestamp: 'Today, 2:04 PM',
-      commentText: 'PRICING details please!',
-      botReplyText: 'Hi Sarah! Here is the breakdown of our digital templates & pricing plans: https://renderreply.com/pricing',
-      ruleName: 'Pricing Trigger Rule'
-    },
-    {
-      id: 'lead-3',
-      handle: '@marcus_dev',
-      name: 'Marcus Vance',
-      avatar: 'MV',
-      email: 'marcus.vance@techlead.dev',
-      phone: '+44 7911 123456',
-      keyword: 'ROADMAP',
-      campaign: 'roadmap',
-      status: 'Email Captured',
-      statusClass: 'email',
-      sourceTitle: 'Free Java Fullstack Roadmap 2026 PDF',
-      sourceThumb: 'https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?auto=format&fit=crop&w=80&q=80',
-      time: '28m ago',
-      timestamp: 'Today, 1:48 PM',
-      commentText: 'Sent you ROADMAP on the carousel post',
-      botReplyText: 'Awesome Marcus! The Fullstack 2026 Roadmap PDF has been emailed to you and here is the direct link: https://renderreply.com/p/roadmap-pdf',
-      ruleName: 'Java Roadmap Lead Magnet'
-    },
-    {
-      id: 'lead-4',
-      handle: '@priya_creates',
-      name: 'Priya Sharma',
-      avatar: 'PS',
-      email: 'priya.sharma@creatorspace.in',
-      phone: '+91 98765 43210',
-      keyword: 'LINK',
-      campaign: 'story',
-      status: 'DM Delivered',
-      statusClass: '',
-      sourceTitle: 'Story Automation Blueprint & DM Triggers',
-      sourceThumb: 'https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&w=80&q=80',
-      time: '1h ago',
-      timestamp: 'Today, 1:15 PM',
-      commentText: 'LINK',
-      botReplyText: 'Hey Priya! Here is the instant link you requested from our story: https://renderreply.com/story-blueprint',
-      ruleName: 'Story Reply Automation'
-    },
-    {
-      id: 'lead-5',
-      handle: '@david_agency',
-      name: 'David Ross',
-      avatar: 'DR',
-      email: 'david@scaleagency.com',
-      phone: '+1 (555) 901-4432',
-      keyword: 'FREE',
-      campaign: 'free',
-      status: 'Email Captured',
-      statusClass: 'email',
-      sourceTitle: 'Free Lead Pack Automation',
-      sourceThumb: 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=80&q=80',
-      time: '2h ago',
-      timestamp: 'Today, 12:10 PM',
-      commentText: 'FREE resource download',
-      botReplyText: 'Hey David! Your free resource package is ready: https://renderreply.com/free-pack. Check your email for login credentials!',
-      ruleName: 'Free Lead Pack Automation'
-    },
-    {
-      id: 'lead-6',
-      handle: '@elena_ecom',
-      name: 'Elena Rostova',
-      avatar: 'ER',
-      email: 'elena@ecomscale.co',
-      phone: '+1 (555) 432-1098',
-      keyword: '#GUIDE',
-      campaign: 'guide',
-      status: 'Email Captured',
-      statusClass: 'email',
-      sourceTitle: '10x Instagram Automation Strategy 2026',
-      sourceThumb: 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=80&q=80',
-      time: '3h ago',
-      timestamp: 'Today, 11:32 AM',
-      commentText: '#GUIDE please!',
-      botReplyText: 'Hey Elena! Here is the full guide to scaling digital products with RenderReply: https://renderreply.com/p/guide',
-      ruleName: 'Reel Lead Magnet #GUIDE'
-    },
-    {
-      id: 'lead-7',
-      handle: '@karan_tech',
-      name: 'Karan Patel',
-      avatar: 'KP',
-      email: 'karan@codevalley.dev',
-      phone: '+91 99887 76655',
-      keyword: 'ROADMAP',
-      campaign: 'roadmap',
-      status: 'Email Captured',
-      statusClass: 'email',
-      sourceTitle: 'Free Java Fullstack Roadmap 2026 PDF',
-      sourceThumb: 'https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?auto=format&fit=crop&w=80&q=80',
-      time: '4h ago',
-      timestamp: 'Today, 10:18 AM',
-      commentText: 'ROADMAP link',
-      botReplyText: 'Hey Karan! We sent the Fullstack Roadmap PDF straight to your inbox and here: https://renderreply.com/p/roadmap-pdf',
-      ruleName: 'Java Roadmap Lead Magnet'
-    },
-    {
-      id: 'lead-8',
-      handle: '@chloe_fashion',
-      name: 'Chloe Bennett',
-      avatar: 'CB',
-      email: 'chloe@stylecreator.com',
-      phone: '+1 (555) 678-9012',
-      keyword: 'PRICING',
-      campaign: 'pricing',
-      status: 'DM Delivered',
-      statusClass: '',
-      sourceTitle: 'How I Make ₹50,000/mo Selling Digital Products',
-      sourceThumb: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=80&q=80',
-      time: '5h ago',
-      timestamp: 'Today, 09:44 AM',
-      commentText: 'Can I get the PRICING?',
-      botReplyText: 'Hey Chloe! Here are all current creator store tiers and checkout links: https://renderreply.com/pricing',
-      ruleName: 'Pricing Trigger Rule'
-    }
-  ];
-
+  let CAPTURED_LEADS_DATABASE = (window.getActiveUserData ? window.getActiveUserData().leads : []) || [];
   let currentLeadsCampaign = 'all';
   let currentLeadsStatus = 'all';
   let currentLeadsSearchQuery = '';
+
+  window.getUserCampaignsMeta = function (userId) {
+    const uid = (userId || window.currentActiveUserId || '').toLowerCase();
+    if (uid.includes('sarah')) {
+      return {
+        total: "2,890",
+        emails: "2,398",
+        phones: "492",
+        topKeyword: "#OUTFIT",
+        topKeywordPct: "58%",
+        topKeywordLeads: "1,670 Leads",
+        topKeywordSub: "Fall Lookbook & Outfit Reel",
+        descriptions: {
+          all: "Showing All Reels & Posts Leads for Sarah Jenkins",
+          outfit: "Showing leads for Fall Blazer & Linen Pants Styling Reel (Keyword: #OUTFIT)",
+          lookbook: "Showing leads for Paris Fashion Week Capsule Moodboard (Keyword: LOOKBOOK)",
+          preset: "Showing leads for Lightroom Aesthetic Preset Pack (Keyword: PRESET)",
+          paris: "Showing leads for Paris Travel Style Guide (Keyword: PARIS)",
+          style: "Showing leads for Daily Capsule Wardrobe Checklist (Keyword: STYLE)"
+        },
+        shortLabels: {
+          all: "All Reels Selected",
+          outfit: "Reel: #OUTFIT",
+          lookbook: "Reel: LOOKBOOK",
+          preset: "Carousel: PRESET",
+          paris: "Story: PARIS",
+          style: "Reel: STYLE"
+        },
+        reels: [
+          { id: "all", title: "All Reels & Posts", kw: "ALL TRIGGERS", count: "2,890 leads", type: "all" },
+          { id: "outfit", title: "Fall Blazer & Linen Pants Styling Reel", kw: "#OUTFIT", count: "1,670 leads", type: "Reel", thumb: "https://images.unsplash.com/photo-1490481651871-ab68de25d43d?auto=format&fit=crop&w=300&q=80" },
+          { id: "lookbook", title: "Paris Fashion Week Capsule Moodboard", kw: "LOOKBOOK", count: "680 leads", type: "Reel", thumb: "https://images.unsplash.com/photo-1445205170230-053b83016050?auto=format&fit=crop&w=300&q=80" },
+          { id: "preset", title: "Lightroom Aesthetic Preset Pack", kw: "PRESET", count: "340 leads", type: "Carousel", thumb: "https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?auto=format&fit=crop&w=300&q=80" },
+          { id: "paris", title: "Paris Travel Style Guide & Hotel Links", kw: "PARIS", count: "120 leads", type: "Story", thumb: "https://images.unsplash.com/photo-1502602898657-3e91760cbb34?auto=format&fit=crop&w=300&q=80" },
+          { id: "style", title: "Daily Capsule Wardrobe Checklist", kw: "STYLE", count: "80 leads", type: "Reel", thumb: "https://images.unsplash.com/photo-1483985988355-763728e1935b?auto=format&fit=crop&w=300&q=80" }
+        ]
+      };
+    } else if (uid.includes('alex')) {
+      return {
+        total: "1,420",
+        emails: "1,178",
+        phones: "242",
+        topKeyword: "#WORKOUT",
+        topKeywordPct: "62%",
+        topKeywordLeads: "880 Leads",
+        topKeywordSub: "Fat Loss & Hypertrophy Reel",
+        descriptions: {
+          all: "Showing All Reels & Posts Leads for Alex Rivera",
+          workout: "Showing leads for 6-Week Hypertrophy Transformation (Keyword: #WORKOUT)",
+          diet: "Showing leads for Custom Macro & Nutrition Guide (Keyword: DIET)",
+          coach: "Showing leads for 1-on-1 VIP Fitness Coaching Audit (Keyword: COACH)",
+          mealplan: "Showing leads for High-Protein Weekly Meal Prep (Keyword: MEALPLAN)",
+          vip: "Showing leads for Private Athletes Mentorship (Keyword: VIP)"
+        },
+        shortLabels: {
+          all: "All Reels Selected",
+          workout: "Reel: #WORKOUT",
+          diet: "Reel: DIET",
+          coach: "Carousel: COACH",
+          mealplan: "Story: MEALPLAN",
+          vip: "Reel: VIP"
+        },
+        reels: [
+          { id: "all", title: "All Reels & Posts", kw: "ALL TRIGGERS", count: "1,420 leads", type: "all" },
+          { id: "workout", title: "6-Week Hypertrophy Transformation", kw: "#WORKOUT", count: "880 leads", type: "Reel", thumb: "https://images.unsplash.com/photo-1534438327276-14e5300c3a48?auto=format&fit=crop&w=300&q=80" },
+          { id: "diet", title: "Custom Macro & Nutrition Guide", kw: "DIET", count: "310 leads", type: "Reel", thumb: "https://images.unsplash.com/photo-1490645935967-10de6ba17061?auto=format&fit=crop&w=300&q=80" },
+          { id: "coach", title: "1-on-1 VIP Fitness Coaching Audit", kw: "COACH", count: "140 leads", type: "Carousel", thumb: "https://images.unsplash.com/photo-1517838277536-f5f99be501cd?auto=format&fit=crop&w=300&q=80" },
+          { id: "mealplan", title: "High-Protein Weekly Meal Prep PDF", kw: "MEALPLAN", count: "60 leads", type: "Story", thumb: "https://images.unsplash.com/photo-1547592180-85f173990554?auto=format&fit=crop&w=300&q=80" },
+          { id: "vip", title: "Private Athletes Mentorship Access", kw: "VIP", count: "30 leads", type: "Reel", thumb: "https://images.unsplash.com/photo-1571019614242-c5c5dee9f50b?auto=format&fit=crop&w=300&q=80" }
+        ]
+      };
+    } else if (uid.includes('agency')) {
+      return {
+        total: "14,850",
+        emails: "12,325",
+        phones: "2,525",
+        topKeyword: "#AUDIT",
+        topKeywordPct: "64%",
+        topKeywordLeads: "9,500 Leads",
+        topKeywordSub: "Enterprise Instagram Audit",
+        descriptions: {
+          all: "Showing All Reels & Posts Leads for RenderReply Agency Pro",
+          audit: "Showing leads for Enterprise Instagram Growth & DM Audit (Keyword: #AUDIT)",
+          scale: "Showing leads for 7-Figure Agency Automation Framework (Keyword: SCALE)",
+          bot: "Showing leads for High-Volume AI Bot Setup (Keyword: BOT)",
+          demo: "Showing leads for White-Label Client Portal Live Demo (Keyword: DEMO)",
+          pro: "Showing leads for Agency Reseller Tier Package (Keyword: PRO)"
+        },
+        shortLabels: {
+          all: "All Reels Selected",
+          audit: "Reel: #AUDIT",
+          scale: "Reel: SCALE",
+          bot: "Carousel: BOT",
+          demo: "Story: DEMO",
+          pro: "Reel: PRO"
+        },
+        reels: [
+          { id: "all", title: "All Reels & Posts", kw: "ALL TRIGGERS", count: "14,850 leads", type: "all" },
+          { id: "audit", title: "Enterprise Instagram Growth & DM Audit", kw: "#AUDIT", count: "9,500 leads", type: "Reel", thumb: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=300&q=80" },
+          { id: "scale", title: "7-Figure Agency Automation Framework", kw: "SCALE", count: "3,200 leads", type: "Reel", thumb: "https://images.unsplash.com/photo-1551836022-d5d88e9218df?auto=format&fit=crop&w=300&q=80" },
+          { id: "bot", title: "High-Volume AI Bot Setup for Multi-Brands", kw: "BOT", count: "1,400 leads", type: "Carousel", thumb: "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&w=300&q=80" },
+          { id: "demo", title: "White-Label Client Portal Live Demo", kw: "DEMO", count: "550 leads", type: "Story", thumb: "https://images.unsplash.com/photo-1557804506-669a67965ba0?auto=format&fit=crop&w=300&q=80" },
+          { id: "pro", title: "Agency Reseller Tier Package", kw: "PRO", count: "200 leads", type: "Reel", thumb: "https://images.unsplash.com/photo-1507679799987-c73779587ccf?auto=format&fit=crop&w=300&q=80" }
+        ]
+      };
+    } else {
+      return {
+        total: "342",
+        emails: "284",
+        phones: "58",
+        topKeyword: "#GUIDE",
+        topKeywordPct: "51%",
+        topKeywordLeads: "176 Leads",
+        topKeywordSub: "10x IG Automation Reel",
+        descriptions: {
+          all: "Showing All Reels & Posts Leads for RudRa RR",
+          guide: "Showing leads for 10x Instagram Automation Strategy (Keyword: #GUIDE)",
+          pricing: "Showing leads for How I Make ₹50K/mo Selling Digital (Keyword: PRICING)",
+          roadmap: "Showing leads for Free Java Roadmap 2026 PDF (Keyword: ROADMAP)",
+          story: "Showing leads for Story Automation Blueprint (Keyword: LINK)",
+          free: "Showing leads for Free Resource Pack Download (Keyword: FREE)"
+        },
+        shortLabels: {
+          all: "All Reels Selected",
+          guide: "Reel: #GUIDE",
+          pricing: "Reel: PRICING",
+          roadmap: "Carousel: ROADMAP",
+          story: "Story: LINK",
+          free: "Reel: FREE"
+        },
+        reels: [
+          { id: "all", title: "All Reels & Posts", kw: "ALL TRIGGERS", count: "342 leads", type: "all" },
+          { id: "guide", title: "10x Instagram Automation Strategy", kw: "#GUIDE", count: "176 leads", type: "Reel", thumb: "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=300&q=80" },
+          { id: "pricing", "title": "How I Make ₹50K/mo Selling Digital", kw: "PRICING", count: "84 leads", type: "Reel", thumb: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=300&q=80" },
+          { id: "roadmap", "title": "Free Java Roadmap 2026 PDF", kw: "ROADMAP", count: "52 leads", type: "Carousel", thumb: "https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?auto=format&fit=crop&w=300&q=80" },
+          { id: "story", "title": "Story Automation Blueprint", kw: "LINK", count: "20 leads", type: "Story", thumb: "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&w=300&q=80" },
+          { id: "free", "title": "Free Resource Pack Download", kw: "FREE", count: "10 leads", type: "Reel", thumb: "https://images.unsplash.com/photo-1517694712202-14dd9538aa97?auto=format&fit=crop&w=300&q=80" }
+        ]
+      };
+    }
+  };
+
+  function updateCapturedLeadsHeaderStats(meta) {
+    if (!meta) meta = window.getUserCampaignsMeta();
+    const countBadge = document.getElementById('leads-live-count-badge');
+    const statTotal = document.getElementById('leads-stat-total');
+    const statEmails = document.getElementById('leads-stat-emails');
+    const statPhones = document.getElementById('leads-stat-phones');
+    const topTrend = document.getElementById('leads-top-kw-trend');
+    const topVal = document.getElementById('leads-top-kw-val');
+    const topSub = document.getElementById('leads-top-kw-sub');
+
+    if (countBadge) countBadge.textContent = meta.total;
+    if (statTotal) statTotal.textContent = meta.total;
+    if (statEmails) statEmails.textContent = meta.emails;
+    if (statPhones) statPhones.textContent = meta.phones;
+    if (topTrend) topTrend.textContent = `${meta.topKeyword} (${meta.topKeywordPct})`;
+    if (topVal) topVal.textContent = meta.topKeywordLeads;
+    if (topSub) topSub.textContent = meta.topKeywordSub;
+  }
+
+  function renderLeadsCampaignCards(meta) {
+    if (!meta) meta = window.getUserCampaignsMeta();
+    const grid = document.getElementById('leads-reels-cards-grid');
+    if (!grid) return;
+
+    grid.innerHTML = meta.reels.map(reel => {
+      if (reel.type === 'all') {
+        return `
+          <div class="leads-reel-card all-content-btn ${currentLeadsCampaign === 'all' ? 'active' : ''}" data-campaign="all" title="View all reels leads">
+            <div class="leads-btn-icon-circle">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="2" y="2" width="20" height="20" rx="4"/>
+                <path d="M7 2v20M17 2v20M2 12h20M2 7h5M2 17h5M17 17h5M17 7h5"/>
+              </svg>
+            </div>
+            <h4 class="leads-reel-title">${reel.title}</h4>
+            <div class="leads-reel-stats">
+              <span class="leads-reel-kw">${reel.kw}</span>
+              <span class="leads-reel-count">${reel.count}</span>
+            </div>
+          </div>
+        `;
+      }
+      return `
+        <div class="leads-reel-card ${currentLeadsCampaign === reel.id ? 'active' : ''}" data-campaign="${reel.id}" title="Click to view leads from this campaign">
+          <div class="leads-reel-thumb-wrap">
+            <img src="${reel.thumb}" alt="${reel.title}" class="leads-reel-img">
+            ${reel.type === 'Reel' ? '<div class="leads-reel-play-icon"><svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div>' : ''}
+            <span class="leads-reel-type-badge">${reel.type}</span>
+          </div>
+          <div class="leads-reel-info">
+            <h4 class="leads-reel-title">${reel.title}</h4>
+            <div class="leads-reel-stats">
+              <span class="leads-reel-kw">${reel.kw}</span>
+              <span class="leads-reel-count">${reel.count}</span>
+            </div>
+          </div>
+        </div>
+      `;
+    }).join('');
+
+    // Reattach click listeners on dynamic reel cards
+    grid.querySelectorAll('.leads-reel-card').forEach(card => {
+      card.addEventListener('click', () => {
+        const camp = card.getAttribute('data-campaign') || 'all';
+        if (typeof window.selectLeadsCampaign === 'function') {
+          window.selectLeadsCampaign(camp, true);
+        }
+      });
+    });
+  }
+
+  function renderDashboardRecentLeadsTable() {
+    const tbody = document.getElementById('dash-recent-leads-body');
+    if (!tbody) return;
+    const leads = (window.getActiveUserData ? window.getActiveUserData().leads : []) || [];
+    if (leads.length === 0) {
+      tbody.innerHTML = `<tr><td colspan="4" style="text-align: center; color: #71717a; padding: 24px;">No recent leads captured yet.</td></tr>`;
+      return;
+    }
+    tbody.innerHTML = leads.slice(0, 5).map((lead) => `
+      <tr class="clickable-table-row" data-db-lead-id="${lead.id}" title="Click to inspect lead details & DM conversation">
+        <td>
+          <div class="lead-user-cell">
+            <div class="lead-user-avatar" style="font-weight: 800; font-size: 11px;">${lead.avatar}</div>
+            <div class="lead-cell-meta">
+              <span class="lead-handle">${lead.handle}</span>
+              <span class="lead-name">${lead.name}</span>
+            </div>
+          </div>
+        </td>
+        <td class="cell-align-center"><span class="kw-tag">${lead.keyword}</span></td>
+        <td class="cell-align-center">
+          <span class="lead-status-pill ${lead.statusClass}">
+            <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" style="vertical-align: -1px; margin-right: 3px;"><polyline points="20 6 9 17 4 12"/></svg>
+            ${lead.status}
+          </span>
+        </td>
+        <td class="cell-align-right time-text">${lead.time}</td>
+      </tr>
+    `).join('');
+
+    tbody.querySelectorAll('.clickable-table-row').forEach((row) => {
+      row.addEventListener('click', () => {
+        const id = row.getAttribute('data-db-lead-id');
+        const activeLeads = (window.getActiveUserData ? window.getActiveUserData().leads : []) || [];
+        const found = activeLeads.find(l => l.id === id);
+        if (found && typeof inspectCustomLead === 'function') {
+          inspectCustomLead(found);
+        }
+      });
+    });
+  }
 
   function renderCapturedLeadsTable() {
     const tableBody = document.getElementById('leads-view-table-body');
@@ -2125,69 +5224,34 @@ function initApp() {
     openInspectDrawer();
   }
 
-  function initCapturedLeadsTabControls() {
+  window.selectLeadsCampaign = function (campKey, isTriggeredFromReel = false) {
+    currentLeadsCampaign = campKey || 'all';
+    const meta = window.getUserCampaignsMeta();
+
     const reelCards = document.querySelectorAll('#leads-reels-cards-grid .leads-reel-card');
-    const campaignPills = document.querySelectorAll('#leads-campaign-filters .leads-camp-pill');
-    const tableWrapper = document.querySelector('#leads-view .dash-table-card');
-    const descPill = document.getElementById('leads-active-filter-desc');
-    const currentReelLabel = document.getElementById('leads-current-reel-label');
-
-    const campaignDescriptions = {
-      all: 'This is All Reels Leads',
-      guide: 'Showing leads for 10x Instagram Automation Strategy (Keyword: #GUIDE)',
-      pricing: 'Showing leads for How I Make ₹50K/mo Selling Digital (Keyword: PRICING)',
-      roadmap: 'Showing leads for Free Java Roadmap 2026 PDF (Keyword: ROADMAP)',
-      story: 'Showing leads for Story Automation Blueprint (Keyword: LINK)',
-      free: 'Showing leads for Free Resource Pack Download (Keyword: FREE)'
-    };
-
-    const campaignShortLabels = {
-      all: 'All Reels Selected',
-      guide: 'Reel: #GUIDE',
-      pricing: 'Reel: PRICING',
-      roadmap: 'Carousel: ROADMAP',
-      story: 'Story: LINK',
-      free: 'Reel: FREE'
-    };
-
-    function selectCampaign(campKey, isTriggeredFromReel = false) {
-      currentLeadsCampaign = campKey || 'all';
-
-      // Sync Reel Cards active state
-      reelCards.forEach(c => {
-        if (c.getAttribute('data-campaign') === currentLeadsCampaign) {
-          c.classList.add('active');
-        } else {
-          c.classList.remove('active');
-        }
-      });
-
-      // Update Sub-pills and descriptions
-      if (descPill) {
-        descPill.textContent = campaignDescriptions[currentLeadsCampaign] || 'Filtered Leads';
-      }
-      if (currentReelLabel) {
-        currentReelLabel.textContent = campaignShortLabels[currentLeadsCampaign] || 'Selected Reel';
-      }
-
-      skeletonizeCapturedLeads(() => {
-        renderCapturedLeadsTable();
-      }, 250);
-
-      const label = campaignShortLabels[currentLeadsCampaign] || 'Filtered Leads';
-      if (isTriggeredFromReel) {
-        showToast(`Reloaded: ${campaignDescriptions[currentLeadsCampaign]}`);
-      }
-    }
-
-    // Reel Cards Click Listeners
-    reelCards.forEach(card => {
-      card.addEventListener('click', () => {
-        const camp = card.getAttribute('data-campaign') || 'all';
-        selectCampaign(camp, true);
-      });
+    reelCards.forEach(c => {
+      c.classList.toggle('active', c.getAttribute('data-campaign') === currentLeadsCampaign);
     });
 
+    const descPill = document.getElementById('leads-active-filter-desc');
+    const currentReelLabel = document.getElementById('leads-current-reel-label');
+    if (descPill) {
+      descPill.textContent = (meta.descriptions && meta.descriptions[currentLeadsCampaign]) || 'Filtered Leads';
+    }
+    if (currentReelLabel) {
+      currentReelLabel.textContent = (meta.shortLabels && meta.shortLabels[currentLeadsCampaign]) || 'Selected Reel';
+    }
+
+    skeletonizeCapturedLeads(() => {
+      renderCapturedLeadsTable();
+    }, 200);
+
+    if (isTriggeredFromReel) {
+      showToast(`Filter: ${(meta.descriptions && meta.descriptions[currentLeadsCampaign]) || currentLeadsCampaign}`);
+    }
+  };
+
+  function initCapturedLeadsTabControls() {
     // Status Filter Buttons
     const statusBtns = document.querySelectorAll('#leads-status-filter-buttons button');
     statusBtns.forEach(btn => {
@@ -2195,7 +5259,7 @@ function initApp() {
         statusBtns.forEach(b => b.classList.remove('active'));
         btn.classList.add('active');
         currentLeadsStatus = btn.getAttribute('data-status-filter') || 'all';
-        
+
         skeletonizeCapturedLeads(() => {
           renderCapturedLeadsTable();
         }, 200);
@@ -2218,10 +5282,10 @@ function initApp() {
         const icon = btnRefreshLeads.querySelector('.refresh-icon') || btnRefreshLeads.querySelector('svg');
         if (icon) icon.classList.add('spinning');
         showToast('Refreshing captured leads database...');
-        
+
         skeletonizeCapturedLeads(() => {
           if (icon) icon.classList.remove('spinning');
-          renderCapturedLeadsTable();
+          window.syncLeadsForActiveUser();
           showToast('Captured leads database synchronized with Instagram.');
         }, 400);
       });
@@ -2262,8 +5326,43 @@ function initApp() {
     }
 
     // Initial render
-    selectCampaign('all', false);
+    window.syncLeadsForActiveUser();
   }
+
+  window.renderDashboardRecentLeadsTable = renderDashboardRecentLeadsTable;
+  window.renderCapturedLeadsTable = renderCapturedLeadsTable;
+  window.updateCapturedLeadsHeaderStats = updateCapturedLeadsHeaderStats;
+  window.renderLeadsCampaignCards = renderLeadsCampaignCards;
+
+  window.syncLeadsForActiveUser = function () {
+    try {
+      CAPTURED_LEADS_DATABASE = (window.getActiveUserData ? window.getActiveUserData().leads : []) || [];
+      currentLeadsCampaign = 'all';
+      currentLeadsStatus = 'all';
+      currentLeadsSearchQuery = '';
+
+      const searchInput = document.getElementById('input-search-leads-tab');
+      if (searchInput) searchInput.value = '';
+
+      const statusBtns = document.querySelectorAll('#leads-status-filter-buttons button');
+      statusBtns.forEach(b => {
+        b.classList.toggle('active', b.getAttribute('data-status-filter') === 'all');
+      });
+
+      const meta = window.getUserCampaignsMeta();
+      updateCapturedLeadsHeaderStats(meta);
+      renderLeadsCampaignCards(meta);
+      renderCapturedLeadsTable();
+      renderDashboardRecentLeadsTable();
+
+      const descPill = document.getElementById('leads-active-filter-desc');
+      const currentReelLabel = document.getElementById('leads-current-reel-label');
+      if (descPill) descPill.textContent = (meta.descriptions && meta.descriptions['all']) || 'This is All Reels Leads';
+      if (currentReelLabel) currentReelLabel.textContent = (meta.shortLabels && meta.shortLabels['all']) || 'All Reels Selected';
+    } catch (err) {
+      console.error('Leads sync error:', err);
+    }
+  };
 
   // Initialize Advanced Dashboard Features & Leads View
   attachChartTooltipListeners();
@@ -2279,7 +5378,7 @@ function initApp() {
       const refreshIcon = btnDashboardRefresh.querySelector('.refresh-icon') || btnDashboardRefresh.querySelector('svg');
       if (refreshIcon) refreshIcon.classList.add('spinning');
       showToast('Refreshing real-time dashboard analytics...');
-      
+
       skeletonizeDashboard(() => {
         loadDashboardData(currentRange);
         if (refreshIcon) refreshIcon.classList.remove('spinning');
@@ -2296,7 +5395,7 @@ function initApp() {
       const icon = btnLppRefresh.querySelector('svg');
       if (icon) icon.classList.add('spinning');
       showToast('Refreshing live mobile store preview...');
-      
+
       skeletonizeStorePreview(() => {
         if (icon) icon.classList.remove('spinning');
         showToast('Live store preview updated.');
@@ -2355,68 +5454,7 @@ function initApp() {
   let currentRuleFilter = 'all';
   let currentRuleSearchQuery = '';
 
-  const automationRulesState = [
-    {
-      id: 'rule-pricing',
-      name: 'Pricing Plans Template',
-      ruleSub: 'Pricing Plans Template',
-      thumbImg: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=600&q=80',
-      type: 'post',
-      typeName: 'Post Comments',
-      keywords: ['PRICING'],
-      target: 'POST',
-      targetType: 'POST',
-      active: true,
-      sentCount: 2140,
-      successRate: '99.2%',
-      response: 'Hey {first_name}! Thanks for asking about pricing. Here are our official creator plans and checkout link: {link}',
-      attachLink: true,
-      linkUrl: 'https://renderreply.com/p/pricing',
-      linkTitle: 'Pricing Plans & Checkout',
-      commentReply: false,
-      commentReplyText: ''
-    },
-    {
-      id: 'rule-story',
-      name: 'Story Mention Thank You',
-      ruleSub: 'Story Mention Thank You',
-      thumbImg: 'https://images.unsplash.com/photo-1611162617474-5b21e879e113?auto=format&fit=crop&w=600&q=80',
-      type: 'story',
-      typeName: 'Story Mentions',
-      keywords: ['STORY_TAG'],
-      target: 'STORIES',
-      targetType: 'STORIES',
-      active: true,
-      sentCount: 1820,
-      successRate: '98.7%',
-      response: 'Thanks for tagging us in your Story, {username}! Here is an exclusive 15% VIP discount code: VIP15. Link: {link}',
-      attachLink: true,
-      linkUrl: 'https://renderreply.com/p/vip-pass',
-      linkTitle: 'VIP Pass & Discount',
-      commentReply: false,
-      commentReplyText: ''
-    },
-    {
-      id: 'rule-reel',
-      name: 'Free Ebook Reel Auto-DM',
-      ruleSub: 'Free Ebook Reel Auto-DM',
-      thumbImg: 'https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?auto=format&fit=crop&w=600&q=80',
-      type: 'reel',
-      typeName: 'Reels & Live',
-      keywords: ['GUIDE'],
-      target: 'REELS',
-      targetType: 'REELS',
-      active: true,
-      sentCount: 932,
-      successRate: '97.9%',
-      response: 'Hey {first_name}! Here is the free Creator Automation Ebook you requested: {link}',
-      attachLink: true,
-      linkUrl: 'https://renderreply.com/free-guide.pdf',
-      linkTitle: 'Free Creator Ebook PDF',
-      commentReply: false,
-      commentReplyText: ''
-    }
-  ];
+  let automationRulesState = window.getActiveUserData().rules;
 
   const defaultThumbImages = {
     post: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=600&q=80',
@@ -3069,86 +6107,64 @@ function initApp() {
   renderAutomationRules();
 
   // 9. RENDERREPLY CLEAN LIVE DM INBOX ENGINE
-  const inboxThreadsData = {
-    alex: {
-      name: 'Alex Mercer',
-      handle: '@alex_creator',
-      avatar: 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=150&q=80',
-      followers: '48.2K Followers',
-      source: 'Reel Comment: "PRICING"',
-      status: 'attention',
-      botActive: true,
-      triggerTitle: 'Triggered by Reel: "Build a 7-Figure IG Automation Engine" (Keyword: "PRICING")',
-      messages: [
-        { type: 'divider', text: 'TODAY, OCT 24' },
-        { type: 'user', text: 'Hey! Can I get the pricing plans for your creator roadmap and preset packs?', time: '02:14 PM', context: 'Commented "PRICING" on Reel #894' },
-        { type: 'bot', text: 'Hey Alex! Here are our membership options, instant downloads, and 1-on-1 strategy sessions:', time: '02:14 PM', flow: 'Reel Viral Funnel v2.4', hasCard: true }
-      ]
-    },
-    sarah: {
-      name: 'Sarah Miller',
-      handle: '@sarah_m',
-      avatar: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=150&q=80',
-      followers: '120K Followers',
-      source: 'Story Mention: "FREE_CHECKLIST"',
-      status: 'bot',
-      botActive: true,
-      triggerTitle: 'Triggered by Story Mention: "@rudrateja tag on story"',
-      messages: [
-        { type: 'divider', text: 'TODAY, OCT 24' },
-        { type: 'user', text: 'Loved your latest story breakdown! Can you send me the free creator checklist you mentioned?', time: '01:10 PM', context: 'Mentioned you in Story' },
-        { type: 'bot', text: 'Hey Sarah! Thank you so much for the story tag! Here is your exclusive 2026 Instagram Growth Checklist PDF: https://renderreply.com/store/rudrateja/downloads/checklist.pdf', time: '01:10 PM', flow: 'Story Mention Auto-Thank You v1.8', hasCard: false }
-      ]
-    },
-    dev: {
-      name: 'John Doe',
-      handle: '@dev_johndoe',
-      avatar: 'https://images.unsplash.com/photo-1570295999919-56ceb5ecca61?auto=format&fit=crop&w=150&q=80',
-      followers: '15.4K Followers',
-      source: 'DM Keyword: "JAVA"',
-      status: 'bot',
-      botActive: true,
-      triggerTitle: 'Triggered by DM Keyword: "JAVA"',
-      messages: [
-        { type: 'divider', text: 'TODAY, OCT 24' },
-        { type: 'user', text: 'JAVA', time: '11:20 AM', context: 'Sent DM keyword "JAVA"' },
-        { type: 'bot', text: 'Hey John! Here is the instant access link to the Java Full Stack Roadmap 2026 PDF: https://renderreply.com/store/rudrateja/downloads/java-roadmap.pdf Happy coding!', time: '11:20 AM', flow: 'Full Stack Roadmap Auto-DM', hasCard: false }
-      ]
-    },
-    priya: {
-      name: 'Priya S.',
-      handle: '@priya_designs',
-      avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=150&q=80',
-      followers: '89K Followers',
-      source: 'Custom Inquiry: Agency License',
-      status: 'attention',
-      botActive: false,
-      triggerTitle: 'Custom Inquiry: Agency Multi-Account License (Bot Paused)',
-      messages: [
-        { type: 'divider', text: 'TODAY, OCT 24' },
-        { type: 'user', text: 'Hi Rudra! Can we customize the RenderReply templates for multiple client agencies? Do you have an agency tier?', time: '09:45 AM', context: 'Custom DM Inquiry' }
-      ]
-    },
-    vikram: {
-      name: 'Vikram P.',
-      handle: '@vikram_tech',
-      avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=150&q=80',
-      followers: '210K Followers',
-      source: 'Preset Bundle: Downloaded',
-      status: 'resolved',
-      botActive: true,
-      triggerTitle: 'Triggered by Reel: "Instagram Automation Presets 2026" (Keyword: "PRESET")',
-      messages: [
-        { type: 'divider', text: 'YESTERDAY, OCT 23' },
-        { type: 'user', text: 'PRESET', time: '04:15 PM', context: 'Commented "PRESET" on Reel #890' },
-        { type: 'bot', text: 'Hey Vikram! Here is your free Instagram Automation Preset Bundle: https://renderreply.com/store/rudrateja/downloads/presets.zip', time: '04:15 PM', flow: 'Preset Distribution Flow', hasCard: false },
-        { type: 'user', text: 'Thank you so much Rudra! Downloaded presets successfully. They work amazingly well!', time: '04:30 PM', context: 'Direct DM' },
-        { type: 'human', text: 'Awesome Vikram! Let me know if you need any tweaks for your specific reels setup. Cheers! ', time: '04:35 PM' }
-      ]
-    }
-  };
+  let inboxThreadsData = window.getActiveUserData().inbox;
+  let activeThreadId = Object.keys(inboxThreadsData)[0] || 'alex';
 
-  let activeThreadId = 'alex';
+  function renderInboxThreadsList(selectedId) {
+    const listContainer = document.getElementById('rr-threads-list');
+    if (!listContainer) return;
+
+    const threadKeys = Object.keys(inboxThreadsData);
+    if (threadKeys.length === 0) {
+      listContainer.innerHTML = '<div style="padding: 24px; text-align: center; color: #94a3b8; font-size: 13px;">No conversations found</div>';
+      return;
+    }
+
+    const currentId = selectedId || activeThreadId || threadKeys[0];
+    activeThreadId = currentId;
+
+    listContainer.innerHTML = threadKeys.map(k => {
+      const t = inboxThreadsData[k];
+      const isActive = k === currentId;
+      const lastMsg = t.messages ? t.messages[t.messages.length - 1] : null;
+      const snippet = lastMsg ? lastMsg.text : (t.source || '');
+      const timeStr = lastMsg ? (lastMsg.time || 'Today') : 'Today';
+      const badgeClass = t.status === 'attention' ? 'action' : (t.status === 'bot' ? 'bot' : 'resolved');
+      const badgeText = t.status === 'attention' ? 'Needs Action' : (t.status === 'bot' ? 'Bot Active' : 'Resolved');
+
+      return `
+        <div class="rr-clean-thread-item ${isActive ? 'active' : ''}" data-thread-id="${k}" data-status="${t.status}">
+          <div class="rr-t-avatar-box">
+            <img src="${t.avatar}" alt="${t.name}" class="rr-t-avatar-img">
+            <span class="rr-t-ig-icon" title="Instagram Direct">
+              <svg width="8" height="8" viewBox="0 0 24 24" fill="#ffffff"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+            </span>
+          </div>
+          <div class="rr-t-details">
+            <div class="rr-t-header-row">
+              <div class="rr-t-title-group">
+                <span class="rr-t-user-name">${t.name}</span>
+                <span class="rr-t-user-handle">${t.handle}</span>
+              </div>
+              <span class="rr-t-timestamp">${timeStr}</span>
+            </div>
+            <div class="rr-t-snippet">${snippet}</div>
+            <div class="rr-t-tags-row">
+              <span class="rr-pill-trigger">${t.source || 'Direct DM'}</span>
+              <span class="rr-pill-badge ${badgeClass}">${badgeText}</span>
+            </div>
+          </div>
+        </div>
+      `;
+    }).join('');
+
+    listContainer.querySelectorAll('.rr-clean-thread-item').forEach(item => {
+      item.addEventListener('click', () => {
+        const id = item.getAttribute('data-thread-id');
+        if (id) selectInboxThread(id);
+      });
+    });
+  }
 
   function renderThreadChatFeed(threadId) {
     const thread = inboxThreadsData[threadId];
@@ -3549,7 +6565,7 @@ function initApp() {
       const icon = btnInboxRefresh.querySelector('svg');
       if (icon) icon.classList.add('spinning');
       showToast('Syncing real-time Instagram DMs & comments...');
-      
+
       skeletonizeInbox(() => {
         if (icon) icon.classList.remove('spinning');
         selectInboxThread(activeThreadId);
@@ -3866,48 +6882,7 @@ function initApp() {
   renderGallery();
 
   // PRODUCTS REGISTRY
-  const storeProducts = [
-    {
-      id: 'prod-1',
-      title: 'Java Full-Stack Developer Roadmap PDF',
-      price: '₹499',
-      oldPrice: '₹999',
-      desc: 'Comprehensive guide from Java core syntax to microservices, Spring Boot, and cloud deployment. Includes architecture diagrams, interview questions, and production checklist.',
-      cta: 'Instant Access',
-      rating: '5.0 (64 customer reviews)',
-      photos: [
-        'https://images.unsplash.com/photo-1517694712202-14dd9538aa97?auto=format&fit=crop&w=600&q=80',
-        'https://images.unsplash.com/photo-1555066931-4365d14bab8c?auto=format&fit=crop&w=600&q=80',
-        'https://images.unsplash.com/photo-1607799279861-4dd421887fb3?auto=format&fit=crop&w=600&q=80'
-      ]
-    },
-    {
-      id: 'prod-2',
-      title: '1-on-1 Instagram Strategy Session',
-      price: '₹1,499',
-      oldPrice: '₹2,999',
-      desc: '30-minute private call to audit your Instagram DM automation funnel, optimize bio link conversion, and scale high-ticket lead generation.',
-      cta: 'Book Session',
-      rating: '4.9 (28 customer reviews)',
-      photos: [
-        'https://images.unsplash.com/photo-1551836022-d5d88e9218df?auto=format&fit=crop&w=600&q=80',
-        'https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&w=600&q=80'
-      ]
-    },
-    {
-      id: 'prod-3',
-      title: 'Instagram Automation Preset Bundle',
-      price: 'FREE',
-      oldPrice: '₹499',
-      desc: 'Pre-configured comment triggers, DM copy templates, and Bio link presets ready to import directly into your RenderReply dashboard.',
-      cta: 'Download Now',
-      rating: '5.0 (112 customer reviews)',
-      photos: [
-        'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=600&q=80',
-        'https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?auto=format&fit=crop&w=600&q=80'
-      ]
-    }
-  ];
+  let storeProducts = window.getActiveUserData().store;
 
   window.editProductItem = function (id) {
     const prod = storeProducts.find(p => p.id === id);
@@ -4115,15 +7090,15 @@ function initApp() {
 
     const query = (searchQuery || '').toLowerCase().trim();
     const filtered = storeProducts.filter(p => {
-      const matchQuery = !query || 
-        (p.title && p.title.toLowerCase().includes(query)) || 
-        (p.desc && p.desc.toLowerCase().includes(query)) || 
+      const matchQuery = !query ||
+        (p.title && p.title.toLowerCase().includes(query)) ||
+        (p.desc && p.desc.toLowerCase().includes(query)) ||
         (p.price && p.price.toLowerCase().includes(query));
-      
+
       let matchFilter = true;
       const isFree = p.price === 'FREE' || p.price === '0' || p.price === '$0.00';
       const isSession = p.title.toLowerCase().includes('session') || p.title.toLowerCase().includes('strategy');
-      
+
       if (filterTag === 'free') matchFilter = isFree;
       if (filterTag === 'guide') matchFilter = !isFree && !isSession;
       if (filterTag === 'session') matchFilter = isSession;
@@ -4630,7 +7605,7 @@ function initApp() {
   }
 
   // STORE SUB-NAV TAB SWITCHER FUNCTION
-  window.switchStoreTab = function(tabName, clickedBtn) {
+  window.switchStoreTab = function (tabName, clickedBtn) {
     const subnavBtns = document.querySelectorAll('.store-subnav-btn');
     let activeBtnEl = null;
     subnavBtns.forEach(btn => {
@@ -5279,6 +8254,227 @@ function initApp() {
     updateSidebarCapsulePill();
     updateTimeRangeCapsulePill();
   }, 50);
+
+  // EXPORT ACTIVE USER SYNC HOOKS FOR APP ENGINE
+  window.syncDashboardForActiveUser = function () {
+    try {
+      DASHBOARD_DATA = window.getActiveUserData().dashboard;
+      loadDashboardData(currentRange);
+      updateConnectionUI();
+      if (typeof window.renderDashboardRecentLeadsTable === 'function') {
+        window.renderDashboardRecentLeadsTable();
+      }
+    } catch (err) { console.error('Dashboard sync error:', err); }
+  };
+
+  window.syncRulesForActiveUser = function () {
+    try {
+      automationRulesState = window.getActiveUserData().rules;
+      renderAutomationRules();
+      updateAutomationKPIs();
+    } catch (err) { console.error('Rules sync error:', err); }
+  };
+
+  window.syncInboxForActiveUser = function () {
+    try {
+      inboxThreadsData = window.getActiveUserData().inbox;
+      const firstId = Object.keys(inboxThreadsData)[0] || 'alex';
+      renderInboxThreadsList(firstId);
+      applyActiveFolderFilter();
+      updateInboxFolderCounts();
+      selectInboxThread(firstId);
+    } catch (err) { console.error('Inbox sync error:', err); }
+  };
+
+  window.syncStoreProductsForActiveUser = function () {
+    try {
+      storeProducts = window.getActiveUserData().store;
+      renderStoreProductsAndSyncPreview();
+    } catch (err) { console.error('Store sync error:', err); }
+  };
+
+  // INITIALIZE ACCOUNT SETTINGS ENGINE & AUTO-SAVE
+  initAccountSettingsInteractions();
+}
+
+function initAccountSettingsInteractions() {
+  // 1. Live Profile Inputs & Auto-Save
+  const fName = document.getElementById('acc-settings-fullname');
+  const fEmail = document.getElementById('acc-settings-email');
+  const statusNote = document.getElementById('settings-autosave-text');
+
+  function flashAutoSaveStatus(msg) {
+    if (!statusNote) return;
+    statusNote.textContent = msg || 'Profile changes auto-saved!';
+    statusNote.style.color = '#10b981';
+    statusNote.style.fontWeight = '700';
+    clearTimeout(statusNote._timer);
+    statusNote._timer = setTimeout(() => {
+      if (statusNote) {
+        statusNote.textContent = 'Profile changes auto-save active';
+        statusNote.style.fontWeight = '600';
+      }
+    }, 2500);
+  }
+
+  if (fName) {
+    fName.addEventListener('input', (e) => {
+      const active = (window.getActiveUserData ? window.getActiveUserData() : null) || {};
+      if (active && active.profile) {
+        active.profile.name = e.target.value;
+        if (typeof window.updateSidebarUserProfileUI === 'function') {
+          window.updateSidebarUserProfileUI(active);
+        }
+        const spmName = document.getElementById('spm-creator-name');
+        if (spmName) spmName.textContent = e.target.value;
+        flashAutoSaveStatus(`Profile name saved as "${e.target.value}"`);
+      }
+    });
+  }
+
+  if (fEmail) {
+    fEmail.addEventListener('input', (e) => {
+      const active = (window.getActiveUserData ? window.getActiveUserData() : null) || {};
+      if (active && active.profile) {
+        active.profile.email = e.target.value;
+        const uppEmail = document.getElementById('upp-user-email');
+        if (uppEmail) uppEmail.textContent = e.target.value;
+        flashAutoSaveStatus(`Email address updated to "${e.target.value}"`);
+      }
+    });
+  }
+
+  // 2. Copy User UID Button
+  const btnCopyUid = document.getElementById('btn-copy-user-uid');
+  if (btnCopyUid) {
+    btnCopyUid.addEventListener('click', () => {
+      const uidInput = document.getElementById('acc-settings-uid');
+      const val = uidInput ? uidInput.value : 'R3MT1DqCnWYuysMej8IZAw31v583';
+      navigator.clipboard.writeText(val).then(() => {
+        btnCopyUid.textContent = 'Copied!';
+        btnCopyUid.style.background = '#10b981';
+        btnCopyUid.style.color = '#ffffff';
+        if (typeof showToast === 'function') showToast(`Copied User UID: ${val}`);
+        setTimeout(() => {
+          btnCopyUid.textContent = 'Copy';
+          btnCopyUid.style.background = '';
+          btnCopyUid.style.color = '';
+        }, 2000);
+      }).catch(() => {
+        if (typeof showToast === 'function') showToast(`User UID: ${val}`);
+      });
+    });
+  }
+
+  // 3. API Key & Webhook Copy Buttons
+  const btnCopyApiKey = document.getElementById('btn-copy-api-key');
+  const btnToggleApiKey = document.getElementById('btn-toggle-api-key');
+  const inputApiKey = document.getElementById('acc-settings-api-key');
+
+  if (btnCopyApiKey && inputApiKey) {
+    btnCopyApiKey.addEventListener('click', () => {
+      navigator.clipboard.writeText(inputApiKey.value).then(() => {
+        btnCopyApiKey.textContent = 'Copied!';
+        if (typeof showToast === 'function') showToast('Copied Live API Secret Key!');
+        setTimeout(() => { btnCopyApiKey.textContent = 'Copy Key'; }, 2000);
+      });
+    });
+  }
+
+  if (btnToggleApiKey && inputApiKey) {
+    btnToggleApiKey.addEventListener('click', () => {
+      if (inputApiKey.type === 'password') {
+        inputApiKey.type = 'text';
+        btnToggleApiKey.textContent = 'Hide';
+      } else {
+        inputApiKey.type = 'password';
+        btnToggleApiKey.textContent = 'Show';
+      }
+    });
+  }
+
+  const btnCopyWebhook = document.getElementById('btn-copy-webhook-url');
+  const inputWebhook = document.getElementById('acc-settings-webhook-url');
+  if (btnCopyWebhook && inputWebhook) {
+    btnCopyWebhook.addEventListener('click', () => {
+      navigator.clipboard.writeText(inputWebhook.value).then(() => {
+        btnCopyWebhook.textContent = 'Copied!';
+        if (typeof showToast === 'function') showToast('Copied Instagram Webhook URL endpoint!');
+        setTimeout(() => { btnCopyWebhook.textContent = 'Copy URL'; }, 2000);
+      });
+    });
+  }
+
+  // 4. Action Buttons
+  const btnChangePlan = document.getElementById('btn-settings-change-plan');
+  if (btnChangePlan) {
+    btnChangePlan.addEventListener('click', () => {
+      if (typeof showToast === 'function') {
+        showToast('Your subscription plan is currently Active. Custom upgrades available via billing support.');
+      }
+    });
+  }
+
+  const btnDownloadInvoice = document.getElementById('btn-settings-download-invoice');
+  if (btnDownloadInvoice) {
+    btnDownloadInvoice.addEventListener('click', () => {
+      const active = window.getActiveUserData ? window.getActiveUserData() : {};
+      const name = (active && active.profile && active.profile.name) || 'User';
+      const csv = `"Invoice ID","Date","Workspace","Amount","Status"\n"INV-2026-8942","Oct 24, 2026","${name}","₹1,499","Paid & Active"`;
+      const blob = new Blob([csv], { type: 'text/csv' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `RenderReply_Subscription_Invoice.csv`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      if (typeof showToast === 'function') showToast('Downloaded recent subscription invoice statement.');
+    });
+  }
+
+  const btnRefreshToken = document.getElementById('btn-settings-refresh-token');
+  if (btnRefreshToken) {
+    btnRefreshToken.addEventListener('click', () => {
+      btnRefreshToken.textContent = 'Refreshing...';
+      setTimeout(() => {
+        btnRefreshToken.textContent = 'Refresh Token';
+        if (typeof showToast === 'function') {
+          showToast('Instagram Meta Graph API Token refreshed & valid for 60 days!');
+        }
+      }, 500);
+    });
+  }
+
+  const btnTestWebhook = document.getElementById('btn-settings-test-webhook');
+  if (btnTestWebhook) {
+    btnTestWebhook.addEventListener('click', () => {
+      btnTestWebhook.textContent = 'Pinging...';
+      setTimeout(() => {
+        btnTestWebhook.textContent = 'Test Webhook';
+        if (typeof showToast === 'function') {
+          showToast('Webhook test ping successful! Delivered in 42ms (HTTP 200 OK).');
+        }
+      }, 400);
+    });
+  }
+
+  // 5. Preferences Toggles
+  ['chk-pref-lead-alerts', 'chk-pref-spam-shield', 'chk-pref-auto-like'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) {
+      el.addEventListener('change', () => {
+        if (typeof showToast === 'function') {
+          showToast(`Preference updated: ${el.checked ? 'Enabled' : 'Disabled'}`);
+        }
+      });
+    }
+  });
+
+  // Initial populate
+  if (typeof window.syncSettingsForActiveUser === 'function') {
+    window.syncSettingsForActiveUser();
+  }
 }
 
 function initPaymentOptionsSuite() {
@@ -5433,9 +8629,9 @@ function initPaymentOptionsSuite() {
 
       return window.paymentState.transactions.filter(tx => {
         if (!tx) return false;
-        const matchSearch = !searchVal || 
-          (tx.id && tx.id.toLowerCase().includes(searchVal)) || 
-          (tx.type && tx.type.toLowerCase().includes(searchVal)) || 
+        const matchSearch = !searchVal ||
+          (tx.id && tx.id.toLowerCase().includes(searchVal)) ||
+          (tx.type && tx.type.toLowerCase().includes(searchVal)) ||
           (tx.customer && tx.customer.toLowerCase().includes(searchVal));
 
         const matchType = typeVal === 'ALL' || tx.type === typeVal;
@@ -5481,7 +8677,7 @@ function initPaymentOptionsSuite() {
       const amt = tx.amount || 0;
       const isPos = amt >= 0;
       if (grossEl) grossEl.textContent = isPos ? `₹${amt.toLocaleString('en-IN')}` : `- ₹${Math.abs(amt).toLocaleString('en-IN')}`;
-      
+
       if (badgeEl) {
         badgeEl.textContent = tx.status || 'Cleared';
         badgeEl.className = `badge-status ${tx.status === 'Cleared' ? 'cleared' : (tx.status === 'Pending' ? 'pending' : 'failed')}`;
@@ -5532,7 +8728,7 @@ function initPaymentOptionsSuite() {
       const a = document.createElement('a');
       a.style.display = 'none';
       a.href = url;
-      a.download = `RenderReply_Transactions_${new Date().toISOString().slice(0,10)}.csv`;
+      a.download = `RenderReply_Transactions_${new Date().toISOString().slice(0, 10)}.csv`;
       a.onclick = (evt) => { if (evt) evt.stopPropagation(); };
       document.body.appendChild(a);
       a.click();
@@ -5708,6 +8904,15 @@ function initPaymentOptionsSuite() {
   updateBalancesUI();
   updatePayoutsUI();
   updateTxnView();
+
+  window.syncPaymentsForActiveUser = function () {
+    try {
+      window.paymentState = window.getActiveUserData().payments;
+      updateBalancesUI();
+      updatePayoutsUI();
+      updateTxnView();
+    } catch (err) { console.error('Payments sync error:', err); }
+  };
 }
 window.initPaymentOptionsSuite = initPaymentOptionsSuite;
 
@@ -6240,7 +9445,7 @@ function initCreatorStoreSettings() {
     const nameVal = document.getElementById('cs-input-store-name')?.value || 'Rudra Teja';
     const bioVal = document.getElementById('cs-input-store-bio')?.value || 'Building premium Instagram businesses and automation systems.';
     const handleVal = document.getElementById('cs-input-store-handle')?.value?.trim() || 'rudrateja';
-    
+
     // Name & Bio
     const spmName = document.getElementById('spm-creator-name');
     const spmBio = document.getElementById('spm-creator-bio');
@@ -6267,7 +9472,7 @@ function initCreatorStoreSettings() {
     const activeBannerSwatch = document.querySelector('.cs-banner-swatch.active');
     const customBannerGraphic = document.getElementById('cs-banner-preview-graphic');
     let bannerBg = customBannerGraphic?.style?.background;
-    
+
     if (!bannerBg || bannerBg === 'none' || bannerBg === '') {
       if (activeBannerSwatch) {
         const bannerKey = activeBannerSwatch.getAttribute('data-banner');
@@ -6557,7 +9762,6 @@ function initCreatorStoreSettings() {
   if (window.syncStoreProfileToUI) {
     window.syncStoreProfileToUI(window.storeProfileState);
   }
-  loadDashboardData('30 Days');
 }
 
 if (document.readyState === 'loading') {
@@ -6631,7 +9835,7 @@ function initBioLinkBuilder() {
     if (inputBio && displayBio) {
       const bioVal = inputBio.value;
       displayBio.textContent = bioVal || 'Helping creators automate Instagram & convert followers into leads.';
-      
+
       // Word count
       const words = bioVal.trim() ? bioVal.trim().split(/\s+/).length : 0;
       if (wordCount) {
@@ -6840,10 +10044,24 @@ function initBioLinkBuilder() {
   }
 
   function escapeHtml(str) {
-    return str.replace(/[&<>'"]/g, 
+    return str.replace(/[&<>'"]/g,
       tag => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;' }[tag] || tag)
     );
   }
+
+  window.syncBioLinkForActiveUser = function () {
+    try {
+      const u = window.getActiveUserData();
+      if (u && u.biolink) {
+        Object.assign(bioState, u.biolink);
+        if (inputTitle) inputTitle.value = bioState.title || '';
+        if (inputBio) inputBio.value = bioState.bio || '';
+        updateTitleAndBio();
+        renderLinks();
+        renderVideos();
+      }
+    } catch (err) { console.error('Bio link sync error:', err); }
+  };
 }
 
 if (document.readyState === 'loading') {
@@ -6857,37 +10075,8 @@ if (document.readyState === 'loading') {
    CAPTURED LEADS INTERACTIVITY LOGIC
    ========================================================================== */
 function initCapturedLeadsPage() {
-  const btnRefreshLeads = document.getElementById('btn-refresh-leads');
-  const btnExportCsv = document.getElementById('btn-export-csv');
-  const inputSearchLeads = document.getElementById('input-search-leads');
-
-  if (btnRefreshLeads) {
-    btnRefreshLeads.addEventListener('click', () => {
-      if (typeof showToast === 'function') showToast('Refreshing captured leads data...');
-    });
-  }
-
-  if (btnExportCsv) {
-    btnExportCsv.addEventListener('click', () => {
-      if (typeof showToast === 'function') showToast('Exporting captured leads to CSV...');
-    });
-  }
-
-  if (inputSearchLeads) {
-    inputSearchLeads.addEventListener('input', (e) => {
-      const query = e.target.value.toLowerCase().trim();
-      const emptyStateBox = document.querySelector('.leads-empty-state-box');
-      if (emptyStateBox) {
-        const descEl = emptyStateBox.querySelector('.leads-empty-desc');
-        if (descEl) {
-          if (query) {
-            descEl.textContent = `No captured activities found matching "${query}".`;
-          } else {
-            descEl.textContent = 'No interaction activity matched your selected search or filter criteria.';
-          }
-        }
-      }
-    });
+  if (typeof window.syncLeadsForActiveUser === 'function') {
+    window.syncLeadsForActiveUser();
   }
 }
 
@@ -6896,3 +10085,2468 @@ if (document.readyState === 'loading') {
 } else {
   initCapturedLeadsPage();
 }
+
+/* ==========================================================================
+   USER PROFILE POPUP & ACCOUNT MODALS ENGINE
+   ========================================================================== */
+function initUserProfileDropdownAndModals() {
+  const profileTrigger = document.getElementById('sidebar-user-profile-btn');
+  const profilePopup = document.getElementById('user-profile-popup');
+  const mobileAvatar = document.querySelector('.mobile-top-bar .user-avatar');
+
+  // Account State Management
+  window.userAccountState = {
+    current: {
+      id: 'acc-primary',
+      name: 'RudRa RR',
+      email: 'rudrateja08@gmail.com',
+      avatar: 'R',
+      insta: '@render6457'
+    },
+    accounts: [
+      { id: 'acc-primary', name: 'RudRa RR', email: 'rudrateja08@gmail.com', avatar: 'R', insta: '@render6457', active: true },
+      { id: 'acc-creator', name: 'Rudra Teja (Creator Hub)', email: 'rudra.creations@gmail.com', avatar: 'RT', insta: '@rudrateja', active: false },
+      { id: 'acc-agency', name: 'RenderReply Agency Pro', email: 'agency@renderreply.com', avatar: 'RA', insta: '@renderagency', active: false }
+    ]
+  };
+
+  // Initialize UI immediately
+  if (typeof window.updateSidebarUserProfileUI === 'function') {
+    window.updateSidebarUserProfileUI();
+  }
+
+  // 1. Toggle Popup Functions (delegate to global controller)
+  function toggleProfilePopup(e) {
+    if (typeof window.toggleUserProfilePopup === 'function') {
+      window.toggleUserProfilePopup(e);
+    }
+  }
+
+  function openProfilePopup() {
+    if (typeof window.openUserProfilePopup === 'function') {
+      window.openUserProfilePopup();
+    }
+  }
+
+  function closeProfilePopup() {
+    if (typeof window.closeUserProfilePopup === 'function') {
+      window.closeUserProfilePopup();
+    }
+  }
+
+  if (profileTrigger) {
+    profileTrigger.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        toggleProfilePopup(e);
+      }
+    });
+  }
+
+  if (mobileAvatar) {
+    mobileAvatar.addEventListener('click', toggleProfilePopup);
+  }
+
+  // Close Popup on Click Outside
+  document.addEventListener('click', (e) => {
+    if (profilePopup && profilePopup.classList.contains('active')) {
+      if (!profilePopup.contains(e.target) && (!profileTrigger || !profileTrigger.contains(e.target))) {
+        closeProfilePopup();
+      }
+    }
+  });
+
+  // Close Popup on Escape Key
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') {
+      closeProfilePopup();
+      closeModal('modal-switch-account');
+      closeModal('modal-user-settings');
+      closeModal('modal-user-support');
+      closeModal('modal-user-signout');
+    }
+  });
+
+  // Helper Modal Functions
+  function openModal(modalId) {
+    const modal = document.getElementById(modalId);
+    if (modal) {
+      modal.classList.add('active');
+      modal.style.display = 'flex';
+      modal.style.opacity = '1';
+      modal.style.pointerEvents = 'auto';
+    }
+  }
+
+  function closeModal(modalId) {
+    const modal = document.getElementById(modalId);
+    if (modal) {
+      modal.classList.remove('active');
+      modal.style.display = 'none';
+      modal.style.opacity = '0';
+      modal.style.pointerEvents = 'none';
+    }
+  }
+
+  // 2. Switch Account Item Click
+  const btnSwitchAccount = document.getElementById('upp-item-switch-account');
+  const btnCloseSwitch = document.getElementById('btn-close-switch-modal');
+  const btnDoneSwitch = document.getElementById('btn-done-switch-acc');
+  const btnShowAddAcc = document.getElementById('btn-show-add-acc');
+  const btnCancelAddAcc = document.getElementById('btn-cancel-add-acc');
+  const btnConfirmAddAcc = document.getElementById('btn-confirm-add-acc');
+  const addAccBox = document.getElementById('add-account-form-box');
+
+  if (btnSwitchAccount) {
+    btnSwitchAccount.addEventListener('click', (e) => {
+      e.stopPropagation();
+      closeProfilePopup();
+      openModal('modal-switch-account');
+    });
+  }
+
+  if (btnCloseSwitch) btnCloseSwitch.addEventListener('click', () => closeModal('modal-switch-account'));
+  if (btnDoneSwitch) btnDoneSwitch.addEventListener('click', () => closeModal('modal-switch-account'));
+
+  if (btnShowAddAcc && addAccBox) {
+    btnShowAddAcc.addEventListener('click', () => {
+      addAccBox.style.display = 'block';
+      btnShowAddAcc.style.display = 'none';
+    });
+  }
+
+  if (btnCancelAddAcc && addAccBox && btnShowAddAcc) {
+    btnCancelAddAcc.addEventListener('click', () => {
+      addAccBox.style.display = 'none';
+      btnShowAddAcc.style.display = 'inline-flex';
+    });
+  }
+
+  function switchActiveAccount(accountName, accountEmail, accountInsta) {
+    window.storeProfileState.name = accountName;
+    window.storeProfileState.email = accountEmail;
+    if (accountInsta) window.storeProfileState.insta = accountInsta;
+
+    if (typeof window.syncStoreProfileToUI === 'function') {
+      window.syncStoreProfileToUI();
+    }
+
+    // Update settings inputs if present
+    const sName = document.getElementById('settings-user-name');
+    const sEmail = document.getElementById('settings-user-email');
+    if (sName) sName.value = accountName;
+    if (sEmail) sEmail.value = accountEmail;
+
+    if (typeof showToast === 'function') {
+      showToast(`Switched account to ${accountName} (${accountEmail})`);
+    }
+
+    closeModal('modal-switch-account');
+  }
+
+  // Account List Item Click
+  const switchAccContainer = document.getElementById('switch-accounts-container');
+  if (switchAccContainer) {
+    switchAccContainer.addEventListener('click', (e) => {
+      const item = e.target.closest('.switch-account-item');
+      if (!item) return;
+      const accId = item.getAttribute('data-account-id');
+      if (accId && typeof window.switchActiveUserAccount === 'function') {
+        window.switchActiveUserAccount(accId);
+      }
+    });
+  }
+
+  // 3. Settings Item Click
+  const btnSettings = document.getElementById('upp-item-settings');
+  const btnCloseSettings = document.getElementById('btn-close-settings-modal');
+  const btnCancelSettings = document.getElementById('btn-cancel-settings');
+  const btnSaveSettings = document.getElementById('btn-save-settings');
+  const btnJumpStoreSettings = document.getElementById('btn-jump-store-settings');
+  const btnRefreshInstaToken = document.getElementById('btn-refresh-insta-token');
+
+  if (btnSettings) {
+    btnSettings.addEventListener('click', (e) => {
+      e.stopPropagation();
+      closeProfilePopup();
+      if (typeof window.openAccountSettingsView === 'function') {
+        window.openAccountSettingsView(e);
+      }
+    });
+  }
+
+  if (btnCloseSettings) btnCloseSettings.addEventListener('click', () => closeModal('modal-user-settings'));
+  if (btnCancelSettings) btnCancelSettings.addEventListener('click', () => closeModal('modal-user-settings'));
+
+  // Settings Tabs Switcher
+  const settingsTabs = document.querySelectorAll('.btn-settings-tab');
+  settingsTabs.forEach(tab => {
+    tab.addEventListener('click', () => {
+      const target = tab.getAttribute('data-stab');
+      settingsTabs.forEach(t => {
+        t.style.color = '#64748b';
+        t.style.borderBottom = 'none';
+        t.style.fontWeight = '600';
+      });
+      tab.style.color = '#4f46e5';
+      tab.style.borderBottom = '2px solid #4f46e5';
+      tab.style.fontWeight = '700';
+
+      document.querySelectorAll('.stab-pane').forEach(p => p.style.display = 'none');
+      const activePane = document.getElementById(`stab-pane-${target}`);
+      if (activePane) activePane.style.display = 'flex';
+    });
+  });
+
+  if (btnSaveSettings) {
+    btnSaveSettings.addEventListener('click', () => {
+      const nameVal = document.getElementById('settings-user-name')?.value.trim();
+      const emailVal = document.getElementById('settings-user-email')?.value.trim();
+      const bioVal = document.getElementById('settings-user-bio')?.value.trim();
+
+      if (nameVal) window.storeProfileState.name = nameVal;
+      if (emailVal) window.storeProfileState.email = emailVal;
+      if (bioVal) window.storeProfileState.bio = bioVal;
+
+      if (typeof window.syncStoreProfileToUI === 'function') {
+        window.syncStoreProfileToUI();
+      }
+      closeModal('modal-user-settings');
+      if (typeof showToast === 'function') showToast('Account & Profile settings saved successfully!');
+    });
+  }
+
+  if (btnJumpStoreSettings) {
+    btnJumpStoreSettings.addEventListener('click', () => {
+      closeModal('modal-user-settings');
+      if (typeof window.switchMainTab === 'function') {
+        window.switchMainTab('creatorstore');
+        // Activate store settings subtab
+        const storeSettingsBtn = document.querySelector('[data-store-tab="store-settings"]');
+        if (storeSettingsBtn) storeSettingsBtn.click();
+      }
+    });
+  }
+
+  if (btnRefreshInstaToken) {
+    btnRefreshInstaToken.addEventListener('click', () => {
+      btnRefreshInstaToken.textContent = 'Refreshing...';
+      setTimeout(() => {
+        btnRefreshInstaToken.textContent = 'Token Active (60d)';
+        if (typeof showToast === 'function') showToast('Instagram Graph API token successfully renewed for 60 days!');
+      }, 700);
+    });
+  }
+
+  // 4. Support Item Click
+  const btnSupport = document.getElementById('upp-item-support');
+  const btnCloseSupport = document.getElementById('btn-close-support-modal');
+  const btnCloseSupportFooter = document.getElementById('btn-close-support-footer');
+  const btnModalCopyEmail = document.getElementById('btn-modal-copy-support-email');
+  const btnModalGotoLearn = document.getElementById('btn-modal-goto-learn');
+
+  if (btnSupport) {
+    btnSupport.addEventListener('click', (e) => {
+      e.stopPropagation();
+      closeProfilePopup();
+      if (typeof window.openSupportCenterView === 'function') {
+        window.openSupportCenterView(e);
+      }
+    });
+  }
+
+  if (btnCloseSupport) btnCloseSupport.addEventListener('click', () => closeModal('modal-user-support'));
+  if (btnCloseSupportFooter) btnCloseSupportFooter.addEventListener('click', () => closeModal('modal-user-support'));
+
+  if (btnModalCopyEmail) {
+    btnModalCopyEmail.addEventListener('click', () => {
+      if (navigator.clipboard) {
+        navigator.clipboard.writeText('support@renderreply.com');
+      }
+      if (typeof showToast === 'function') showToast('Copied support email: support@renderreply.com');
+    });
+  }
+
+  if (btnModalGotoLearn) {
+    btnModalGotoLearn.addEventListener('click', () => {
+      closeModal('modal-user-support');
+      if (typeof window.switchMainTab === 'function') {
+        window.switchMainTab('learn-help');
+      }
+    });
+  }
+
+  // 5. Sign Out Item Click
+  const btnSignOut = document.getElementById('upp-item-signout');
+  const btnCloseSignout = document.getElementById('btn-cancel-signout');
+  const btnConfirmSignout = document.getElementById('btn-confirm-signout');
+  const signedOutBanner = document.getElementById('signed-out-prompt-banner');
+  const btnQuickRelogin = document.getElementById('btn-quick-relogin');
+
+  if (btnSignOut) {
+    btnSignOut.addEventListener('click', (e) => {
+      e.stopPropagation();
+      closeProfilePopup();
+      openModal('modal-user-signout');
+    });
+  }
+
+  if (btnCloseSignout) btnCloseSignout.addEventListener('click', () => closeModal('modal-user-signout'));
+
+  if (btnConfirmSignout) {
+    btnConfirmSignout.addEventListener('click', () => {
+      closeModal('modal-user-signout');
+      if (signedOutBanner) signedOutBanner.style.display = 'flex';
+      if (typeof showToast === 'function') showToast('You have signed out of RudRa RR.');
+    });
+  }
+
+  if (btnQuickRelogin) {
+    btnQuickRelogin.addEventListener('click', () => {
+      if (signedOutBanner) signedOutBanner.style.display = 'none';
+      if (typeof showToast === 'function') showToast('Welcome back, RudRa RR!');
+    });
+  }
+
+  // Initialize Support View Event Listeners
+  initSupportCenterEngine();
+
+  // Initial UI sync
+  if (typeof window.syncStoreProfileToUI === 'function') {
+    window.syncStoreProfileToUI();
+  }
+}
+
+/* ==========================================================================
+   SUPPORT & HELP CENTER ENGINE (MATCHING SCREENSHOT 1 & 2)
+   ========================================================================== */
+
+window.supportPreviousViewId = 'dashboard';
+window.currentActiveChatTicketId = null;
+
+function initSupportCenterEngine() {
+  // 1. Back button
+  const btnBack = document.getElementById('btn-support-back');
+  if (btnBack) {
+    btnBack.addEventListener('click', (e) => {
+      e.preventDefault();
+      const prev = window.supportPreviousViewId || 'dashboard';
+      if (prev === 'settings' && typeof window.openAccountSettingsView === 'function') {
+        window.openAccountSettingsView();
+      } else if (typeof window.switchMainTab === 'function') {
+        window.switchMainTab(prev);
+      } else {
+        const targetNav = document.querySelector(`.sidebar-nav .nav-item[data-tab="${prev}"]`);
+        if (targetNav) targetNav.click();
+      }
+    });
+  }
+
+  // 2. Segmented Pill Tab Switcher
+  const btnResources = document.getElementById('tab-btn-help-resources');
+  const btnTickets = document.getElementById('tab-btn-support-tickets');
+
+  if (btnResources) {
+    btnResources.addEventListener('click', () => window.switchSupportSubPanel('resources'));
+  }
+  if (btnTickets) {
+    btnTickets.addEventListener('click', () => window.switchSupportSubPanel('tickets'));
+  }
+
+  // 3. Card 3 "Open Tickets Dashboard ->" button
+  const btnGotoTickets = document.getElementById('btn-support-goto-tickets');
+  if (btnGotoTickets) {
+    btnGotoTickets.addEventListener('click', () => window.switchSupportSubPanel('tickets'));
+  }
+
+  // 4. WhatsApp Support Triggers
+  const btnChatWa = document.getElementById('btn-support-chat-whatsapp');
+  const btnFaqWa = document.getElementById('btn-faq-ask-whatsapp');
+  const btnLaunchWa = document.getElementById('btn-launch-whatsapp-direct');
+
+  const openWhatsAppAction = () => {
+    window.open('https://wa.me/15550192834?text=Hi%20RenderReply%20Support%2C%20I%20need%20assistance%20with%20my%20Instagram%20automation%20setup.', '_blank');
+    if (typeof showToast === 'function') showToast('Connecting to RenderReply WhatsApp Support...');
+  };
+
+  if (btnChatWa) btnChatWa.addEventListener('click', openWhatsAppAction);
+  if (btnFaqWa) btnFaqWa.addEventListener('click', openWhatsAppAction);
+  if (btnLaunchWa) btnLaunchWa.addEventListener('click', openWhatsAppAction);
+
+  // 5. Documentation Cards
+  const docGeneral = document.getElementById('doc-card-general');
+  const docAutomation = document.getElementById('doc-card-automation');
+  const docBilling = document.getElementById('doc-card-billing');
+  const docSettings = document.getElementById('doc-card-settings');
+
+  if (docGeneral) docGeneral.addEventListener('click', () => window.openSupportGuide('general'));
+  if (docAutomation) docAutomation.addEventListener('click', () => window.openSupportGuide('automation'));
+  if (docBilling) docBilling.addEventListener('click', () => window.openSupportGuide('billing'));
+  if (docSettings) docSettings.addEventListener('click', () => window.openSupportGuide('settings'));
+
+  // 6. FAQ Accordions
+  window.initSupportFAQAccordions();
+
+  // 7. Refresh Tickets Button
+  const btnRefreshTickets = document.getElementById('btn-refresh-support-tickets');
+  if (btnRefreshTickets) {
+    btnRefreshTickets.addEventListener('click', () => {
+      const icon = btnRefreshTickets.querySelector('.refresh-icon');
+      if (icon) icon.classList.add('spinning');
+      window.renderSupportTicketsList();
+      setTimeout(() => {
+        if (icon) icon.classList.remove('spinning');
+        if (typeof showToast === 'function') showToast('Support tickets refreshed.');
+      }, 500);
+    });
+  }
+
+  // 8. Resolve/Reopen button in Chat Modal
+  const btnToggleResolve = document.getElementById('btn-toggle-resolve-ticket');
+  if (btnToggleResolve) {
+    btnToggleResolve.addEventListener('click', () => window.toggleTicketResolvedState());
+  }
+
+  // Initial render of tickets
+  window.renderSupportTicketsList();
+}
+
+window.switchSupportSubPanel = function (panelKey) {
+  const btnResources = document.getElementById('tab-btn-help-resources');
+  const btnTickets = document.getElementById('tab-btn-support-tickets');
+  const panelResources = document.getElementById('support-panel-resources');
+  const panelTickets = document.getElementById('support-panel-tickets');
+
+  if (panelKey === 'tickets') {
+    if (btnResources) {
+      btnResources.classList.remove('active');
+      btnResources.setAttribute('aria-selected', 'false');
+    }
+    if (btnTickets) {
+      btnTickets.classList.add('active');
+      btnTickets.setAttribute('aria-selected', 'true');
+    }
+    if (panelResources) panelResources.classList.remove('active');
+    if (panelTickets) panelTickets.classList.add('active');
+    window.renderSupportTicketsList();
+  } else {
+    if (btnResources) {
+      btnResources.classList.add('active');
+      btnResources.setAttribute('aria-selected', 'true');
+    }
+    if (btnTickets) {
+      btnTickets.classList.remove('active');
+      btnTickets.setAttribute('aria-selected', 'false');
+    }
+    if (panelResources) panelResources.classList.add('active');
+    if (panelTickets) panelTickets.classList.remove('active');
+  }
+};
+
+window.initSupportFAQAccordions = function () {
+  const faqItems = document.querySelectorAll('.support-faq-item');
+  faqItems.forEach(item => {
+    const btn = item.querySelector('.support-faq-question');
+    if (btn && !btn.dataset.faqInitialized) {
+      btn.dataset.faqInitialized = 'true';
+      btn.addEventListener('click', () => {
+        const isActive = item.classList.contains('active');
+        if (isActive) {
+          item.classList.remove('active');
+          btn.setAttribute('aria-expanded', 'false');
+        } else {
+          item.classList.add('active');
+          btn.setAttribute('aria-expanded', 'true');
+        }
+      });
+    }
+  });
+};
+
+window.getStoredSupportTickets = function () {
+  try {
+    const raw = localStorage.getItem('renderreply_support_tickets');
+    if (raw) return JSON.parse(raw);
+  } catch (e) {
+    console.error('Error loading tickets from localStorage', e);
+  }
+  return [];
+};
+
+window.saveStoredSupportTickets = function (tickets) {
+  try {
+    localStorage.setItem('renderreply_support_tickets', JSON.stringify(tickets));
+  } catch (e) {
+    console.error('Error saving tickets to localStorage', e);
+  }
+};
+
+window.renderSupportTicketsList = function () {
+  const emptyState = document.getElementById('ticket-empty-state');
+  const ticketsListWrap = document.getElementById('support-tickets-list');
+  if (!emptyState || !ticketsListWrap) return;
+
+  const tickets = window.getStoredSupportTickets();
+
+  if (!tickets || tickets.length === 0) {
+    emptyState.style.display = 'flex';
+    ticketsListWrap.style.display = 'none';
+    ticketsListWrap.innerHTML = '';
+    return;
+  }
+
+  emptyState.style.display = 'none';
+  ticketsListWrap.style.display = 'flex';
+
+  ticketsListWrap.innerHTML = tickets.map(ticket => {
+    const statusClass = ticket.status === 'Resolved' ? 'status-resolved' : (ticket.status === 'In Progress' ? 'status-in-progress' : 'status-open');
+    const priorityClass = ticket.priority === 'Urgent' ? 'priority-urgent' : (ticket.priority === 'High' ? 'priority-high' : '');
+
+    return `
+      <div class="support-ticket-item" onclick="window.openSupportChatModal('${ticket.id}')">
+        <div class="ticket-item-top">
+          <span class="ticket-id-tag">#${ticket.id}</span>
+          <span class="ticket-status-badge ${statusClass}">${ticket.status || 'Open'}</span>
+        </div>
+        <h4 class="ticket-item-subject">${ticket.subject || 'Support Request'}</h4>
+        <div class="ticket-item-meta-row">
+          <div class="ticket-meta-badges">
+            <span class="ticket-priority-badge ${priorityClass}">${ticket.priority || 'Medium'}</span>
+            <span>${ticket.category || 'General'}</span>
+          </div>
+          <span>${ticket.createdTimeStr || 'Recently'}</span>
+        </div>
+      </div>
+    `;
+  }).join('');
+};
+
+window.handleCreateSupportTicket = function (e) {
+  if (e && typeof e.preventDefault === 'function') e.preventDefault();
+
+  const subjInput = document.getElementById('ticket-input-subject');
+  const catSelect = document.getElementById('ticket-select-category');
+  const prioSelect = document.getElementById('ticket-select-priority');
+  const descTextarea = document.getElementById('ticket-textarea-description');
+
+  if (!subjInput || !descTextarea) return;
+
+  const subject = subjInput.value.trim();
+  const category = catSelect ? catSelect.value : 'General Inquiry';
+  const priority = prioSelect ? prioSelect.value : 'Medium';
+  const description = descTextarea.value.trim();
+
+  if (!subject || !description) {
+    if (typeof showToast === 'function') showToast('Please enter both subject and description.');
+    return;
+  }
+
+  const randNum = Math.floor(1000 + Math.random() * 9000);
+  const ticketId = `RR-${randNum}`;
+  const now = new Date();
+  const timeStr = 'Just now';
+
+  const newTicket = {
+    id: ticketId,
+    subject: subject,
+    category: category,
+    priority: priority,
+    description: description,
+    status: 'Open',
+    createdAt: now.toISOString(),
+    createdTimeStr: timeStr,
+    messages: [
+      {
+        sender: 'agent',
+        senderName: 'Support Bot',
+        avatar: 'RR',
+        text: `Hello! We have received your ticket #${ticketId} regarding "${subject}". A technical support engineer is reviewing your inquiry.`,
+        time: now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+      },
+      {
+        sender: 'user',
+        senderName: 'You',
+        avatar: 'RR',
+        text: description,
+        time: now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+      }
+    ]
+  };
+
+  const tickets = window.getStoredSupportTickets();
+  tickets.unshift(newTicket);
+  window.saveStoredSupportTickets(tickets);
+
+  subjInput.value = '';
+  descTextarea.value = '';
+  if (prioSelect) prioSelect.value = 'Medium';
+
+  window.renderSupportTicketsList();
+
+  if (typeof showToast === 'function') {
+    showToast(`Support Ticket #${ticketId} created!`);
+  }
+
+  setTimeout(() => {
+    window.openSupportChatModal(ticketId);
+
+    setTimeout(() => {
+      window.simulateInitialAgentReply(ticketId, category, subject);
+    }, 1400);
+  }, 300);
+};
+
+window.openSupportChatModal = function (ticketId) {
+  window.currentActiveChatTicketId = ticketId;
+  const tickets = window.getStoredSupportTickets();
+  const ticket = tickets.find(t => t.id === ticketId);
+  if (!ticket) return;
+
+  const modal = document.getElementById('modal-support-ticket-chat');
+  const idEl = document.getElementById('chat-modal-ticket-id');
+  const subjEl = document.getElementById('chat-modal-ticket-subject');
+  const statusEl = document.getElementById('chat-modal-ticket-status');
+  const priorityEl = document.getElementById('chat-modal-ticket-priority');
+  const catEl = document.getElementById('chat-modal-category');
+  const createdEl = document.getElementById('chat-modal-created-time');
+  const btnResolve = document.getElementById('btn-toggle-resolve-ticket');
+
+  if (idEl) idEl.textContent = `#${ticket.id}`;
+  if (subjEl) subjEl.textContent = ticket.subject;
+  if (catEl) catEl.textContent = ticket.category;
+  if (createdEl) createdEl.textContent = ticket.createdTimeStr || 'Today';
+
+  if (statusEl) {
+    statusEl.textContent = ticket.status || 'Open';
+    statusEl.className = 'ticket-status-badge ' + (ticket.status === 'Resolved' ? 'status-resolved' : (ticket.status === 'In Progress' ? 'status-in-progress' : 'status-open'));
+  }
+
+  if (priorityEl) {
+    priorityEl.textContent = ticket.priority || 'Medium';
+    priorityEl.className = 'ticket-priority-badge ' + (ticket.priority === 'Urgent' ? 'priority-urgent' : (ticket.priority === 'High' ? 'priority-high' : ''));
+  }
+
+  if (btnResolve) {
+    btnResolve.textContent = ticket.status === 'Resolved' ? 'Reopen Ticket' : 'Mark as Resolved';
+  }
+
+  window.renderSupportChatMessages(ticket);
+
+  if (modal) {
+    modal.classList.add('active');
+    modal.style.display = 'flex';
+    modal.style.opacity = '1';
+    modal.style.pointerEvents = 'auto';
+  }
+};
+
+window.closeSupportChatModal = function () {
+  const modal = document.getElementById('modal-support-ticket-chat');
+  if (modal) {
+    modal.classList.remove('active');
+    modal.style.display = 'none';
+    modal.style.opacity = '0';
+    modal.style.pointerEvents = 'none';
+  }
+  window.currentActiveChatTicketId = null;
+  window.renderSupportTicketsList();
+};
+
+window.renderSupportChatMessages = function (ticket) {
+  const container = document.getElementById('support-chat-messages-container');
+  if (!container || !ticket) return;
+
+  const messages = ticket.messages || [];
+
+  container.innerHTML = messages.map(msg => {
+    const isUser = msg.sender === 'user';
+    const bubbleClass = isUser ? 'bubble-user' : 'bubble-agent';
+    const initial = isUser ? 'RR' : (msg.avatar || 'S');
+
+    return `
+      <div class="chat-bubble ${bubbleClass}">
+        <div class="chat-bubble-avatar">${initial}</div>
+        <div class="chat-bubble-content">
+          <div style="font-weight: 700; font-size: 11.5px; margin-bottom: 3px; opacity: 0.85;">${msg.senderName || (isUser ? 'You' : 'Sarah (Support Engineer)')}</div>
+          <div>${msg.text}</div>
+          <div class="chat-bubble-time">${msg.time || 'Now'}</div>
+        </div>
+      </div>
+    `;
+  }).join('');
+
+  container.scrollTop = container.scrollHeight;
+};
+
+window.handleSendChatReply = function (e) {
+  if (e && typeof e.preventDefault === 'function') e.preventDefault();
+  if (!window.currentActiveChatTicketId) return;
+
+  const input = document.getElementById('input-support-chat-reply');
+  if (!input) return;
+
+  const text = input.value.trim();
+  if (!text) return;
+
+  const tickets = window.getStoredSupportTickets();
+  const ticket = tickets.find(t => t.id === window.currentActiveChatTicketId);
+  if (!ticket) return;
+
+  const now = new Date();
+  const userMsg = {
+    sender: 'user',
+    senderName: 'You',
+    avatar: 'RR',
+    text: text,
+    time: now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+  };
+
+  ticket.messages = ticket.messages || [];
+  ticket.messages.push(userMsg);
+  if (ticket.status === 'Resolved') ticket.status = 'In Progress';
+  window.saveStoredSupportTickets(tickets);
+
+  input.value = '';
+  window.renderSupportChatMessages(ticket);
+
+  const typingIndicator = document.getElementById('support-agent-typing-indicator');
+  if (typingIndicator) typingIndicator.style.display = 'flex';
+
+  setTimeout(() => {
+    if (typingIndicator) typingIndicator.style.display = 'none';
+    window.dispatchSmartAgentResponse(ticket.id, text, ticket.category);
+  }, 1300);
+};
+
+window.dispatchSmartAgentResponse = function (ticketId, userText, category) {
+  const tickets = window.getStoredSupportTickets();
+  const ticket = tickets.find(t => t.id === ticketId);
+  if (!ticket) return;
+
+  let responseText = `Thank you for the update! I checked your account telemetry. The Meta API webhooks and automated DM dispatch queues are performing normally with 0% error rate.`;
+
+  const lower = userText.toLowerCase();
+  if (lower.includes('token') || lower.includes('api') || lower.includes('meta')) {
+    responseText = `I verified your Meta Graph API connection. Your webhook endpoint is responding with HTTP 200 OK. If you recently changed your Instagram password, remember to re-authenticate under Settings > Account.`;
+  } else if (lower.includes('billing') || lower.includes('cancel') || lower.includes('invoice') || lower.includes('plan')) {
+    responseText = `Your subscription status is active. Invoices are automatically delivered to your billing email on file, and you can switch tiers anytime without interruption.`;
+  } else if (lower.includes('rule') || lower.includes('trigger') || lower.includes('dm') || lower.includes('keyword')) {
+    responseText = `For keyword triggers, please make sure your Instagram account is set to 'Creator' or 'Business' and that 'Allow Access to Messages' is toggled ON inside Instagram App Settings > Privacy > Messages.`;
+  } else if (lower.includes('thank') || lower.includes('resolved') || lower.includes('great') || lower.includes('perfect')) {
+    responseText = `You're very welcome! I'm glad we could get that sorted out for you. Let us know if there's anything else you need. Have a wonderful day!`;
+  }
+
+  const now = new Date();
+  const agentMsg = {
+    sender: 'agent',
+    senderName: 'Sarah M. (Support Engineer)',
+    avatar: 'S',
+    text: responseText,
+    time: now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+  };
+
+  ticket.messages.push(agentMsg);
+  window.saveStoredSupportTickets(tickets);
+
+  if (window.currentActiveChatTicketId === ticketId) {
+    window.renderSupportChatMessages(ticket);
+  }
+};
+
+window.simulateInitialAgentReply = function (ticketId, category, subject) {
+  const tickets = window.getStoredSupportTickets();
+  const ticket = tickets.find(t => t.id === ticketId);
+  if (!ticket) return;
+
+  let reply = `Hi! I'm Sarah from RenderReply Technical Support. I see your request regarding "${subject}". I'm reviewing your setup and will ensure this is resolved right away.`;
+
+  if (category === 'Instagram Automation & API') {
+    reply = `Hi! Sarah from Support here. I am inspecting your Instagram Graph API webhook logs. We guarantee real-time delivery under 500ms. I'm checking your account permissions now.`;
+  } else if (category === 'Billing & Subscription') {
+    reply = `Hello! I'm checking your billing profile details. All payments and invoices are encrypted via Stripe. Let me assist you with your plan options.`;
+  }
+
+  const now = new Date();
+  ticket.messages.push({
+    sender: 'agent',
+    senderName: 'Sarah M. (Support Engineer)',
+    avatar: 'S',
+    text: reply,
+    time: now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+  });
+
+  window.saveStoredSupportTickets(tickets);
+  if (window.currentActiveChatTicketId === ticketId) {
+    window.renderSupportChatMessages(ticket);
+  }
+};
+
+window.insertQuickReply = function (text) {
+  const input = document.getElementById('input-support-chat-reply');
+  if (input) {
+    input.value = text;
+    input.focus();
+  }
+};
+
+window.toggleTicketResolvedState = function () {
+  if (!window.currentActiveChatTicketId) return;
+  const tickets = window.getStoredSupportTickets();
+  const ticket = tickets.find(t => t.id === window.currentActiveChatTicketId);
+  if (!ticket) return;
+
+  const isResolved = ticket.status === 'Resolved';
+  ticket.status = isResolved ? 'Open' : 'Resolved';
+
+  const now = new Date();
+  ticket.messages.push({
+    sender: 'agent',
+    senderName: 'System',
+    avatar: '⚙️',
+    text: isResolved ? 'Ticket reopened by customer.' : 'Ticket marked as resolved. Thank you for contacting RenderReply Support!',
+    time: now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+  });
+
+  window.saveStoredSupportTickets(tickets);
+  window.openSupportChatModal(ticket.id);
+
+  if (typeof showToast === 'function') {
+    showToast(`Ticket #${ticket.id} is now ${ticket.status}.`);
+  }
+};
+
+window.openSupportGuide = function (guideKey) {
+  const modal = document.getElementById('modal-support-guide');
+  const titleEl = document.getElementById('guide-modal-title');
+  const subEl = document.getElementById('guide-modal-subtitle');
+  const bodyEl = document.getElementById('guide-modal-body');
+  if (!modal || !titleEl || !bodyEl) return;
+
+  const guides = {
+    general: {
+      title: 'Meta Graph API & Instagram Setup Guide',
+      subtitle: 'Step-by-step instructions to integrate your Meta API assets.',
+      content: `
+        <h4 style="font-size: 16px; font-weight: 800; color: #0f172a; margin-bottom: 8px;">1. Connect your Instagram Professional Account</h4>
+        <p style="margin-bottom: 14px;">RenderReply uses the official Instagram Graph API OAuth 2.0. Make sure your Instagram account is set to a <strong>Creator</strong> or <strong>Business Account</strong>.</p>
+        
+        <h4 style="font-size: 16px; font-weight: 800; color: #0f172a; margin-bottom: 8px;">2. Required Permissions</h4>
+        <ul style="padding-left: 20px; margin-bottom: 14px;">
+          <li><code>instagram_manage_messages</code> - Dispatches automated direct messages</li>
+          <li><code>instagram_manage_comments</code> - Detects comment triggers and sends instant replies</li>
+          <li><code>pages_read_engagement</code> - Analyzes live story mentions and Reel performance</li>
+        </ul>
+
+        <h4 style="font-size: 16px; font-weight: 800; color: #0f172a; margin-bottom: 8px;">3. Webhook Delivery Verification</h4>
+        <p>All webhooks are secured with AES-256 HMAC encryption signatures. Latency across all regions is below <strong>500ms</strong>.</p>
+      `
+    },
+    automation: {
+      title: 'Automation Flow & DM Dispatch Guide',
+      subtitle: 'Learn how keyword triggers detect comments and dispatch DMs in real time.',
+      content: `
+        <h4 style="font-size: 16px; font-weight: 800; color: #0f172a; margin-bottom: 8px;">How Real-Time Trigger Detection Works</h4>
+        <p style="margin-bottom: 14px;">When a user comments on any of your Instagram Reels, Posts, or Stories, our high-speed webhook captures the keyword in under 0.5s.</p>
+        
+        <h4 style="font-size: 16px; font-weight: 800; color: #0f172a; margin-bottom: 8px;">Trigger Matching Modes</h4>
+        <ul style="padding-left: 20px; margin-bottom: 14px;">
+          <li><strong>Exact Match:</strong> Triggers only when the comment matches your exact keyword (e.g. "LINK").</li>
+          <li><strong>Fuzzy / Contains:</strong> Triggers if the keyword appears anywhere in the sentence.</li>
+          <li><strong>Randomized Reply Delays:</strong> Add 2-5s human-like delays to keep messaging organic.</li>
+        </ul>
+
+        <h4 style="font-size: 16px; font-weight: 800; color: #0f172a; margin-bottom: 8px;">Digital Product Delivery</h4>
+        <p>You can attach Bio Link pages or Creator Storefront products directly to any automated DM.</p>
+      `
+    },
+    billing: {
+      title: 'Billing, Subscriptions & Invoicing',
+      subtitle: 'Manage plans, upgrades, payment methods, and invoices.',
+      content: `
+        <h4 style="font-size: 16px; font-weight: 800; color: #0f172a; margin-bottom: 8px;">Available RenderReply Plans</h4>
+        <ul style="padding-left: 20px; margin-bottom: 14px;">
+          <li><strong>Starter ($29/mo):</strong> 10 Active Rules, 5,000 Automated DMs/mo.</li>
+          <li><strong>Pro ($79/mo):</strong> 50 Active Rules, 25,000 Automated DMs/mo, Storefront integration.</li>
+          <li><strong>Agency / Enterprise ($199/mo):</strong> Unlimited Rules, Unlimited DMs, Priority Webhooks.</li>
+        </ul>
+
+        <h4 style="font-size: 16px; font-weight: 800; color: #0f172a; margin-bottom: 8px;">1-Click Upgrades & Cancellation</h4>
+        <p>Upgrade or cancel anytime in Account Settings > Billing with zero penalty fees.</p>
+      `
+    },
+    settings: {
+      title: 'Settings & Comment Detection Optimization',
+      subtitle: 'Fine-tune comment detection sensitivity and inbox workflows.',
+      content: `
+        <h4 style="font-size: 16px; font-weight: 800; color: #0f172a; margin-bottom: 8px;">Optimizing Trigger Detection Rates</h4>
+        <p style="margin-bottom: 14px;">Ensure "Allow Access to Messages" is enabled inside your Instagram app under Settings > Privacy > Messages.</p>
+        
+        <h4 style="font-size: 16px; font-weight: 800; color: #0f172a; margin-bottom: 8px;">Spam Filtering & Blacklists</h4>
+        <p style="margin-bottom: 14px;">You can configure negative keyword exclusions to avoid replying to bots or repetitive promo comments.</p>
+
+        <h4 style="font-size: 16px; font-weight: 800; color: #0f172a; margin-bottom: 8px;">Auto-Save & Real-Time Sync</h4>
+        <p>All changes in your automation dashboard auto-save instantly to cloud storage.</p>
+      `
+    }
+  };
+
+  const guide = guides[guideKey] || guides.general;
+  titleEl.textContent = guide.title;
+  subEl.textContent = guide.subtitle;
+  bodyEl.innerHTML = guide.content;
+
+  modal.classList.add('active');
+  modal.style.display = 'flex';
+  modal.style.opacity = '1';
+  modal.style.pointerEvents = 'auto';
+};
+
+window.closeSupportGuideModal = function () {
+  const modal = document.getElementById('modal-support-guide');
+  if (modal) {
+    modal.classList.remove('active');
+    modal.style.display = 'none';
+    modal.style.opacity = '0';
+    modal.style.pointerEvents = 'none';
+  }
+};
+
+/* ========================================================================== */
+/* REELS UPLOAD & STUDIO FEATURE (REELS CONTROLLER)                           */
+/* ========================================================================== */
+
+(function initReelsStudioModule() {
+  // STATE
+  let currentReelsSubTab = 'gallery';
+  let activeReelPreset = 1;
+  let isPlaying = true;
+  let isMuted = true;
+  let currentFilter = 'normal';
+  let currentTone = 'viral';
+  let activeFramework = 'pas';
+  let canvasAnimationId = null;
+  let isLiked = false;
+  let currentActiveFolder = 'main';
+  let currentGalleryViewMode = 'gallery';
+
+  // GALLERY MEDIA DATASET (EMPTY BY DEFAULT - ONLY SHOWS WHAT USER UPLOADS)
+  let galleryFolders = [
+    { id: 'main', name: 'Main Gallery', count: 0, isDefault: true }
+  ];
+
+  let galleryMediaItems = [];
+
+  // SOCIAL ACCOUNTS DATASET
+  let socialAccountsList = [
+    { id: 'ig-stories-1', platform: 'ig-story', group: 'INSTAGRAM STORIES', name: 'RenderReply Official', handle: '@renderreply', selected: true },
+    { id: 'ig-stories-2', platform: 'ig-story', group: 'INSTAGRAM STORIES', name: 'Alex Growth Co', handle: '@alexcreator', selected: false },
+    { id: 'reels-1', platform: 'reels', group: 'REELS', name: 'RenderReply Studio', handle: '@renderreply', selected: true },
+    { id: 'reels-2', platform: 'reels', group: 'REELS', name: 'Digital Academy', handle: '@digitalacademy', selected: false },
+    { id: 'tiktok-1', platform: 'tiktok', group: 'TIKTOK', name: 'RenderReply HQ', handle: '@renderreply.io', selected: true },
+    { id: 'tiktok-2', platform: 'tiktok', group: 'TIKTOK', name: 'Viral Automation Hub', handle: '@automationtips', selected: false },
+    { id: 'yt-1', platform: 'youtube', group: 'YOUTUBE SHORTS', name: 'RenderReply Labs', handle: '@RenderReplyLabs', selected: false }
+  ];
+
+  // SCHEDULING ACTIVITY LOG
+  let schedulingActivityList = [
+    {
+      id: 'act-1',
+      mediaName: 'Digiproducthub (15)',
+      platform: 'Instagram Reels & TikTok',
+      time: 'Just now',
+      status: 'in-progress',
+      statusText: 'In progress • Posting now'
+    },
+    {
+      id: 'act-2',
+      mediaName: 'Store Launch Showcase (08)',
+      platform: 'Instagram Stories & Reels',
+      time: 'Today, 6:30 PM',
+      status: 'scheduled',
+      statusText: 'Scheduled'
+    },
+    {
+      id: 'act-3',
+      mediaName: 'Viral Hook Strategy (30)',
+      platform: 'TikTok & YouTube Shorts',
+      time: 'Tomorrow, 9:00 AM',
+      status: 'scheduled',
+      statusText: 'Scheduled'
+    }
+  ];
+
+  // SAMPLE REELS PRESETS
+  const samplePresets = {
+    1: {
+      title: "Growth Hack ($12K DM Strategy)",
+      tag: "🔥 VIRAL HOOK",
+      overlayText: "STOP SCROLLING: How I Automated $12K in DMs",
+      caption: "Want the complete automated DM blueprint? Comment GROWTH below and I'll send it straight to your DMs! 🚀\n\nStop losing hours answering repetitive questions manually. Use RenderReply smart rules to convert views into revenue 24/7.\n\n#creatoreconomy #dmautomation #growthhacks #digitalproducts #renderreply",
+      keyword: "GROWTH",
+      template: "tpl-growth",
+      audio: "Trending Beat • Phonk Velocity",
+      bgGradient: ["#0f172a", "#3b0764", "#0284c7"]
+    },
+    2: {
+      title: "AI Workflow & Tools Review",
+      tag: "⚡ NEW STRATEGY",
+      overlayText: "TOP 5 AI TOOLS THAT ACTUALLY MAKE MONEY",
+      caption: "These 5 AI tools replaced a 4-person creator team for me in 2026. Comment AITOOLS for the complete free resource sheet + links! 💡\n\n#aitools #automation #creators #productivity #marketing",
+      keyword: "AITOOLS",
+      template: "tpl-custom",
+      audio: "Lo-Fi Chill Focus Beats",
+      bgGradient: ["#1e1b4b", "#4338ca", "#06b6d4"]
+    },
+    3: {
+      title: "High-Converting Storefront Showcase",
+      tag: "💰 $10K CASE STUDY",
+      overlayText: "HOW I SELL DIGITAL PRODUCTS ON AUTOPILOT",
+      caption: "Stop sending followers to messy link trees. Here's how my RenderReply storefront generated $19,840 this month alone. Comment STORE to get 20% off! 🎟️\n\n#digitalproducts #stanstore #creatorbusiness #passiveincome",
+      keyword: "STORE",
+      template: "tpl-store",
+      audio: "Viral Luxury Ambient Sound",
+      bgGradient: ["#14532d", "#065f46", "#10b981"]
+    },
+    4: {
+      title: "Viral Bio Link Setup",
+      tag: "👇 COMMENT 'TEMPLATE'",
+      overlayText: "THE 1-CLICK BIO LINK PAGE THAT CONVERTS 3X HIGHER",
+      caption: "Steal my exact high-converting Bio Link Page template for free! Comment TEMPLATE below and my automated assistant will DM it to you instantly ✨\n\n#biolink #linkinbio #instagramtips #contentcreator",
+      keyword: "TEMPLATE",
+      template: "tpl-lead",
+      audio: "Phonk Velocity (Trending #1)",
+      bgGradient: ["#701a75", "#be185d", "#f43f5e"]
+    }
+  };
+
+  // =========================================================================
+  // SUB-TAB NAVIGATION HANDLER
+  // =========================================================================
+  window.switchReelsSubTab = function (tabName) {
+    if (!tabName) return;
+    currentReelsSubTab = tabName;
+
+    // Subnav buttons
+    const btns = document.querySelectorAll('.reels-subnav-btn');
+    btns.forEach(b => {
+      if (b.getAttribute('data-reels-tab') === tabName) {
+        b.classList.add('active');
+      } else {
+        b.classList.remove('active');
+      }
+    });
+
+    // Sub-panes
+    const panes = document.querySelectorAll('.reels-tab-pane, .reels-pane');
+    panes.forEach(p => {
+      if (p.id === `reels-pane-${tabName}`) {
+        p.classList.add('active');
+      } else {
+        p.classList.remove('active');
+      }
+    });
+
+    if (tabName === 'gallery') {
+      renderGalleryGrid();
+    } else if (tabName === 'schedule') {
+      renderSocialAccountsDropdown();
+      renderSchedulingActivityList();
+    } else if (tabName === 'studio') {
+      startProceduralCanvas(activeReelPreset);
+    } else if (tabName === 'analytics') {
+      renderReelsAnalyticsChart();
+    }
+  };
+
+  // =========================================================================
+  // MODAL CONTROLLERS
+  // =========================================================================
+  window.openReelsModal = function (modalId) {
+    const modal = document.getElementById(modalId);
+    if (modal) {
+      modal.style.display = 'flex';
+      modal.classList.add('active');
+      const firstInput = modal.querySelector('input[type="text"], textarea');
+      if (firstInput) {
+        setTimeout(() => firstInput.focus(), 60);
+      }
+    }
+  };
+
+  window.closeReelsModal = function (modalId) {
+    const modal = document.getElementById(modalId);
+    if (modal) {
+      modal.classList.remove('active');
+      modal.style.display = 'none';
+    }
+  };
+
+  // Close modals on backdrop click or Escape key
+  document.addEventListener('click', (e) => {
+    if (e.target && e.target.classList && e.target.classList.contains('reels-modal-backdrop')) {
+      e.target.classList.remove('active');
+      e.target.style.display = 'none';
+    }
+  });
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') {
+      document.querySelectorAll('.reels-modal-backdrop.active').forEach(m => {
+        m.classList.remove('active');
+        m.style.display = 'none';
+      });
+    }
+  });
+
+  // =========================================================================
+  // GALLERY & FOLDER MANAGEMENT
+  // =========================================================================
+  function renderGalleryFolders() {
+    const listEl = document.getElementById('gallery-folder-tree');
+    const emptyNote = document.getElementById('gallery-folder-empty-note');
+    if (!listEl) return;
+
+    const customFolders = galleryFolders.filter(f => !f.isDefault);
+
+    if (customFolders.length === 0) {
+      if (emptyNote) emptyNote.style.display = 'block';
+      listEl.innerHTML = '';
+    } else {
+      if (emptyNote) emptyNote.style.display = 'none';
+
+      let allCount = galleryMediaItems.length;
+      let html = `
+        <div class="folder-tree-item ${currentActiveFolder === 'main' ? 'active' : ''}" onclick="window.selectGalleryFolder('main', this)">
+          <div class="folder-item-label">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
+            <span>All Media</span>
+          </div>
+          <span class="folder-count-badge">${allCount}</span>
+        </div>
+      `;
+
+      html += customFolders.map(folder => {
+        const count = galleryMediaItems.filter(item => item.folder === folder.id).length;
+        return `
+          <div class="folder-tree-item ${folder.id === currentActiveFolder ? 'active' : ''}" onclick="window.selectGalleryFolder('${folder.id}', this)">
+            <div class="folder-item-label">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path></svg>
+              <span>${folder.name}</span>
+            </div>
+            <div class="folder-item-actions">
+              <span class="folder-count-badge">${count}</span>
+              <button type="button" class="btn-folder-delete" title="Delete folder" onclick="event.stopPropagation(); window.deleteGalleryFolder('${folder.id}');">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
+              </button>
+            </div>
+          </div>
+        `;
+      }).join('');
+
+      listEl.innerHTML = html;
+    }
+  }
+
+  function renderGalleryGrid(searchQuery = '') {
+    const gridEl = document.getElementById('gallery-media-grid');
+    const emptyState = document.getElementById('gallery-empty-state');
+    if (!gridEl) return;
+
+    let items = galleryMediaItems;
+    if (currentActiveFolder !== 'main') {
+      items = items.filter(item => item.folder === currentActiveFolder);
+    }
+
+    if (searchQuery) {
+      const q = searchQuery.toLowerCase();
+      items = items.filter(item => item.name.toLowerCase().includes(q) || (item.autoDmKeyword && item.autoDmKeyword.toLowerCase().includes(q)));
+    }
+
+    if (items.length === 0) {
+      gridEl.style.display = 'none';
+      if (emptyState) {
+        emptyState.style.display = 'flex';
+        const heading = emptyState.querySelector('.empty-heading');
+        const sub = emptyState.querySelector('.empty-sub');
+        if (currentActiveFolder !== 'main') {
+          const folderObj = galleryFolders.find(f => f.id === currentActiveFolder);
+          const fName = folderObj ? folderObj.name : 'folder';
+          if (heading) heading.textContent = `No media in "${fName}"`;
+          if (sub) sub.textContent = 'Upload image(s) or video(s) to add media to this folder';
+        } else {
+          if (heading) heading.textContent = 'Your gallery is empty!';
+          if (sub) sub.textContent = 'Drop images / videos here or click the button';
+        }
+      }
+      return;
+    }
+
+    if (emptyState) emptyState.style.display = 'none';
+    gridEl.style.display = 'grid';
+
+    gridEl.innerHTML = items.map(media => {
+      const isVideo = media.type === 'video' || (media.name && /\.(mp4|mov|webm|mkv)$/i.test(media.name));
+      const visualHtml = (isVideo && media.thumbUrl && (media.thumbUrl.startsWith('blob:') || media.thumbUrl.startsWith('data:video') || media.thumbUrl.endsWith('.mp4')))
+        ? `<video src="${media.thumbUrl}" class="media-thumb-img" muted playsinline preload="metadata" onloadeddata="try{this.currentTime=0.2}catch(e){}" style="width: 100%; height: 100%; object-fit: cover; pointer-events: none;"></video>`
+        : `<img src="${media.thumbUrl || 'goldfish_reel_thumb.jpg'}" alt="${media.name}" class="media-thumb-img" onerror="this.onerror=null; this.src='goldfish_reel_thumb.jpg';">`;
+
+      return `
+        <div class="storrito-media-card" id="media-card-${media.id}" onclick="window.openMediaDetailModal('${media.id}')">
+          <div class="media-card-thumb-container">
+            ${visualHtml}
+            <div class="media-card-select-overlay">
+              <input type="checkbox" class="media-card-checkbox" onclick="event.stopPropagation();">
+            </div>
+            <div class="media-card-camera-badge">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+                <polygon points="23 7 16 12 23 17 23 7"></polygon>
+                <rect x="1" y="5" width="15" height="14" rx="2" ry="2"></rect>
+              </svg>
+            </div>
+            <div class="media-card-hover-mask">
+              <button type="button" class="btn-storrito-open" onclick="event.stopPropagation(); window.openMediaDetailModal('${media.id}');">Open</button>
+            </div>
+          </div>
+          <div class="media-card-label-bar">
+            <span class="media-card-filename" title="${media.name}">${media.name}</span>
+          </div>
+        </div>
+      `;
+    }).join('');
+  }
+
+  // =========================================================================
+  // MEDIA DETAIL MODAL & ACTIONS (MATCHING SCREENSHOT)
+  // =========================================================================
+  let currentSelectedMediaId = null;
+
+  window.openMediaDetailModal = function (mediaId) {
+    const media = galleryMediaItems.find(m => m.id === mediaId);
+    if (!media) {
+      if (typeof window.showToast === 'function') window.showToast('Media not found');
+      return;
+    }
+
+    currentSelectedMediaId = mediaId;
+
+    // Set Title
+    const titleEl = document.getElementById('modal-media-title');
+    if (titleEl) titleEl.textContent = media.name;
+
+    // Set Preview (Video or Image)
+    const videoEl = document.getElementById('modal-detail-video');
+    const imgEl = document.getElementById('modal-detail-img');
+    const isVideo = media.type === 'video' || (media.name && /\.(mp4|mov|webm|mkv)$/i.test(media.name));
+
+    if (isVideo && media.thumbUrl && (media.thumbUrl.startsWith('blob:') || media.thumbUrl.startsWith('data:video') || media.thumbUrl.endsWith('.mp4'))) {
+      if (videoEl) {
+        videoEl.style.display = 'block';
+        videoEl.src = media.thumbUrl;
+      }
+      if (imgEl) imgEl.style.display = 'none';
+    } else {
+      if (videoEl) {
+        videoEl.style.display = 'none';
+        try { videoEl.pause(); } catch (e) { }
+      }
+      if (imgEl) {
+        imgEl.style.display = 'block';
+        imgEl.src = media.thumbUrl || 'goldfish_reel_thumb.jpg';
+      }
+    }
+
+    // Set Meta
+    const typeEl = document.getElementById('modal-detail-type');
+    if (typeEl) typeEl.textContent = isVideo ? '9:16 Video Reel' : '9:16 Story Image';
+
+    const folderEl = document.getElementById('modal-detail-folder');
+    if (folderEl) {
+      const f = galleryFolders.find(fold => fold.id === media.folder);
+      folderEl.textContent = f ? f.name : 'Main Gallery';
+    }
+
+    const sizeEl = document.getElementById('modal-detail-size');
+    if (sizeEl) sizeEl.textContent = media.size || '14.2 MB';
+
+    const kwBadge = document.getElementById('modal-detail-keyword-badge');
+    if (kwBadge) kwBadge.textContent = `#${media.autoDmKeyword || 'GROWTH'}`;
+
+    const dmText = document.getElementById('modal-detail-dm-preview');
+    if (dmText) dmText.textContent = `"Hey! Here is your toolkit guide for #${media.autoDmKeyword || 'GROWTH'}. Enjoy! 📦"`;
+
+    window.openReelsModal('modal-media-detail-backdrop');
+  };
+
+  window.handleModalPostClick = function () {
+    window.closeReelsModal('modal-media-detail-backdrop');
+    if (currentSelectedMediaId) {
+      window.openMediaInScheduler(currentSelectedMediaId);
+    }
+  };
+
+  window.handleModalDeleteMedia = function () {
+    if (!currentSelectedMediaId) return;
+    const media = galleryMediaItems.find(m => m.id === currentSelectedMediaId);
+    const mediaName = media ? media.name : 'Media item';
+
+    galleryMediaItems = galleryMediaItems.filter(m => m.id !== currentSelectedMediaId);
+    window.closeReelsModal('modal-media-detail-backdrop');
+    renderGalleryFolders();
+    renderGalleryGrid();
+
+    if (typeof window.showToast === 'function') {
+      window.showToast(`🗑️ Deleted "${mediaName}"`);
+    }
+  };
+
+  window.handleModalArchiveMedia = function () {
+    if (!currentSelectedMediaId) return;
+    const media = galleryMediaItems.find(m => m.id === currentSelectedMediaId);
+    const mediaName = media ? media.name : 'Media item';
+
+    if (media) media.isArchived = true;
+    window.closeReelsModal('modal-media-detail-backdrop');
+    renderGalleryGrid();
+
+    if (typeof window.showToast === 'function') {
+      window.showToast(`📦 Archived "${mediaName}"`);
+    }
+  };
+
+  window.handleModalDuplicateMedia = function () {
+    if (!currentSelectedMediaId) return;
+    const media = galleryMediaItems.find(m => m.id === currentSelectedMediaId);
+    if (!media) return;
+
+    const clone = {
+      ...media,
+      id: `media-${Date.now()}`,
+      name: `${media.name} (Copy)`
+    };
+
+    galleryMediaItems.unshift(clone);
+    window.closeReelsModal('modal-media-detail-backdrop');
+    renderGalleryFolders();
+    renderGalleryGrid();
+
+    if (typeof window.showToast === 'function') {
+      window.showToast(`📋 Created duplicate: "${clone.name}"`);
+    }
+  };
+
+  window.handleModalDownloadMedia = function () {
+    if (!currentSelectedMediaId) return;
+    const media = galleryMediaItems.find(m => m.id === currentSelectedMediaId);
+    const mediaName = media ? media.name : 'story_media';
+
+    if (media && media.thumbUrl && (media.thumbUrl.startsWith('blob:') || media.thumbUrl.startsWith('data:'))) {
+      const a = document.createElement('a');
+      a.href = media.thumbUrl;
+      a.download = media.name || 'media_export';
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+    }
+
+    if (typeof window.showToast === 'function') {
+      window.showToast(`📥 Downloading "${mediaName}"...`);
+    }
+  };
+
+  window.selectGalleryFolder = function (folderId, btn) {
+    currentActiveFolder = folderId;
+    renderGalleryFolders();
+    renderGalleryGrid();
+  };
+
+  window.toggleGalleryView = function (mode, btn) {
+    currentGalleryViewMode = mode;
+    const btns = document.querySelectorAll('.toggle-opt-btn');
+    btns.forEach(b => b.classList.remove('active'));
+    if (btn) btn.classList.add('active');
+
+    if (mode === 'archive') {
+      if (typeof window.showToast === 'function') {
+        window.showToast('📦 Switched to Archived Reels');
+      }
+    }
+    renderGalleryGrid();
+  };
+
+  window.handleGallerySearch = function (query) {
+    renderGalleryGrid(query);
+  };
+
+  window.openNewFolderPrompt = function () {
+    const modal = document.getElementById('modal-new-folder-backdrop');
+    if (modal) {
+      window.openReelsModal('modal-new-folder-backdrop');
+      const input = document.getElementById('input-new-folder-name');
+      if (input) {
+        input.value = '';
+        setTimeout(() => input.focus(), 60);
+      }
+    } else {
+      const name = prompt('Enter a name for your new folder:');
+      if (name && name.trim()) {
+        window.createNewFolderWithName(name.trim());
+      }
+    }
+  };
+
+  window.createNewFolderWithName = function (name) {
+    if (!name || !name.trim()) return;
+    const cleanName = name.trim();
+    const newId = `folder-${Date.now()}`;
+    galleryFolders.push({ id: newId, name: cleanName, count: 0 });
+    currentActiveFolder = newId;
+
+    renderGalleryFolders();
+    renderGalleryGrid();
+
+    if (typeof window.showToast === 'function') {
+      window.showToast(`📁 Created folder: ${cleanName}`);
+    }
+  };
+
+  window.confirmCreateFolder = function () {
+    const input = document.getElementById('input-new-folder-name');
+    const name = input ? input.value.trim() : '';
+    if (!name) {
+      if (typeof window.showToast === 'function') window.showToast('Please enter a folder name');
+      return;
+    }
+
+    window.createNewFolderWithName(name);
+    window.closeReelsModal('modal-new-folder-backdrop');
+    if (input) input.value = '';
+  };
+
+  window.deleteGalleryFolder = function (folderId) {
+    const folder = galleryFolders.find(f => f.id === folderId);
+    const folderName = folder ? folder.name : 'folder';
+    galleryFolders = galleryFolders.filter(f => f.id !== folderId);
+    if (currentActiveFolder === folderId) {
+      currentActiveFolder = 'main';
+    }
+    // Reassign media in this folder to main
+    galleryMediaItems.forEach(item => {
+      if (item.folder === folderId) item.folder = 'main';
+    });
+
+    renderGalleryFolders();
+    renderGalleryGrid();
+
+    if (typeof window.showToast === 'function') {
+      window.showToast(`🗑️ Deleted folder: ${folderName}`);
+    }
+  };
+
+  window.createEmptyReel = function () {
+    const modal = document.getElementById('modal-new-empty-reel-backdrop');
+    if (modal) {
+      window.openReelsModal('modal-new-empty-reel-backdrop');
+      const input = document.getElementById('input-empty-reel-title');
+      if (input) {
+        input.value = '';
+        setTimeout(() => input.focus(), 60);
+      }
+    } else {
+      const title = prompt('Enter a name for your new empty story / reel:', 'Untitled Story');
+      if (title && title.trim()) {
+        window.createNewEmptyReelWithTitle(title.trim());
+      }
+    }
+  };
+
+  window.createNewEmptyReelWithTitle = function (title) {
+    const cleanTitle = title || 'New Empty Story / Reel';
+    const newMedia = {
+      id: `media-${Date.now()}`,
+      name: cleanTitle,
+      type: 'video',
+      duration: '00:15',
+      size: '12.0 MB',
+      folder: currentActiveFolder || 'main',
+      date: 'Just now',
+      autoDmKeyword: 'GROWTH',
+      template: 'Growth Toolkit Blueprint',
+      color: 'linear-gradient(135deg, #090d16, #7e22ce)',
+      thumbIcon: '✨',
+      thumbUrl: 'goldfish_reel_thumb.jpg'
+    };
+
+    galleryMediaItems.unshift(newMedia);
+    renderGalleryFolders();
+    renderGalleryGrid();
+    window.openMediaInScheduler(newMedia.id);
+
+    if (typeof window.showToast === 'function') {
+      window.showToast(`✨ Created story: "${cleanTitle}"`);
+    }
+  };
+
+  window.confirmCreateEmptyReel = function () {
+    const titleInput = document.getElementById('input-empty-reel-title');
+    const title = titleInput && titleInput.value.trim() ? titleInput.value.trim() : 'New Empty Story / Reel';
+
+    window.closeReelsModal('modal-new-empty-reel-backdrop');
+    if (titleInput) titleInput.value = '';
+    window.createNewEmptyReelWithTitle(title);
+  };
+
+  // TRIGGER FILE INPUT
+  window.triggerReelFileInput = function () {
+    const fileInput = document.getElementById('reels-file-input');
+    if (fileInput) {
+      fileInput.click();
+    } else {
+      window.triggerReelsBatchUpload();
+    }
+  };
+
+  // HANDLE REAL FILE UPLOAD WITH PROGRESS CHIP
+  window.handleReelFileUpload = function (event) {
+    const files = event.target.files;
+    if (!files || files.length === 0) return;
+
+    const file = files[0];
+    const chip = document.getElementById('reels-upload-progress-chip');
+    const fill = document.getElementById('upload-chip-fill');
+    const statusText = document.getElementById('upload-chip-status');
+
+    if (chip) chip.style.display = 'inline-flex';
+
+    let progress = 15;
+    if (fill) fill.style.width = `${progress}%`;
+    if (statusText) statusText.textContent = `${file.name} • uploading (${progress}%)`;
+
+    const interval = setInterval(() => {
+      progress += 25;
+      if (fill) fill.style.width = `${Math.min(progress, 100)}%`;
+      if (statusText) statusText.textContent = `${file.name} • processing`;
+
+      if (progress >= 100) {
+        clearInterval(interval);
+
+        // Create object URL for preview if image or video
+        let previewUrl = 'goldfish_reel_thumb.jpg';
+        try {
+          if (file.type.startsWith('image') || file.type.startsWith('video')) {
+            previewUrl = URL.createObjectURL(file);
+          }
+        } catch (e) { }
+
+        // Create new media card item
+        const newMedia = {
+          id: `media-${Date.now()}`,
+          name: file.name,
+          type: file.type.startsWith('image') ? 'image' : 'video',
+          duration: '00:15',
+          size: `${(file.size / (1024 * 1024)).toFixed(1)} MB`,
+          folder: currentActiveFolder || 'main',
+          date: 'Just now',
+          autoDmKeyword: 'GROWTH',
+          template: 'Growth Toolkit Blueprint',
+          thumbUrl: previewUrl
+        };
+
+        galleryMediaItems.unshift(newMedia);
+        renderGalleryFolders();
+        renderGalleryGrid();
+
+        setTimeout(() => {
+          if (chip) chip.style.display = 'none';
+        }, 1800);
+
+        if (typeof window.showToast === 'function') {
+          window.showToast(`✓ Uploaded "${file.name}" to Gallery!`);
+        }
+      }
+    }, 350);
+  };
+
+  // TOGGLE GALLERY / ARCHIVE TABS
+  window.toggleGalleryArchive = function (mode, btn) {
+    currentGalleryViewMode = mode;
+    const tabBtns = document.querySelectorAll('.gallery-center-tab-strip .center-tab-btn');
+    tabBtns.forEach(b => b.classList.remove('active'));
+    if (btn) btn.classList.add('active');
+
+    const emptyState = document.getElementById('gallery-empty-state');
+    const mediaGrid = document.getElementById('gallery-media-grid');
+
+    if (mode === 'archive') {
+      if (mediaGrid) mediaGrid.style.display = 'none';
+      if (emptyState) {
+        emptyState.style.display = 'flex';
+        const heading = emptyState.querySelector('.empty-heading');
+        const sub = emptyState.querySelector('.empty-sub');
+        if (heading) heading.textContent = 'Your archive is empty!';
+        if (sub) sub.textContent = 'Completed and archived stories will appear here';
+      }
+    } else {
+      if (emptyState) {
+        const heading = emptyState.querySelector('.empty-heading');
+        const sub = emptyState.querySelector('.empty-sub');
+        if (heading) heading.textContent = 'Your gallery is empty!';
+        if (sub) sub.textContent = 'Drop images / videos here or click the button';
+      }
+      renderGalleryGrid();
+    }
+  };
+
+  // OPEN MEDIA IN SCHEDULER (MATCHING SCREENSHOT)
+  window.openMediaInScheduler = function (mediaId) {
+    const media = galleryMediaItems.find(m => m.id === mediaId) || { name: 'Digiproducthub (15)', autoDmKeyword: 'GROWTH', thumbUrl: 'goldfish_reel_thumb.jpg' };
+
+    const bannerTitle = document.getElementById('sched-active-title');
+    if (bannerTitle) bannerTitle.textContent = media.name;
+
+    const posterImg = document.getElementById('sched-poster-img');
+    if (posterImg) posterImg.src = media.thumbUrl || 'goldfish_reel_thumb.jpg';
+
+    const videoEl = document.getElementById('schedule-video-element');
+    if (videoEl && media.thumbUrl && !media.thumbUrl.startsWith('data:image')) {
+      videoEl.src = media.thumbUrl;
+    }
+
+    // Reset feedback banner and button
+    const banner = document.getElementById('sched-feedback-banner');
+    if (banner) banner.style.display = 'none';
+
+    const postBtn = document.getElementById('btn-post-now-action');
+    if (postBtn) {
+      postBtn.disabled = false;
+      postBtn.textContent = 'Post now';
+      postBtn.style.opacity = '1';
+    }
+
+    // Switch to scheduler sub-tab
+    window.switchReelsSubTab('schedule');
+
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+
+    if (typeof window.showToast === 'function') {
+      window.showToast(`🎯 Opened "${media.name}" in Post Scheduler`);
+    }
+  };
+
+  window.toggleSocialDropdown = function (e) {
+    const list = document.getElementById('social-grouped-list');
+    if (list) {
+      list.style.display = list.style.display === 'none' ? 'block' : 'none';
+    }
+  };
+
+  // EXECUTE POST NOW (EXACT REPLICA OF USER SCREENSHOT)
+  window.executePostNow = function () {
+    const banner = document.getElementById('sched-feedback-banner');
+    const postBtn = document.getElementById('btn-post-now-action');
+    const actList = document.getElementById('scheduling-activity-list');
+    const cardActivity = document.getElementById('card-scheduling-activity');
+    const bannerTitle = document.getElementById('sched-active-title');
+    const title = bannerTitle ? bannerTitle.textContent : 'Digiproducthub (15)';
+
+    // Show feedback banner matching screenshot
+    if (banner) {
+      banner.style.display = 'block';
+    }
+
+    // Disable post now button
+    if (postBtn) {
+      postBtn.disabled = true;
+      postBtn.textContent = 'Commands sent';
+    }
+
+    // Reveal scheduling activity card if hidden
+    if (cardActivity) {
+      cardActivity.style.display = 'block';
+    }
+
+    // Prepend activity amber card
+    if (actList) {
+      const now = new Date();
+      const dateStr = now.toISOString().replace('T', ' ').substring(0, 19);
+      const newCard = document.createElement('div');
+      newCard.className = 'activity-amber-card';
+      newCard.innerHTML = `
+        <div class="activity-amber-left">
+          <svg class="ig-pink-icon" width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+            <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
+            <circle cx="12" cy="12" r="4" fill="#ffffff"></circle>
+          </svg>
+          <div>
+            <div class="activity-name-row">
+              <span class="activity-type-label">Instagram Story</span>
+              <span class="activity-handle-label">@real_factcheck</span>
+            </div>
+            <div class="activity-time-label">Scheduled for ${dateStr}</div>
+          </div>
+        </div>
+        <span class="activity-amber-pill">In progress</span>
+      `;
+      actList.insertBefore(newCard, actList.firstChild);
+    }
+
+    if (typeof window.showToast === 'function') {
+      window.showToast(`🚀 Scheduling commands sent for "${title}"!`);
+    }
+  };
+
+  window.handleAutoDmKeywordInput = function (val) {
+    const clean = val.replace(/^#+/, '').trim().toUpperCase();
+    const quote = document.querySelector('#pub-quote-1 .quote-text');
+    if (quote) {
+      quote.textContent = `"Sent you a DM! Check your inbox with the #${clean || 'GROWTH'} guide 🚀"`;
+    }
+  };
+
+  window.testAutoDmOnCurrentPost = function () {
+    const input = document.getElementById('auto-dm-compose-keyword');
+    const kw = input ? input.value.replace(/^#+/, '').trim() : 'GROWTH';
+    const modal = document.getElementById('modal-reels-test-dm-backdrop');
+    if (modal) {
+      window.openReelsModal('modal-reels-test-dm-backdrop');
+      const simInput = document.getElementById('sim-comment-text');
+      if (simInput) simInput.value = `Please send me ${kw}! 🙌`;
+    } else {
+      if (typeof window.showToast === 'function') {
+        window.showToast(`⚡ Simulated comment-to-DM for #${kw} tested successfully!`);
+      }
+    }
+  };
+
+  // =========================================================================
+  // SAVE AUTO-DM SETTINGS
+  // =========================================================================
+  window.saveAutoDmSettings = function () {
+    const keywordInput = document.getElementById('auto-dm-compose-keyword');
+    const templateSelect = document.getElementById('auto-dm-template-select');
+    const keyword = keywordInput ? keywordInput.value.replace(/^#+/, '').trim() : '';
+    const template = templateSelect ? templateSelect.options[templateSelect.selectedIndex].text : '';
+    const btn = document.getElementById('btn-save-auto-dm');
+
+    if (!keyword) {
+      if (typeof window.showToast === 'function') {
+        window.showToast('⚠️ Please enter a trigger keyword before saving.');
+      }
+      return;
+    }
+
+    // Animate save button
+    if (btn) {
+      btn.disabled = true;
+      btn.innerHTML = '<span class="chip-spinner-icon" style="width: 14px; height: 14px; border-width: 2px; border-color: #fff transparent #fff transparent;"></span> <span>Saving...</span>';
+    }
+
+    setTimeout(() => {
+      if (btn) {
+        btn.disabled = false;
+        btn.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> <span>Saved!</span>';
+        btn.style.background = 'linear-gradient(135deg, #059669, #10b981)';
+      }
+
+      if (typeof window.showToast === 'function') {
+        window.showToast(`✅ Auto-DM saved! Keyword: #${keyword.toUpperCase()} → ${template}`);
+      }
+
+      // Reset button after 2s
+      setTimeout(() => {
+        if (btn) {
+          btn.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg> <span>Save</span>';
+          btn.style.background = 'linear-gradient(135deg, #7c3aed, #a855f7)';
+        }
+      }, 2000);
+    }, 600);
+  };
+
+  // =========================================================================
+  // CREATE DM TEMPLATE MODAL (BLACK & WHITE THEME + TRIGGER MODES)
+  // =========================================================================
+  window._currentDmTriggerMode = 'custom';
+
+  window.setDmTriggerMode = function (mode) {
+    window._currentDmTriggerMode = mode;
+    const btnCustom = document.getElementById('trigger-mode-custom');
+    const btnEmoji = document.getElementById('trigger-mode-emoji');
+    const btnAll = document.getElementById('trigger-mode-all');
+    const panelCustom = document.getElementById('trigger-panel-custom');
+    const panelEmoji = document.getElementById('trigger-panel-emoji');
+    const panelAll = document.getElementById('trigger-panel-all');
+
+    if (btnCustom) btnCustom.classList.toggle('active', mode === 'custom');
+    if (btnEmoji) btnEmoji.classList.toggle('active', mode === 'emoji');
+    if (btnAll) btnAll.classList.toggle('active', mode === 'all');
+
+    if (panelCustom) panelCustom.style.display = mode === 'custom' ? 'block' : 'none';
+    if (panelEmoji) panelEmoji.style.display = mode === 'emoji' ? 'block' : 'none';
+    if (panelAll) panelAll.style.display = mode === 'all' ? 'block' : 'none';
+
+    if (mode === 'custom') {
+      const input = document.getElementById('new-dm-trigger-word');
+      if (input) setTimeout(() => input.focus(), 50);
+    } else if (mode === 'emoji') {
+      const input = document.getElementById('new-dm-trigger-emoji');
+      if (input) setTimeout(() => input.focus(), 50);
+    }
+  };
+
+  window.selectDmIconEmoji = function (emoji, btn) {
+    const input = document.getElementById('new-dm-tpl-emoji');
+    if (input) input.value = emoji;
+    const container = document.getElementById('dm-icon-emoji-presets');
+    if (container) {
+      container.querySelectorAll('.dm-bw-emoji-chip').forEach(c => c.classList.remove('active'));
+    }
+    if (btn) btn.classList.add('active');
+  };
+
+  window.selectDmTriggerEmoji = function (emoji, btn) {
+    const input = document.getElementById('new-dm-trigger-emoji');
+    if (input) input.value = emoji;
+    const container = document.getElementById('dm-trigger-emoji-presets');
+    if (container) {
+      container.querySelectorAll('.dm-bw-emoji-chip').forEach(c => c.classList.remove('active'));
+    }
+    if (btn) btn.classList.add('active');
+  };
+
+  window.setTriggerWordValue = function (word) {
+    const input = document.getElementById('new-dm-trigger-word');
+    if (input) {
+      input.value = word;
+      input.focus();
+    }
+  };
+
+  window.insertTplVar = function (tag) {
+    const textarea = document.getElementById('new-dm-tpl-body');
+    if (!textarea) return;
+    const start = textarea.selectionStart || textarea.value.length;
+    const end = textarea.selectionEnd || textarea.value.length;
+    const val = textarea.value;
+    textarea.value = val.substring(0, start) + tag + val.substring(end);
+    textarea.focus();
+    const newPos = start + tag.length;
+    textarea.setSelectionRange(newPos, newPos);
+  };
+
+  window.openCreateDmTemplateModal = function () {
+    const modal = document.getElementById('modal-create-dm-template');
+    if (modal) {
+      modal.style.display = 'flex';
+      setTimeout(() => {
+        modal.classList.add('active');
+      }, 10);
+
+      // Reset form
+      const nameInput = document.getElementById('new-dm-tpl-name');
+      const emojiInput = document.getElementById('new-dm-tpl-emoji');
+      const triggerWord = document.getElementById('new-dm-trigger-word');
+      const triggerEmoji = document.getElementById('new-dm-trigger-emoji');
+      const bodyInput = document.getElementById('new-dm-tpl-body');
+      const linkInput = document.getElementById('new-dm-tpl-link');
+
+      if (nameInput) nameInput.value = '';
+      if (emojiInput) emojiInput.value = '📦';
+      if (triggerWord) triggerWord.value = 'GROWTH';
+      if (triggerEmoji) triggerEmoji.value = '🔥';
+      if (bodyInput) bodyInput.value = 'Hey {first_name}! Here is your free resource: {link}';
+      if (linkInput) linkInput.value = '';
+
+      window.setDmTriggerMode('custom');
+      if (nameInput) setTimeout(() => nameInput.focus(), 60);
+    }
+  };
+
+  window.closeCreateDmTemplateModal = function () {
+    const modal = document.getElementById('modal-create-dm-template');
+    if (modal) {
+      modal.classList.remove('active');
+      setTimeout(() => {
+        modal.style.display = 'none';
+      }, 200);
+    }
+  };
+
+  window.confirmCreateDmTemplate = function () {
+    const name = (document.getElementById('new-dm-tpl-name')?.value || '').trim();
+    const emoji = (document.getElementById('new-dm-tpl-emoji')?.value || '📦').trim();
+    const body = (document.getElementById('new-dm-tpl-body')?.value || '').trim();
+    const link = (document.getElementById('new-dm-tpl-link')?.value || '').trim();
+    const mode = window._currentDmTriggerMode || 'custom';
+
+    if (!name) {
+      if (typeof window.showToast === 'function') {
+        window.showToast('⚠️ Please enter a Template Name.');
+      }
+      return;
+    }
+
+    let triggerVal = '';
+    if (mode === 'custom') {
+      triggerVal = (document.getElementById('new-dm-trigger-word')?.value || '').replace(/^#+/, '').trim().toUpperCase();
+      if (!triggerVal) {
+        if (typeof window.showToast === 'function') {
+          window.showToast('⚠️ Please enter a Custom Trigger Keyword (e.g. GROWTH).');
+        }
+        return;
+      }
+    } else if (mode === 'emoji') {
+      triggerVal = (document.getElementById('new-dm-trigger-emoji')?.value || '').trim();
+      if (!triggerVal) {
+        if (typeof window.showToast === 'function') {
+          window.showToast('⚠️ Please select or enter a Trigger Emoji.');
+        }
+        return;
+      }
+    } else {
+      triggerVal = '*'; // All comments
+    }
+
+    if (!body) {
+      if (typeof window.showToast === 'function') {
+        window.showToast('⚠️ Please enter a DM message body.');
+      }
+      return;
+    }
+
+    // Generate unique value
+    const tplValue = 'tpl-custom-' + Date.now();
+
+    // Add to the dropdown
+    const select = document.getElementById('auto-dm-template-select');
+    if (select) {
+      const option = document.createElement('option');
+      option.value = tplValue;
+      option.textContent = `${emoji} ${name}`;
+      option.dataset.body = body;
+      option.dataset.link = link;
+      option.dataset.triggerMode = mode;
+      option.dataset.triggerVal = triggerVal;
+      select.appendChild(option);
+      select.value = tplValue;
+    }
+
+    // Auto update trigger keyword in compose card
+    const composeKwInput = document.getElementById('auto-dm-compose-keyword');
+    if (composeKwInput) {
+      if (mode === 'custom') {
+        composeKwInput.value = triggerVal;
+      } else if (mode === 'emoji') {
+        composeKwInput.value = triggerVal;
+      } else {
+        composeKwInput.value = 'ALL';
+      }
+      if (typeof window.handleAutoDmKeywordInput === 'function') {
+        window.handleAutoDmKeywordInput(composeKwInput.value);
+      }
+    }
+
+    window.closeCreateDmTemplateModal();
+
+    if (typeof window.showToast === 'function') {
+      const triggerLabel = mode === 'all' ? 'All Comments' : `${triggerVal}`;
+      window.showToast(`✅ DM Template "${name}" created! (Trigger: ${triggerLabel})`);
+    }
+  };
+
+  // =========================================================================
+  // DATE & TIME PICKER INITIALIZATION
+  // =========================================================================
+  function initDateTimePicker() {
+    const dtInput = document.getElementById('sched-datetime-display');
+    if (!dtInput) return;
+
+    // Set default to current time + 1 hour (rounded to nearest 15 min)
+    const now = new Date();
+    now.setHours(now.getHours() + 1);
+    now.setMinutes(Math.ceil(now.getMinutes() / 15) * 15, 0, 0);
+
+    // Format as YYYY-MM-DDTHH:MM for datetime-local input
+    const year = now.getFullYear();
+    const month = String(now.getMonth() + 1).padStart(2, '0');
+    const day = String(now.getDate()).padStart(2, '0');
+    const hours = String(now.getHours()).padStart(2, '0');
+    const minutes = String(now.getMinutes()).padStart(2, '0');
+    dtInput.value = `${year}-${month}-${day}T${hours}:${minutes}`;
+
+    // Set min to current time (prevent scheduling in the past)
+    const nowMin = new Date();
+    const minYear = nowMin.getFullYear();
+    const minMonth = String(nowMin.getMonth() + 1).padStart(2, '0');
+    const minDay = String(nowMin.getDate()).padStart(2, '0');
+    const minHours = String(nowMin.getHours()).padStart(2, '0');
+    const minMinutes = String(nowMin.getMinutes()).padStart(2, '0');
+    dtInput.min = `${minYear}-${minMonth}-${minDay}T${minHours}:${minMinutes}`;
+
+    // Listen for changes
+    dtInput.addEventListener('change', function () {
+      const selected = new Date(this.value);
+      if (selected < new Date()) {
+        if (typeof window.showToast === 'function') {
+          window.showToast('⚠️ Cannot schedule in the past. Adjusted to now.');
+        }
+        const adjusted = new Date();
+        adjusted.setMinutes(adjusted.getMinutes() + 5, 0, 0);
+        const aY = adjusted.getFullYear();
+        const aM = String(adjusted.getMonth() + 1).padStart(2, '0');
+        const aD = String(adjusted.getDate()).padStart(2, '0');
+        const aH = String(adjusted.getHours()).padStart(2, '0');
+        const aMi = String(adjusted.getMinutes()).padStart(2, '0');
+        this.value = `${aY}-${aM}-${aD}T${aH}:${aMi}`;
+      }
+    });
+  }
+
+  // Initialize datetime on load
+  setTimeout(initDateTimePicker, 150);
+
+  window.updateSelectedAccountsCount = function () {
+    const chips = document.querySelectorAll('#selected-account-chips .sched-account-chip');
+    const badge = document.getElementById('selected-accounts-count-badge');
+    if (badge) {
+      badge.textContent = `${chips.length} selected`;
+    }
+  };
+
+  function renderSchedulingActivityList() {
+    const listEl = document.getElementById('scheduling-activity-list');
+    if (!listEl) return;
+
+    listEl.innerHTML = schedulingActivityList.map(act => `
+      <div class="activity-item-card">
+        <div class="activity-main-info">
+          <span class="activity-platform-badge">${act.platform}</span>
+          <div>
+            <div class="activity-title-text">${act.mediaName}</div>
+            <div style="font-size: 11.5px; color: #64748b;">${act.time}</div>
+          </div>
+        </div>
+        <div style="display: flex; align-items: center; gap: 10px;">
+          <span class="activity-status-pill ${act.status}">
+            ${act.status === 'in-progress'
+        ? '<span class="chip-spinner-icon" style="width: 10px; height: 10px; border-width: 1.5px;"></span>'
+        : '✓'}
+            ${act.statusText}
+          </span>
+        </div>
+      </div>
+    `).join('');
+  }
+
+  // =========================================================================
+  // BULK SCHEDULING
+  // =========================================================================
+  window.downloadBulkTemplate = function () {
+    const csvContent = "data:text/csv;charset=utf-8,Media_Filename,Platforms,Caption,Auto_DM_Keyword,Scheduled_Date_Time\n"
+      + "product_launch_15s.mp4,Instagram Reels|TikTok,Automate your sales with RenderReply,GROWTH,2026-09-08 18:30\n"
+      + "store_showcase_08s.mp4,Instagram Stories,Get 20% off our creator store,STORE,2026-09-09 12:00\n"
+      + "viral_hook_30s.mp4,Instagram Reels|TikTok|YouTube Shorts,3 secrets to viral DMs,BLUEPRINT,2026-09-10 15:45\n";
+
+    const encodedUri = encodeURI(csvContent);
+    const link = document.createElement("a");
+    link.setAttribute("href", encodedUri);
+    link.setAttribute("download", "renderreply_bulk_schedule_template.csv");
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+
+    if (typeof window.showToast === 'function') {
+      window.showToast('📥 Downloaded RenderReply Bulk Schedule CSV Template!');
+    }
+  };
+
+  // =========================================================================
+  // PROCEDURAL 9:16 VERTICAL VIDEO CANVAS ENGINE
+  // =========================================================================
+  function startProceduralCanvas(presetId = 1) {
+    const canvas = document.getElementById('reels-procedural-canvas');
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return;
+
+    if (canvasAnimationId) {
+      cancelAnimationFrame(canvasAnimationId);
+    }
+
+    const videoEl = document.getElementById('reels-video-element');
+    if (videoEl) {
+      videoEl.style.display = 'none';
+    }
+    canvas.style.display = 'block';
+
+    const preset = samplePresets[presetId] || samplePresets[1];
+    let step = 0;
+
+    function renderFrame() {
+      if (!isPlaying) {
+        canvasAnimationId = requestAnimationFrame(renderFrame);
+        return;
+      }
+
+      step += 0.02;
+      const w = canvas.width;
+      const h = canvas.height;
+
+      // Dynamic Gradient Background
+      const grad = ctx.createLinearGradient(0, 0, w * 0.8, h);
+      grad.addColorStop(0, preset.bgGradient[0] || '#0f172a');
+      grad.addColorStop(0.5, preset.bgGradient[1] || '#3b0764');
+      grad.addColorStop(1, preset.bgGradient[2] || '#0284c7');
+      ctx.fillStyle = grad;
+      ctx.fillRect(0, 0, w, h);
+
+      // Ambient Glowing Grid Lines
+      ctx.strokeStyle = 'rgba(255, 255, 255, 0.04)';
+      ctx.lineWidth = 1;
+      for (let x = 0; x < w; x += 30) {
+        ctx.beginPath();
+        ctx.moveTo(x, 0);
+        ctx.lineTo(x, h);
+        ctx.stroke();
+      }
+      for (let y = 0; y < h; y += 30) {
+        ctx.beginPath();
+        ctx.moveTo(0, y);
+        ctx.lineTo(w, y);
+        ctx.stroke();
+      }
+
+      // Animated Wave Particles
+      for (let i = 0; i < 24; i++) {
+        const px = (Math.sin(step + i * 0.6) * 0.5 + 0.5) * w;
+        const py = ((step * 40 + i * 28) % h);
+        const radius = Math.sin(step + i) * 3 + 4;
+        const alpha = Math.sin(step * 0.5 + i) * 0.3 + 0.3;
+
+        ctx.fillStyle = `rgba(192, 132, 252, ${alpha})`;
+        ctx.beginPath();
+        ctx.arc(px, py, radius, 0, Math.PI * 2);
+        ctx.fill();
+      }
+
+      // Animated Sound Wave in Center
+      const waveY = h * 0.52;
+      ctx.strokeStyle = 'rgba(255, 255, 255, 0.25)';
+      ctx.lineWidth = 3;
+      ctx.beginPath();
+      for (let x = 30; x < w - 30; x += 6) {
+        const dy = Math.sin(x * 0.05 + step * 3) * 24 * Math.sin((x / w) * Math.PI);
+        if (x === 30) ctx.moveTo(x, waveY + dy);
+        else ctx.lineTo(x, waveY + dy);
+      }
+      ctx.stroke();
+
+      // Creator Watermark Badge in Canvas
+      ctx.fillStyle = 'rgba(0, 0, 0, 0.4)';
+      ctx.beginPath();
+      ctx.roundRect(w / 2 - 70, h * 0.38, 140, 36, 18);
+      ctx.fill();
+      ctx.strokeStyle = 'rgba(255, 255, 255, 0.2)';
+      ctx.stroke();
+
+      ctx.fillStyle = '#ffffff';
+      ctx.font = 'bold 13px Inter, sans-serif';
+      ctx.textAlign = 'center';
+      ctx.fillText('RenderReply Live', w / 2, h * 0.38 + 22);
+
+      // Scrubber progress update if simulated
+      const scrubber = document.getElementById('reels-scrubber');
+      const scrubberFill = document.getElementById('reels-scrubber-fill');
+      const timecode = document.getElementById('reels-timecode-display');
+
+      const currentTimeVal = (step * 2) % 30;
+      if (scrubber) scrubber.value = currentTimeVal;
+      if (scrubberFill) scrubberFill.style.width = `${(currentTimeVal / 30) * 100}%`;
+      if (timecode) {
+        const secStr = Math.floor(currentTimeVal).toString().padStart(2, '0');
+        timecode.textContent = `00:${secStr} / 00:30`;
+      }
+
+      canvasAnimationId = requestAnimationFrame(renderFrame);
+    }
+
+    renderFrame();
+  }
+
+  // PLAYBACK & MEDIA CONTROLLERS
+  function updatePlayIcons(playing) {
+    const ctrlPlayIcon = document.getElementById('reels-ctrl-play-icon');
+    const centerPlayBtn = document.getElementById('reels-play-center-btn');
+    if (ctrlPlayIcon) {
+      ctrlPlayIcon.innerHTML = playing
+        ? '<rect x="6" y="4" width="4" height="16"></rect><rect x="14" y="4" width="4" height="16"></rect>'
+        : '<polygon points="5 3 19 12 5 21 5 3"></polygon>';
+    }
+    if (centerPlayBtn) {
+      centerPlayBtn.style.opacity = playing ? '0' : '0.9';
+    }
+  }
+
+  // ACCORDIONS, TRIMMING & SPEED
+  window.toggleReelsAccordion = function (headEl) {
+    if (!headEl) return;
+    const body = headEl.nextElementSibling;
+    if (body) {
+      body.classList.toggle('open');
+    }
+  };
+
+  // VISUAL COLOR FILTERS
+  window.updateLiveFilterAdjustment = function () {
+    const b = document.getElementById('filter-brightness')?.value || 100;
+    const c = document.getElementById('filter-contrast')?.value || 100;
+    const s = document.getElementById('filter-saturate')?.value || 100;
+    const sepia = document.getElementById('filter-sepia')?.value || 0;
+
+    const filterString = `brightness(${b}%) contrast(${c}%) saturate(${s}%) sepia(${sepia}%)`;
+
+    const videoEl = document.getElementById('reels-video-element');
+    const canvas = document.getElementById('reels-procedural-canvas');
+    if (videoEl) videoEl.style.filter = filterString;
+    if (canvas) canvas.style.filter = filterString;
+  };
+
+  // ON-SCREEN TEXT OVERLAYS & HOOK BADGES
+  window.updateOverlayText = function (val) {
+    const preview = document.getElementById('reels-text-content-preview');
+    if (preview) {
+      preview.textContent = val || 'Your Viral Reel Hook Here';
+    }
+  };
+
+  // AUDIO SELECTION
+  window.selectReelAudio = function (trackId, title, item) {
+    const items = document.querySelectorAll('.audio-track-item');
+    items.forEach(i => i.classList.remove('active'));
+    if (item) item.classList.add('active');
+
+    const soundTitle = document.getElementById('reels-ig-sound-title');
+    if (soundTitle) soundTitle.textContent = title;
+
+    if (typeof window.showToast === 'function') {
+      window.showToast(`🎵 Audio Selected: ${title}`);
+    }
+  };
+
+  // AI CAPTION & HASHTAGS GENERATOR
+  const aiCaptionsByTone = {
+    viral: "STOP SCROLLING 🚨 If you're not automating your Instagram DMs in 2026, you're missing out on 80% of your warm sales.\n\nComment GROWTH below and my automated system will send you the 3-step setup guide instantly! 🚀\n\n#creatoreconomy #dmautomation #viralreels #growthhacks #renderreply",
+    edu: "Here is the exact step-by-step breakdown of how creators automate $10K+ per month using simple comment triggers:\n\n1. Post a high-value Reel\n2. Give a clear 1-word CTA (e.g. 'GROWTH')\n3. Deliver value in DMs within 2 seconds\n\nComment GROWTH for the full checklist! 📚\n\n#socialmediatips #marketingtips #growthstrategy #creators",
+    sales: "Ready to turn your followers into paying clients on autopilot? 💰\n\nComment GROWTH below to get instant access to our Creator Launch Toolkit with a special 20% discount code included!\n\n#digitalproducts #creatorbusiness #monetization #onlinebusiness",
+    story: "Two months ago I was spending 4 hours every single day copy-pasting the same link in Instagram DMs. Then I turned on RenderReply automation.\n\nComment GROWTH and I'll send you the exact playbook that saved my sanity! ✨\n\n#entrepreneurship #solopreneur #creativelife #automation"
+  };
+
+  // PUBLISHING & SCHEDULING MODALS
+  window.openReelPublishModal = function (mode = 'publish') {
+    const modal = document.getElementById('modal-reels-publish-backdrop');
+    if (modal) modal.classList.add('active');
+  };
+
+  // COMMENT-TO-DM SIMULATOR
+  window.openReelTestDmModal = function (event) {
+    if (event) event.stopPropagation();
+    const modal = document.getElementById('modal-reels-test-dm-backdrop');
+    if (modal) modal.classList.add('active');
+  };
+
+  // REELS ANALYTICS CHART
+  function renderReelsAnalyticsChart() {
+    const container = document.getElementById('reels-analytics-chart');
+    if (!container) return;
+
+    const reachPoints = [42, 68, 85, 92, 120, 145, 182];
+    const dmPoints = [8, 14, 21, 26, 34, 41, 52];
+    const xLabels = ['Day 1', 'Day 5', 'Day 10', 'Day 15', 'Day 20', 'Day 25', 'Day 30'];
+
+    const numPoints = xLabels.length;
+    const paddingLeft = 36;
+    const paddingRight = 480;
+    const availableWidth = paddingRight - paddingLeft;
+    const step = availableWidth / (numPoints - 1);
+
+    const maxY = 200;
+    const chartTop = 20;
+    const chartBottom = 150;
+    const chartHeight = chartBottom - chartTop;
+
+    function getY(val) {
+      return chartBottom - (val / maxY) * chartHeight;
+    }
+
+    const reachY = reachPoints.map(getY);
+    const dmY = dmPoints.map(getY);
+
+    let pathReach = `M ${paddingLeft} ${reachY[0]}`;
+    let pathDm = `M ${paddingLeft} ${dmY[0]}`;
+
+    for (let i = 1; i < numPoints; i++) {
+      const x = paddingLeft + i * step;
+      pathReach += ` L ${x} ${reachY[i]}`;
+      pathDm += ` L ${x} ${dmY[i]}`;
+    }
+
+    const areaReach = `${pathReach} L ${paddingLeft + (numPoints - 1) * step} ${chartBottom} L ${paddingLeft} ${chartBottom} Z`;
+
+    container.innerHTML = `
+      <svg width="100%" height="100%" viewBox="0 0 540 190" style="overflow: visible;">
+        <defs>
+          <linearGradient id="reelReachGrad" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="#a855f7" stop-opacity="0.25"/>
+            <stop offset="100%" stop-color="#a855f7" stop-opacity="0.0"/>
+          </linearGradient>
+        </defs>
+
+        <line x1="${paddingLeft}" y1="${chartTop}" x2="${paddingRight}" y2="${chartTop}" stroke="#f1f5f9" stroke-width="1"/>
+        <line x1="${paddingLeft}" y1="${chartTop + chartHeight * 0.5}" x2="${paddingRight}" y2="${chartTop + chartHeight * 0.5}" stroke="#f1f5f9" stroke-width="1"/>
+        <line x1="${paddingLeft}" y1="${chartBottom}" x2="${paddingRight}" y2="${chartBottom}" stroke="#e2e8f0" stroke-width="1"/>
+
+        <path d="${areaReach}" fill="url(#reelReachGrad)" />
+        <path d="${pathReach}" fill="none" stroke="#a855f7" stroke-width="3" stroke-linecap="round"/>
+        <path d="${pathDm}" fill="none" stroke="#10b981" stroke-width="2.5" stroke-linecap="round" stroke-dasharray="4 4"/>
+
+        ${reachPoints.map((val, i) => `
+          <circle cx="${paddingLeft + i * step}" cy="${reachY[i]}" r="4" fill="#a855f7" stroke="#ffffff" stroke-width="2"/>
+        `).join('')}
+
+        ${xLabels.map((lbl, i) => `
+          <text x="${paddingLeft + i * step}" y="172" fill="#94a3b8" font-size="10" font-weight="600" text-anchor="middle">${lbl}</text>
+        `).join('')}
+      </svg>
+    `;
+  }
+
+  // AI SCRIPT & HOOK STUDIO
+  const scriptTemplates = {
+    pas: {
+      hook: '"If you are still typing manual DMs to every single customer lead in 2026, you are leaving 5 figures on the table every month."',
+      cue1: "Visual: Urgent point at camera with bold warning text",
+      tag1: "🚨 STOP LOSING DM SALES",
+      body: '"Here is the problem: by the time you reply 3 hours later, their buying intent is already cold. When you use RenderReply, your Instagram triggers an instant DM containing your checkout link in under 2 seconds while capturing their verified email."',
+      cue2: "Visual: Quick split screen showing fast 2-second automated DM",
+      tag2: "⚡ 2-SECOND AUTOPILOT CONVERSION",
+      cta: '"Comment \'GROWTH\' below right now and I will send the entire blueprint straight to your DMs for free!"',
+      cue3: "Visual: Point down towards the comment box",
+      tag3: "👇 COMMENT 'GROWTH' FOR FREE DM"
+    },
+    tutorial: {
+      hook: '"Here is the exact 3-step system that generated $18,450 from Instagram Reels without spending a dime on ads."',
+      cue1: "Visual: High energy screen record of notification sales banner",
+      tag1: "💰 $18.4K ZERO-AD STRATEGY",
+      body: '"Step 1: Pick one core keyword like \'STORE\'. Step 2: Link your digital product or Notion template in RenderReply. Step 3: Turn on randomized AI comment responses to protect your account authority."',
+      cue2: "Visual: Step by step walkthrough animation",
+      tag2: "🚀 3 ACTIONABLE STEPS",
+      cta: '"Comment \'STORE\' below to get the 1-click template bundle sent directly to your inbox!"',
+      cue3: "Visual: Double tap screen and point down",
+      tag3: "👇 COMMENT 'STORE' TO UNLOCK"
+    },
+    pov: {
+      hook: '"POV: It is 11 PM and you are sleeping while your Instagram Reel is making sales and capturing leads on autopilot."',
+      cue1: "Visual: Relaxed creator POV aesthetic with morning coffee",
+      tag1: "✨ PASSIVE CREATOR LIFE",
+      body: '"I used to burn out replying to hundreds of DMs by hand. Now, one viral Reel + RenderReply automation does 100% of the heavy lifting. My conversion rate tripled in 14 days."',
+      cue2: "Visual: Show real-time RenderReply dashboard metrics",
+      tag2: "📈 3X HIGHER CONVERSIONS",
+      cta: '"Want to steal this setup? Comment \'GROWTH\' below and check your DMs in 5 seconds!"',
+      cue3: "Visual: Point towards direct message notification",
+      tag3: "👇 COMMENT 'GROWTH' NOW"
+    },
+    myth: {
+      hook: '"Stop believing the myth that you need 100,000 followers to make serious money from Instagram Reels."',
+      cue1: "Visual: Screen record of 3,000 follower account making $5K/mo",
+      tag1: "❌ MYTH BUSTED",
+      body: '"Followers do not pay your rent—conversions do. When you pair a 30-second Reel with an automated keyword trigger, you can turn a 2,000-view Reel into 40 paying customers every single week."',
+      cue2: "Visual: Show conversion funnel breakdown",
+      tag2: "🎯 TURNING VIEWS INTO BUYERS",
+      cta: '"Comment \'BLUEPRINT\' below to get my free micro-creator monetization roadmap!"',
+      cue3: "Visual: Point down towards comments",
+      tag3: "👇 COMMENT 'BLUEPRINT' FOR ROADMAP"
+    }
+  };
+
+  window.handleScriptSourceChange = function (val) {
+    const customGroup = document.getElementById('script-custom-topic-group');
+    if (customGroup) {
+      customGroup.style.display = val === 'custom' ? 'block' : 'none';
+    }
+  };
+
+  window.selectScriptFramework = function (fw, btn) {
+    activeFramework = fw;
+    const fwBtns = document.querySelectorAll('.fw-pill');
+    fwBtns.forEach(b => b.classList.remove('active'));
+    if (btn) btn.classList.add('active');
+  };
+
+  window.generateReelScript = function () {
+    const btn = document.getElementById('btn-generate-full-script');
+    if (btn) {
+      btn.style.opacity = '0.7';
+      btn.innerHTML = '<span>⚡ Writing Viral Script...</span>';
+    }
+
+    setTimeout(() => {
+      const data = scriptTemplates[activeFramework] || scriptTemplates.pas;
+
+      const act1 = document.getElementById('script-act1-text');
+      const act2 = document.getElementById('script-act2-text');
+      const act3 = document.getElementById('script-act3-text');
+
+      if (act1) act1.textContent = data.hook;
+      if (act2) act2.textContent = data.body;
+      if (act3) act3.textContent = data.cta;
+
+      if (btn) {
+        btn.style.opacity = '1';
+        btn.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg> Generate 30-Second Viral Script';
+      }
+
+      if (typeof window.showToast === 'function') {
+        window.showToast('🎬 Generated 30-Second Viral Script!');
+      }
+    }, 400);
+  };
+
+  window.loadScriptIntoEditor = function () {
+    const data = scriptTemplates[activeFramework] || scriptTemplates.pas;
+    const overlayInput = document.getElementById('reels-overlay-text-input');
+    const captionTextarea = document.getElementById('reels-caption-textarea');
+
+    if (overlayInput) {
+      overlayInput.value = data.tag1.replace(/[^\w\s$]/gi, '').trim() || 'AUTOMATE YOUR SALES';
+      window.updateOverlayText(overlayInput.value);
+    }
+
+    if (captionTextarea) {
+      captionTextarea.value = `${data.hook}\n\n${data.cta}\n\n#creatoreconomy #dmautomation #viralreels #growth`;
+      window.updateCaptionPreview(captionTextarea.value);
+    }
+
+    window.switchReelsSubTab('studio');
+
+    if (typeof window.showToast === 'function') {
+      window.showToast('✨ Loaded Script into Studio Editor!');
+    }
+  };
+
+  // INITIALIZE STUDIO ON MOUNT
+  setTimeout(() => {
+    renderGalleryFolders();
+    renderGalleryGrid();
+    renderSocialAccountsDropdown();
+    renderSchedulingActivityList();
+  }, 100);
+
+})();
+
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', initUserProfileDropdownAndModals);
+} else {
+  initUserProfileDropdownAndModals();
+}
+
+
+
+
