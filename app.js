@@ -3050,6 +3050,11 @@ window.updateSidebarUserProfileUI = function (userData) {
   const uppEmail = document.getElementById('upp-user-email');
   if (uppName) uppName.textContent = profile.name || 'RudRa RR';
   if (uppEmail) uppEmail.textContent = profile.email || 'rudrateja08@gmail.com';
+
+  // 5. Sync Social Scheduler Accounts & Chips
+  if (typeof window.syncSchedulerAccountsToActiveUser === 'function') {
+    try { window.syncSchedulerAccountsToActiveUser(); } catch (e) { }
+  }
 };
 
 window.switchActiveUserAccount = function (userId) {
@@ -3126,6 +3131,9 @@ window.switchActiveUserAccount = function (userId) {
   }
   if (typeof window.syncSettingsForActiveUser === 'function') {
     try { window.syncSettingsForActiveUser(); } catch (e) { console.error(e); }
+  }
+  if (typeof window.syncSchedulerAccountsToActiveUser === 'function') {
+    try { window.syncSchedulerAccountsToActiveUser(); } catch (e) { console.error(e); }
   }
 
   // 6. User Feedback Toast & Modal Dismissal
@@ -7027,21 +7035,24 @@ function initApp() {
       ];
       storeProducts.forEach((prod, index) => {
         const row = document.createElement('div');
-        row.className = 'dsp-prod-row';
+        row.className = 'dsp-prod-row cs-phone-prod-item';
         row.dataset.prodId = prod.id;
         const isFree = prod.price === 'FREE' || prod.price === '$0.00' || prod.price === '0';
         const photo = (prod.photos && prod.photos[0]) ? prod.photos[0] : '';
         const fallbackBg = colors[index % colors.length];
 
         row.innerHTML = `
-          ${photo ? `<img src="${photo}" class="dsp-prod-img" alt="${prod.title}" style="object-fit:cover;">` : `<div class="dsp-prod-img" style="background:${fallbackBg};"></div>`}
-          <div class="dsp-prod-info">
-            <div class="dsp-prod-name">${prod.title}</div>
-            <div class="dsp-prod-price ${isFree ? 'free' : ''}">${prod.price}</div>
+          ${photo ? `<div class="cs-phone-prod-img dsp-prod-img"><img src="${photo}" alt="${prod.title}"></div>` : `<div class="cs-phone-prod-img dsp-prod-img" style="background:${fallbackBg};"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.7)" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg></div>`}
+          <div class="cs-phone-prod-info dsp-prod-info">
+            <span class="cs-phone-prod-name dsp-prod-name">${prod.title}</span>
           </div>
+          <span class="cs-phone-prod-price dsp-prod-price ${isFree ? 'cs-phone-prod-free-badge free' : ''}">${prod.price}</span>
         `;
         dspList.appendChild(row);
       });
+      if (typeof window.reapplyLiveStoreStyles === 'function') {
+        window.reapplyLiveStoreStyles();
+      }
     }
 
     // SYNC TO LIVE STOREFRONT PREVIEW MODAL (#spm-products-grid)
@@ -7068,6 +7079,9 @@ function initApp() {
         `;
         spmGrid.appendChild(card);
       });
+      if (typeof window.reapplyLiveStoreStyles === 'function') {
+        window.reapplyLiveStoreStyles();
+      }
     }
 
     // SYNC CATALOG COUNTS & BADGES
@@ -9177,9 +9191,15 @@ function initCreatorStoreSettings() {
       if (file) {
         const reader = new FileReader();
         reader.onload = function (evt) {
-          const bgUrl = `url('${evt.target.result}') center/cover no-repeat`;
+          const bgUrl = `url('${evt.target.result}') center / cover no-repeat`;
+          window.currentStoreBannerBg = bgUrl;
           if (bannerPreviewGraphic) bannerPreviewGraphic.style.background = bgUrl;
-          if (phoneHero) phoneHero.style.background = bgUrl;
+          document.querySelectorAll('.cs-phone-hero, .dsp-hero, #spm-hero-banner').forEach(el => {
+            el.style.background = bgUrl;
+            el.style.backgroundSize = 'cover';
+            el.style.backgroundPosition = 'center';
+            el.style.backgroundRepeat = 'no-repeat';
+          });
           syncAllStorePreviewFields();
           showToast('Uploaded new hero banner image!');
         };
@@ -9205,8 +9225,13 @@ function initCreatorStoreSettings() {
       swatch.classList.add('active');
       const bannerKey = swatch.getAttribute('data-banner');
       const bg = bannerPresetMap[bannerKey] || swatch.style.background;
-      if (phoneHero && bg) {
-        phoneHero.style.background = bg;
+      if (bg) {
+        window.currentStoreBannerBg = bg;
+        document.querySelectorAll('.cs-phone-hero, .dsp-hero, #spm-hero-banner').forEach(el => {
+          el.style.background = bg;
+          el.style.backgroundSize = 'cover';
+          el.style.backgroundPosition = 'center';
+        });
         if (bannerPreviewGraphic) bannerPreviewGraphic.style.background = bg;
         syncAllStorePreviewFields();
         showToast('Hero banner preset updated on phone preview!');
@@ -9251,15 +9276,43 @@ function initCreatorStoreSettings() {
   const pickerProdTitle = document.getElementById('cs-picker-prod-title');
   const txtProdTitle = document.getElementById('cs-txt-prod-title');
   const selectProdShadow = document.getElementById('cs-select-prod-shadow');
-  const phoneProdItems = document.querySelectorAll('.cs-phone-prod-item');
-  const phoneProdPrices = document.querySelectorAll('.cs-phone-prod-price');
-  const phoneProdNames = document.querySelectorAll('.cs-phone-prod-name');
+
+  function updateAllProductCardBg(val) {
+    if (!val) return;
+    window.currentCustomProdBg = val;
+    document.querySelectorAll('.cs-phone-prod-item, .dsp-prod-row, .spm-prod-card').forEach(item => {
+      item.style.background = val;
+    });
+  }
+
+  function updateAllProductPriceColor(val) {
+    if (!val) return;
+    document.querySelectorAll('.cs-phone-prod-price, .dsp-prod-price, .spm-prod-price').forEach(item => {
+      if (!item.classList.contains('free')) item.style.color = val;
+    });
+  }
+
+  function updateAllProductTitleColor(val) {
+    if (!val) return;
+    document.querySelectorAll('.cs-phone-prod-name, .dsp-prod-name, .spm-prod-title').forEach(item => {
+      item.style.color = val;
+    });
+  }
 
   if (pickerProdBg) {
     pickerProdBg.addEventListener('input', () => {
       const val = pickerProdBg.value;
       if (txtProdBg) txtProdBg.value = val;
-      phoneProdItems.forEach(item => item.style.background = val);
+      updateAllProductCardBg(val);
+    });
+  }
+  if (txtProdBg) {
+    txtProdBg.addEventListener('input', () => {
+      const val = txtProdBg.value;
+      if (pickerProdBg && val.startsWith('#') && (val.length === 4 || val.length === 7)) {
+        pickerProdBg.value = val;
+      }
+      updateAllProductCardBg(val);
     });
   }
 
@@ -9267,7 +9320,16 @@ function initCreatorStoreSettings() {
     pickerProdPrice.addEventListener('input', () => {
       const val = pickerProdPrice.value;
       if (txtProdPrice) txtProdPrice.value = val;
-      phoneProdPrices.forEach(item => item.style.color = val);
+      updateAllProductPriceColor(val);
+    });
+  }
+  if (txtProdPrice) {
+    txtProdPrice.addEventListener('input', () => {
+      const val = txtProdPrice.value;
+      if (pickerProdPrice && val.startsWith('#') && (val.length === 4 || val.length === 7)) {
+        pickerProdPrice.value = val;
+      }
+      updateAllProductPriceColor(val);
     });
   }
 
@@ -9275,14 +9337,23 @@ function initCreatorStoreSettings() {
     pickerProdTitle.addEventListener('input', () => {
       const val = pickerProdTitle.value;
       if (txtProdTitle) txtProdTitle.value = val;
-      phoneProdNames.forEach(item => item.style.color = val);
+      updateAllProductTitleColor(val);
+    });
+  }
+  if (txtProdTitle) {
+    txtProdTitle.addEventListener('input', () => {
+      const val = txtProdTitle.value;
+      if (pickerProdTitle && val.startsWith('#') && (val.length === 4 || val.length === 7)) {
+        pickerProdTitle.value = val;
+      }
+      updateAllProductTitleColor(val);
     });
   }
 
   if (selectProdShadow) {
     selectProdShadow.addEventListener('change', () => {
       const shadow = selectProdShadow.value;
-      phoneProdItems.forEach(item => {
+      document.querySelectorAll('.cs-phone-prod-item, .dsp-prod-row, .spm-prod-card').forEach(item => {
         item.classList.remove('shadow-subtle', 'shadow-flat', 'shadow-floating');
         item.classList.add(`shadow-${shadow}`);
       });
@@ -9469,11 +9540,13 @@ function initCreatorStoreSettings() {
     }
 
     // Hero Banner
-    const activeBannerSwatch = document.querySelector('.cs-banner-swatch.active');
-    const customBannerGraphic = document.getElementById('cs-banner-preview-graphic');
-    let bannerBg = customBannerGraphic?.style?.background;
-
+    let bannerBg = window.currentStoreBannerBg;
+    if (!bannerBg) {
+      const customBannerGraphic = document.getElementById('cs-banner-preview-graphic');
+      bannerBg = customBannerGraphic?.style?.background;
+    }
     if (!bannerBg || bannerBg === 'none' || bannerBg === '') {
+      const activeBannerSwatch = document.querySelector('.cs-banner-swatch.active');
       if (activeBannerSwatch) {
         const bannerKey = activeBannerSwatch.getAttribute('data-banner');
         bannerBg = bannerPresetMap[bannerKey] || activeBannerSwatch.style.background;
@@ -9481,10 +9554,11 @@ function initCreatorStoreSettings() {
     }
 
     if (bannerBg) {
-      const spmHero = document.getElementById('spm-hero-banner');
-      const dspHero = document.querySelector('.dsp-hero');
-      if (spmHero) spmHero.style.background = bannerBg;
-      if (dspHero) dspHero.style.background = bannerBg;
+      document.querySelectorAll('.cs-phone-hero, .dsp-hero, #spm-hero-banner').forEach(el => {
+        el.style.background = bannerBg;
+        el.style.backgroundSize = 'cover';
+        el.style.backgroundPosition = 'center';
+      });
     }
 
     // Product Card Theme Colors
@@ -9503,14 +9577,18 @@ function initCreatorStoreSettings() {
     }
 
     // Primary Accent Color
-    const activeColorSwatch = document.querySelector('.cs-color-swatch.active');
-    const accentCol = activeColorSwatch?.getAttribute('data-color') || document.getElementById('cs-custom-color-picker')?.value || '#4f46e5';
+    const activeColorSwatch = document.querySelector('.cs-color-swatch.active, .qc-swatch.active');
+    const accentCol = activeColorSwatch?.getAttribute('data-color') || activeColorSwatch?.getAttribute('data-qc-color') || document.getElementById('cs-custom-color-picker')?.value || '#4f46e5';
     if (accentCol) {
       const spmBadge = document.getElementById('spm-verified-badge');
       if (spmBadge) spmBadge.style.background = accentCol;
       document.querySelectorAll('.spm-btn-buy').forEach(btn => {
         btn.style.background = `linear-gradient(135deg, ${accentCol}, #6366f1)`;
       });
+    }
+
+    if (window.reapplyLiveStoreStyles) {
+      window.reapplyLiveStoreStyles();
     }
   }
 
@@ -11147,14 +11225,17 @@ window.closeSupportGuideModal = function () {
     });
 
     if (tabName === 'gallery') {
-      renderGalleryGrid();
+      if (typeof renderGalleryGrid === 'function') renderGalleryGrid();
     } else if (tabName === 'schedule') {
-      renderSocialAccountsDropdown();
-      renderSchedulingActivityList();
+      if (typeof window.syncSchedulerAccountsToActiveUser === 'function') {
+        window.syncSchedulerAccountsToActiveUser();
+      } else if (typeof window.updateSelectedAccountsCount === 'function') {
+        window.updateSelectedAccountsCount();
+      }
     } else if (tabName === 'studio') {
-      startProceduralCanvas(activeReelPreset);
+      if (typeof startProceduralCanvas === 'function') startProceduralCanvas(activeReelPreset);
     } else if (tabName === 'analytics') {
-      renderReelsAnalyticsChart();
+      if (typeof renderReelsAnalyticsChart === 'function') renderReelsAnalyticsChart();
     }
   };
 
@@ -11214,7 +11295,7 @@ window.closeSupportGuideModal = function () {
     } else {
       if (emptyNote) emptyNote.style.display = 'none';
 
-      let allCount = galleryMediaItems.length;
+      let allCount = galleryMediaItems.filter(item => !item.isArchived).length;
       let html = `
         <div class="folder-tree-item ${currentActiveFolder === 'main' ? 'active' : ''}" onclick="window.selectGalleryFolder('main', this)">
           <div class="folder-item-label">
@@ -11226,7 +11307,7 @@ window.closeSupportGuideModal = function () {
       `;
 
       html += customFolders.map(folder => {
-        const count = galleryMediaItems.filter(item => item.folder === folder.id).length;
+        const count = galleryMediaItems.filter(item => item.folder === folder.id && !item.isArchived).length;
         return `
           <div class="folder-tree-item ${folder.id === currentActiveFolder ? 'active' : ''}" onclick="window.selectGalleryFolder('${folder.id}', this)">
             <div class="folder-item-label">
@@ -11252,8 +11333,15 @@ window.closeSupportGuideModal = function () {
     const emptyState = document.getElementById('gallery-empty-state');
     if (!gridEl) return;
 
-    let items = galleryMediaItems;
-    if (currentActiveFolder !== 'main') {
+    let items = galleryMediaItems.filter(item => {
+      if (currentGalleryViewMode === 'archive') {
+        return !!item.isArchived;
+      } else {
+        return !item.isArchived;
+      }
+    });
+
+    if (currentGalleryViewMode !== 'archive' && currentActiveFolder !== 'main') {
       items = items.filter(item => item.folder === currentActiveFolder);
     }
 
@@ -11268,14 +11356,37 @@ window.closeSupportGuideModal = function () {
         emptyState.style.display = 'flex';
         const heading = emptyState.querySelector('.empty-heading');
         const sub = emptyState.querySelector('.empty-sub');
-        if (currentActiveFolder !== 'main') {
+        const emptyBtn = document.getElementById('btn-empty-gallery-action');
+
+        if (currentGalleryViewMode === 'archive') {
+          if (heading) heading.textContent = 'Your archive is empty!';
+          if (sub) sub.textContent = 'Completed and archived reels will appear here when archived from the active gallery.';
+          if (emptyBtn) {
+            emptyBtn.innerHTML = `<span>← Go to Active Gallery</span>`;
+            emptyBtn.onclick = function () { window.toggleGalleryArchive('gallery'); };
+          }
+        } else if (currentActiveFolder !== 'main') {
           const folderObj = galleryFolders.find(f => f.id === currentActiveFolder);
           const fName = folderObj ? folderObj.name : 'folder';
           if (heading) heading.textContent = `No media in "${fName}"`;
           if (sub) sub.textContent = 'Upload image(s) or video(s) to add media to this folder';
+          if (emptyBtn) {
+            emptyBtn.innerHTML = `
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>
+              <span>Upload</span>
+            `;
+            emptyBtn.onclick = function () { window.triggerReelFileInput(); };
+          }
         } else {
           if (heading) heading.textContent = 'Your gallery is empty!';
           if (sub) sub.textContent = 'Drop images / videos here or click the button';
+          if (emptyBtn) {
+            emptyBtn.innerHTML = `
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>
+              <span>Upload</span>
+            `;
+            emptyBtn.onclick = function () { window.triggerReelFileInput(); };
+          }
         }
       }
       return;
@@ -11294,6 +11405,7 @@ window.closeSupportGuideModal = function () {
         <div class="storrito-media-card" id="media-card-${media.id}" onclick="window.openMediaDetailModal('${media.id}')">
           <div class="media-card-thumb-container">
             ${visualHtml}
+            ${media.isArchived ? `<div class="media-card-archived-badge" style="position: absolute; top: 8px; left: 8px; background: rgba(15, 23, 42, 0.85); color: #cbd5e1; font-size: 11px; font-weight: 700; padding: 3px 8px; border-radius: 6px; backdrop-filter: blur(4px); display: flex; align-items: center; gap: 4px; z-index: 2;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="21 8 21 21 3 21 3 8"></polyline><rect x="1" y="3" width="22" height="5"></rect><line x1="10" y1="12" x2="14" y2="12"></line></svg>Archived</div>` : ''}
             <div class="media-card-select-overlay">
               <input type="checkbox" class="media-card-checkbox" onclick="event.stopPropagation();">
             </div>
@@ -11369,12 +11481,55 @@ window.closeSupportGuideModal = function () {
     if (sizeEl) sizeEl.textContent = media.size || '14.2 MB';
 
     const kwBadge = document.getElementById('modal-detail-keyword-badge');
-    if (kwBadge) kwBadge.textContent = `#${media.autoDmKeyword || 'GROWTH'}`;
+    const kwVal = media.autoDmKeyword || 'GROWTH';
+    if (kwBadge) kwBadge.innerHTML = `#${kwVal} <span style="opacity: 0.6; font-size: 10px; margin-left: 2px;">✎</span>`;
 
     const dmText = document.getElementById('modal-detail-dm-preview');
-    if (dmText) dmText.textContent = `"Hey! Here is your toolkit guide for #${media.autoDmKeyword || 'GROWTH'}. Enjoy! 📦"`;
+    if (dmText) dmText.textContent = `Sends DM automatically when followers comment #${kwVal}.`;
+
+    // Dynamic Archive / Unarchive Button
+    const archiveBtn = document.getElementById('btn-modal-archive-action');
+    if (archiveBtn) {
+      if (media.isArchived) {
+        archiveBtn.innerHTML = `
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="1 4 1 10 7 10"></polyline><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"></path></svg>
+          <span>Unarchive</span>
+        `;
+        archiveBtn.title = "Restore to Gallery";
+      } else {
+        archiveBtn.innerHTML = `
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="21 8 21 21 3 21 3 8"></polyline><rect x="1" y="3" width="22" height="5"></rect><line x1="10" y1="12" x2="14" y2="12"></line></svg>
+          <span>Archive</span>
+        `;
+        archiveBtn.title = "Archive Media";
+      }
+    }
 
     window.openReelsModal('modal-media-detail-backdrop');
+  };
+
+  // QUICK EDIT COMMENT KEYWORD DIRECTLY FROM PREVIEW MODAL
+  window.promptEditMediaKeyword = function () {
+    if (!currentSelectedMediaId) return;
+    const media = galleryMediaItems.find(m => m.id === currentSelectedMediaId);
+    if (!media) return;
+
+    const currentKw = media.autoDmKeyword || 'GROWTH';
+    const newKw = prompt('Enter new comment trigger keyword (e.g. LINK, GROWTH, PRICE):', currentKw);
+    if (newKw && newKw.trim()) {
+      const cleanKw = newKw.trim().toUpperCase().replace(/^#/, '');
+      media.autoDmKeyword = cleanKw;
+      
+      const kwBadge = document.getElementById('modal-detail-keyword-badge');
+      if (kwBadge) kwBadge.innerHTML = `#${cleanKw} <span style="opacity: 0.6; font-size: 10px; margin-left: 2px;">✎</span>`;
+      
+      const dmText = document.getElementById('modal-detail-dm-preview');
+      if (dmText) dmText.textContent = `Sends DM automatically when followers comment #${cleanKw}.`;
+
+      if (typeof window.showToast === 'function') {
+        window.showToast(`Comment trigger updated to #${cleanKw}`);
+      }
+    }
   };
 
   window.handleModalPostClick = function () {
@@ -11395,21 +11550,27 @@ window.closeSupportGuideModal = function () {
     renderGalleryGrid();
 
     if (typeof window.showToast === 'function') {
-      window.showToast(`🗑️ Deleted "${mediaName}"`);
+      window.showToast(`Deleted "${mediaName}"`);
     }
   };
 
   window.handleModalArchiveMedia = function () {
     if (!currentSelectedMediaId) return;
     const media = galleryMediaItems.find(m => m.id === currentSelectedMediaId);
-    const mediaName = media ? media.name : 'Media item';
+    if (!media) return;
+    const mediaName = media.name || 'Media item';
 
-    if (media) media.isArchived = true;
+    media.isArchived = !media.isArchived;
     window.closeReelsModal('modal-media-detail-backdrop');
+    renderGalleryFolders();
     renderGalleryGrid();
 
     if (typeof window.showToast === 'function') {
-      window.showToast(`📦 Archived "${mediaName}"`);
+      if (media.isArchived) {
+        window.showToast(`Archived "${mediaName}"`);
+      } else {
+        window.showToast(`Restored "${mediaName}" to Gallery`);
+      }
     }
   };
 
@@ -11430,7 +11591,7 @@ window.closeSupportGuideModal = function () {
     renderGalleryGrid();
 
     if (typeof window.showToast === 'function') {
-      window.showToast(`📋 Created duplicate: "${clone.name}"`);
+      window.showToast(`Created duplicate: "${clone.name}"`);
     }
   };
 
@@ -11449,7 +11610,7 @@ window.closeSupportGuideModal = function () {
     }
 
     if (typeof window.showToast === 'function') {
-      window.showToast(`📥 Downloading "${mediaName}"...`);
+      window.showToast(`Downloading "${mediaName}"...`);
     }
   };
 
@@ -11467,7 +11628,7 @@ window.closeSupportGuideModal = function () {
 
     if (mode === 'archive') {
       if (typeof window.showToast === 'function') {
-        window.showToast('📦 Switched to Archived Reels');
+        window.showToast('Switched to Archived Reels');
       }
     }
     renderGalleryGrid();
@@ -11505,7 +11666,7 @@ window.closeSupportGuideModal = function () {
     renderGalleryGrid();
 
     if (typeof window.showToast === 'function') {
-      window.showToast(`📁 Created folder: ${cleanName}`);
+      window.showToast(`Created folder: "${cleanName}"`);
     }
   };
 
@@ -11538,7 +11699,7 @@ window.closeSupportGuideModal = function () {
     renderGalleryGrid();
 
     if (typeof window.showToast === 'function') {
-      window.showToast(`🗑️ Deleted folder: ${folderName}`);
+      window.showToast(`Deleted folder: "${folderName}"`);
     }
   };
 
@@ -11579,10 +11740,10 @@ window.closeSupportGuideModal = function () {
     galleryMediaItems.unshift(newMedia);
     renderGalleryFolders();
     renderGalleryGrid();
-    window.openMediaInScheduler(newMedia.id);
+    window.switchReelsSubTab('studio');
 
     if (typeof window.showToast === 'function') {
-      window.showToast(`✨ Created story: "${cleanTitle}"`);
+      window.showToast(`Opened "${cleanTitle}" in Story & Reel Studio`);
     }
   };
 
@@ -11637,12 +11798,15 @@ window.closeSupportGuideModal = function () {
           }
         } catch (e) { }
 
+        const nameLower = (file.name || '').toLowerCase();
+        const isImage = file.type.startsWith('image') || /\.(jpg|jpeg|png|webp|gif|bmp|tiff|svg)$/i.test(nameLower) || nameLower.includes('screenshot');
+
         // Create new media card item
         const newMedia = {
           id: `media-${Date.now()}`,
           name: file.name,
-          type: file.type.startsWith('image') ? 'image' : 'video',
-          duration: '00:15',
+          type: isImage ? 'image' : 'video',
+          duration: isImage ? 'Photo' : '00:15',
           size: `${(file.size / (1024 * 1024)).toFixed(1)} MB`,
           folder: currentActiveFolder || 'main',
           date: 'Just now',
@@ -11651,16 +11815,69 @@ window.closeSupportGuideModal = function () {
           thumbUrl: previewUrl
         };
 
+        currentSelectedMediaId = newMedia.id;
         galleryMediaItems.unshift(newMedia);
         renderGalleryFolders();
         renderGalleryGrid();
+
+        // Also pre-configure scheduler with this uploaded media
+        const bannerTitle = document.getElementById('sched-active-title');
+        if (bannerTitle) bannerTitle.textContent = newMedia.name;
+
+        const chkStories = document.getElementById('chk-acc-stories');
+        const chkReels = document.getElementById('chk-acc-reels');
+        const chkPosts = document.getElementById('chk-acc-posts');
+        const rowStories = document.getElementById('row-acc-stories');
+        const rowReels = document.getElementById('row-acc-reels');
+        const rowPosts = document.getElementById('row-acc-posts');
+
+        if (isImage) {
+          if (chkPosts) chkPosts.checked = true;
+          if (chkReels) chkReels.checked = false;
+          if (chkStories) chkStories.checked = false;
+          if (rowPosts) rowPosts.classList.add('selected');
+          if (rowReels) rowReels.classList.remove('selected');
+          if (rowStories) rowStories.classList.remove('selected');
+        } else {
+          if (chkPosts) chkPosts.checked = false;
+          if (chkReels) chkReels.checked = true;
+          if (chkStories) chkStories.checked = false;
+          if (rowPosts) rowPosts.classList.remove('selected');
+          if (rowReels) rowReels.classList.add('selected');
+          if (rowStories) rowStories.classList.remove('selected');
+        }
+
+        const posterImg = document.getElementById('sched-poster-img');
+        const videoEl = document.getElementById('schedule-video-element');
+        if (isImage) {
+          if (videoEl) {
+            videoEl.style.display = 'none';
+            try { videoEl.pause(); } catch (e) { }
+          }
+          if (posterImg) {
+            posterImg.style.display = 'block';
+            posterImg.src = previewUrl;
+          }
+        } else {
+          if (videoEl) {
+            videoEl.style.display = 'block';
+            videoEl.src = previewUrl;
+          }
+          if (posterImg) {
+            posterImg.style.display = 'none';
+          }
+        }
+
+        if (typeof window.updateSelectedAccountsCount === 'function') {
+          window.updateSelectedAccountsCount();
+        }
 
         setTimeout(() => {
           if (chip) chip.style.display = 'none';
         }, 1800);
 
         if (typeof window.showToast === 'function') {
-          window.showToast(`✓ Uploaded "${file.name}" to Gallery!`);
+          window.showToast(`Uploaded "${file.name}" to Gallery (${isImage ? 'Post' : 'Reel'})`);
         }
       }
     }, 350);
@@ -11671,47 +11888,53 @@ window.closeSupportGuideModal = function () {
     currentGalleryViewMode = mode;
     const tabBtns = document.querySelectorAll('.gallery-center-tab-strip .center-tab-btn');
     tabBtns.forEach(b => b.classList.remove('active'));
-    if (btn) btn.classList.add('active');
+    if (btn) {
+      btn.classList.add('active');
+    } else {
+      const targetBtn = document.getElementById(mode === 'archive' ? 'tab-btn-archive' : 'tab-btn-gallery');
+      if (targetBtn) targetBtn.classList.add('active');
+    }
 
-    const emptyState = document.getElementById('gallery-empty-state');
-    const mediaGrid = document.getElementById('gallery-media-grid');
+    const archiveBanner = document.getElementById('archive-info-banner');
+    const topCards = document.querySelector('.gallery-top-cards-grid');
 
     if (mode === 'archive') {
-      if (mediaGrid) mediaGrid.style.display = 'none';
-      if (emptyState) {
-        emptyState.style.display = 'flex';
-        const heading = emptyState.querySelector('.empty-heading');
-        const sub = emptyState.querySelector('.empty-sub');
-        if (heading) heading.textContent = 'Your archive is empty!';
-        if (sub) sub.textContent = 'Completed and archived stories will appear here';
+      if (archiveBanner) archiveBanner.style.display = 'flex';
+      if (topCards) topCards.style.display = 'none';
+      if (typeof window.showToast === 'function') {
+        window.showToast('Switched to Archived Reels');
       }
     } else {
-      if (emptyState) {
-        const heading = emptyState.querySelector('.empty-heading');
-        const sub = emptyState.querySelector('.empty-sub');
-        if (heading) heading.textContent = 'Your gallery is empty!';
-        if (sub) sub.textContent = 'Drop images / videos here or click the button';
-      }
-      renderGalleryGrid();
+      if (archiveBanner) archiveBanner.style.display = 'none';
+      if (topCards) topCards.style.display = 'grid';
     }
+    renderGalleryGrid();
   };
 
   // OPEN MEDIA IN SCHEDULER (MATCHING SCREENSHOT)
   window.openMediaInScheduler = function (mediaId) {
-    const media = galleryMediaItems.find(m => m.id === mediaId) || { name: 'Digiproducthub (15)', autoDmKeyword: 'GROWTH', thumbUrl: 'goldfish_reel_thumb.jpg' };
+    let media = galleryMediaItems.find(m => m.id === mediaId || m.name === mediaId);
+    if (!media && typeof currentSelectedMediaId !== 'undefined' && currentSelectedMediaId) {
+      media = galleryMediaItems.find(m => m.id === currentSelectedMediaId);
+    }
+    if (!media && galleryMediaItems.length > 0) {
+      media = galleryMediaItems[0];
+    }
+    if (!media) {
+      const bannerTitle = document.getElementById('sched-active-title');
+      const activeName = bannerTitle && bannerTitle.textContent ? bannerTitle.textContent.trim() : 'full_page_screenshot.jpeg';
+      const isImg = /\.(jpg|jpeg|png|webp|gif|bmp|tiff)$/i.test(activeName) || activeName.toLowerCase().includes('screenshot');
+      media = { 
+        name: activeName, 
+        type: isImg ? 'image' : 'video', 
+        autoDmKeyword: 'GROWTH', 
+        thumbUrl: 'goldfish_reel_thumb.jpg' 
+      };
+    }
 
     const bannerTitle = document.getElementById('sched-active-title');
     if (bannerTitle) bannerTitle.textContent = media.name;
 
-    const posterImg = document.getElementById('sched-poster-img');
-    if (posterImg) posterImg.src = media.thumbUrl || 'goldfish_reel_thumb.jpg';
-
-    const videoEl = document.getElementById('schedule-video-element');
-    if (videoEl && media.thumbUrl && !media.thumbUrl.startsWith('data:image')) {
-      videoEl.src = media.thumbUrl;
-    }
-
-    // Reset feedback banner and button
     const banner = document.getElementById('sched-feedback-banner');
     if (banner) banner.style.display = 'none';
 
@@ -11722,13 +11945,112 @@ window.closeSupportGuideModal = function () {
       postBtn.style.opacity = '1';
     }
 
+    const composeKwInput = document.getElementById('auto-dm-compose-keyword');
+    if (composeKwInput) {
+      composeKwInput.value = media.autoDmKeyword || 'GROWTH';
+    }
+
+    // AUTO-FILL SOCIAL ACCOUNTS & AUTOMATION TARGET BASED ON MEDIA FILE TYPE
+    // .mp4, .mov, .webm -> select REEL
+    // .jpg, .jpeg, .png, .webp -> select POST
+    const nameLower = (media.name || '').toLowerCase();
+    const isImageExt = /\.(jpg|jpeg|png|webp|gif|bmp|tiff|svg)$/i.test(nameLower) || nameLower.includes('screenshot');
+    const isVideoExt = /\.(mp4|mov|webm|mkv|avi|m4v|3gp)$/i.test(nameLower);
+
+    let isPost = false;
+    let isReel = false;
+    let isStory = false;
+
+    if (isImageExt || media.type === 'image' || media.type === 'post') {
+      isPost = true;
+    } else if (isVideoExt || media.type === 'video' || nameLower.includes('reel')) {
+      isReel = true;
+    } else {
+      isPost = true; // default images/posts
+    }
+
+    // Update checkboxes and rows
+    const chkStories = document.getElementById('chk-acc-stories');
+    const chkReels = document.getElementById('chk-acc-reels');
+    const chkPosts = document.getElementById('chk-acc-posts');
+
+    if (chkStories) chkStories.checked = isStory;
+    if (chkReels) chkReels.checked = isReel;
+    if (chkPosts) chkPosts.checked = isPost;
+
+    const rowStories = document.getElementById('row-acc-stories');
+    const rowReels = document.getElementById('row-acc-reels');
+    const rowPosts = document.getElementById('row-acc-posts');
+
+    if (rowStories) rowStories.classList.toggle('selected', isStory);
+    if (rowReels) rowReels.classList.toggle('selected', isReel);
+    if (rowPosts) rowPosts.classList.toggle('selected', isPost);
+
+    // TOGGLE VIDEO vs IMAGE IN PREVIEW VIEWPORT
+    const posterImg = document.getElementById('sched-poster-img');
+    const videoEl = document.getElementById('schedule-video-element');
+
+    if (isPost || isStory || isImageExt) {
+      if (videoEl) {
+        videoEl.style.display = 'none';
+        try { videoEl.pause(); } catch (e) { }
+      }
+      if (posterImg) {
+        posterImg.style.display = 'block';
+        posterImg.src = media.thumbUrl || 'goldfish_reel_thumb.jpg';
+      }
+    } else {
+      if (videoEl) {
+        videoEl.style.display = 'block';
+        if (media.thumbUrl && !media.thumbUrl.startsWith('data:image')) {
+          videoEl.src = media.thumbUrl;
+        }
+      }
+      if (posterImg) {
+        posterImg.style.display = 'none';
+      }
+    }
+
     // Switch to scheduler sub-tab
     window.switchReelsSubTab('schedule');
+
+    if (typeof window.syncSchedulerAccountsToActiveUser === 'function') {
+      window.syncSchedulerAccountsToActiveUser();
+    } else if (typeof window.updateSelectedAccountsCount === 'function') {
+      window.updateSelectedAccountsCount();
+    }
 
     window.scrollTo({ top: 0, behavior: 'smooth' });
 
     if (typeof window.showToast === 'function') {
-      window.showToast(`🎯 Opened "${media.name}" in Post Scheduler`);
+      window.showToast(`Opened "${media.name}" in Post Scheduler`);
+    }
+  };
+
+  // =========================================================================
+  // SCHEDULER CANCEL / BACK CONFIRMATION HANDLERS
+  // =========================================================================
+  window.promptCancelSchedule = function () {
+    const modal = document.getElementById('modal-cancel-schedule-confirm');
+    if (modal) {
+      modal.style.display = 'flex';
+      modal.classList.add('active');
+    }
+  };
+
+  window.closeCancelScheduleModal = function () {
+    const modal = document.getElementById('modal-cancel-schedule-confirm');
+    if (modal) {
+      modal.classList.remove('active');
+      modal.style.display = 'none';
+    }
+  };
+
+  window.confirmCancelSchedule = function () {
+    window.closeCancelScheduleModal();
+    window.switchReelsSubTab('gallery');
+    if (typeof window.showToast === 'function') {
+      window.showToast('Returned to Gallery');
     }
   };
 
@@ -11736,6 +12058,154 @@ window.closeSupportGuideModal = function () {
     const list = document.getElementById('social-grouped-list');
     if (list) {
       list.style.display = list.style.display === 'none' ? 'block' : 'none';
+    }
+  };
+
+  // TOGGLE SOCIAL ACCOUNT & AUTO-SYNC AUTOMATION TARGET
+  window.toggleSocialAccountSelection = function (platform) {
+    const chkStories = document.getElementById('chk-acc-stories');
+    const chkReels = document.getElementById('chk-acc-reels');
+    const chkPosts = document.getElementById('chk-acc-posts');
+
+    const rowStories = document.getElementById('row-acc-stories');
+    const rowReels = document.getElementById('row-acc-reels');
+    const rowPosts = document.getElementById('row-acc-posts');
+
+    if (rowStories && chkStories) rowStories.classList.toggle('selected', chkStories.checked);
+    if (rowReels && chkReels) rowReels.classList.toggle('selected', chkReels.checked);
+    if (rowPosts && chkPosts) rowPosts.classList.toggle('selected', chkPosts.checked);
+
+    window.updateSelectedAccountsCount();
+  };
+
+  window.updateSelectedAccountsCount = function () {
+    const chkStories = document.getElementById('chk-acc-stories');
+    const chkReels = document.getElementById('chk-acc-reels');
+    const chkPosts = document.getElementById('chk-acc-posts');
+
+    const isStories = chkStories ? chkStories.checked : false;
+    const isReels = chkReels ? chkReels.checked : false;
+    const isPosts = chkPosts ? chkPosts.checked : false;
+
+    const count = (isStories ? 1 : 0) + (isReels ? 1 : 0) + (isPosts ? 1 : 0);
+    const badge = document.getElementById('selected-accounts-count-badge');
+    if (badge) {
+      badge.textContent = `${count} selected`;
+    }
+
+    // Render chips in search bar with active handle and avatar
+    const chipsContainer = document.getElementById('selected-account-chips');
+    if (chipsContainer) {
+      const activeUser = (typeof window.getActiveUserData === 'function' ? window.getActiveUserData() : null) || {};
+      const profile = (activeUser && activeUser.profile) ? activeUser.profile : {};
+      const activeHandle = (profile.insta) 
+        ? profile.insta.replace(/^@/, '') 
+        : (profile.name ? profile.name.toLowerCase().replace(/[^a-z0-9_]/g, '_') : 'render6457');
+
+      const avatarUrl = profile.avatar || '';
+      const avatarStyle = avatarUrl ? `style="background-image: url('${avatarUrl}'); background-size: cover; background-position: center;"` : '';
+      const realIgSvg = `<svg class="chip-ig-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><circle cx="12" cy="12" r="4"></circle><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg>`;
+
+      let chipsHtml = '';
+      if (isStories) {
+        chipsHtml += `
+          <div class="sched-account-chip">
+            <div class="chip-avatar-img" ${avatarStyle}></div>
+            <span class="chip-name">${activeHandle} (Story)</span>
+            ${realIgSvg}
+            <button type="button" class="chip-close-x" onclick="event.stopPropagation(); document.getElementById('chk-acc-stories').checked = false; window.toggleSocialAccountSelection('stories');">×</button>
+          </div>
+        `;
+      }
+      if (isReels) {
+        chipsHtml += `
+          <div class="sched-account-chip">
+            <div class="chip-avatar-img" ${avatarStyle}></div>
+            <span class="chip-name">${activeHandle} (Reel)</span>
+            ${realIgSvg}
+            <button type="button" class="chip-close-x" onclick="event.stopPropagation(); document.getElementById('chk-acc-reels').checked = false; window.toggleSocialAccountSelection('reels');">×</button>
+          </div>
+        `;
+      }
+      if (isPosts) {
+        chipsHtml += `
+          <div class="sched-account-chip">
+            <div class="chip-avatar-img" ${avatarStyle}></div>
+            <span class="chip-name">${activeHandle} (Post)</span>
+            ${realIgSvg}
+            <button type="button" class="chip-close-x" onclick="event.stopPropagation(); document.getElementById('chk-acc-posts').checked = false; window.toggleSocialAccountSelection('posts');">×</button>
+          </div>
+        `;
+      }
+      if (!chipsHtml) {
+        chipsHtml = `<span style="color: #94a3b8; font-size: 13px;">Select accounts...</span>`;
+      }
+      chipsContainer.innerHTML = chipsHtml;
+    }
+
+    // DYNAMICALLY POPULATE "CHOOSE WHERE THIS AUTOMATION SHOULD APPLY"
+    const targetSelect = document.getElementById('auto-dm-target-media-type');
+    if (targetSelect) {
+      const bannerTitle = document.getElementById('sched-active-title');
+      const activeName = (bannerTitle ? bannerTitle.textContent : '').toLowerCase();
+      const isImg = /\.(jpg|jpeg|png|webp|gif|bmp|tiff|svg)$/i.test(activeName) || activeName.includes('screenshot');
+      const isVid = /\.(mp4|mov|webm|mkv|avi|m4v)$/i.test(activeName) || activeName.includes('reel');
+
+      const options = [];
+      let defaultVal = 'POST';
+
+      if (count > 1) {
+        options.push(`<option value="ALL">ALL SELECTED PLATFORMS (${count})</option>`);
+      }
+      options.push(`<option value="POST">POST</option>`);
+      options.push(`<option value="REEL">REEL</option>`);
+      options.push(`<option value="STORY">STORY</option>`);
+      if (count <= 1) {
+        options.push(`<option value="ALL">ALL MEDIA</option>`);
+      }
+
+      if (count > 1) {
+        defaultVal = 'ALL';
+      } else if (isPosts) {
+        defaultVal = 'POST';
+      } else if (isReels) {
+        defaultVal = 'REEL';
+      } else if (isStories) {
+        defaultVal = 'STORY';
+      } else if (isImg) {
+        defaultVal = 'POST';
+      } else if (isVid) {
+        defaultVal = 'REEL';
+      }
+
+      targetSelect.innerHTML = options.join('');
+      targetSelect.value = defaultVal;
+    }
+  };
+
+  // SYNC SCHEDULER SOCIAL ACCOUNTS TO ACTIVE USER
+  window.syncSchedulerAccountsToActiveUser = function () {
+    const activeUser = (typeof window.getActiveUserData === 'function' ? window.getActiveUserData() : null) || {};
+    const profile = (activeUser && activeUser.profile) ? activeUser.profile : {};
+    const activeHandle = (profile.insta) 
+      ? profile.insta.replace(/^@/, '') 
+      : (profile.name ? profile.name.toLowerCase().replace(/[^a-z0-9_]/g, '_') : 'render6457');
+    const avatarUrl = profile.avatar || '';
+
+    document.querySelectorAll('#social-grouped-list .acc-handle-text').forEach(el => {
+      el.textContent = activeHandle;
+    });
+
+    document.querySelectorAll('#social-grouped-list .acc-globe-avatar').forEach(el => {
+      if (avatarUrl) {
+        el.style.backgroundImage = `url('${avatarUrl}')`;
+        el.style.backgroundSize = 'cover';
+        el.style.backgroundPosition = 'center';
+      }
+    });
+
+    if (typeof window.updateSelectedAccountsCount === 'function') {
+      window.updateSelectedAccountsCount();
     }
   };
 
@@ -11747,6 +12217,11 @@ window.closeSupportGuideModal = function () {
     const cardActivity = document.getElementById('card-scheduling-activity');
     const bannerTitle = document.getElementById('sched-active-title');
     const title = bannerTitle ? bannerTitle.textContent : 'Digiproducthub (15)';
+
+    const activeUser = (typeof window.getActiveUserData === 'function' ? window.getActiveUserData() : null) || {};
+    const activeHandle = (activeUser.profile && activeUser.profile.insta) 
+      ? activeUser.profile.insta 
+      : '@render6457';
 
     // Show feedback banner matching screenshot
     if (banner) {
@@ -11772,14 +12247,15 @@ window.closeSupportGuideModal = function () {
       newCard.className = 'activity-amber-card';
       newCard.innerHTML = `
         <div class="activity-amber-left">
-          <svg class="ig-pink-icon" width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+          <svg class="ig-pink-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
-            <circle cx="12" cy="12" r="4" fill="#ffffff"></circle>
+            <circle cx="12" cy="12" r="4"></circle>
+            <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
           </svg>
           <div>
             <div class="activity-name-row">
-              <span class="activity-type-label">Instagram Story</span>
-              <span class="activity-handle-label">@real_factcheck</span>
+              <span class="activity-type-label">Instagram Post</span>
+              <span class="activity-handle-label">${activeHandle}</span>
             </div>
             <div class="activity-time-label">Scheduled for ${dateStr}</div>
           </div>
@@ -11790,16 +12266,242 @@ window.closeSupportGuideModal = function () {
     }
 
     if (typeof window.showToast === 'function') {
-      window.showToast(`🚀 Scheduling commands sent for "${title}"!`);
+      window.showToast(`Scheduling commands sent for "${title}"`);
+    }
+  };
+
+  // =========================================================================
+  // NEW AUTO-DM BUILDER LOGIC (MATCHING USER IMAGES 2, 3, 4)
+  // =========================================================================
+  const AUTO_DM_TEMPLATES = {
+    guide: {
+      triggerType: 'specific',
+      keyword: 'GUIDE',
+      publicReply: 'Just sent it to your DMs! ✨',
+      dmResponse: 'Thanks for commenting! Here is the link to download your Free E-Book:\nhttps://renderreply.com/download-guide',
+      attachProduct: true,
+      productName: 'Free Guide Download',
+      productDesc: 'Click below to download',
+      productUrl: 'https://renderreply.com/guide.pdf',
+      followGate: true,
+      collectLeads: false
+    },
+    pricing: {
+      triggerType: 'specific',
+      keyword: 'PRICING',
+      publicReply: 'Sent you our complete pricing tiers! 🚀',
+      dmResponse: 'Here are all our pricing options and subscription tiers:\nhttps://renderreply.com/pricing',
+      attachProduct: true,
+      productName: 'RenderReply Pro Plan',
+      productDesc: 'Choose your growth tier',
+      productUrl: 'https://renderreply.com/pricing',
+      followGate: true,
+      collectLeads: false
+    },
+    audit: {
+      triggerType: 'specific',
+      keyword: 'AUDIT',
+      publicReply: 'Sent you the 1-on-1 strategy call booking link! 📅',
+      dmResponse: 'Here is the calendar link for your free 1-on-1 strategy call:\nhttps://renderreply.com/book-audit',
+      attachProduct: true,
+      productName: '1-on-1 Strategy Call Audit',
+      productDesc: 'Book a free 20-min strategy session',
+      productUrl: 'https://renderreply.com/book-audit',
+      followGate: true,
+      collectLeads: true
+    },
+    checklist: {
+      triggerType: 'specific',
+      keyword: 'CHECKLIST',
+      publicReply: 'Check your inbox for the cheat sheet! 📄',
+      dmResponse: 'Here is your free Creator Checklist PDF:\nhttps://renderreply.com/checklist.pdf',
+      attachProduct: true,
+      productName: 'Free Checklist PDF',
+      productDesc: 'Download your cheat sheet',
+      productUrl: 'https://renderreply.com/checklist.pdf',
+      followGate: true,
+      collectLeads: false
+    },
+    webinar: {
+      triggerType: 'specific',
+      keyword: 'WEBINAR',
+      publicReply: "You're registered! Sent you the masterclass link 🎓",
+      dmResponse: 'Here is your VIP ticket for the live training masterclass:\nhttps://renderreply.com/webinar',
+      attachProduct: true,
+      productName: 'Live Webinar VIP Pass',
+      productDesc: 'Join the live training session',
+      productUrl: 'https://renderreply.com/webinar',
+      followGate: true,
+      collectLeads: true
+    },
+    shop: {
+      triggerType: 'specific',
+      keyword: 'SHOP',
+      publicReply: 'Sent you the store discount link! 🛍️',
+      dmResponse: 'Here is your exclusive 20% discount link to our shop:\nhttps://renderreply.com/shop',
+      attachProduct: true,
+      productName: 'StanStore 20% Off Collection',
+      productDesc: 'Shop creator products',
+      productUrl: 'https://renderreply.com/shop',
+      followGate: true,
+      collectLeads: false
+    },
+    reserve: {
+      triggerType: 'specific',
+      keyword: 'RESERVE',
+      publicReply: 'Sent you the VIP demo reservation! ⚡',
+      dmResponse: 'Here is your interactive demo reservation link:\nhttps://renderreply.com/demo',
+      attachProduct: true,
+      productName: 'VIP Live Demo Pass',
+      productDesc: 'Interactive live walkthrough',
+      productUrl: 'https://renderreply.com/demo',
+      followGate: true,
+      collectLeads: true
+    }
+  };
+
+  window.switchAutoDmBuilderMode = function (mode) {
+    const btnCreate = document.getElementById('btn-mode-create-own');
+    const btnTpl = document.getElementById('btn-mode-use-template');
+    const tplPickerWrap = document.getElementById('auto-dm-template-picker-wrap');
+
+    if (mode === 'template') {
+      if (btnTpl) btnTpl.classList.add('active');
+      if (btnCreate) btnCreate.classList.remove('active');
+      if (tplPickerWrap) tplPickerWrap.style.display = 'block';
+
+      const picker = document.getElementById('auto-dm-template-picker');
+      const selectedTplKey = picker ? picker.value : 'guide';
+      window.handleTemplatePickerChange(selectedTplKey);
+    } else {
+      if (btnCreate) btnCreate.classList.add('active');
+      if (btnTpl) btnTpl.classList.remove('active');
+      if (tplPickerWrap) tplPickerWrap.style.display = 'none';
+
+      // Clear/Reset for custom creation (Image 3)
+      window.setAutoDmTriggerType('specific');
+      const kwInput = document.getElementById('auto-dm-compose-keyword');
+      if (kwInput) kwInput.value = '';
+      
+      const pubReply = document.getElementById('auto-dm-public-reply');
+      if (pubReply) pubReply.value = '';
+
+      const dmResp = document.getElementById('auto-dm-dm-response');
+      if (dmResp) dmResp.value = '';
+
+      const attachToggle = document.getElementById('auto-dm-attach-product-toggle');
+      if (attachToggle) {
+        attachToggle.checked = false;
+        window.toggleAutoDmProductFields(false);
+      }
+
+      const followToggle = document.getElementById('auto-dm-follow-gate-toggle');
+      if (followToggle) followToggle.checked = false;
+
+      const leadsToggle = document.getElementById('auto-dm-collect-leads-toggle');
+      if (leadsToggle) leadsToggle.checked = false;
+    }
+  };
+
+  window.handleTemplatePickerChange = function (templateKey) {
+    const tpl = AUTO_DM_TEMPLATES[templateKey] || AUTO_DM_TEMPLATES.guide;
+
+    window.setAutoDmTriggerType(tpl.triggerType);
+
+    const kwInput = document.getElementById('auto-dm-compose-keyword');
+    if (kwInput) kwInput.value = tpl.keyword;
+
+    const pubReply = document.getElementById('auto-dm-public-reply');
+    if (pubReply) pubReply.value = tpl.publicReply;
+
+    const dmResp = document.getElementById('auto-dm-dm-response');
+    if (dmResp) dmResp.value = tpl.dmResponse;
+
+    const attachToggle = document.getElementById('auto-dm-attach-product-toggle');
+    if (attachToggle) {
+      attachToggle.checked = !!tpl.attachProduct;
+      window.toggleAutoDmProductFields(attachToggle.checked);
+    }
+
+    const prodName = document.getElementById('auto-dm-product-name');
+    if (prodName) prodName.value = tpl.productName || '';
+
+    const prodDesc = document.getElementById('auto-dm-product-desc');
+    if (prodDesc) prodDesc.value = tpl.productDesc || '';
+
+    const prodUrl = document.getElementById('auto-dm-product-url');
+    if (prodUrl) prodUrl.value = tpl.productUrl || '';
+
+    const followToggle = document.getElementById('auto-dm-follow-gate-toggle');
+    if (followToggle) followToggle.checked = !!tpl.followGate;
+
+    const leadsToggle = document.getElementById('auto-dm-collect-leads-toggle');
+    if (leadsToggle) leadsToggle.checked = !!tpl.collectLeads;
+
+    if (typeof window.showToast === 'function') {
+      window.showToast(`Loaded template: ${templateKey.toUpperCase()}`);
+    }
+  };
+
+  window.setAutoDmTriggerType = function (type) {
+    const btnSpecific = document.getElementById('trigger-type-btn-specific');
+    const btnAny = document.getElementById('trigger-type-btn-any');
+    const kwCol = document.getElementById('trigger-keywords-field-col');
+
+    if (type === 'any') {
+      if (btnAny) btnAny.classList.add('active');
+      if (btnSpecific) btnSpecific.classList.remove('active');
+      if (kwCol) {
+        kwCol.style.opacity = '0.5';
+        kwCol.style.pointerEvents = 'none';
+      }
+    } else {
+      if (btnSpecific) btnSpecific.classList.add('active');
+      if (btnAny) btnAny.classList.remove('active');
+      if (kwCol) {
+        kwCol.style.opacity = '1';
+        kwCol.style.pointerEvents = 'auto';
+      }
+    }
+  };
+
+  window.toggleAutoDmProductFields = function (isShown) {
+    const box = document.getElementById('auto-dm-product-expanded-box');
+    if (box) {
+      box.style.display = isShown ? 'flex' : 'none';
+    }
+  };
+
+  window.confirmAutoDmSelection = function () {
+    const targetType = document.getElementById('auto-dm-target-media-type')?.value || 'REEL';
+    const formPane = document.getElementById('auto-dm-editor-form-pane');
+    if (formPane) {
+      formPane.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }
+    if (typeof window.showToast === 'function') {
+      window.showToast(`Target set to ${targetType}. Configure responses below.`);
+    }
+  };
+
+  window.saveCreatedAutomation = function () {
+    const kwInput = document.getElementById('auto-dm-compose-keyword');
+    const kwVal = (kwInput ? kwInput.value.trim() : '') || 'GROWTH';
+    
+    // If an active media item is selected, update it
+    if (currentSelectedMediaId) {
+      const media = galleryMediaItems.find(m => m.id === currentSelectedMediaId);
+      if (media) {
+        media.autoDmKeyword = kwVal.replace(/^#/, '').toUpperCase();
+      }
+    }
+
+    if (typeof window.showToast === 'function') {
+      window.showToast(`Automation active on keyword: #${kwVal.replace(/^#/, '').toUpperCase()}`);
     }
   };
 
   window.handleAutoDmKeywordInput = function (val) {
-    const clean = val.replace(/^#+/, '').trim().toUpperCase();
-    const quote = document.querySelector('#pub-quote-1 .quote-text');
-    if (quote) {
-      quote.textContent = `"Sent you a DM! Check your inbox with the #${clean || 'GROWTH'} guide 🚀"`;
-    }
+    // optional live keyword handler
   };
 
   window.testAutoDmOnCurrentPost = function () {
@@ -11812,7 +12514,7 @@ window.closeSupportGuideModal = function () {
       if (simInput) simInput.value = `Please send me ${kw}! 🙌`;
     } else {
       if (typeof window.showToast === 'function') {
-        window.showToast(`⚡ Simulated comment-to-DM for #${kw} tested successfully!`);
+        window.showToast(`Comment-to-DM simulated successfully for #${kw}`);
       }
     }
   };
@@ -11829,7 +12531,7 @@ window.closeSupportGuideModal = function () {
 
     if (!keyword) {
       if (typeof window.showToast === 'function') {
-        window.showToast('⚠️ Please enter a trigger keyword before saving.');
+        window.showToast('Please enter a trigger keyword before saving.');
       }
       return;
     }
@@ -11848,7 +12550,7 @@ window.closeSupportGuideModal = function () {
       }
 
       if (typeof window.showToast === 'function') {
-        window.showToast(`✅ Auto-DM saved! Keyword: #${keyword.toUpperCase()} → ${template}`);
+        window.showToast(`Auto-DM saved! Keyword: #${keyword.toUpperCase()} → ${template}`);
       }
 
       // Reset button after 2s
@@ -11979,7 +12681,7 @@ window.closeSupportGuideModal = function () {
 
     if (!name) {
       if (typeof window.showToast === 'function') {
-        window.showToast('⚠️ Please enter a Template Name.');
+        window.showToast('Please enter a Template Name.');
       }
       return;
     }
@@ -11989,7 +12691,7 @@ window.closeSupportGuideModal = function () {
       triggerVal = (document.getElementById('new-dm-trigger-word')?.value || '').replace(/^#+/, '').trim().toUpperCase();
       if (!triggerVal) {
         if (typeof window.showToast === 'function') {
-          window.showToast('⚠️ Please enter a Custom Trigger Keyword (e.g. GROWTH).');
+          window.showToast('Please enter a Custom Trigger Keyword.');
         }
         return;
       }
@@ -11997,7 +12699,7 @@ window.closeSupportGuideModal = function () {
       triggerVal = (document.getElementById('new-dm-trigger-emoji')?.value || '').trim();
       if (!triggerVal) {
         if (typeof window.showToast === 'function') {
-          window.showToast('⚠️ Please select or enter a Trigger Emoji.');
+          window.showToast('Please select or enter a Trigger Keyword.');
         }
         return;
       }
@@ -12007,7 +12709,7 @@ window.closeSupportGuideModal = function () {
 
     if (!body) {
       if (typeof window.showToast === 'function') {
-        window.showToast('⚠️ Please enter a DM message body.');
+        window.showToast('Please enter a DM message body.');
       }
       return;
     }
@@ -12086,7 +12788,7 @@ window.closeSupportGuideModal = function () {
       const selected = new Date(this.value);
       if (selected < new Date()) {
         if (typeof window.showToast === 'function') {
-          window.showToast('⚠️ Cannot schedule in the past. Adjusted to now.');
+          window.showToast('Cannot schedule in the past. Adjusted to now.');
         }
         const adjusted = new Date();
         adjusted.setMinutes(adjusted.getMinutes() + 5, 0, 0);
@@ -12102,14 +12804,6 @@ window.closeSupportGuideModal = function () {
 
   // Initialize datetime on load
   setTimeout(initDateTimePicker, 150);
-
-  window.updateSelectedAccountsCount = function () {
-    const chips = document.querySelectorAll('#selected-account-chips .sched-account-chip');
-    const badge = document.getElementById('selected-accounts-count-badge');
-    if (badge) {
-      badge.textContent = `${chips.length} selected`;
-    }
-  };
 
   function renderSchedulingActivityList() {
     const listEl = document.getElementById('scheduling-activity-list');
@@ -12154,7 +12848,7 @@ window.closeSupportGuideModal = function () {
     document.body.removeChild(link);
 
     if (typeof window.showToast === 'function') {
-      window.showToast('📥 Downloaded RenderReply Bulk Schedule CSV Template!');
+      window.showToast('Downloaded Bulk Schedule CSV Template');
     }
   };
 
@@ -12327,7 +13021,7 @@ window.closeSupportGuideModal = function () {
     if (soundTitle) soundTitle.textContent = title;
 
     if (typeof window.showToast === 'function') {
-      window.showToast(`🎵 Audio Selected: ${title}`);
+      window.showToast(`Audio selected: ${title}`);
     }
   };
 
@@ -12504,7 +13198,7 @@ window.closeSupportGuideModal = function () {
       }
 
       if (typeof window.showToast === 'function') {
-        window.showToast('🎬 Generated 30-Second Viral Script!');
+        window.showToast('Generated 30-second viral script');
       }
     }, 400);
   };
@@ -12527,16 +13221,855 @@ window.closeSupportGuideModal = function () {
     window.switchReelsSubTab('studio');
 
     if (typeof window.showToast === 'function') {
-      window.showToast('✨ Loaded Script into Studio Editor!');
+      window.showToast('Loaded script into Studio editor');
+    }
+  };
+
+  // =========================================================================
+  // REELS SUB-TAB NAVIGATION
+  // =========================================================================
+  window.switchReelsSubTab = function (tabName) {
+    const subnavBtns = document.querySelectorAll('.reels-subnav-btn');
+    const panes = document.querySelectorAll('.reels-tab-pane');
+
+    subnavBtns.forEach(btn => {
+      const target = btn.getAttribute('data-subtab');
+      btn.classList.toggle('active', target === tabName);
+    });
+
+    panes.forEach(pane => {
+      pane.classList.remove('active');
+    });
+
+    const activePane = document.getElementById(`reels-pane-${tabName}`);
+    if (activePane) {
+      activePane.classList.add('active');
+    }
+
+    if (tabName !== 'studio') {
+      window.stopStudioPlayback();
+    } else {
+      window.selectStudioLayer('main');
+    }
+
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  // =========================================================================
+  // BLACK & WHITE STUDIO TIMELINE STORY & REEL EDITOR (FULL INTERACTIVE ENGINE)
+  // =========================================================================
+  let studioIsPlaying = false;
+  let studioCurrentTimeMs = 0;
+  const studioTotalDurationMs = 14200; // 14.2s as shown in screenshot
+  let studioSelectedLayer = 'text';
+  let studioZoomPercent = 100;
+  let studioTimelineZoom = 1;
+  let studioPlaybackTimer = null;
+  let studioSnappingEnabled = true;
+  let activeTrimmingClip = null;
+
+  // STUDIO LAYERS REGISTRY
+  let studioLayers = [
+    {
+      id: 'bg',
+      type: 'bg',
+      title: 'Background Layer',
+      res: '1080x1920',
+      dur: '14.2s',
+      startMs: 0,
+      endMs: 14200,
+      opacity: 100,
+      visible: true,
+      locked: false,
+      animation: 'none'
+    },
+    {
+      id: 'main',
+      type: 'main',
+      title: 'Main Story Content',
+      res: '1080x1920',
+      dur: '14.2s',
+      startMs: 0,
+      endMs: 14200,
+      opacity: 100,
+      visible: true,
+      locked: false,
+      animation: 'none'
+    },
+    {
+      id: 'text',
+      type: 'text',
+      title: 'Text Overlay',
+      res: 'Vector 1080p',
+      dur: '14.2s',
+      startMs: 0,
+      endMs: 14200,
+      opacity: 100,
+      visible: true,
+      locked: false,
+      animation: 'fadeIn'
+    },
+    {
+      id: 'sticker',
+      type: 'sticker',
+      title: 'Sticker Layer',
+      res: '512x512 SVG',
+      dur: '10.0s',
+      startMs: 1200,
+      endMs: 11200,
+      opacity: 100,
+      visible: true,
+      locked: false,
+      animation: 'popIn'
+    }
+  ];
+
+  function formatTimecode(ms) {
+    const totalSeconds = ms / 1000;
+    const hours = Math.floor(totalSeconds / 3600);
+    const minutes = Math.floor((totalSeconds % 3600) / 60);
+    const seconds = Math.floor(totalSeconds % 60);
+    const millis = Math.floor(ms % 1000);
+
+    const hh = String(hours).padStart(2, '0');
+    const mm = String(minutes).padStart(2, '0');
+    const ss = String(seconds).padStart(2, '0');
+    const mmm = String(millis).padStart(3, '0');
+
+    return `${hh}:${mm}:${ss}.${mmm}`;
+  }
+
+  function updateStudioPlayheadVisuals() {
+    const needle = document.getElementById('studio-playhead-needle');
+    const readout = document.getElementById('studio-timecode-readout');
+    const progFill = document.getElementById('studio-story-prog-fill');
+
+    if (readout) {
+      readout.textContent = formatTimecode(studioCurrentTimeMs);
+    }
+
+    const progressPct = Math.min(Math.max(studioCurrentTimeMs / studioTotalDurationMs, 0), 1);
+
+    if (needle) {
+      const trackArea = document.getElementById('studio-timeline-tracks-area');
+      const areaWidth = trackArea ? (trackArea.clientWidth - 150) : 400;
+      const leftPos = 140 + (progressPct * areaWidth);
+      needle.style.left = `${leftPos}px`;
+    }
+
+    if (progFill) {
+      progFill.style.width = `${Math.round(progressPct * 100)}%`;
+    }
+
+    // Check layer time visibility
+    studioLayers.forEach(layer => {
+      const el = document.querySelector(`[data-layer-id="${layer.id}"]`) || document.getElementById(`studio-${layer.id}-layer`);
+      if (el && layer.type !== 'bg' && layer.type !== 'main') {
+        if (!layer.visible) {
+          el.style.display = 'none';
+        } else {
+          const isTimeActive = studioCurrentTimeMs >= layer.startMs && studioCurrentTimeMs <= layer.endMs;
+          el.style.display = isTimeActive ? '' : 'none';
+        }
+      }
+    });
+  }
+
+  window.seekTimelineToEvent = function (e) {
+    const trackArea = document.getElementById('studio-timeline-tracks-area');
+    if (!trackArea) return;
+
+    const rect = trackArea.getBoundingClientRect();
+    const clickX = e.clientX - rect.left - 140; // 140px header offset
+    const trackWidth = rect.width - 150;
+
+    if (trackWidth > 0 && clickX >= 0) {
+      const pct = Math.min(Math.max(clickX / trackWidth, 0), 1);
+      studioCurrentTimeMs = Math.round(pct * studioTotalDurationMs);
+      updateStudioPlayheadVisuals();
+    }
+  };
+
+  window.toggleStudioPlayback = function () {
+    const btn = document.getElementById('btn-studio-play-pause');
+    const playIcon = document.getElementById('studio-play-icon');
+    const bgVideo = document.getElementById('studio-bg-video-element');
+
+    if (studioIsPlaying) {
+      // Pause
+      studioIsPlaying = false;
+      if (studioPlaybackTimer) clearInterval(studioPlaybackTimer);
+      if (playIcon) {
+        playIcon.innerHTML = '<polygon points="6 4 20 12 6 20 6 4"></polygon>';
+      }
+      if (bgVideo && !bgVideo.paused) {
+        try { bgVideo.pause(); } catch (err) { }
+      }
+    } else {
+      // Play
+      studioIsPlaying = true;
+      if (playIcon) {
+        playIcon.innerHTML = '<rect x="6" y="4" width="4" height="16"></rect><rect x="14" y="4" width="4" height="16"></rect>';
+      }
+      if (bgVideo && bgVideo.style.display !== 'none') {
+        try { bgVideo.play(); } catch (err) { }
+      }
+
+      const stepMs = 50;
+      studioPlaybackTimer = setInterval(() => {
+        studioCurrentTimeMs += stepMs;
+        if (studioCurrentTimeMs >= studioTotalDurationMs) {
+          studioCurrentTimeMs = 0; // Seamless loop
+          if (bgVideo) bgVideo.currentTime = 0;
+        }
+        updateStudioPlayheadVisuals();
+      }, stepMs);
+    }
+  };
+
+  window.stopStudioPlayback = function () {
+    studioIsPlaying = false;
+    if (studioPlaybackTimer) clearInterval(studioPlaybackTimer);
+    studioCurrentTimeMs = 0;
+
+    const playIcon = document.getElementById('studio-play-icon');
+    if (playIcon) {
+      playIcon.innerHTML = '<polygon points="6 4 20 12 6 20 6 4"></polygon>';
+    }
+
+    const bgVideo = document.getElementById('studio-bg-video-element');
+    if (bgVideo) {
+      try {
+        bgVideo.pause();
+        bgVideo.currentTime = 0;
+      } catch (err) { }
+    }
+
+    updateStudioPlayheadVisuals();
+  };
+
+  // DRAWER TOGGLING & TOOL SWITCHING
+  window.toggleStudioDrawer = function (forceOpen) {
+    const drawer = document.getElementById('studio-tool-drawer');
+    if (drawer) {
+      if (typeof forceOpen === 'boolean') {
+        drawer.classList.toggle('active', forceOpen);
+      } else {
+        drawer.classList.toggle('active');
+      }
+    }
+  };
+
+  const toolTitles = {
+    media: 'Media & Backgrounds',
+    sticker: 'Instagram Stickers & Widgets',
+    canva: 'Story Templates & Layouts',
+    text: 'Typography & Text Styles',
+    ai: 'AI Script & Hook Assistant',
+    images: 'Curated Stock Photos',
+    gif: 'Animated GIF Stickers',
+    emojis: 'Emoji Sticker Picker'
+  };
+
+  window.switchStudioTool = function (toolName, btn) {
+    document.querySelectorAll('.studio-tool-btn').forEach(b => b.classList.remove('active'));
+    if (btn) btn.classList.add('active');
+
+    window.toggleStudioDrawer(true);
+
+    const titleEl = document.getElementById('studio-drawer-title');
+    if (titleEl && toolTitles[toolName]) {
+      titleEl.textContent = toolTitles[toolName];
+    }
+
+    document.querySelectorAll('.drawer-content-pane').forEach(pane => pane.classList.remove('active'));
+    const targetPane = document.getElementById(`drawer-panel-${toolName}`);
+    if (targetPane) targetPane.classList.add('active');
+
+    if (toolName === 'text') {
+      window.selectStudioLayer('text');
+    } else if (toolName === 'sticker') {
+      window.selectStudioLayer('sticker');
+    }
+  };
+
+  // CANVAS DRAG AND DROP ENGINE
+  function initStudioCanvasDragging() {
+    const stage = document.getElementById('studio-story-content');
+    if (!stage) return;
+
+    let draggingElement = null;
+    let dragStartX = 0;
+    let dragStartY = 0;
+    let elemStartX = 0;
+    let elemStartY = 0;
+
+    function onPointerDown(e) {
+      const target = e.target.closest('.studio-draggable-item');
+      if (!target) return;
+
+      // Don't drag if user is typing text inside contenteditable
+      if (e.target.isContentEditable && document.activeElement === e.target) {
+        return;
+      }
+
+      draggingElement = target;
+      const layerId = target.getAttribute('data-layer-id');
+      if (layerId) window.selectStudioLayer(layerId);
+
+      const clientX = e.clientX || (e.touches && e.touches[0].clientX);
+      const clientY = e.clientY || (e.touches && e.touches[0].clientY);
+
+      dragStartX = clientX;
+      dragStartY = clientY;
+      elemStartX = target.offsetLeft;
+      elemStartY = target.offsetTop;
+
+      document.addEventListener('mousemove', onPointerMove);
+      document.addEventListener('mouseup', onPointerUp);
+      document.addEventListener('touchmove', onPointerMove, { passive: false });
+      document.addEventListener('touchend', onPointerUp);
+    }
+
+    function onPointerMove(e) {
+      if (!draggingElement) return;
+      if (e.preventDefault) e.preventDefault();
+
+      const clientX = e.clientX || (e.touches && e.touches[0].clientX);
+      const clientY = e.clientY || (e.touches && e.touches[0].clientY);
+
+      const dx = clientX - dragStartX;
+      const dy = clientY - dragStartY;
+
+      let newX = elemStartX + dx;
+      let newY = elemStartY + dy;
+
+      // Snapping guide to center if enabled
+      if (studioSnappingEnabled) {
+        const stageWidth = stage.clientWidth;
+        const elemWidth = draggingElement.offsetWidth;
+        const centerX = (stageWidth - elemWidth) / 2;
+        if (Math.abs(newX - centerX) < 8) {
+          newX = centerX;
+        }
+      }
+
+      draggingElement.style.left = `${Math.max(4, Math.min(newX, stage.clientWidth - draggingElement.offsetWidth - 4))}px`;
+      draggingElement.style.top = `${Math.max(10, Math.min(newY, stage.clientHeight - draggingElement.offsetHeight - 10))}px`;
+    }
+
+    function onPointerUp() {
+      draggingElement = null;
+      document.removeEventListener('mousemove', onPointerMove);
+      document.removeEventListener('mouseup', onPointerUp);
+      document.removeEventListener('touchmove', onPointerMove);
+      document.removeEventListener('touchend', onPointerUp);
+    }
+
+    stage.addEventListener('mousedown', onPointerDown);
+    stage.addEventListener('touchstart', onPointerDown, { passive: false });
+  }
+
+  // DYNAMIC ASSET & LAYER INSERTION
+  window.triggerStudioBgUpload = function () {
+    const input = document.getElementById('studio-bg-file-input');
+    if (input) input.click();
+  };
+
+  window.handleStudioBgUpload = function (e) {
+    const file = e.target.files && e.target.files[0];
+    if (!file) return;
+
+    const bgLayer = document.getElementById('studio-bg-layer');
+    const bgVideo = document.getElementById('studio-bg-video-element');
+
+    const url = URL.createObjectURL(file);
+
+    if (file.type.startsWith('video')) {
+      if (bgVideo) {
+        bgVideo.src = url;
+        bgVideo.style.display = 'block';
+        bgVideo.play();
+      }
+      if (bgLayer) bgLayer.style.backgroundImage = 'none';
+      if (typeof window.showToast === 'function') window.showToast(`Loaded video background: ${file.name}`);
+    } else {
+      if (bgVideo) {
+        bgVideo.style.display = 'none';
+        try { bgVideo.pause(); } catch (err) { }
+      }
+      if (bgLayer) {
+        bgLayer.style.backgroundImage = `url(${url})`;
+        bgLayer.style.backgroundSize = 'cover';
+      }
+      if (typeof window.showToast === 'function') window.showToast(`Loaded photo background: ${file.name}`);
+    }
+  };
+
+  window.setStudioBackground = function (preset) {
+    const bgLayer = document.getElementById('studio-bg-layer');
+    const bgVideo = document.getElementById('studio-bg-video-element');
+    if (bgVideo) {
+      bgVideo.style.display = 'none';
+      try { bgVideo.pause(); } catch (err) { }
+    }
+    if (!bgLayer) return;
+
+    bgLayer.style.backgroundImage = '';
+    if (preset === 'carbon') {
+      bgLayer.style.background = 'linear-gradient(135deg, #181e2b 0%, #0d121c 100%)';
+    } else if (preset === 'gold') {
+      bgLayer.style.background = 'linear-gradient(135deg, #78350f 0%, #d97706 100%)';
+    } else if (preset === 'cyan') {
+      bgLayer.style.background = 'linear-gradient(135deg, #0c4a6e 0%, #0284c7 100%)';
+    } else if (preset === 'purple') {
+      bgLayer.style.background = 'linear-gradient(135deg, #3b0764 0%, #7e22ce 100%)';
+    }
+    if (typeof window.showToast === 'function') window.showToast(`Applied ${preset} background preset`);
+  };
+
+  window.setStudioBgImage = function (url) {
+    const bgLayer = document.getElementById('studio-bg-layer');
+    const bgVideo = document.getElementById('studio-bg-video-element');
+    if (bgVideo) {
+      bgVideo.style.display = 'none';
+      try { bgVideo.pause(); } catch (err) { }
+    }
+    if (bgLayer) {
+      bgLayer.style.background = `url('${url}') center/cover no-repeat`;
+      if (typeof window.showToast === 'function') window.showToast('Updated background with stock photo');
+    }
+  };
+
+  window.addStudioTextLayer = function (presetType) {
+    const container = document.getElementById('studio-dynamic-layers-container');
+    if (!container) return;
+
+    const layerId = `text_${Date.now()}`;
+    const newDiv = document.createElement('div');
+    newDiv.className = 'story-text-layer studio-draggable-item active-layer-box';
+    newDiv.setAttribute('data-layer-id', layerId);
+    newDiv.style.top = `${120 + (studioLayers.length * 15)}px`;
+    newDiv.style.left = '20px';
+
+    let defaultText = 'New Heading';
+    if (presetType === 'heading') defaultText = 'VIRAL REEL HEADLINE';
+    else if (presetType === 'subheading') defaultText = 'Comment "GROWTH" for blueprint';
+    else if (presetType === 'callout') defaultText = '⚡ 2-SECOND AUTOMATION';
+
+    newDiv.innerHTML = `
+      <p class="story-message-text" contenteditable="true" spellcheck="false">${defaultText}</p>
+      <div class="layer-resize-handle"></div>
+    `;
+
+    container.appendChild(newDiv);
+
+    studioLayers.push({
+      id: layerId,
+      type: 'text',
+      title: defaultText.substring(0, 18),
+      res: 'Vector 1080p',
+      dur: '14.2s',
+      startMs: 0,
+      endMs: 14200,
+      opacity: 100,
+      visible: true,
+      locked: false,
+      animation: 'fadeIn'
+    });
+
+    window.selectStudioLayer(layerId);
+    if (typeof window.showToast === 'function') window.showToast('Added new text layer to canvas');
+  };
+
+  window.addStudioSticker = function (type) {
+    const container = document.getElementById('studio-dynamic-layers-container');
+    if (!container) return;
+
+    const layerId = `sticker_${Date.now()}`;
+    const newDiv = document.createElement('div');
+    newDiv.className = 'story-sticker-layer studio-draggable-item active-layer-box';
+    newDiv.setAttribute('data-layer-id', layerId);
+    newDiv.style.top = '220px';
+    newDiv.style.left = '30px';
+
+    let contentHtml = '';
+    let title = 'Sticker';
+
+    if (type === 'heart') {
+      title = 'Heart Sticker';
+      contentHtml = '<svg width="32" height="32" viewBox="0 0 24 24" fill="#f43f5e"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>';
+    } else if (type === 'fire') {
+      title = 'Fire Emoji';
+      contentHtml = '<span style="font-size: 32px;">🔥</span>';
+    } else if (type === 'poll') {
+      title = 'Interactive Poll';
+      contentHtml = `
+        <div style="background: rgba(0,0,0,0.7); backdrop-filter: blur(8px); border: 1.5px solid #ffffff; border-radius: 10px; padding: 8px 12px; text-align: center; color: #fff; width: 140px;">
+          <div style="font-size: 11px; font-weight: 800; margin-bottom: 6px;">WANT THIS FREE?</div>
+          <div style="display: flex; gap: 4px;">
+            <div style="flex: 1; background: #ffffff; color: #000; font-weight: 800; font-size: 10px; padding: 4px 0; border-radius: 6px;">YES!</div>
+            <div style="flex: 1; background: rgba(255,255,255,0.2); font-weight: 800; font-size: 10px; padding: 4px 0; border-radius: 6px;">NO</div>
+          </div>
+        </div>
+      `;
+    } else if (type === 'question') {
+      title = 'Ask Question';
+      contentHtml = `
+        <div style="background: #ffffff; color: #000; border-radius: 12px; padding: 8px 12px; text-align: center; width: 150px; box-shadow: 0 8px 20px rgba(0,0,0,0.5);">
+          <div style="font-size: 11px; font-weight: 800;">Ask me a question</div>
+          <div style="margin-top: 4px; background: #f1f5f9; border-radius: 6px; padding: 4px; font-size: 9.5px; color: #64748b;">Type something...</div>
+        </div>
+      `;
+    } else if (type === 'countdown') {
+      title = 'Countdown Widget';
+      contentHtml = `
+        <div style="background: #000; border: 1.5px solid #f59e0b; border-radius: 10px; padding: 6px 12px; text-align: center; color: #f59e0b; font-family: monospace; font-size: 13px; font-weight: 800; width: 130px;">
+          ⏱ 02:45:10
+        </div>
+      `;
+    } else if (type === 'verified') {
+      title = 'Verified Badge';
+      contentHtml = '<svg width="28" height="28" viewBox="0 0 24 24" fill="#38bdf8"><path d="M12 2l2.4 2.8 3.7-.4 1.2 3.5 3.5 1.2-.4 3.7 2.8 2.4-2.8 2.4.4 3.7-3.5 1.2-1.2 3.5-3.7-.4L12 22l-2.4-2.8-3.7.4-1.2-3.5-3.5-1.2.4-3.7L2 12l2.8-2.4-.4-3.7 3.5-1.2 1.2-3.5 3.7.4z"></path><polyline points="9 12 11 14 15 10" fill="none" stroke="#000" stroke-width="2"></polyline></svg>';
+    } else {
+      title = `${type} Badge`;
+      contentHtml = '<span style="font-size: 32px;">✨</span>';
+    }
+
+    newDiv.innerHTML = `${contentHtml}<div class="layer-resize-handle"></div>`;
+    container.appendChild(newDiv);
+
+    studioLayers.push({
+      id: layerId,
+      type: 'sticker',
+      title: title,
+      res: '512x512 SVG',
+      dur: '10.0s',
+      startMs: 1000,
+      endMs: 11000,
+      opacity: 100,
+      visible: true,
+      locked: false,
+      animation: 'popIn'
+    });
+
+    window.selectStudioLayer(layerId);
+    if (typeof window.showToast === 'function') window.showToast(`Added ${title} to canvas`);
+  };
+
+  window.addStudioEmoji = function (emoji) {
+    const container = document.getElementById('studio-dynamic-layers-container');
+    if (!container) return;
+
+    const layerId = `emoji_${Date.now()}`;
+    const newDiv = document.createElement('div');
+    newDiv.className = 'story-sticker-layer studio-draggable-item active-layer-box';
+    newDiv.setAttribute('data-layer-id', layerId);
+    newDiv.style.top = '180px';
+    newDiv.style.left = '60px';
+    newDiv.innerHTML = `<span style="font-size: 38px; filter: drop-shadow(0 4px 10px rgba(0,0,0,0.6));">${emoji}</span><div class="layer-resize-handle"></div>`;
+
+    container.appendChild(newDiv);
+
+    studioLayers.push({
+      id: layerId,
+      type: 'sticker',
+      title: `Emoji (${emoji})`,
+      res: 'Vector Emoji',
+      dur: '14.2s',
+      startMs: 0,
+      endMs: 14200,
+      opacity: 100,
+      visible: true,
+      locked: false,
+      animation: 'popIn'
+    });
+
+    window.selectStudioLayer(layerId);
+    if (typeof window.showToast === 'function') window.showToast(`Dropped ${emoji} onto canvas`);
+  };
+
+  window.applyStudioTemplate = function (templateId) {
+    const textEl = document.getElementById('studio-editable-text');
+    if (templateId === 'quote') {
+      if (textEl) textEl.innerHTML = '"Stop trading time for money. Build an automated digital system that closes DM leads 24/7."<br><br><span style="font-size: 11px; opacity: 0.8; font-style: italic;">— @rudrateja</span>';
+      window.setStudioBackground('carbon');
+    } else if (templateId === 'promo') {
+      if (textEl) textEl.innerHTML = '⚡ 24-HOUR FLASH SALE<br><br><span style="font-size: 15px; font-weight: 800; color: #f59e0b;">50% OFF ALL PRESETS</span><br><br>Comment "STORE" to claim';
+      window.setStudioBackground('gold');
+    } else if (templateId === 'tweet') {
+      if (textEl) textEl.innerHTML = 'If you are still sending manual DMs to 100 leads a day, you are working as a bot.<br><br>Let RenderReply automate it in 2 seconds.';
+      window.setStudioBackground('cyan');
+    } else if (templateId === 'podcast') {
+      if (textEl) textEl.innerHTML = '🎙 EP. 42: How we built a $100K/mo automation flywheel with zero paid ads.<br><br>👇 Tap link in bio';
+      window.setStudioBackground('purple');
+    }
+    if (typeof window.showToast === 'function') window.showToast('Applied Story Layout Template');
+  };
+
+  window.applyAiGeneratedHook = function (hookId) {
+    const textEl = document.getElementById('studio-editable-text');
+    if (!textEl) return;
+
+    if (hookId === 'hook1') {
+      textEl.textContent = '🚨 Stop typing manual DMs to every customer lead in 2026.';
+    } else if (hookId === 'hook2') {
+      textEl.textContent = '💰 How this 1 Reel generated $18,450 on 100% autopilot.';
+    } else if (hookId === 'hook3') {
+      textEl.textContent = '✨ POV: Making sales while you sleep with RenderReply.';
+    }
+
+    textEl.style.animation = 'none';
+    setTimeout(() => {
+      textEl.style.animation = 'fadeInPane 0.4s ease';
+    }, 10);
+
+    if (typeof window.showToast === 'function') window.showToast('Applied AI Viral Hook to canvas');
+  };
+
+  window.updateSelectedTextFont = function (fontFamily) {
+    const activeEl = document.querySelector(`.studio-draggable-item.active-layer-box[data-layer-id="${studioSelectedLayer}"]`) || document.getElementById('studio-text-overlay-box');
+    if (activeEl) {
+      activeEl.style.fontFamily = fontFamily;
+    }
+  };
+
+  window.setSelectedTextColor = function (color) {
+    const activeEl = document.querySelector(`.studio-draggable-item.active-layer-box[data-layer-id="${studioSelectedLayer}"]`) || document.getElementById('studio-text-overlay-box');
+    if (activeEl) {
+      activeEl.style.color = color;
+    }
+    document.querySelectorAll('.swatch-circle').forEach(sw => {
+      sw.classList.toggle('active', sw.style.backgroundColor === color);
+    });
+  };
+
+  window.selectStudioLayer = function (layerId) {
+    studioSelectedLayer = layerId;
+    const layerObj = studioLayers.find(l => l.id === layerId) || studioLayers[1];
+
+    // Highlight on canvas
+    document.querySelectorAll('.studio-draggable-item').forEach(el => {
+      el.classList.toggle('active-layer-box', el.getAttribute('data-layer-id') === layerId);
+    });
+
+    // Highlight right layers card
+    document.querySelectorAll('.layer-item-card').forEach(card => card.classList.remove('active-gold', 'selected-layer'));
+    const activeCard = document.getElementById(`layer-card-${layerId}`);
+    if (activeCard) {
+      if (layerId === 'main') activeCard.classList.add('active-gold');
+      else activeCard.classList.add('selected-layer');
+    }
+
+    // Highlight timeline track
+    document.querySelectorAll('.timeline-track-row').forEach(row => row.classList.remove('selected-track'));
+    const trackClip = document.getElementById(`timeline-clip-${layerId}`);
+    if (trackClip && trackClip.closest('.timeline-track-row')) {
+      trackClip.closest('.timeline-track-row').classList.add('selected-track');
+    }
+
+    // Update inspector
+    const inspTitle = document.getElementById('studio-inspector-title');
+    const inspRes = document.getElementById('studio-insp-res');
+    const inspDur = document.getElementById('studio-insp-dur');
+    const opacityInput = document.getElementById('studio-layer-opacity');
+    const opacityBadge = document.getElementById('studio-opacity-badge');
+    const animSelect = document.getElementById('studio-layer-animation');
+
+    if (inspTitle) inspTitle.textContent = layerObj.title;
+    if (inspRes) inspRes.textContent = layerObj.res;
+    if (inspDur) inspDur.textContent = layerObj.dur;
+    if (opacityInput) opacityInput.value = layerObj.opacity;
+    if (opacityBadge) opacityBadge.textContent = `${layerObj.opacity}%`;
+    if (animSelect) animSelect.value = layerObj.animation || 'none';
+  };
+
+  window.updateStudioLayerOpacity = function (val) {
+    const num = parseInt(val, 10) || 100;
+    const layerObj = studioLayers.find(l => l.id === studioSelectedLayer);
+    if (layerObj) layerObj.opacity = num;
+
+    const badge = document.getElementById('studio-opacity-badge');
+    if (badge) badge.textContent = `${num}%`;
+
+    const el = document.querySelector(`[data-layer-id="${studioSelectedLayer}"]`) || document.getElementById(`studio-${studioSelectedLayer}-layer`) || document.getElementById('studio-story-content');
+    if (el) el.style.opacity = num / 100;
+  };
+
+  window.setLayerAnimation = function (anim) {
+    const layerObj = studioLayers.find(l => l.id === studioSelectedLayer);
+    if (layerObj) layerObj.animation = anim;
+    if (typeof window.showToast === 'function') window.showToast(`Set animation: ${anim}`);
+  };
+
+  window.toggleLayerVisibility = function (layerId) {
+    const layerObj = studioLayers.find(l => l.id === layerId);
+    if (!layerObj) return;
+
+    layerObj.visible = !layerObj.visible;
+    const el = document.querySelector(`[data-layer-id="${layerId}"]`) || document.getElementById(`studio-${layerId}-layer`);
+    if (el) el.style.display = layerObj.visible ? '' : 'none';
+
+    if (typeof window.showToast === 'function') {
+      window.showToast(`${layerObj.visible ? 'Showed' : 'Hidden'} layer: ${layerObj.title}`);
+    }
+  };
+
+  window.deleteSelectedStudioTrack = function () {
+    if (studioSelectedLayer === 'bg' || studioSelectedLayer === 'main') {
+      if (typeof window.showToast === 'function') window.showToast('Main background layer is locked.');
+      return;
+    }
+
+    const idx = studioLayers.findIndex(l => l.id === studioSelectedLayer);
+    if (idx !== -1) {
+      const removed = studioLayers.splice(idx, 1)[0];
+      const el = document.querySelector(`[data-layer-id="${removed.id}"]`);
+      if (el) el.remove();
+
+      const trackRow = document.getElementById(`timeline-clip-${removed.id}`)?.closest('.timeline-track-row');
+      if (trackRow) trackRow.remove();
+
+      const layerCard = document.getElementById(`layer-card-${removed.id}`);
+      if (layerCard) layerCard.remove();
+
+      window.selectStudioLayer('main');
+      if (typeof window.showToast === 'function') window.showToast(`Deleted "${removed.title}"`);
+    }
+  };
+
+  window.startClipTrim = function (layerId, side, e) {
+    e.stopPropagation();
+    activeTrimmingClip = { layerId, side, startX: e.clientX };
+
+    function onTrimMove(ev) {
+      if (!activeTrimmingClip) return;
+      const dx = ev.clientX - activeTrimmingClip.startX;
+      const layerObj = studioLayers.find(l => l.id === activeTrimmingClip.layerId);
+      if (!layerObj) return;
+
+      const clipEl = document.getElementById(`timeline-clip-${layerObj.id}`);
+      if (clipEl) {
+        if (activeTrimmingClip.side === 'right') {
+          clipEl.style.width = `max(20px, calc(100% + ${dx}px))`;
+        }
+      }
+    }
+
+    function onTrimEnd() {
+      activeTrimmingClip = null;
+      document.removeEventListener('mousemove', onTrimMove);
+      document.removeEventListener('mouseup', onTrimEnd);
+      if (typeof window.showToast === 'function') window.showToast('Trimmed clip duration');
+    }
+
+    document.addEventListener('mousemove', onTrimMove);
+    document.addEventListener('mouseup', onTrimEnd);
+  };
+
+  window.saveStudioProject = function () {
+    try {
+      localStorage.setItem('renderreply_studio_project', JSON.stringify({
+        layers: studioLayers,
+        currentTime: studioCurrentTimeMs
+      }));
+    } catch (e) { }
+
+    if (typeof window.showToast === 'function') {
+      window.showToast('Studio project draft saved to local storage!');
+    }
+  };
+
+  window.shareStudioProject = function () {
+    if (navigator.clipboard) {
+      navigator.clipboard.writeText('https://renderreply.com/studio/story-render-948');
+    }
+    if (typeof window.showToast === 'function') {
+      window.showToast('Project share link copied to clipboard!');
+    }
+  };
+
+  window.splitStudioTrack = function () {
+    if (typeof window.showToast === 'function') {
+      window.showToast(`Split clip at ${formatTimecode(studioCurrentTimeMs)}`);
+    }
+  };
+
+  window.undoStudioAction = function () {
+    if (typeof window.showToast === 'function') window.showToast('Undo previous action');
+  };
+
+  window.redoStudioAction = function () {
+    if (typeof window.showToast === 'function') window.showToast('Redo studio action');
+  };
+
+  window.zoomTimeline = function (delta) {
+    studioTimelineZoom = Math.min(Math.max(studioTimelineZoom + delta * 0.2, 0.6), 2.0);
+    const tracksArea = document.getElementById('studio-tracks-list-wrap');
+    if (tracksArea) {
+      tracksArea.style.minWidth = `${100 * studioTimelineZoom}%`;
+    }
+    if (typeof window.showToast === 'function') {
+      window.showToast(`Timeline Scale: ${Math.round(studioTimelineZoom * 100)}%`);
+    }
+  };
+
+  window.toggleStudioFullscreen = function () {
+    const container = document.querySelector('.studio-editor-viewport-container');
+    if (container) {
+      if (!document.fullscreenElement) {
+        if (container.requestFullscreen) container.requestFullscreen();
+      } else {
+        if (document.exitFullscreen) document.exitFullscreen();
+      }
+    }
+  };
+
+  window.adjustCanvasZoom = function (delta) {
+    studioZoomPercent = Math.min(Math.max(studioZoomPercent + delta, 60), 160);
+    const frame = document.getElementById('story-frame-viewport');
+    if (frame) {
+      frame.style.transform = `scale(${studioZoomPercent / 100})`;
+      frame.style.transformOrigin = 'center center';
+    }
+    if (typeof window.showToast === 'function') {
+      window.showToast(`Canvas Zoom: ${studioZoomPercent}%`);
+    }
+  };
+
+  window.toggleStudioSnapping = function (enabled) {
+    studioSnappingEnabled = enabled;
+    if (typeof window.showToast === 'function') {
+      window.showToast(enabled ? 'Overlay & Snapping enabled' : 'Snapping disabled');
+    }
+  };
+
+  window.openConnectAccountModal = function (e) {
+    if (e && typeof e.stopPropagation === 'function') e.stopPropagation();
+    if (typeof window.openSwitchAccountModal === 'function') {
+      window.openSwitchAccountModal(e);
+    } else {
+      const modal = document.getElementById('modal-switch-account');
+      if (modal) {
+        modal.classList.add('active');
+        modal.style.display = 'flex';
+        modal.style.opacity = '1';
+        modal.style.pointerEvents = 'auto';
+      }
     }
   };
 
   // INITIALIZE STUDIO ON MOUNT
   setTimeout(() => {
-    renderGalleryFolders();
-    renderGalleryGrid();
-    renderSocialAccountsDropdown();
-    renderSchedulingActivityList();
+    if (typeof renderGalleryFolders === 'function') renderGalleryFolders();
+    if (typeof renderGalleryGrid === 'function') renderGalleryGrid();
+    if (typeof window.syncSchedulerAccountsToActiveUser === 'function') {
+      window.syncSchedulerAccountsToActiveUser();
+    } else if (typeof window.updateSelectedAccountsCount === 'function') {
+      window.updateSelectedAccountsCount();
+    }
+    if (typeof initStudioCanvasDragging === 'function') initStudioCanvasDragging();
+    if (typeof updateStudioPlayheadVisuals === 'function') updateStudioPlayheadVisuals();
   }, 100);
 
 })();
