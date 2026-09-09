@@ -10349,7 +10349,7 @@ function initUserProfileDropdownAndModals() {
   const btnDoneSwitch = document.getElementById('btn-done-switch-acc');
   const btnShowAddAcc = document.getElementById('btn-show-add-acc');
   const btnCancelAddAcc = document.getElementById('btn-cancel-add-acc');
-  const btnConfirmAddAcc = document.getElementById('btn-confirm-add-acc');
+  const btnOpenInstaLogin = document.getElementById('btn-open-insta-login');
   const addAccBox = document.getElementById('add-account-form-box');
 
   if (btnSwitchAccount) {
@@ -10376,6 +10376,131 @@ function initUserProfileDropdownAndModals() {
       btnShowAddAcc.style.display = 'inline-flex';
     });
   }
+
+  if (btnOpenInstaLogin) {
+    btnOpenInstaLogin.addEventListener('click', () => {
+      if (typeof window.openAccountModal === 'function') {
+        window.openAccountModal('modal-instagram-auth');
+      } else {
+        openModal('modal-instagram-auth');
+      }
+      setTimeout(() => {
+        const uInput = document.getElementById('insta-login-username');
+        if (uInput) uInput.focus();
+      }, 100);
+    });
+  }
+
+  window.handleInstagramAuthSubmit = function () {
+    const userInput = document.getElementById('insta-login-username');
+    const passInput = document.getElementById('insta-login-password');
+    const submitBtn = document.getElementById('btn-submit-insta-login');
+    const btnText = document.getElementById('btn-insta-text');
+
+    if (!userInput) return;
+    let rawHandle = userInput.value.trim();
+    if (!rawHandle) return;
+
+    let cleanHandle = rawHandle.startsWith('@') ? rawHandle : '@' + rawHandle;
+    let cleanName = rawHandle.replace('@', '').replace(/[._]/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
+    if (!cleanName || cleanName.length < 2) cleanName = 'Instagram Creator';
+
+    if (submitBtn) submitBtn.disabled = true;
+    if (btnText) btnText.textContent = 'Connecting...';
+
+    setTimeout(() => {
+      const newAccId = 'acc-ig-' + Date.now();
+      const newAvatar = 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=150&q=80';
+
+      if (window.USER_ACCOUNTS_DATABASE) {
+        window.USER_ACCOUNTS_DATABASE[newAccId] = {
+          id: newAccId,
+          profile: {
+            name: cleanName,
+            email: `${rawHandle.replace('@', '').toLowerCase()}@instagram.creator`,
+            avatar: newAvatar,
+            bio: `Official Instagram creator account for ${cleanHandle}. Automating DMs & Storefront.`,
+            insta: cleanHandle,
+            yt: `youtube.com/${rawHandle.replace('@', '')}`,
+            tw: cleanHandle,
+            initials: cleanName.split(' ').map(n => n[0]).join('').slice(0, 2).toUpperCase(),
+            badge: 'Instagram Creator',
+            role: 'Creator'
+          },
+          dashboard: {
+            '7 Days': { followers: '1.2K', following: '120', views: '8,400', comments: '340', totalReplies: '280', sentToday: '12', activeRulesFlat: '2', leadsFlat: '18' },
+            '14 Days': { followers: '2.4K', following: '135', views: '15,600', comments: '680', totalReplies: '540', sentToday: '24', activeRulesFlat: '3', leadsFlat: '36' },
+            '30 Days': { followers: '5.8K', following: '150', views: '32,400', comments: '1,420', totalReplies: '1,190', sentToday: '42', activeRulesFlat: '4', leadsFlat: '84' },
+            '60 Days': { followers: '11.2K', following: '180', views: '64,000', comments: '2,900', totalReplies: '2,400', sentToday: '68', activeRulesFlat: '5', leadsFlat: '160' },
+            '90 Days': { followers: '18.5K', following: '210', views: '98,000', comments: '4,500', totalReplies: '3,800', sentToday: '95', activeRulesFlat: '6', leadsFlat: '250' }
+          },
+          rules: [],
+          leads: [],
+          inbox: [],
+          storeProducts: [],
+          payments: { balance: 0, pending: 0, totalSales: 0, history: [] },
+          biolink: { title: cleanName, bio: `Follow my content on Instagram ${cleanHandle}`, links: [], theme: 'modern-dark' }
+        };
+      }
+
+      const container = document.getElementById('switch-accounts-container');
+      if (container) {
+        const newItem = document.createElement('div');
+        newItem.className = 'switch-account-item';
+        newItem.id = 'acc-card-' + newAccId;
+        newItem.setAttribute('data-account-id', newAccId);
+        newItem.setAttribute('onclick', `window.switchActiveUserAccount('${newAccId}')`);
+        newItem.innerHTML = `
+          <div class="acc-item-left">
+            <div class="acc-avatar-wrapper">
+              <img src="${newAvatar}" alt="${cleanName}" class="acc-avatar-img">
+              <span class="acc-ig-badge" title="Instagram Connected">
+                <svg viewBox="0 0 24 24" fill="#ffffff">
+                  <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
+                </svg>
+              </span>
+            </div>
+            <div class="acc-item-info">
+              <div class="acc-name-row">
+                <span class="acc-name-label">${cleanName}</span>
+                <span class="acc-active-badge">ACTIVE</span>
+              </div>
+              <div class="acc-handle-row"><span class="acc-handle-highlight">${cleanHandle}</span></div>
+            </div>
+          </div>
+          <div class="acc-check-icon">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+              <polyline points="20 6 9 17 4 12" />
+            </svg>
+          </div>
+        `;
+        container.appendChild(newItem);
+      }
+
+      if (typeof window.switchActiveUserAccount === 'function') {
+        window.switchActiveUserAccount(newAccId);
+      }
+
+      if (submitBtn) submitBtn.disabled = false;
+      if (btnText) btnText.textContent = 'Log In & Connect';
+      if (userInput) userInput.value = '';
+      if (passInput) passInput.value = '';
+
+      const aBox = document.getElementById('add-account-form-box');
+      const bShow = document.getElementById('btn-show-add-acc');
+      if (aBox) aBox.style.display = 'none';
+      if (bShow) bShow.style.display = 'inline-flex';
+
+      if (typeof window.closeAccountModal === 'function') {
+        window.closeAccountModal('modal-instagram-auth');
+        window.closeAccountModal('modal-switch-account');
+      }
+
+      if (typeof showToast === 'function') {
+        showToast(`Instagram account ${cleanHandle} connected successfully!`);
+      }
+    }, 700);
+  };
 
   function switchActiveAccount(accountName, accountEmail, accountInsta) {
     window.storeProfileState.name = accountName;
