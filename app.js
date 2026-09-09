@@ -1448,7 +1448,7 @@ window.USER_ACCOUNTS_DATABASE = {
   "acc-alex": {
     "id": "acc-alex",
     "profile": {
-      "name": "Alex Rivera (Fit Coach)",
+      "name": "Alex Rivera ",
       "email": "alex.fitness@rivera-fit.io",
       "avatar": "https://images.unsplash.com/photo-1570295999919-56ceb5ecca61?auto=format&fit=crop&w=250&q=80",
       "bio": "Certified Strength Coach & High-Performance Nutritionist 🏋️‍♂️ 1000+ Body Transformations.",
@@ -2970,6 +2970,16 @@ window.openUserSignoutModal = function (e) {
   if (e && typeof e.stopPropagation === 'function') e.stopPropagation();
   window.closeUserProfilePopup();
   const modal = document.getElementById('modal-user-signout');
+  if (modal) {
+    modal.classList.add('active');
+    modal.style.display = 'flex';
+    modal.style.opacity = '1';
+    modal.style.pointerEvents = 'auto';
+  }
+};
+
+window.openAccountModal = function (modalId) {
+  const modal = document.getElementById(modalId);
   if (modal) {
     modal.classList.add('active');
     modal.style.display = 'flex';
@@ -10383,7 +10393,7 @@ function initUserProfileDropdownAndModals() {
     if (sEmail) sEmail.value = accountEmail;
 
     if (typeof showToast === 'function') {
-      showToast(`Switched account to ${accountName} (${accountEmail})`);
+      showToast(`Switched account to ${accountName}`);
     }
 
     closeModal('modal-switch-account');
@@ -11181,15 +11191,12 @@ window.closeSupportGuideModal = function () {
 
   let galleryMediaItems = [];
 
-  // SOCIAL ACCOUNTS DATASET
+  // SOCIAL ACCOUNTS DATASET (INSTAGRAM STORIES & REELS)
   let socialAccountsList = [
     { id: 'ig-stories-1', platform: 'ig-story', group: 'INSTAGRAM STORIES', name: 'RenderReply Official', handle: '@renderreply', selected: true },
     { id: 'ig-stories-2', platform: 'ig-story', group: 'INSTAGRAM STORIES', name: 'Alex Growth Co', handle: '@alexcreator', selected: false },
     { id: 'reels-1', platform: 'reels', group: 'REELS', name: 'RenderReply Studio', handle: '@renderreply', selected: true },
-    { id: 'reels-2', platform: 'reels', group: 'REELS', name: 'Digital Academy', handle: '@digitalacademy', selected: false },
-    { id: 'tiktok-1', platform: 'tiktok', group: 'TIKTOK', name: 'RenderReply HQ', handle: '@renderreply.io', selected: true },
-    { id: 'tiktok-2', platform: 'tiktok', group: 'TIKTOK', name: 'Viral Automation Hub', handle: '@automationtips', selected: false },
-    { id: 'yt-1', platform: 'youtube', group: 'YOUTUBE SHORTS', name: 'RenderReply Labs', handle: '@RenderReplyLabs', selected: false }
+    { id: 'reels-2', platform: 'reels', group: 'REELS', name: 'Digital Academy', handle: '@digitalacademy', selected: false }
   ];
 
   // SCHEDULING ACTIVITY LOG
@@ -11197,7 +11204,7 @@ window.closeSupportGuideModal = function () {
     {
       id: 'act-1',
       mediaName: 'Digiproducthub (15)',
-      platform: 'Instagram Reels & TikTok',
+      platform: 'Instagram Reels',
       time: 'Just now',
       status: 'in-progress',
       statusText: 'In progress • Posting now'
@@ -11213,7 +11220,7 @@ window.closeSupportGuideModal = function () {
     {
       id: 'act-3',
       mediaName: 'Viral Hook Strategy (30)',
-      platform: 'TikTok & YouTube Shorts',
+      platform: 'Instagram Reels',
       time: 'Tomorrow, 9:00 AM',
       status: 'scheduled',
       statusText: 'Scheduled'
@@ -11586,10 +11593,10 @@ window.closeSupportGuideModal = function () {
     if (newKw && newKw.trim()) {
       const cleanKw = newKw.trim().toUpperCase().replace(/^#/, '');
       media.autoDmKeyword = cleanKw;
-      
+
       const kwBadge = document.getElementById('modal-detail-keyword-badge');
       if (kwBadge) kwBadge.innerHTML = `#${cleanKw} <span style="opacity: 0.6; font-size: 10px; margin-left: 2px;">✎</span>`;
-      
+
       const dmText = document.getElementById('modal-detail-dm-preview');
       if (dmText) dmText.textContent = `Sends DM automatically when followers comment #${cleanKw}.`;
 
@@ -11991,11 +11998,11 @@ window.closeSupportGuideModal = function () {
       const bannerTitle = document.getElementById('sched-active-title');
       const activeName = bannerTitle && bannerTitle.textContent ? bannerTitle.textContent.trim() : 'full_page_screenshot.jpeg';
       const isImg = /\.(jpg|jpeg|png|webp|gif|bmp|tiff)$/i.test(activeName) || activeName.toLowerCase().includes('screenshot');
-      media = { 
-        name: activeName, 
-        type: isImg ? 'image' : 'video', 
-        autoDmKeyword: 'GROWTH', 
-        thumbUrl: 'goldfish_reel_thumb.jpg' 
+      media = {
+        name: activeName,
+        type: isImg ? 'image' : 'video',
+        autoDmKeyword: 'GROWTH',
+        thumbUrl: 'goldfish_reel_thumb.jpg'
       };
     }
 
@@ -12165,8 +12172,8 @@ window.closeSupportGuideModal = function () {
     if (chipsContainer) {
       const activeUser = (typeof window.getActiveUserData === 'function' ? window.getActiveUserData() : null) || {};
       const profile = (activeUser && activeUser.profile) ? activeUser.profile : {};
-      const activeHandle = (profile.insta) 
-        ? profile.insta.replace(/^@/, '') 
+      const activeHandle = (profile.insta)
+        ? profile.insta.replace(/^@/, '')
         : (profile.name ? profile.name.toLowerCase().replace(/[^a-z0-9_]/g, '_') : 'render6457');
 
       const avatarUrl = profile.avatar || '';
@@ -12254,8 +12261,8 @@ window.closeSupportGuideModal = function () {
   window.syncSchedulerAccountsToActiveUser = function () {
     const activeUser = (typeof window.getActiveUserData === 'function' ? window.getActiveUserData() : null) || {};
     const profile = (activeUser && activeUser.profile) ? activeUser.profile : {};
-    const activeHandle = (profile.insta) 
-      ? profile.insta.replace(/^@/, '') 
+    const activeHandle = (profile.insta)
+      ? profile.insta.replace(/^@/, '')
       : (profile.name ? profile.name.toLowerCase().replace(/[^a-z0-9_]/g, '_') : 'render6457');
     const avatarUrl = profile.avatar || '';
 
@@ -12286,8 +12293,8 @@ window.closeSupportGuideModal = function () {
     const title = bannerTitle ? bannerTitle.textContent : 'Digiproducthub (15)';
 
     const activeUser = (typeof window.getActiveUserData === 'function' ? window.getActiveUserData() : null) || {};
-    const activeHandle = (activeUser.profile && activeUser.profile.insta) 
-      ? activeUser.profile.insta 
+    const activeHandle = (activeUser.profile && activeUser.profile.insta)
+      ? activeUser.profile.insta
       : '@render6457';
 
     // Show feedback banner matching screenshot
@@ -12449,7 +12456,7 @@ window.closeSupportGuideModal = function () {
       window.setAutoDmTriggerType('specific');
       const kwInput = document.getElementById('auto-dm-compose-keyword');
       if (kwInput) kwInput.value = '';
-      
+
       const pubReply = document.getElementById('auto-dm-public-reply');
       if (pubReply) pubReply.value = '';
 
@@ -12553,7 +12560,7 @@ window.closeSupportGuideModal = function () {
   window.saveCreatedAutomation = function () {
     const kwInput = document.getElementById('auto-dm-compose-keyword');
     const kwVal = (kwInput ? kwInput.value.trim() : '') || 'GROWTH';
-    
+
     // If an active media item is selected, update it
     if (currentSelectedMediaId) {
       const media = galleryMediaItems.find(m => m.id === currentSelectedMediaId);
@@ -12902,9 +12909,9 @@ window.closeSupportGuideModal = function () {
   // =========================================================================
   window.downloadBulkTemplate = function () {
     const csvContent = "data:text/csv;charset=utf-8,Media_Filename,Platforms,Caption,Auto_DM_Keyword,Scheduled_Date_Time\n"
-      + "product_launch_15s.mp4,Instagram Reels|TikTok,Automate your sales with RenderReply,GROWTH,2026-09-08 18:30\n"
+      + "product_launch_15s.mp4,Instagram Reels,Automate your sales with RenderReply,GROWTH,2026-09-08 18:30\n"
       + "store_showcase_08s.mp4,Instagram Stories,Get 20% off our creator store,STORE,2026-09-09 12:00\n"
-      + "viral_hook_30s.mp4,Instagram Reels|TikTok|YouTube Shorts,3 secrets to viral DMs,BLUEPRINT,2026-09-10 15:45\n";
+      + "viral_hook_30s.mp4,Instagram Reels|Instagram Stories,3 secrets to viral DMs,BLUEPRINT,2026-09-10 15:45\n";
 
     const encodedUri = encodeURI(csvContent);
     const link = document.createElement("a");
@@ -13530,7 +13537,8 @@ window.closeSupportGuideModal = function () {
   const toolTitles = {
     media: 'Media & Backgrounds',
     sticker: 'Instagram Stickers & Widgets',
-    canva: 'Story Templates & Layouts',
+    canva: 'Story & Reel Templates',
+    templates: 'Story & Reel Templates',
     text: 'Typography & Text Styles',
     ai: 'AI Script & Hook Assistant',
     images: 'Curated Stock Photos',
