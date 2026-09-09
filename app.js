@@ -802,7 +802,7 @@ window.USER_ACCOUNTS_DATABASE = {
     "profile": {
       "name": "Sarah Jenkins",
       "email": "sarah.lifestyle@gmail.com",
-      "avatar": "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=250&q=80",
+      "avatar": "https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=250&q=80",
       "bio": "Fashion stylist, lifestyle vlogger & daily aesthetic outfit links ✨ NYC & Paris.",
       "insta": "@sarah_style",
       "yt": "youtube.com/@sarahstyle",
@@ -3076,24 +3076,6 @@ window.switchActiveUserAccount = function (userId) {
     const itemId = item.getAttribute('data-account-id');
     const isActive = itemId === userId;
     item.classList.toggle('active', isActive);
-    const badge = item.querySelector('.acc-active-badge');
-    const checkOrBtn = item.querySelector('.acc-check-icon') || item.querySelector('button.btn');
-
-    if (isActive) {
-      item.style.border = '1.5px solid #6366f1';
-      item.style.background = 'rgba(99, 102, 241, 0.05)';
-      if (badge) badge.style.display = 'inline-block';
-      if (checkOrBtn) {
-        checkOrBtn.outerHTML = `<div class="acc-check-icon" style="color: #6366f1;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg></div>`;
-      }
-    } else {
-      item.style.border = '1px solid #e2e8f0';
-      item.style.background = '#ffffff';
-      if (badge) badge.style.display = 'none';
-      if (checkOrBtn && checkOrBtn.classList.contains('acc-check-icon')) {
-        checkOrBtn.outerHTML = `<button type="button" class="btn btn-outline btn-xs" style="font-weight: 700;">Switch</button>`;
-      }
-    }
   });
 
   // 4. Update Settings Modal Inputs
@@ -3373,6 +3355,13 @@ window.switchMainTab = function (tabName, linkEl) {
       view.style.display = 'none';
     }
   });
+
+  if (tabName === 'inbox') {
+    const inboxContainer = document.getElementById('rr-inbox-container');
+    if (inboxContainer) {
+      inboxContainer.classList.remove('chat-active-mobile');
+    }
+  }
 };
 
 window.openProductStudio = function () {
@@ -3942,6 +3931,21 @@ function initApp() {
           view.classList.remove('active');
         }
       });
+
+      if (targetTab === 'inbox') {
+        const inboxContainer = document.getElementById('rr-inbox-container');
+        if (inboxContainer) {
+          inboxContainer.classList.remove('chat-active-mobile');
+        }
+      }
+
+      if (targetTab === 'automation-rules') {
+        setTimeout(() => {
+          if (typeof window.updateRulesFilterArrows === 'function') {
+            window.updateRulesFilterArrows();
+          }
+        }, 60);
+      }
 
       if (targetTab === 'creatorstore') {
         setTimeout(() => {
@@ -6169,7 +6173,7 @@ function initApp() {
     listContainer.querySelectorAll('.rr-clean-thread-item').forEach(item => {
       item.addEventListener('click', () => {
         const id = item.getAttribute('data-thread-id');
-        if (id) selectInboxThread(id);
+        if (id) selectInboxThread(id, true);
       });
     });
   }
@@ -6295,7 +6299,7 @@ function initApp() {
     });
   }
 
-  function selectInboxThread(threadId) {
+  function selectInboxThread(threadId, isUserClick = false) {
     const thread = inboxThreadsData[threadId];
     if (!thread) return;
 
@@ -6369,10 +6373,12 @@ function initApp() {
     renderThreadChatFeed(threadId);
     updateInboxFolderCounts();
 
-    // On Mobile: enter chat view
-    const inboxContainer = document.getElementById('rr-inbox-container');
-    if (inboxContainer) {
-      inboxContainer.classList.add('chat-active-mobile');
+    // On Mobile: enter chat view only when clicked by user
+    if (isUserClick) {
+      const inboxContainer = document.getElementById('rr-inbox-container');
+      if (inboxContainer) {
+        inboxContainer.classList.add('chat-active-mobile');
+      }
     }
   }
 
@@ -6380,7 +6386,7 @@ function initApp() {
   document.querySelectorAll('.rr-clean-thread-item').forEach(item => {
     item.addEventListener('click', () => {
       const threadId = item.getAttribute('data-thread-id');
-      if (threadId) selectInboxThread(threadId);
+      if (threadId) selectInboxThread(threadId, true);
     });
   });
 
@@ -7618,6 +7624,66 @@ function initApp() {
     setTimeout(updateArrows, 150);
   }
 
+  // RULES FILTER ARROW BUTTONS LOGIC
+  function initRulesFilterArrowButtons() {
+    const strip = document.getElementById('rules-filter-tabs');
+    const leftBtn = document.getElementById('btn-rules-scroll-left');
+    const rightBtn = document.getElementById('btn-rules-scroll-right');
+    if (!strip) return;
+
+    function updateArrows() {
+      if (!strip) return;
+      if (strip.clientWidth === 0) {
+        if (rightBtn) rightBtn.classList.remove('visible');
+        if (leftBtn) leftBtn.classList.remove('visible');
+        return;
+      }
+      const maxScroll = strip.scrollWidth - strip.clientWidth;
+      if (maxScroll <= 4) {
+        if (leftBtn) leftBtn.classList.remove('visible');
+        if (rightBtn) rightBtn.classList.remove('visible');
+        return;
+      }
+      if (leftBtn) {
+        if (strip.scrollLeft > 10) {
+          leftBtn.classList.add('visible');
+        } else {
+          leftBtn.classList.remove('visible');
+        }
+      }
+      if (rightBtn) {
+        if (strip.scrollLeft < maxScroll - 10) {
+          rightBtn.classList.add('visible');
+        } else {
+          rightBtn.classList.remove('visible');
+        }
+      }
+    }
+    window.updateRulesFilterArrows = updateArrows;
+
+    if (leftBtn) {
+      leftBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        strip.scrollBy({ left: -140, behavior: 'smooth' });
+        setTimeout(updateArrows, 300);
+      });
+    }
+
+    if (rightBtn) {
+      rightBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        strip.scrollBy({ left: 140, behavior: 'smooth' });
+        setTimeout(updateArrows, 300);
+      });
+    }
+
+    strip.addEventListener('scroll', updateArrows, { passive: true });
+    window.addEventListener('resize', updateArrows, { passive: true });
+    setTimeout(updateArrows, 200);
+  }
+
   // STORE SUB-NAV TAB SWITCHER FUNCTION
   window.switchStoreTab = function (tabName, clickedBtn) {
     const subnavBtns = document.querySelectorAll('.store-subnav-btn');
@@ -7655,6 +7721,7 @@ function initApp() {
   };
 
   initSubnavArrowButtons();
+  initRulesFilterArrowButtons();
 
   // GLOBAL EVENT DELEGATION FOR DEEP INTERACTIVE BUTTONS
   document.addEventListener('click', (e) => {

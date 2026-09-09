@@ -1266,24 +1266,36 @@
                 <line x1="12" y1="5" x2="12" y2="19" />
                 <line x1="5" y1="12" x2="19" y2="12" />
               </svg>
-              + New Automation
+              New Automation
             </button>
           </div>
         </header>
 
         <!-- FILTER TABS & SEARCH CONTROLS -->
         <div class="rules-toolbar">
-          <div class="rules-filter-tabs" id="rules-filter-tabs">
-            <button class="rule-tab-btn active" data-rule-filter="all">All Rules <span class="rule-count-pill"
-                id="filter-count-all">3</span></button>
-            <button class="rule-tab-btn" data-rule-filter="post">Post Comments <span class="rule-count-pill"
-                id="filter-count-post">1</span></button>
-            <button class="rule-tab-btn" data-rule-filter="story">Story Mentions <span class="rule-count-pill"
-                id="filter-count-story">1</span></button>
-            <button class="rule-tab-btn" data-rule-filter="reel">Reels &amp; Live <span class="rule-count-pill"
-                id="filter-count-reel">1</span></button>
-            <button class="rule-tab-btn" data-rule-filter="dm">Direct Keywords <span class="rule-count-pill"
-                id="filter-count-dm">0</span></button>
+          <div class="rules-filter-scroll-wrapper" id="rules-filter-scroll-wrapper">
+            <button type="button" class="rules-scroll-btn left" id="btn-rules-scroll-left" aria-label="Scroll left">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                <polyline points="15 18 9 12 15 6" />
+              </svg>
+            </button>
+            <div class="rules-filter-tabs" id="rules-filter-tabs">
+              <button class="rule-tab-btn active" data-rule-filter="all">All Rules <span class="rule-count-pill"
+                  id="filter-count-all">3</span></button>
+              <button class="rule-tab-btn" data-rule-filter="post">Post Comments <span class="rule-count-pill"
+                  id="filter-count-post">1</span></button>
+              <button class="rule-tab-btn" data-rule-filter="story">Story Mentions <span class="rule-count-pill"
+                  id="filter-count-story">1</span></button>
+              <button class="rule-tab-btn" data-rule-filter="reel">Reels &amp; Live <span class="rule-count-pill"
+                  id="filter-count-reel">1</span></button>
+              <button class="rule-tab-btn" data-rule-filter="dm">Direct Keywords <span class="rule-count-pill"
+                  id="filter-count-dm">0</span></button>
+            </div>
+            <button type="button" class="rules-scroll-btn right" id="btn-rules-scroll-right" aria-label="Scroll right">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                <polyline points="9 18 15 12 9 6" />
+              </svg>
+            </button>
           </div>
 
           <div class="rules-search-wrapper">
@@ -4948,8 +4960,8 @@
                       <div class="cs-phone-profile">
                         <div class="cs-phone-avatar-wrapper">
                           <img
-                            src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=250&q=80"
-                            class="cs-phone-avatar-img" id="dsp-avatar-el" alt="Rudra Teja">
+                            src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=250&q=80"
+                            class="cs-phone-avatar-img" id="dsp-avatar-el" alt="RudRa RR">
                           <div class="cs-phone-verified-badge" title="Verified Creator">
                             <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#ffffff"
                               stroke-width="3">
@@ -9148,11 +9160,11 @@
 
           <div class="spm-creator-profile-card">
             <div class="spm-avatar-wrapper">
-              <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=250&q=80"
+              <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=250&q=80"
                 id="spm-avatar-img" class="spm-avatar" alt="Creator Avatar">
               <span class="spm-verified-badge" id="spm-verified-badge" title="Verified Creator">✓</span>
             </div>
-            <h1 class="spm-creator-name" id="spm-creator-name">Rudra Teja</h1>
+            <h1 class="spm-creator-name" id="spm-creator-name">RudRa RR</h1>
             <p class="spm-creator-bio" id="spm-creator-bio">Building premium Instagram businesses and automation
               systems.</p>
 
@@ -10084,21 +10096,10 @@
 
   <!-- 1. SWITCH ACCOUNT MODAL -->
   <div class="store-preview-modal-backdrop payment-modal-backdrop" id="modal-switch-account">
-    <div class="store-auth-card" style="max-width: 520px; width: 94%;">
+    <div class="store-auth-card switch-acc-modal-card">
       <div class="auth-card-header">
         <div class="auth-title-group">
-          <div style="display: flex; align-items: center; gap: 8px;">
-            <div
-              style="width: 32px; height: 32px; border-radius: 8px; background: rgba(99, 102, 241, 0.12); color: #4f46e5; display: flex; align-items: center; justify-content: center;">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
-                <polyline points="17 1 21 5 17 9"></polyline>
-                <path d="M3 11V9a4 4 0 0 1 4-4h14"></path>
-                <polyline points="7 23 3 19 7 15"></polyline>
-                <path d="M21 13v2a4 4 0 0 1-4 4H3"></path>
-              </svg>
-            </div>
-            <h2 class="auth-title">Switch Account</h2>
-          </div>
+          <h2 class="auth-title">Switch Account</h2>
           <p class="auth-sub">Select an account or connected workspace to manage automations.</p>
         </div>
         <button type="button" class="btn-close-modal" id="btn-close-switch-modal"
@@ -10110,29 +10111,28 @@
         </button>
       </div>
 
-      <div class="switch-accounts-list" id="switch-accounts-container"
-        style="display: flex; flex-direction: column; gap: 10px; margin: 16px 0;">
+      <div class="switch-accounts-list" id="switch-accounts-container">
         <!-- Account 1: RudRa RR (Primary) -->
         <div class="switch-account-item active" id="acc-card-rudra" data-account-id="acc-rudra"
-          onclick="window.switchActiveUserAccount('acc-rudra')"
-          style="display: flex; align-items: center; justify-content: space-between; padding: 12px 14px; border-radius: 12px; border: 1.5px solid #6366f1; background: rgba(99, 102, 241, 0.04); cursor: pointer; transition: all 0.2s ease;">
-          <div style="display: flex; align-items: center; gap: 12px;">
-            <div class="acc-avatar-icon"
-              style="width: 38px; height: 38px; border-radius: 50%; background: #0f172a; color: #ffffff; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 14px;">
-              R</div>
-            <div>
-              <div
-                style="font-weight: 700; font-size: 14px; color: #0f172a; display: flex; align-items: center; gap: 6px;">
+          onclick="window.switchActiveUserAccount('acc-rudra')">
+          <div class="acc-item-left">
+            <div class="acc-avatar-wrapper">
+              <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=250&q=80"
+                alt="RudRa RR" class="acc-avatar-img">
+              <span class="acc-ig-badge" title="Instagram Connected">
+                <svg viewBox="0 0 24 24" fill="#ffffff"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+              </span>
+            </div>
+            <div class="acc-item-info">
+              <div class="acc-name-row">
                 <span class="acc-name-label">RudRa RR</span>
-                <span class="acc-active-badge"
-                  style="background: #10b981; color: #ffffff; font-size: 10px; font-weight: 800; padding: 2px 6px; border-radius: 9999px;">ACTIVE</span>
+                <span class="acc-active-badge">ACTIVE</span>
               </div>
-              <div style="font-size: 12px; color: #64748b; margin-top: 1px;">rudrateja08@gmail.com • Instagram:
-                @render6457</div>
+              <div class="acc-handle-row"><span class="acc-handle-highlight">@render6457</span> <span class="acc-dot">•</span> <span class="acc-email-text">rudrateja08@gmail.com</span></div>
             </div>
           </div>
-          <div class="acc-check-icon" style="color: #0f172a;">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+          <div class="acc-check-icon">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
               <polyline points="20 6 9 17 4 12" />
             </svg>
           </div>
@@ -10140,98 +10140,105 @@
 
         <!-- Account 2: Sarah Jenkins (Fashion & Lifestyle) -->
         <div class="switch-account-item" id="acc-card-sarah" data-account-id="acc-sarah"
-          onclick="window.switchActiveUserAccount('acc-sarah')"
-          style="display: flex; align-items: center; justify-content: space-between; padding: 12px 14px; border-radius: 12px; border: 1px solid #e2e8f0; background: #ffffff; cursor: pointer; transition: all 0.2s ease;">
-          <div style="display: flex; align-items: center; gap: 12px;">
-            <div class="acc-avatar-icon"
-              style="width: 38px; height: 38px; border-radius: 50%; background: linear-gradient(135deg, #ec4899, #f43f5e); color: #ffffff; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 14px;">
-              SJ</div>
-            <div>
-              <div
-                style="font-weight: 700; font-size: 14px; color: #0f172a; display: flex; align-items: center; gap: 6px;">
+          onclick="window.switchActiveUserAccount('acc-sarah')">
+          <div class="acc-item-left">
+            <div class="acc-avatar-wrapper">
+              <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=120&q=80"
+                alt="Sarah Jenkins" class="acc-avatar-img">
+              <span class="acc-ig-badge" title="Instagram Connected">
+                <svg viewBox="0 0 24 24" fill="#ffffff"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+              </span>
+            </div>
+            <div class="acc-item-info">
+              <div class="acc-name-row">
                 <span class="acc-name-label">Sarah Jenkins</span>
-                <span class="acc-active-badge"
-                  style="display: none; background: #10b981; color: #ffffff; font-size: 10px; font-weight: 800; padding: 2px 6px; border-radius: 9999px;">ACTIVE</span>
+                <span class="acc-active-badge">ACTIVE</span>
               </div>
-              <div style="font-size: 12px; color: #64748b; margin-top: 1px;">sarah.lifestyle@gmail.com • Instagram:
-                @sarah_style</div>
+              <div class="acc-handle-row"><span class="acc-handle-highlight">@sarah_style</span> <span class="acc-dot">•</span> <span class="acc-email-text">sarah.lifestyle@gmail.com</span></div>
             </div>
           </div>
-          <button type="button" class="btn btn-outline btn-xs" style="font-weight: 700;">Switch</button>
+          <div class="acc-check-icon">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+              <polyline points="20 6 9 17 4 12" />
+            </svg>
+          </div>
         </div>
 
         <!-- Account 3: Alex Rivera (Fitness & Nutrition Coach) -->
         <div class="switch-account-item" id="acc-card-alex" data-account-id="acc-alex"
-          onclick="window.switchActiveUserAccount('acc-alex')"
-          style="display: flex; align-items: center; justify-content: space-between; padding: 12px 14px; border-radius: 12px; border: 1px solid #e2e8f0; background: #ffffff; cursor: pointer; transition: all 0.2s ease;">
-          <div style="display: flex; align-items: center; gap: 12px;">
-            <div class="acc-avatar-icon"
-              style="width: 38px; height: 38px; border-radius: 50%; background: linear-gradient(135deg, #10b981, #059669); color: #ffffff; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 14px;">
-              AR</div>
-            <div>
-              <div
-                style="font-weight: 700; font-size: 14px; color: #0f172a; display: flex; align-items: center; gap: 6px;">
+          onclick="window.switchActiveUserAccount('acc-alex')">
+          <div class="acc-item-left">
+            <div class="acc-avatar-wrapper">
+              <img src="https://images.unsplash.com/photo-1570295999919-56ceb5ecca61?auto=format&fit=crop&w=120&q=80"
+                alt="Alex Rivera" class="acc-avatar-img">
+              <span class="acc-ig-badge" title="Instagram Connected">
+                <svg viewBox="0 0 24 24" fill="#ffffff"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+              </span>
+            </div>
+            <div class="acc-item-info">
+              <div class="acc-name-row">
                 <span class="acc-name-label">Alex Rivera (Fit Coach)</span>
-                <span class="acc-active-badge"
-                  style="display: none; background: #10b981; color: #ffffff; font-size: 10px; font-weight: 800; padding: 2px 6px; border-radius: 9999px;">ACTIVE</span>
+                <span class="acc-active-badge">ACTIVE</span>
               </div>
-              <div style="font-size: 12px; color: #64748b; margin-top: 1px;">alex.fitness@rivera-fit.io • Instagram:
-                @alex_riverafit</div>
+              <div class="acc-handle-row"><span class="acc-handle-highlight">@alex_riverafit</span> <span class="acc-dot">•</span> <span class="acc-email-text">alex.fitness@rivera-fit.io</span></div>
             </div>
           </div>
-          <button type="button" class="btn btn-outline btn-xs" style="font-weight: 700;">Switch</button>
+          <div class="acc-check-icon">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+              <polyline points="20 6 9 17 4 12" />
+            </svg>
+          </div>
         </div>
 
         <!-- Account 4: RenderReply Agency Pro (Agency Multi-Client) -->
         <div class="switch-account-item" id="acc-card-agency" data-account-id="acc-agency"
-          onclick="window.switchActiveUserAccount('acc-agency')"
-          style="display: flex; align-items: center; justify-content: space-between; padding: 12px 14px; border-radius: 12px; border: 1px solid #e2e8f0; background: #ffffff; cursor: pointer; transition: all 0.2s ease;">
-          <div style="display: flex; align-items: center; gap: 12px;">
-            <div class="acc-avatar-icon"
-              style="width: 38px; height: 38px; border-radius: 50%; background: linear-gradient(135deg, #06b6d4, #3b82f6); color: #ffffff; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 14px;">
-              RA</div>
-            <div>
-              <div
-                style="font-weight: 700; font-size: 14px; color: #0f172a; display: flex; align-items: center; gap: 6px;">
+          onclick="window.switchActiveUserAccount('acc-agency')">
+          <div class="acc-item-left">
+            <div class="acc-avatar-wrapper">
+              <img src="https://images.unsplash.com/photo-1560250097-0b93528c311a?auto=format&fit=crop&w=120&q=80"
+                alt="RenderReply Agency" class="acc-avatar-img">
+              <span class="acc-ig-badge" title="Instagram Connected">
+                <svg viewBox="0 0 24 24" fill="#ffffff"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+              </span>
+            </div>
+            <div class="acc-item-info">
+              <div class="acc-name-row">
                 <span class="acc-name-label">RenderReply Agency Pro</span>
-                <span class="acc-active-badge"
-                  style="display: none; background: #10b981; color: #ffffff; font-size: 10px; font-weight: 800; padding: 2px 6px; border-radius: 9999px;">ACTIVE</span>
+                <span class="acc-active-badge">ACTIVE</span>
               </div>
-              <div style="font-size: 12px; color: #64748b; margin-top: 1px;">agency@renderreply.com • Instagram:
-                @renderagency</div>
+              <div class="acc-handle-row"><span class="acc-handle-highlight">@renderagency</span> <span class="acc-dot">•</span> <span class="acc-email-text">agency@renderreply.com</span></div>
             </div>
           </div>
-          <button type="button" class="btn btn-outline btn-xs" style="font-weight: 700;">Switch</button>
+          <div class="acc-check-icon">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+              <polyline points="20 6 9 17 4 12" />
+            </svg>
+          </div>
         </div>
       </div>
 
-      <!-- Add Account Section -->
-      <div id="add-account-form-box"
-        style="display: none; padding: 14px; border-radius: 12px; background: #f8fafc; border: 1px dashed #cbd5e1; margin-bottom: 16px;">
-        <div style="font-weight: 700; font-size: 13px; color: #0f172a; margin-bottom: 8px;">Add New Account</div>
-        <div style="display: flex; flex-direction: column; gap: 10px;">
-          <input type="text" id="new-acc-name" class="auto-form-input" placeholder="Account Name (e.g. Rudra Business)"
-            style="background: #ffffff;">
-          <input type="email" id="new-acc-email" class="auto-form-input"
-            placeholder="Account Email (e.g. business@gmail.com)" style="background: #ffffff;">
-          <div style="display: flex; gap: 8px; justify-content: flex-end;">
+      <!-- Add Account Form Box -->
+      <div id="add-account-form-box" class="add-account-form-box" style="display: none;">
+        <div class="add-acc-form-title">Add New Workspace Account</div>
+        <div class="add-acc-form-fields">
+          <input type="text" id="new-acc-name" class="auto-form-input" placeholder="Account Name (e.g. Rudra Business)">
+          <input type="email" id="new-acc-email" class="auto-form-input" placeholder="Account Email (e.g. business@gmail.com)">
+          <div class="add-acc-form-btns">
             <button type="button" class="btn btn-outline btn-xs" id="btn-cancel-add-acc">Cancel</button>
             <button type="button" class="btn btn-primary btn-xs" id="btn-confirm-add-acc">Add &amp; Switch</button>
           </div>
         </div>
       </div>
 
-      <div
-        style="display: flex; justify-content: space-between; align-items: center; border-top: 1px solid #f1f5f9; padding-top: 14px; margin-top: 8px;">
-        <button type="button" class="btn btn-outline btn-sm" id="btn-show-add-acc"
-          style="display: flex; align-items: center; gap: 6px;">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+      <div class="switch-modal-footer">
+        <button type="button" class="btn-modal-add-acc" id="btn-show-add-acc">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
             <line x1="12" y1="5" x2="12" y2="19" />
             <line x1="5" y1="12" x2="19" y2="12" />
           </svg>
-          Add Another Account
+          <span>Add Account</span>
         </button>
-        <button type="button" class="btn btn-primary btn-sm" id="btn-done-switch-acc"
+        <button type="button" class="btn-modal-done" id="btn-done-switch-acc"
           onclick="window.closeAccountModal('modal-switch-account')">Done</button>
       </div>
     </div>
