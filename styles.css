@@ -2881,6 +2881,12 @@ p,
   color: var(--border-color);
 }
 
+@media (max-width: 768px) {
+  .inbox-quick-stats {
+    display: none !important;
+  }
+}
+
 /* 2-Column Clean Container */
 .rr-clean-inbox-container {
   display: grid;
@@ -7605,12 +7611,12 @@ input:checked+.slider:before {
 
 /* SUPPORT & HELP CONTACT CARD AT BOTTOM */
 .help-contact-card {
-  background: linear-gradient(135deg, #090d16 0%, #1e293b 100%);
-  color: #ffffff;
+  background: #ffffff;
+  color: var(--text-primary);
   border-radius: 14px;
   padding: 20px 24px;
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  box-shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.2);
+  border: 1px solid var(--border-color);
+  box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.05), 0 2px 6px -1px rgba(0, 0, 0, 0.02);
 }
 
 .help-contact-inner {
@@ -7624,9 +7630,9 @@ input:checked+.slider:before {
   width: 46px;
   height: 46px;
   border-radius: 12px;
-  background: rgba(99, 102, 241, 0.2);
-  border: 1px solid rgba(99, 102, 241, 0.4);
-  color: #818cf8;
+  background: rgba(99, 102, 241, 0.08);
+  border: 1px solid rgba(99, 102, 241, 0.18);
+  color: #4f46e5;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -7639,14 +7645,14 @@ input:checked+.slider:before {
 
 .help-contact-title {
   font-size: 16px;
-  font-weight: 800;
-  color: #ffffff;
+  font-weight: 700;
+  color: var(--text-primary);
   margin: 0 0 4px 0;
 }
 
 .help-contact-desc {
   font-size: 13px;
-  color: #94a3b8;
+  color: var(--text-secondary);
   line-height: 1.45;
   margin: 0;
 }
@@ -15125,6 +15131,28 @@ input:checked+.slider:before {
     border-radius: 8px !important;
     justify-content: center !important;
     box-sizing: border-box !important;
+  }
+
+  /* Right-align single action buttons (Refresh & Save Changes) on mobile */
+  #inbox-view .header-actions,
+  #biolink-view .header-actions,
+  #creatorstore-view .header-actions {
+    display: flex !important;
+    justify-content: flex-end !important;
+    align-items: center !important;
+    width: 100% !important;
+  }
+
+  #inbox-view .header-actions .btn,
+  #biolink-view .header-actions .btn,
+  #creatorstore-view .header-actions .btn,
+  #btn-inbox-refresh,
+  #btn-save-biolink,
+  #btn-save-creatorstore {
+    width: auto !important;
+    min-width: 125px !important;
+    flex: 0 0 auto !important;
+    margin-left: auto !important;
   }
 
   /* DASHBOARD MOBILE */
