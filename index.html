@@ -43,6 +43,7 @@
               <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
             </svg>
             Live Inbox
+            <span class="nav-badge-blue" id="sidebar-inbox-badge">2</span>
           </a>
           <a class="nav-item" data-tab="automation-rules">
             <svg viewBox="0 0 24 24">
@@ -874,24 +875,18 @@
         </div>
       </section>
 
-      <!-- TAB 2: LIVE INBOX VIEW (Clean Minimalist Live DM Hub) -->
+      <!-- TAB 2: LIVE INBOX VIEW (High-End RenderReply Modern DM Hub) -->
       <section id="inbox-view" class="tab-view">
-        <header class="view-header">
+        <header class="view-header rr-inbox-page-header">
           <div class="header-title-group">
             <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
-              <h1 class="view-title">Live DM Inbox</h1>
+              <h1 class="view-title inbox-main-header-title">Live DM Inbox</h1>
               <span class="live-status-pill"><span class="pulse-dot"></span> Live Sync Active</span>
             </div>
-            <p class="view-subtitle">Real-time Instagram conversation hub with instant bot triggers and seamless human
-              takeover.</p>
+            <p class="view-subtitle">Real-time Instagram conversation hub with instant bot triggers and seamless human takeover.</p>
           </div>
           <div class="header-actions">
-            <div class="inbox-quick-stats">
-              <span class="iq-stat"><strong id="iq-active-bots">3</strong> Bots Active</span>
-              <span class="iq-divider">•</span>
-              <span class="iq-stat"><strong id="iq-open-leads" style="color: #f59e0b;">2</strong> Needs Action</span>
-            </div>
-            <button class="btn btn-refresh" id="btn-inbox-refresh">
+            <button class="btn btn-refresh" id="btn-inbox-refresh" title="Sync Live Instagram Messages">
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
                 style="margin-right: 6px;">
                 <polyline points="23 4 23 10 17 10" />
@@ -902,225 +897,118 @@
           </div>
         </header>
 
-        <!-- CLEAN 2-COLUMN LIVE INBOX CONTAINER -->
-        <div class="rr-clean-inbox-container" id="rr-inbox-container">
+        <!-- HIGH-END 2-COLUMN LIVE INBOX CONTAINER -->
+        <div class="rr-clean-inbox-container rr-modern-inbox-wrapper" id="rr-inbox-container">
 
-          <!-- COLUMN 1: CONVERSATIONS LIST & FILTERS -->
-          <div class="rr-clean-threads-col">
-            <!-- Filter Folders Bar -->
-            <div class="rr-clean-folder-tabs">
-              <button class="rr-folder-tab active" data-filter="all">All <span class="f-count"
-                  id="count-all">5</span></button>
-              <button class="rr-folder-tab alert-tab" data-filter="attention">Needs Action <span class="f-count alert"
-                  id="count-attention">2</span></button>
-              <button class="rr-folder-tab" data-filter="bot">Bot Active <span class="f-count"
-                  id="count-bot">2</span></button>
-              <button class="rr-folder-tab" data-filter="resolved">Resolved <span class="f-count"
-                  id="count-resolved">1</span></button>
-            </div>
+          <!-- LEFT COLUMN: CONVERSATION LIST (360px - 420px) -->
+          <div class="rr-clean-threads-col rr-modern-threads-panel">
+            
+            <!-- Left Header: Title + Action Icons -->
+            <div class="rr-inbox-list-topbar">
+              <div class="rr-inbox-title-row">
+                <div style="display: flex; align-items: center; gap: 8px;">
+                  <h2 class="rr-inbox-panel-title">Inbox</h2>
+                  <span class="rr-inbox-unread-chip" id="inbox-unread-total-badge">2 Unread</span>
+                </div>
+                <div class="rr-inbox-top-actions">
+                  <button type="button" class="btn-icon-subtle" id="btn-toggle-search-focus" title="Search messages">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <circle cx="11" cy="11" r="8" />
+                      <line x1="21" y1="21" x2="16.65" y2="16.65" />
+                    </svg>
+                  </button>
+                  <div class="rr-dropdown-rel">
+                    <button type="button" class="btn-icon-subtle" id="btn-inbox-more-menu" title="Inbox actions">
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="1.5" />
+                        <circle cx="19" cy="12" r="1.5" />
+                        <circle cx="5" cy="12" r="1.5" />
+                      </svg>
+                    </button>
+                    <!-- More Actions Dropdown -->
+                    <div class="rr-custom-dropdown" id="inbox-more-dropdown">
+                      <button type="button" class="rr-dd-item" id="btn-mark-all-read">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+                        Mark all as read
+                      </button>
+                      <button type="button" class="rr-dd-item" id="btn-sync-inbox-now">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>
+                        Refresh live sync
+                      </button>
+                      <button type="button" class="rr-dd-item" id="btn-export-chat-logs">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                        Export conversation logs
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
 
-            <!-- Search Bar -->
-            <div class="rr-clean-search-bar">
-              <div class="rr-clean-search-wrapper">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                  <circle cx="11" cy="11" r="8" />
-                  <line x1="21" y1="21" x2="16.65" y2="16.65" />
-                </svg>
-                <input type="text" class="rr-clean-search-input" id="rr-inbox-search"
-                  placeholder="Search conversations, handles, keywords...">
+              <!-- Search Bar with Instant Clear -->
+              <div class="rr-modern-search-box">
+                <div class="rr-clean-search-wrapper rr-modern-search-wrap">
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" class="rr-search-svg-icon">
+                    <circle cx="11" cy="11" r="8" />
+                    <line x1="21" y1="21" x2="16.65" y2="16.65" />
+                  </svg>
+                  <input type="text" class="rr-clean-search-input rr-modern-search-input" id="rr-inbox-search"
+                    placeholder="Search contacts, keywords, DMs...">
+                  <button type="button" class="btn-clear-search" id="btn-clear-inbox-search" title="Clear search">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                      <line x1="18" y1="6" x2="6" y2="18" />
+                      <line x1="6" y1="6" x2="18" y2="18" />
+                    </svg>
+                  </button>
+                </div>
+              </div>
+
+              <!-- Filter Pills (Open, Closed, All) -->
+              <div class="rr-modern-filter-pills" id="rr-inbox-filter-pills">
+                <button class="rr-pill-tab active" data-filter="open">
+                  Open <span class="f-pill-count" id="count-open">4</span>
+                </button>
+                <button class="rr-pill-tab" data-filter="closed">
+                  Closed <span class="f-pill-count" id="count-closed">1</span>
+                </button>
+                <button class="rr-pill-tab" data-filter="all">
+                  All <span class="f-pill-count" id="count-all">5</span>
+                </button>
               </div>
             </div>
 
             <!-- Thread Items Scroll List -->
-            <div class="rr-clean-threads-scroll" id="rr-threads-list">
-              <!-- Thread 1 -->
-              <div class="rr-clean-thread-item active" data-thread-id="alex" data-status="attention">
-                <div class="rr-t-avatar-box">
-                  <img
-                    src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=100&q=80"
-                    alt="Alex" class="rr-t-avatar-img">
-                  <span class="rr-t-ig-icon" title="Instagram Direct">
-                    <svg width="8" height="8" viewBox="0 0 24 24" fill="#ffffff">
-                      <path
-                        d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z" />
-                    </svg>
-                  </span>
-                </div>
-                <div class="rr-t-details">
-                  <div class="rr-t-header-row">
-                    <div class="rr-t-title-group">
-                      <span class="rr-t-user-name">Alex Mercer</span>
-                      <span class="rr-t-user-handle">@alex_creator</span>
-                    </div>
-                    <span class="rr-t-timestamp">2m ago</span>
-                  </div>
-                  <div class="rr-t-snippet">Can I get the pricing plans for your course?</div>
-                  <div class="rr-t-tags-row">
-                    <span class="rr-pill-trigger"><svg width="11" height="11" viewBox="0 0 24 24" fill="none"
-                        stroke="currentColor" stroke-width="2" style="margin-right: 3px; vertical-align: -1px;">
-                        <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
-                      </svg>Comment "PRICING"</span>
-                    <span class="rr-pill-badge action">Needs Action</span>
-                  </div>
-                </div>
-              </div>
-
-              <!-- Thread 2 -->
-              <div class="rr-clean-thread-item" data-thread-id="sarah" data-status="bot">
-                <div class="rr-t-avatar-box">
-                  <img
-                    src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=100&q=80"
-                    alt="Sarah" class="rr-t-avatar-img">
-                  <span class="rr-t-ig-icon" title="Instagram Direct">
-                    <svg width="8" height="8" viewBox="0 0 24 24" fill="#ffffff">
-                      <path
-                        d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z" />
-                    </svg>
-                  </span>
-                </div>
-                <div class="rr-t-details">
-                  <div class="rr-t-header-row">
-                    <div class="rr-t-title-group">
-                      <span class="rr-t-user-name">Sarah Miller</span>
-                      <span class="rr-t-user-handle">@sarah_m</span>
-                    </div>
-                    <span class="rr-t-timestamp">1h ago</span>
-                  </div>
-                  <div class="rr-t-snippet">Can you send me the free checklist?</div>
-                  <div class="rr-t-tags-row">
-                    <span class="rr-pill-trigger"><svg width="11" height="11" viewBox="0 0 24 24" fill="none"
-                        stroke="currentColor" stroke-width="2" style="margin-right: 3px; vertical-align: -1px;">
-                        <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z" />
-                        <circle cx="12" cy="13" r="4" />
-                      </svg>Story Mention</span>
-                    <span class="rr-pill-badge bot">Bot Active</span>
-                  </div>
-                </div>
-              </div>
-
-              <!-- Thread 3 -->
-              <div class="rr-clean-thread-item" data-thread-id="dev" data-status="bot">
-                <div class="rr-t-avatar-box">
-                  <img
-                    src="https://images.unsplash.com/photo-1570295999919-56ceb5ecca61?auto=format&fit=crop&w=100&q=80"
-                    alt="John" class="rr-t-avatar-img">
-                  <span class="rr-t-ig-icon" title="Instagram Direct">
-                    <svg width="8" height="8" viewBox="0 0 24 24" fill="#ffffff">
-                      <path
-                        d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z" />
-                    </svg>
-                  </span>
-                </div>
-                <div class="rr-t-details">
-                  <div class="rr-t-header-row">
-                    <div class="rr-t-title-group">
-                      <span class="rr-t-user-name">John Doe</span>
-                      <span class="rr-t-user-handle">@dev_johndoe</span>
-                    </div>
-                    <span class="rr-t-timestamp">3h ago</span>
-                  </div>
-                  <div class="rr-t-snippet">Sent Java Full Stack roadmap PDF!</div>
-                  <div class="rr-t-tags-row">
-                    <span class="rr-pill-trigger">Keyword "JAVA"</span>
-                    <span class="rr-pill-badge bot">Bot Active</span>
-                  </div>
-                </div>
-              </div>
-
-              <!-- Thread 4 -->
-              <div class="rr-clean-thread-item" data-thread-id="priya" data-status="attention">
-                <div class="rr-t-avatar-box">
-                  <img
-                    src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=100&q=80"
-                    alt="Priya" class="rr-t-avatar-img">
-                  <span class="rr-t-ig-icon" title="Instagram Direct">
-                    <svg width="8" height="8" viewBox="0 0 24 24" fill="#ffffff">
-                      <path
-                        d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z" />
-                    </svg>
-                  </span>
-                </div>
-                <div class="rr-t-details">
-                  <div class="rr-t-header-row">
-                    <div class="rr-t-title-group">
-                      <span class="rr-t-user-name">Priya S.</span>
-                      <span class="rr-t-user-handle">@priya_designs</span>
-                    </div>
-                    <span class="rr-t-timestamp">5h ago</span>
-                  </div>
-                  <div class="rr-t-snippet">Can we customize templates for agencies?</div>
-                  <div class="rr-t-tags-row">
-                    <span class="rr-pill-trigger">Custom Inquiry</span>
-                    <span class="rr-pill-badge action">Needs Action</span>
-                  </div>
-                </div>
-              </div>
-
-              <!-- Thread 5 -->
-              <div class="rr-clean-thread-item" data-thread-id="vikram" data-status="resolved">
-                <div class="rr-t-avatar-box">
-                  <img
-                    src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=100&q=80"
-                    alt="Vikram" class="rr-t-avatar-img">
-                  <span class="rr-t-ig-icon" title="Instagram Direct">
-                    <svg width="8" height="8" viewBox="0 0 24 24" fill="#ffffff">
-                      <path
-                        d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z" />
-                    </svg>
-                  </span>
-                </div>
-                <div class="rr-t-details">
-                  <div class="rr-t-header-row">
-                    <div class="rr-t-title-group">
-                      <span class="rr-t-user-name">Vikram P.</span>
-                      <span class="rr-t-user-handle">@vikram_tech</span>
-                    </div>
-                    <span class="rr-t-timestamp">1d ago</span>
-                  </div>
-                  <div class="rr-t-snippet">Downloaded presets successfully!</div>
-                  <div class="rr-t-tags-row">
-                    <span class="rr-pill-trigger">Preset Bundle</span>
-                    <span class="rr-pill-badge resolved"><svg width="11" height="11" viewBox="0 0 24 24" fill="none"
-                        stroke="currentColor" stroke-width="3" style="vertical-align: -1px; margin-right: 3px;">
-                        <polyline points="20 6 9 17 4 12" />
-                      </svg>Resolved</span>
-                  </div>
-                </div>
-              </div>
+            <div class="rr-clean-threads-scroll rr-modern-threads-scroll" id="rr-threads-list">
+              <!-- Dynamically populated by JavaScript -->
             </div>
           </div>
 
-          <!-- COLUMN 2: CONVERSATION VIEWPORT & ACTIONS -->
-          <div class="rr-clean-chat-col">
-            <!-- Clean Header -->
-            <div class="rr-clean-chat-header">
+          <!-- RIGHT COLUMN: ACTIVE CONVERSATION THREAD VIEWPORT -->
+          <div class="rr-clean-chat-col rr-modern-chat-panel">
+            
+            <!-- Thread Top Header -->
+            <div class="rr-clean-chat-header rr-modern-chat-header">
               <button type="button" class="btn-inbox-mobile-back" id="btn-inbox-mobile-back"
                 title="Back to conversations">
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
                   <polyline points="15 18 9 12 15 6" />
                 </svg>
               </button>
+
               <div class="rr-c-user-info">
                 <div class="rr-c-avatar-wrap">
                   <img
                     src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=120&q=80"
                     alt="Avatar" class="rr-c-avatar-img" id="rr-current-avatar">
-                  <span class="rr-c-ig-badge">
-                    <svg width="9" height="9" viewBox="0 0 24 24" fill="#ffffff">
-                      <path
-                        d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z" />
-                    </svg>
-                  </span>
+                  <span class="rr-online-dot-badge" title="Online now"></span>
                 </div>
-                <div>
-                  <div style="display: flex; align-items: center; gap: 6px;">
+                <div class="rr-c-meta-col">
+                  <div class="rr-c-top-line">
                     <span class="rr-c-name" id="rr-current-name">Alex Mercer</span>
-                    <span class="rr-c-verified" title="Verified Creator">✓</span>
                     <span class="rr-c-handle" id="rr-current-handle">@alex_creator</span>
                   </div>
-                  <div style="display: flex; align-items: center; gap: 6px; margin-top: 2px;">
+                  <div class="rr-c-sub-line">
                     <span class="rr-c-followers" id="rr-current-followers">48.2K Followers</span>
-                    <span style="color: #cbd5e1;">•</span>
+                    <span class="rr-c-dot-sep">•</span>
                     <span class="rr-c-source" id="rr-current-source">Reel Comment: "PRICING"</span>
                   </div>
                 </div>
@@ -1133,104 +1021,116 @@
                   <span class="dot-status green" id="bot-toggle-dot"></span>
                   <span id="bot-toggle-text">Bot Engaged</span>
                 </button>
-                <button type="button" class="btn-clean-resolve" id="btn-resolve-chat" title="Mark Resolved">
+                <button type="button" class="btn-clean-resolve" id="btn-resolve-chat" title="Toggle Resolve/Reopen">
                   <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
                     <polyline points="20 6 9 17 4 12" />
                   </svg>
-                  <span>Resolve</span>
+                  <span id="btn-resolve-text">Resolve</span>
                 </button>
+                <div class="rr-dropdown-rel">
+                  <button type="button" class="btn-icon-subtle" id="btn-thread-more-actions" title="More thread options">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <circle cx="12" cy="12" r="1.5" />
+                      <circle cx="19" cy="12" r="1.5" />
+                      <circle cx="5" cy="12" r="1.5" />
+                    </svg>
+                  </button>
+                  <div class="rr-custom-dropdown" id="thread-more-dropdown">
+                    <button type="button" class="rr-dd-item" id="btn-view-ig-profile">
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+                      View profile on IG
+                    </button>
+                    <button type="button" class="rr-dd-item" id="btn-mute-thread">
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 5L6 9H2v6h4l5 4V5z"/><line x1="23" y1="9" x2="17" y2="15"/><line x1="17" y1="9" x2="23" y2="15"/></svg>
+                      Mute notifications
+                    </button>
+                    <button type="button" class="rr-dd-item rr-dd-danger" id="btn-block-contact">
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="4.93" y1="4.93" x2="19.07" y2="19.07"/></svg>
+                      Block contact
+                    </button>
+                  </div>
+                </div>
               </div>
             </div>
 
             <!-- Subtle Trigger Banner -->
             <div class="rr-clean-trigger-bar" id="rr-trigger-banner">
               <div style="display: flex; align-items: center; gap: 8px; flex: 1; min-width: 0;">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                  style="color: #6366f1; flex-shrink: 0;">
-                  <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2" />
-                </svg>
-                <span class="trigger-bar-txt" id="rr-tcb-title">Triggered by Reel: "Build a 7-Figure IG Automation
-                  Engine" (Keyword: "PRICING")</span>
+                <span class="trigger-lightning-icon">⚡</span>
+                <span class="trigger-bar-txt" id="rr-tcb-title">Triggered by Reel: "Build a 7-Figure IG Automation Engine" (Keyword: "PRICING")</span>
               </div>
               <button type="button" class="btn-view-trigger-rule" id="rr-tcb-view-rule">View Rule ↗</button>
             </div>
 
             <!-- Message Feed -->
-            <div class="rr-clean-chat-feed" id="chat-feed-box">
-              <div class="rr-clean-divider"><span>TODAY, OCT 24</span></div>
-
-              <!-- Message 1: Incoming User DM -->
-              <div class="rr-clean-msg user">
-                <img src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=80&q=80"
-                  alt="User" class="rr-clean-msg-avatar">
-                <div class="rr-clean-bubble user">
-                  <div class="msg-origin-tag">Commented "PRICING" on Reel #894</div>
-                  <div class="msg-text">Hey! Can I get the pricing plans for your creator roadmap and preset packs?
-                  </div>
-                  <div class="msg-time">02:14 PM</div>
-                </div>
-              </div>
-
-              <!-- Message 2: Automated Bot DM with Card -->
-              <div class="rr-clean-msg bot">
-                <div class="rr-clean-bubble bot">
-                  <div class="msg-sender-line">
-                    <span class="bot-label">RenderReply Bot</span>
-                    <span class="flow-label">Reel Viral Funnel v2.4</span>
-                  </div>
-                  <div class="msg-text">Hey Alex! Here are our membership options, instant downloads, and 1-on-1
-                    strategy sessions:</div>
-
-                  <!-- Rich Interactive Product Card inside DM -->
-                  <div class="rr-clean-product-card">
-                    <div class="dm-card-tag">OFFICIAL STORE</div>
-                    <div class="dm-card-title">Rudra Teja Creator Storefront</div>
-                    <div class="dm-card-sub">Instant PDF downloads, Instagram automation presets & private audit calls.
-                    </div>
-                    <a href="https://renderreply.com/store/rudrateja" target="_blank" rel="noopener"
-                      class="btn btn-sm btn-primary" style="margin-top: 8px; width: 100%;">
-                      View Pricing & Products ↗
-                    </a>
-                  </div>
-
-                  <div class="msg-time bot-time">02:14 PM • <span style="color: #38bdf8;">Delivered <svg width="13"
-                        height="13" viewBox="0 0 24 24" fill="none" stroke="#38bdf8" stroke-width="2.5"
-                        style="vertical-align: -2px;">
-                        <polyline points="18 6 9 17 4 12" />
-                        <polyline points="22 10 15 17 13 15" />
-                      </svg></span></div>
-                </div>
-              </div>
+            <div class="rr-clean-chat-feed rr-modern-chat-feed" id="chat-feed-box">
+              <!-- Dynamically rendered messages -->
             </div>
 
             <!-- Quick Action Preset Chips Bar -->
-            <div class="rr-clean-preset-bar">
+            <div class="rr-clean-preset-bar rr-modern-preset-bar">
               <span class="preset-label">Quick Presets:</span>
               <button type="button" class="clean-preset-chip"
-                data-text="Hey Alex! Here is the direct link to our store pricing: https://renderreply.com/store/rudrateja">Pricing
-                Link</button>
+                data-text="Hey! Here is the direct link to our store pricing: https://renderreply.com/store/rudrateja">Pricing Link</button>
               <button type="button" class="clean-preset-chip"
-                data-text="Would you like to book a private 1-on-1 strategy call? Select a slot: https://renderreply.com/store/rudrateja#call">Book
-                Call</button>
+                data-text="Would you like to book a private 1-on-1 strategy call? Select a slot: https://renderreply.com/store/rudrateja#call">Book Call</button>
               <button type="button" class="clean-preset-chip"
-                data-text="Here is your free Java Roadmap PDF download: https://renderreply.com/store/rudrateja/downloads/java-roadmap.pdf">Free
-                PDF</button>
+                data-text="Here is your free Java Roadmap PDF download: https://renderreply.com/store/rudrateja/downloads/java-roadmap.pdf">Free PDF</button>
               <button type="button" class="clean-preset-chip"
                 data-text="Can I help answer any specific questions about our automation presets?">Follow-up</button>
             </div>
 
-            <!-- Clean Composer -->
-            <div class="rr-clean-composer-box">
-              <div class="rr-composer-field-wrapper">
-                <textarea class="rr-clean-textarea" id="chat-input-msg" rows="2"
+            <!-- Modern Clean Composer Box -->
+            <div class="rr-clean-composer-box rr-modern-composer-box">
+              <div class="rr-composer-field-wrapper rr-modern-composer-wrapper">
+                <textarea class="rr-clean-textarea rr-modern-textarea" id="chat-input-msg" rows="2"
                   placeholder="Reply to @alex_creator as Rudra Teja (pauses bot for 30m)..."></textarea>
-                <div class="rr-clean-composer-footer">
-                  <div style="display: flex; align-items: center; gap: 8px;">
-                    <span style="font-size: 11px; color: #94a3b8;">Press <strong>Enter ↵</strong> to send</span>
+                
+                <div class="rr-clean-composer-footer rr-modern-composer-footer">
+                  <div class="rr-composer-tools">
+                    <button type="button" class="btn-composer-icon" id="btn-composer-attach" title="Add attachment / PDF link">
+                      <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+                        <line x1="12" y1="5" x2="12" y2="19" />
+                        <line x1="5" y1="12" x2="19" y2="12" />
+                      </svg>
+                    </button>
+                    <button type="button" class="btn-composer-icon" id="btn-composer-preset" title="Insert Quick Automation Snippet">
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+                        <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2" />
+                      </svg>
+                    </button>
+                    <div class="rr-dropdown-rel">
+                      <button type="button" class="btn-composer-icon" id="btn-composer-emoji" title="Add emoji">
+                        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+                          <circle cx="12" cy="12" r="10" />
+                          <path d="M8 14s1.5 2 4 2 4-2 4-2" />
+                          <line x1="9" y1="9" x2="9.01" y2="9" />
+                          <line x1="15" y1="9" x2="15.01" y2="9" />
+                        </svg>
+                      </button>
+                      <!-- Emoji Picker Popup -->
+                      <div class="rr-emoji-picker-popup" id="composer-emoji-popup">
+                        <span class="emoji-opt">🔥</span>
+                        <span class="emoji-opt">🚀</span>
+                        <span class="emoji-opt">✨</span>
+                        <span class="emoji-opt">👍</span>
+                        <span class="emoji-opt">👏</span>
+                        <span class="emoji-opt">💡</span>
+                        <span class="emoji-opt">🎯</span>
+                        <span class="emoji-opt">💰</span>
+                        <span class="emoji-opt">❤️</span>
+                        <span class="emoji-opt">✅</span>
+                      </div>
+                    </div>
+                    <span class="rr-composer-hint">Press <strong>Enter ↵</strong> to send</span>
                   </div>
-                  <button type="button" class="btn btn-primary btn-pill btn-sm" id="btn-send-chat"
-                    style="padding: 6px 16px;">
-                    Send DM
+
+                  <button type="button" class="btn btn-primary btn-pill btn-sm rr-btn-send-dm" id="btn-send-chat">
+                    <span>Send DM</span>
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="margin-left: 4px;">
+                      <line x1="22" y1="2" x2="11" y2="13" />
+                      <polygon points="22 2 15 22 11 13 2 9 22 2" />
+                    </svg>
                   </button>
                 </div>
               </div>

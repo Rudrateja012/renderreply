@@ -6128,9 +6128,26 @@ function initApp() {
   // Initial render of automation rules
   renderAutomationRules();
 
-  // 9. RENDERREPLY CLEAN LIVE DM INBOX ENGINE
-  let inboxThreadsData = window.getActiveUserData().inbox;
+  // 9. RENDERREPLY CLEAN LIVE DM INBOX ENGINE (MODERN REDESIGN)
+  let inboxThreadsData = window.getActiveUserData().inbox || {};
   let activeThreadId = Object.keys(inboxThreadsData)[0] || 'alex';
+  let activeInboxFilter = 'open'; // 'open' | 'closed' | 'all'
+  let activeSearchQuery = '';
+
+  // Initialize unread flags and verified badges if not present
+  function ensureInboxDefaults() {
+    Object.keys(inboxThreadsData).forEach((key, idx) => {
+      const t = inboxThreadsData[key];
+      if (t.unread === undefined) {
+        // First 2 threads start unread by default if not resolved
+        t.unread = (idx < 2 && t.status !== 'resolved' && t.status !== 'closed');
+      }
+      if (t.verified === undefined) {
+        t.verified = (key === 'alex' || key === 'sarah' || key === 'vikram');
+      }
+    });
+  }
+  ensureInboxDefaults();
 
   function renderInboxThreadsList(selectedId) {
     const listContainer = document.getElementById('rr-threads-list');
@@ -6138,42 +6155,74 @@ function initApp() {
 
     const threadKeys = Object.keys(inboxThreadsData);
     if (threadKeys.length === 0) {
-      listContainer.innerHTML = '<div style="padding: 24px; text-align: center; color: #94a3b8; font-size: 13px;">No conversations found</div>';
+      listContainer.innerHTML = `
+        <div style="padding: 36px 20px; text-align: center; color: #94a3b8; font-size: 13px;">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#cbd5e1" stroke-width="1.8" style="margin-bottom: 8px;">
+            <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
+          </svg>
+          <div>No conversations found</div>
+        </div>`;
       return;
     }
 
     const currentId = selectedId || activeThreadId || threadKeys[0];
     activeThreadId = currentId;
 
-    listContainer.innerHTML = threadKeys.map(k => {
+    // Filter threads
+    const q = activeSearchQuery.toLowerCase().trim();
+    const filteredKeys = threadKeys.filter(k => {
+      const t = inboxThreadsData[k];
+      const matchesFilter = (activeInboxFilter === 'all') ||
+        (activeInboxFilter === 'open' && t.status !== 'resolved' && t.status !== 'closed') ||
+        (activeInboxFilter === 'closed' && (t.status === 'resolved' || t.status === 'closed'));
+
+      if (!matchesFilter) return false;
+
+      if (!q) return true;
+      const textToSearch = `${t.name} ${t.handle} ${t.source || ''} ${t.triggerTitle || ''} ${
+        t.messages ? t.messages.map(m => m.text).join(' ') : ''
+      }`.toLowerCase();
+      return textToSearch.includes(q);
+    });
+
+    if (filteredKeys.length === 0) {
+      listContainer.innerHTML = `
+        <div style="padding: 36px 20px; text-align: center; color: #94a3b8; font-size: 13px;">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#cbd5e1" stroke-width="1.8" style="margin-bottom: 8px;">
+            <circle cx="11" cy="11" r="8" />
+            <line x1="21" y1="21" x2="16.65" y2="16.65" />
+          </svg>
+          <div>No conversations match "${activeSearchQuery}"</div>
+        </div>`;
+      return;
+    }
+
+    listContainer.innerHTML = filteredKeys.map(k => {
       const t = inboxThreadsData[k];
       const isActive = k === currentId;
       const lastMsg = t.messages ? t.messages[t.messages.length - 1] : null;
-      const snippet = lastMsg ? lastMsg.text : (t.source || '');
+      const snippet = lastMsg ? (lastMsg.type === 'human' ? `You: ${lastMsg.text}` : lastMsg.text) : (t.source || '');
       const timeStr = lastMsg ? (lastMsg.time || 'Today') : 'Today';
-      const badgeClass = t.status === 'attention' ? 'action' : (t.status === 'bot' ? 'bot' : 'resolved');
-      const badgeText = t.status === 'attention' ? 'Needs Action' : (t.status === 'bot' ? 'Bot Active' : 'Resolved');
+      const isUnread = !!t.unread;
 
       return `
-        <div class="rr-clean-thread-item ${isActive ? 'active' : ''}" data-thread-id="${k}" data-status="${t.status}">
+        <div class="rr-clean-thread-item ${isActive ? 'active' : ''} ${isUnread ? 'is-unread' : ''}" data-thread-id="${k}" data-status="${t.status}">
           <div class="rr-t-avatar-box">
             <img src="${t.avatar}" alt="${t.name}" class="rr-t-avatar-img">
-            <span class="rr-t-ig-icon" title="Instagram Direct">
-              <svg width="8" height="8" viewBox="0 0 24 24" fill="#ffffff"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
-            </span>
           </div>
           <div class="rr-t-details">
             <div class="rr-t-header-row">
               <div class="rr-t-title-group">
                 <span class="rr-t-user-name">${t.name}</span>
-                <span class="rr-t-user-handle">${t.handle}</span>
               </div>
               <span class="rr-t-timestamp">${timeStr}</span>
             </div>
-            <div class="rr-t-snippet">${snippet}</div>
+            <div class="rr-t-snippet-row">
+              <div class="rr-t-snippet">${snippet}</div>
+              ${isUnread ? '<span class="rr-unread-dot" title="Unread DM"></span>' : ''}
+            </div>
             <div class="rr-t-tags-row">
               <span class="rr-pill-trigger">${t.source || 'Direct DM'}</span>
-              <span class="rr-pill-badge ${badgeClass}">${badgeText}</span>
             </div>
           </div>
         </div>
@@ -6196,63 +6245,65 @@ function initApp() {
     if (!chatFeed) return;
 
     let html = '';
-    thread.messages.forEach(msg => {
-      if (msg.type === 'divider') {
-        html += `<div class="rr-clean-divider"><span>${msg.text}</span></div>`;
-      } else if (msg.type === 'user') {
-        html += `
-          <div class="rr-clean-msg user">
-            <img src="${thread.avatar}" alt="${thread.name}" class="rr-clean-msg-avatar">
-            <div class="rr-clean-bubble user">
-              ${msg.context ? `<div class="msg-origin-tag">${msg.context}</div>` : ''}
-              <div class="msg-text">${msg.text}</div>
-              <div class="msg-time">${msg.time}</div>
-            </div>
-          </div>
-        `;
-      } else if (msg.type === 'bot') {
-        html += `
-          <div class="rr-clean-msg bot">
-            <div class="rr-clean-bubble bot">
-              <div class="msg-sender-line">
-                <span class="bot-label"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-right: 4px; vertical-align: -2px;"><rect x="4" y="4" width="16" height="16" rx="2"/><circle cx="9" cy="9" r="1.5"/><circle cx="15" cy="9" r="1.5"/><line x1="9" y1="15" x2="15" y2="15"/><line x1="12" y1="2" x2="12" y2="4"/></svg>RenderReply Bot</span>
-                <span class="flow-label">${msg.flow || 'Automation Flow'}</span>
+    if (thread.messages && thread.messages.length > 0) {
+      thread.messages.forEach(msg => {
+        if (msg.type === 'divider' || msg.type === 'system') {
+          html += `<div class="rr-clean-divider"><span>${msg.text}</span></div>`;
+        } else if (msg.type === 'user') {
+          html += `
+            <div class="rr-clean-msg user">
+              <img src="${thread.avatar}" alt="${thread.name}" class="rr-clean-msg-avatar">
+              <div class="rr-clean-bubble user">
+                ${msg.context ? `<div class="msg-origin-tag">${msg.context}</div>` : ''}
+                <div class="msg-text">${msg.text}</div>
+                <div class="msg-time">${msg.time}</div>
               </div>
-              <div class="msg-text">${msg.text}</div>
-              ${msg.hasCard ? `
-                <div class="rr-clean-product-card">
-                  <div class="dm-card-tag">OFFICIAL STORE</div>
-                  <div class="dm-card-title">Rudra Teja Creator Storefront</div>
-                  <div class="dm-card-sub">Instant PDF downloads, Instagram automation presets & private audit calls.</div>
-                  <a href="https://renderreply.com/store/rudrateja" target="_blank" rel="noopener" class="btn btn-sm btn-primary" style="margin-top: 8px; width: 100%;">
-                    View Pricing & Products ↗
-                  </a>
+            </div>
+          `;
+        } else if (msg.type === 'bot') {
+          html += `
+            <div class="rr-clean-msg bot">
+              <div class="rr-clean-bubble bot">
+                <div class="msg-sender-line">
+                  <span class="bot-label"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align: -2px;"><rect x="4" y="4" width="16" height="16" rx="2"/><circle cx="9" cy="9" r="1.5"/><circle cx="15" cy="9" r="1.5"/><line x1="9" y1="15" x2="15" y2="15"/><line x1="12" y1="2" x2="12" y2="4"/></svg>RenderReply Automation</span>
+                  <span class="flow-label">${msg.flow || 'Reel Viral Funnel v2.4'}</span>
                 </div>
-              ` : ''}
-              <div class="msg-time bot-time">${msg.time} • <span style="color: #38bdf8;">Delivered <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#38bdf8" stroke-width="2.5" style="vertical-align: -2px;"><polyline points="18 6 9 17 4 12"/><polyline points="22 10 15 17 13 15"/></svg></span></div>
-            </div>
-          </div>
-        `;
-      } else if (msg.type === 'human') {
-        html += `
-          <div class="rr-clean-msg human">
-            <div class="rr-clean-bubble human">
-              <div class="msg-sender-line">
-                <span class="human-label"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-right: 4px; vertical-align: -2px;"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>Rudra Teja (Human Agent)</span>
-                <span class="flow-label" style="background: rgba(255,255,255,0.15); color: #ffffff;">Direct Reply</span>
+                <div class="msg-text">${msg.text}</div>
+                ${msg.hasCard ? `
+                  <div class="rr-clean-product-card">
+                    <div class="dm-card-tag">OFFICIAL STORE</div>
+                    <div class="dm-card-title">Rudra Teja Creator Storefront</div>
+                    <div class="dm-card-sub">Instant PDF downloads, Instagram automation presets & private audit calls.</div>
+                    <a href="https://renderreply.com/store/rudrateja" target="_blank" rel="noopener" class="btn btn-sm btn-primary" style="margin-top: 8px; width: 100%;">
+                      View Pricing & Products ↗
+                    </a>
+                  </div>
+                ` : ''}
+                <div class="msg-time bot-time">${msg.time} • <span style="color: #38bdf8; display: inline-flex; align-items: center; gap: 3px;">Delivered <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#38bdf8" stroke-width="2.5"><polyline points="18 6 9 17 4 12"/><polyline points="22 10 15 17 13 15"/></svg></span></div>
               </div>
-              <div class="msg-text">${msg.text}</div>
-              <div class="msg-time" style="color: rgba(255,255,255,0.7);">${msg.time} • Delivered <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#38bdf8" stroke-width="2.5" style="vertical-align: -2px;"><polyline points="18 6 9 17 4 12"/><polyline points="22 10 15 17 13 15"/></svg></div>
             </div>
-          </div>
-        `;
-      }
-    });
+          `;
+        } else if (msg.type === 'human') {
+          html += `
+            <div class="rr-clean-msg human">
+              <div class="rr-clean-bubble human">
+                <div class="msg-sender-line">
+                  <span class="human-label"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align: -2px;"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>Rudra Teja (Creator)</span>
+                  <span class="flow-label" style="background: rgba(255,255,255,0.2); color: #ffffff;">Direct Reply</span>
+                </div>
+                <div class="msg-text">${msg.text}</div>
+                <div class="msg-time" style="color: rgba(255,255,255,0.85);">${msg.time} • Delivered <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2.5" style="vertical-align: -2px;"><polyline points="18 6 9 17 4 12"/><polyline points="22 10 15 17 13 15"/></svg></div>
+              </div>
+            </div>
+          `;
+        }
+      });
+    }
 
     if (!thread.botActive) {
       html += `
         <div class="rr-clean-system-notice">
-          <span><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="margin-right: 4px; vertical-align: -2px;"><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></svg>Bot paused for this conversation to allow direct human agent reply</span>
+          <span><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="margin-right: 5px; vertical-align: -2px;"><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></svg>Bot paused for this conversation for human agent takeover</span>
         </div>
       `;
     }
@@ -6263,50 +6314,44 @@ function initApp() {
 
   function updateInboxFolderCounts() {
     let allCount = 0;
-    let attentionCount = 0;
+    let openCount = 0;
+    let closedCount = 0;
+    let unreadCount = 0;
     let botCount = 0;
-    let resolvedCount = 0;
 
     Object.values(inboxThreadsData).forEach(t => {
       allCount++;
-      if (t.status === 'attention') attentionCount++;
-      else if (t.status === 'bot') botCount++;
-      else if (t.status === 'resolved') resolvedCount++;
+      const isResolved = (t.status === 'resolved' || t.status === 'closed');
+      if (isResolved) {
+        closedCount++;
+      } else {
+        openCount++;
+      }
+      if (t.botActive) botCount++;
+      if (t.unread) unreadCount++;
     });
 
+    const countOpenEl = document.getElementById('count-open');
+    const countClosedEl = document.getElementById('count-closed');
     const countAllEl = document.getElementById('count-all');
-    const countAttEl = document.getElementById('count-attention');
-    const countBotEl = document.getElementById('count-bot');
-    const countResEl = document.getElementById('count-resolved');
     const iqOpenLeads = document.getElementById('iq-open-leads');
     const iqActiveBots = document.getElementById('iq-active-bots');
+    const sidebarBadge = document.getElementById('sidebar-inbox-badge');
+    const unreadChip = document.getElementById('inbox-unread-total-badge');
 
+    if (countOpenEl) countOpenEl.textContent = openCount;
+    if (countClosedEl) countClosedEl.textContent = closedCount;
     if (countAllEl) countAllEl.textContent = allCount;
-    if (countAttEl) countAttEl.textContent = attentionCount;
-    if (countBotEl) countBotEl.textContent = botCount;
-    if (countResEl) countResEl.textContent = resolvedCount;
-    if (iqOpenLeads) iqOpenLeads.textContent = attentionCount;
+    if (iqOpenLeads) iqOpenLeads.textContent = unreadCount;
     if (iqActiveBots) iqActiveBots.textContent = botCount;
-  }
-
-  function applyActiveFolderFilter() {
-    const activeTab = document.querySelector('.rr-folder-tab.active');
-    const filter = activeTab ? activeTab.getAttribute('data-filter') : 'all';
-
-    document.querySelectorAll('.rr-clean-thread-item').forEach(item => {
-      const itemStatus = item.getAttribute('data-status');
-      if (filter === 'all') {
-        item.style.display = 'flex';
-      } else if (filter === 'attention' && itemStatus === 'attention') {
-        item.style.display = 'flex';
-      } else if (filter === 'bot' && itemStatus === 'bot') {
-        item.style.display = 'flex';
-      } else if (filter === 'resolved' && itemStatus === 'resolved') {
-        item.style.display = 'flex';
-      } else {
-        item.style.display = 'none';
-      }
-    });
+    
+    if (sidebarBadge) {
+      sidebarBadge.textContent = unreadCount;
+      sidebarBadge.style.display = unreadCount > 0 ? 'inline-block' : 'none';
+    }
+    if (unreadChip) {
+      unreadChip.textContent = unreadCount > 0 ? `${unreadCount} Unread` : 'All Read';
+    }
   }
 
   function selectInboxThread(threadId, isUserClick = false) {
@@ -6315,14 +6360,26 @@ function initApp() {
 
     activeThreadId = threadId;
 
-    // Update active class in thread list
+    // Mark as read immediately on selection
+    if (thread.unread) {
+      thread.unread = false;
+    }
+
+    // Update active and unread state in thread list DOM
     document.querySelectorAll('.rr-clean-thread-item').forEach(item => {
-      item.classList.toggle('active', item.getAttribute('data-thread-id') === threadId);
+      const isThis = item.getAttribute('data-thread-id') === threadId;
+      item.classList.toggle('active', isThis);
+      if (isThis) {
+        item.classList.remove('is-unread');
+        const unreadDot = item.querySelector('.rr-unread-dot');
+        if (unreadDot) unreadDot.remove();
+      }
     });
 
     // Update Chat Header
     const currentAvatar = document.getElementById('rr-current-avatar');
     const currentName = document.getElementById('rr-current-name');
+    const currentVerified = document.getElementById('rr-current-verified');
     const currentHandle = document.getElementById('rr-current-handle');
     const currentFollowers = document.getElementById('rr-current-followers');
     const currentSource = document.getElementById('rr-current-source');
@@ -6330,12 +6387,17 @@ function initApp() {
     const botToggleDot = document.getElementById('bot-toggle-dot');
     const botToggleText = document.getElementById('bot-toggle-text');
     const btnResolveChat = document.getElementById('btn-resolve-chat');
+    const btnResolveText = document.getElementById('btn-resolve-text');
 
     if (currentAvatar) currentAvatar.src = thread.avatar;
     if (currentName) currentName.textContent = thread.name;
+    if (currentVerified) currentVerified.style.display = 'none';
     if (currentHandle) currentHandle.textContent = thread.handle;
-    if (currentFollowers) currentFollowers.textContent = thread.followers;
-    if (currentSource) currentSource.textContent = thread.source;
+    if (currentFollowers) currentFollowers.textContent = thread.followers || '48.2K Followers';
+    if (currentSource) currentSource.textContent = thread.source || 'Instagram Direct';
+    if (currentHandle) currentHandle.textContent = thread.handle;
+    if (currentFollowers) currentFollowers.textContent = thread.followers || '48.2K Followers';
+    if (currentSource) currentSource.textContent = thread.source || 'Instagram Direct';
 
     if (btnToggleBot && botToggleDot && botToggleText) {
       if (thread.botActive) {
@@ -6349,29 +6411,20 @@ function initApp() {
       }
     }
 
-    if (btnResolveChat) {
-      if (thread.status === 'resolved') {
+    if (btnResolveChat && btnResolveText) {
+      const isResolved = thread.status === 'resolved' || thread.status === 'closed';
+      if (isResolved) {
         btnResolveChat.className = 'btn-clean-resolve resolved';
-        btnResolveChat.innerHTML = `
-          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-            <polyline points="20 6 9 17 4 12"/>
-          </svg>
-          <span>Resolved (Reopen)</span>
-        `;
+        btnResolveText.textContent = 'Reopen';
       } else {
         btnResolveChat.className = 'btn-clean-resolve';
-        btnResolveChat.innerHTML = `
-          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-            <polyline points="20 6 9 17 4 12"/>
-          </svg>
-          <span>Resolve</span>
-        `;
+        btnResolveText.textContent = 'Resolve';
       }
     }
 
     // Update Trigger Context Banner
     const tcbTitle = document.getElementById('rr-tcb-title');
-    if (tcbTitle) tcbTitle.textContent = thread.triggerTitle;
+    if (tcbTitle) tcbTitle.textContent = thread.triggerTitle || `Triggered by Reel: "Build a 7-Figure IG Automation Engine" (Keyword: "PRICING")`;
 
     // Update Composer Placeholder
     const composerInput = document.getElementById('chat-input-msg');
@@ -6392,13 +6445,139 @@ function initApp() {
     }
   }
 
-  // Setup Thread Click Handlers
-  document.querySelectorAll('.rr-clean-thread-item').forEach(item => {
-    item.addEventListener('click', () => {
-      const threadId = item.getAttribute('data-thread-id');
-      if (threadId) selectInboxThread(threadId, true);
+  // Filter Tab Click Handlers (Open, Closed, All)
+  document.querySelectorAll('.rr-pill-tab').forEach(tab => {
+    tab.addEventListener('click', () => {
+      document.querySelectorAll('.rr-pill-tab').forEach(t => t.classList.remove('active'));
+      tab.classList.add('active');
+      activeInboxFilter = tab.getAttribute('data-filter') || 'open';
+      renderInboxThreadsList(activeThreadId);
     });
   });
+
+  // Search Input Handler with Instant Clear
+  const searchInput = document.getElementById('rr-inbox-search');
+  const btnClearSearch = document.getElementById('btn-clear-inbox-search');
+  if (searchInput) {
+    searchInput.addEventListener('input', () => {
+      activeSearchQuery = searchInput.value;
+      if (btnClearSearch) {
+        btnClearSearch.classList.toggle('visible', !!activeSearchQuery.trim());
+      }
+      renderInboxThreadsList(activeThreadId);
+    });
+  }
+
+  if (btnClearSearch && searchInput) {
+    btnClearSearch.addEventListener('click', () => {
+      searchInput.value = '';
+      activeSearchQuery = '';
+      btnClearSearch.classList.remove('visible');
+      searchInput.focus();
+      renderInboxThreadsList(activeThreadId);
+    });
+  }
+
+  // Search Focus Toggle Button
+  const btnToggleSearch = document.getElementById('btn-toggle-search-focus');
+  if (btnToggleSearch && searchInput) {
+    btnToggleSearch.addEventListener('click', () => {
+      searchInput.focus();
+    });
+  }
+
+  // More Actions Dropdown Toggle
+  const btnInboxMore = document.getElementById('btn-inbox-more-menu');
+  const inboxMoreDropdown = document.getElementById('inbox-more-dropdown');
+  if (btnInboxMore && inboxMoreDropdown) {
+    btnInboxMore.addEventListener('click', (e) => {
+      e.stopPropagation();
+      inboxMoreDropdown.classList.toggle('active');
+    });
+  }
+
+  const btnThreadMore = document.getElementById('btn-thread-more-actions');
+  const threadMoreDropdown = document.getElementById('thread-more-dropdown');
+  if (btnThreadMore && threadMoreDropdown) {
+    btnThreadMore.addEventListener('click', (e) => {
+      e.stopPropagation();
+      threadMoreDropdown.classList.toggle('active');
+    });
+  }
+
+  // Close dropdowns on click outside
+  document.addEventListener('click', () => {
+    if (inboxMoreDropdown) inboxMoreDropdown.classList.remove('active');
+    if (threadMoreDropdown) threadMoreDropdown.classList.remove('active');
+    const emojiPopup = document.getElementById('composer-emoji-popup');
+    if (emojiPopup) emojiPopup.classList.remove('active');
+  });
+
+  // Mark all as read action
+  const btnMarkAllRead = document.getElementById('btn-mark-all-read');
+  if (btnMarkAllRead) {
+    btnMarkAllRead.addEventListener('click', () => {
+      Object.values(inboxThreadsData).forEach(t => { t.unread = false; });
+      renderInboxThreadsList(activeThreadId);
+      updateInboxFolderCounts();
+      showToast('All conversations marked as read.');
+    });
+  }
+
+  // Sync Inbox Now
+  const btnSyncInboxNow = document.getElementById('btn-sync-inbox-now');
+  if (btnSyncInboxNow) {
+    btnSyncInboxNow.addEventListener('click', () => {
+      const refreshBtn = document.getElementById('btn-inbox-refresh');
+      if (refreshBtn) refreshBtn.click();
+    });
+  }
+
+  // Export Chat Logs
+  const btnExportLogs = document.getElementById('btn-export-chat-logs');
+  if (btnExportLogs) {
+    btnExportLogs.addEventListener('click', () => {
+      const thread = inboxThreadsData[activeThreadId];
+      const handle = thread ? thread.handle : 'inbox';
+      showToast(`Exported DM conversation transcript for ${handle}.`);
+    });
+  }
+
+  // Thread More Actions (View IG, Mute, Block)
+  const btnViewIg = document.getElementById('btn-view-ig-profile');
+  if (btnViewIg) {
+    btnViewIg.addEventListener('click', () => {
+      const thread = inboxThreadsData[activeThreadId];
+      if (thread) {
+        showToast(`Opening ${thread.handle} on Instagram...`);
+        window.open(`https://instagram.com/${thread.handle.replace('@', '')}`, '_blank');
+      }
+    });
+  }
+
+  const btnMuteThread = document.getElementById('btn-mute-thread');
+  if (btnMuteThread) {
+    btnMuteThread.addEventListener('click', () => {
+      const thread = inboxThreadsData[activeThreadId];
+      if (thread) {
+        thread.muted = !thread.muted;
+        showToast(thread.muted ? `Notifications muted for ${thread.handle}` : `Notifications unmuted for ${thread.handle}`);
+      }
+    });
+  }
+
+  const btnBlockContact = document.getElementById('btn-block-contact');
+  if (btnBlockContact) {
+    btnBlockContact.addEventListener('click', () => {
+      const thread = inboxThreadsData[activeThreadId];
+      if (thread) {
+        thread.status = 'closed';
+        showToast(`Contact ${thread.handle} has been blocked.`);
+        renderInboxThreadsList();
+        updateInboxFolderCounts();
+      }
+    });
+  }
 
   // Mobile Back Button to Thread List
   const btnInboxMobileBack = document.getElementById('btn-inbox-mobile-back');
@@ -6408,27 +6587,6 @@ function initApp() {
       if (inboxContainer) {
         inboxContainer.classList.remove('chat-active-mobile');
       }
-    });
-  }
-
-  // Folder Tabs Filtering (All, Needs Action, Bot Active, Resolved)
-  document.querySelectorAll('.rr-folder-tab').forEach(tab => {
-    tab.addEventListener('click', () => {
-      document.querySelectorAll('.rr-folder-tab').forEach(t => t.classList.remove('active'));
-      tab.classList.add('active');
-      applyActiveFolderFilter();
-    });
-  });
-
-  // Thread Search Filter
-  const threadSearchInput = document.getElementById('rr-inbox-search');
-  if (threadSearchInput) {
-    threadSearchInput.addEventListener('input', () => {
-      const query = threadSearchInput.value.toLowerCase().trim();
-      document.querySelectorAll('.rr-clean-thread-item').forEach(item => {
-        const text = item.textContent.toLowerCase();
-        item.style.display = text.includes(query) ? 'flex' : 'none';
-      });
     });
   }
 
@@ -6457,44 +6615,29 @@ function initApp() {
       const thread = inboxThreadsData[activeThreadId];
       if (!thread) return;
 
-      const activeThreadEl = document.querySelector(`.rr-clean-thread-item[data-thread-id="${activeThreadId}"]`);
+      const isResolved = (thread.status === 'resolved' || thread.status === 'closed');
 
-      if (thread.status !== 'resolved') {
+      if (!isResolved) {
         // Mark as resolved
         thread.status = 'resolved';
-        if (activeThreadEl) {
-          activeThreadEl.setAttribute('data-status', 'resolved');
-          const statusPill = activeThreadEl.querySelector('.rr-pill-badge');
-          if (statusPill) {
-            statusPill.className = 'rr-pill-badge resolved';
-            statusPill.textContent = 'Resolved';
-          }
-        }
         thread.messages.push({
           type: 'divider',
           text: 'Conversation marked as resolved'
         });
-        showToast(`Conversation with ${thread.handle} moved to Resolved!`);
+        showToast(`Conversation with ${thread.handle} moved to Closed.`);
       } else {
         // Reopen conversation
         thread.status = 'attention';
-        if (activeThreadEl) {
-          activeThreadEl.setAttribute('data-status', 'attention');
-          const statusPill = activeThreadEl.querySelector('.rr-pill-badge');
-          if (statusPill) {
-            statusPill.className = 'rr-pill-badge action';
-            statusPill.textContent = 'Needs Action';
-          }
-        }
         thread.messages.push({
           type: 'divider',
           text: 'Conversation reopened'
         });
-        showToast(`Conversation with ${thread.handle} reopened!`);
+        showToast(`Conversation with ${thread.handle} reopened.`);
       }
 
+      renderInboxThreadsList(activeThreadId);
       selectInboxThread(activeThreadId);
-      applyActiveFolderFilter();
+      updateInboxFolderCounts();
     });
   }
 
@@ -6509,6 +6652,55 @@ function initApp() {
       }
     });
   });
+
+  // Composer Emoji Picker
+  const btnComposerEmoji = document.getElementById('btn-composer-emoji');
+  const composerEmojiPopup = document.getElementById('composer-emoji-popup');
+  if (btnComposerEmoji && composerEmojiPopup) {
+    btnComposerEmoji.addEventListener('click', (e) => {
+      e.stopPropagation();
+      composerEmojiPopup.classList.toggle('active');
+    });
+
+    composerEmojiPopup.querySelectorAll('.emoji-opt').forEach(opt => {
+      opt.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const emoji = opt.textContent;
+        const composer = document.getElementById('chat-input-msg');
+        if (composer) {
+          composer.value += emoji;
+          composer.focus();
+        }
+        composerEmojiPopup.classList.remove('active');
+      });
+    });
+  }
+
+  // Composer Quick Preset Button
+  const btnComposerPreset = document.getElementById('btn-composer-preset');
+  if (btnComposerPreset) {
+    btnComposerPreset.addEventListener('click', () => {
+      const composer = document.getElementById('chat-input-msg');
+      if (composer) {
+        composer.value = "Hey! Here is our official store link with all our Instagram presets and creator guides: https://renderreply.com/store/rudrateja";
+        composer.focus();
+        showToast("Quick preset response inserted into composer.");
+      }
+    });
+  }
+
+  // Composer Attachment Button
+  const btnComposerAttach = document.getElementById('btn-composer-attach');
+  if (btnComposerAttach) {
+    btnComposerAttach.addEventListener('click', () => {
+      const composer = document.getElementById('chat-input-msg');
+      if (composer) {
+        composer.value += " [Attached: Instagram_Growth_Checklist_2026.pdf]";
+        composer.focus();
+        showToast("Document attachment link attached to draft.");
+      }
+    });
+  }
 
   // Send Message Action Handler
   const chatInputMsg = document.getElementById('chat-input-msg');
@@ -6526,6 +6718,7 @@ function initApp() {
     const timeStr = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
 
     // Direct DM send
+    if (!thread.messages) thread.messages = [];
     thread.messages.push({
       type: 'human',
       text: text,
@@ -6547,14 +6740,8 @@ function initApp() {
 
     // Re-render feed
     renderThreadChatFeed(activeThreadId);
+    renderInboxThreadsList(activeThreadId);
     chatInputMsg.value = '';
-
-    // Update thread preview
-    const activeThreadEl = document.querySelector(`.rr-clean-thread-item[data-thread-id="${activeThreadId}"]`);
-    if (activeThreadEl) {
-      const prev = activeThreadEl.querySelector('.rr-t-snippet');
-      if (prev) prev.textContent = `You: ${text}`;
-    }
 
     showToast(`DM message sent to ${thread.handle}`);
   }
@@ -6592,14 +6779,28 @@ function initApp() {
 
       skeletonizeInbox(() => {
         if (icon) icon.classList.remove('spinning');
+        renderInboxThreadsList(activeThreadId);
         selectInboxThread(activeThreadId);
         showToast('Live DM Inbox synchronized with Instagram.');
       }, 400);
     });
   }
 
-  // Initialize initial thread view on startup
+  // Global sync for active user switch
+  window.syncInboxForActiveUser = function () {
+    inboxThreadsData = window.getActiveUserData().inbox || {};
+    activeThreadId = Object.keys(inboxThreadsData)[0] || 'alex';
+    ensureInboxDefaults();
+    renderInboxThreadsList(activeThreadId);
+    selectInboxThread(activeThreadId);
+    updateInboxFolderCounts();
+  };
+
+  // Initial startup
+  ensureInboxDefaults();
+  renderInboxThreadsList('alex');
   selectInboxThread('alex');
+  updateInboxFolderCounts();
 
   // BROWSER TAB STOREFRONT OVERLAY HANDLERS
   if (btnOpenBrowserOverlay && browserOverlay) {
