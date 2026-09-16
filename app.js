@@ -3345,32 +3345,93 @@ window.switchStoreTab = function (tabName, btnEl) {
 window.switchMainTab = function (tabName, linkEl) {
   if (!tabName) return;
 
-  const navItems = document.querySelectorAll('.nav-item');
-  navItems.forEach(n => n.classList.remove('active'));
+  if (tabName === 'settings' && typeof window.openAccountSettingsView === 'function') {
+    window.openAccountSettingsView();
+    return;
+  }
+  if (tabName === 'support' && typeof window.openSupportCenterView === 'function') {
+    window.openSupportCenterView();
+    return;
+  }
+
+  try {
+    localStorage.setItem('rr_active_tab', tabName);
+    if (window.location.hash !== '#' + tabName) {
+      history.replaceState(null, '', '#' + tabName);
+    }
+  } catch (e) {}
+
+  const navItems = document.querySelectorAll('.sidebar-nav .nav-item, .nav-item');
+  navItems.forEach(n => {
+    if (n.getAttribute('data-tab') === tabName) {
+      n.classList.add('active');
+    } else {
+      n.classList.remove('active');
+    }
+  });
 
   if (linkEl) {
     linkEl.classList.add('active');
-  } else {
-    const targetNav = document.querySelector(`.nav-item[data-tab="${tabName}"]`);
-    if (targetNav) targetNav.classList.add('active');
   }
 
   const tabViews = document.querySelectorAll('.tab-view');
   tabViews.forEach(view => {
-    if (view.id === `${tabName}-view`) {
+    if (view.id === (tabName + '-view')) {
       view.classList.add('active');
       view.style.display = 'block';
+      if (typeof triggerReloadAnimation === 'function') {
+        triggerReloadAnimation(view);
+      }
     } else {
       view.classList.remove('active');
       view.style.display = 'none';
     }
   });
 
+  // Update capsule pill position
+  const indicator = document.getElementById('sidebar-pill-indicator');
+  const activeNav = document.querySelector('.sidebar-nav .nav-item.active');
+  const sidebarNav = document.getElementById('sidebar-nav');
+  if (indicator && activeNav && sidebarNav) {
+    const navRect = sidebarNav.getBoundingClientRect();
+    const itemRect = activeNav.getBoundingClientRect();
+    const topOffset = itemRect.top - navRect.top;
+    indicator.style.transform = 'translateY(' + topOffset + 'px)';
+    indicator.style.height = itemRect.height + 'px';
+    indicator.style.opacity = '1';
+  }
+
   if (tabName === 'inbox') {
     const inboxContainer = document.getElementById('rr-inbox-container');
     if (inboxContainer) {
       inboxContainer.classList.remove('chat-active-mobile');
     }
+  }
+
+  if (tabName === 'reels') {
+    let savedReelsTab = 'create';
+    try {
+      savedReelsTab = localStorage.getItem('rr_active_reels_tab') || 'create';
+    } catch (e) {}
+    if (typeof window.switchReelsWorkspaceTab === 'function') {
+      window.switchReelsWorkspaceTab(savedReelsTab);
+    }
+  }
+
+  if (tabName === 'automation-rules') {
+    setTimeout(() => {
+      if (typeof window.updateRulesFilterArrows === 'function') {
+        window.updateRulesFilterArrows();
+      }
+    }, 60);
+  }
+
+  if (tabName === 'creatorstore') {
+    setTimeout(() => {
+      if (typeof window.updateSubnavArrows === 'function') {
+        window.updateSubnavArrows();
+      }
+    }, 60);
   }
 };
 
@@ -3928,42 +3989,9 @@ function initApp() {
     item.addEventListener('click', (e) => {
       e.preventDefault();
       const targetTab = item.getAttribute('data-tab');
+      if (!targetTab) return;
 
-      navItems.forEach(nav => nav.classList.remove('active'));
-      item.classList.add('active');
-      updateSidebarCapsulePill();
-
-      tabViews.forEach(view => {
-        if (view.id === `${targetTab}-view`) {
-          view.classList.add('active');
-          triggerReloadAnimation(view);
-        } else {
-          view.classList.remove('active');
-        }
-      });
-
-      if (targetTab === 'inbox') {
-        const inboxContainer = document.getElementById('rr-inbox-container');
-        if (inboxContainer) {
-          inboxContainer.classList.remove('chat-active-mobile');
-        }
-      }
-
-      if (targetTab === 'automation-rules') {
-        setTimeout(() => {
-          if (typeof window.updateRulesFilterArrows === 'function') {
-            window.updateRulesFilterArrows();
-          }
-        }, 60);
-      }
-
-      if (targetTab === 'creatorstore') {
-        setTimeout(() => {
-          if (typeof window.updateSubnavArrows === 'function') {
-            window.updateSubnavArrows();
-          }
-        }, 60);
-      }
+      window.switchMainTab(targetTab, item);
 
       if (window.innerWidth <= 1024) {
         closeMobileSidebar();
@@ -8547,6 +8575,29 @@ function initApp() {
     updateTimeRangeCapsulePill();
   }, 50);
 
+  // RESTORE ACTIVE TAB ON PAGE LOAD / RELOAD
+  function restoreAppActiveTabOnLoad() {
+    let savedTab = '';
+    try {
+      if (window.location.hash) {
+        savedTab = window.location.hash.replace(/^#/, '');
+      }
+      if (!savedTab) {
+        savedTab = localStorage.getItem('rr_active_tab');
+      }
+    } catch (e) {}
+
+    if (savedTab && savedTab !== 'dashboard') {
+      window.switchMainTab(savedTab);
+    }
+  }
+
+  restoreAppActiveTabOnLoad();
+  window.addEventListener('hashchange', () => {
+    const h = window.location.hash.replace(/^#/, '');
+    if (h) window.switchMainTab(h);
+  });
+
   // EXPORT ACTIVE USER SYNC HOOKS FOR APP ENGINE
   window.syncDashboardForActiveUser = function () {
     try {
@@ -11799,7 +11850,7 @@ window.closeSupportGuideModal = function () {
       const isVideo = media.type === 'video' || (media.name && /\.(mp4|mov|webm|mkv)$/i.test(media.name));
       const visualHtml = (isVideo && media.thumbUrl && (media.thumbUrl.startsWith('blob:') || media.thumbUrl.startsWith('data:video') || media.thumbUrl.endsWith('.mp4')))
         ? `<video src="${media.thumbUrl}" class="media-thumb-img" muted playsinline preload="metadata" onloadeddata="try{this.currentTime=0.2}catch(e){}" style="width: 100%; height: 100%; object-fit: cover; pointer-events: none;"></video>`
-        : `<img src="${media.thumbUrl || 'goldfish_reel_thumb.jpg'}" alt="${media.name}" class="media-thumb-img" onerror="this.onerror=null; this.src='goldfish_reel_thumb.jpg';">`;
+        : `<img src="${media.thumbUrl || 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=800&q=80'}" alt="${media.name}" class="media-thumb-img" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=800&q=80';">`;
 
       return `
         <div class="storrito-media-card" id="media-card-${media.id}" onclick="window.openMediaDetailModal('${media.id}')">
@@ -11863,7 +11914,7 @@ window.closeSupportGuideModal = function () {
       }
       if (imgEl) {
         imgEl.style.display = 'block';
-        imgEl.src = media.thumbUrl || 'goldfish_reel_thumb.jpg';
+        imgEl.src = media.thumbUrl || 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=800&q=80';
       }
     }
 
@@ -12134,7 +12185,7 @@ window.closeSupportGuideModal = function () {
       template: 'Growth Toolkit Blueprint',
       color: 'linear-gradient(135deg, #090d16, #7e22ce)',
       thumbIcon: '✨',
-      thumbUrl: 'goldfish_reel_thumb.jpg'
+      thumbUrl: 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=800&q=80'
     };
 
     galleryMediaItems.unshift(newMedia);
@@ -12191,7 +12242,7 @@ window.closeSupportGuideModal = function () {
         clearInterval(interval);
 
         // Create object URL for preview if image or video
-        let previewUrl = 'goldfish_reel_thumb.jpg';
+        let previewUrl = 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=800&q=80';
         try {
           if (file.type.startsWith('image') || file.type.startsWith('video')) {
             previewUrl = URL.createObjectURL(file);
@@ -12328,7 +12379,7 @@ window.closeSupportGuideModal = function () {
         name: activeName,
         type: isImg ? 'image' : 'video',
         autoDmKeyword: 'GROWTH',
-        thumbUrl: 'goldfish_reel_thumb.jpg'
+        thumbUrl: 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=800&q=80'
       };
     }
 
@@ -12397,7 +12448,7 @@ window.closeSupportGuideModal = function () {
       }
       if (posterImg) {
         posterImg.style.display = 'block';
-        posterImg.src = media.thumbUrl || 'goldfish_reel_thumb.jpg';
+        posterImg.src = media.thumbUrl || 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=800&q=80';
       }
     } else {
       if (videoEl) {
@@ -14481,6 +14532,1031 @@ if (document.readyState === 'loading') {
   initUserProfileDropdownAndModals();
 }
 
+/* ==========================================================================
+   REELS & MEDIA STUDIO - ENGINE & STATE MANAGEMENT (SLATE MONOCHROME)
+   ========================================================================== */
 
+(function initReelsStudioEngine() {
+  // Studio Wizard State Store
+  const reelsState = {
+    activeTab: 'create',
+    wizardStep: 0,
+    format: 'reel', // 'reel', 'post', 'story'
+    mediaFile: null,
+    mediaUrl: 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=800&q=80',
+    mediaType: 'image', // 'video' or 'image'
+    coverUrl: 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=800&q=80',
+    caption: 'Steal my exact high-converting blueprint! Comment GUIDE below and get the complete system sent to your DMs ✨ #growth #reels',
+    audioName: 'Original Audio - renderreply',
+    shareToFeed: true,
+    recommendFb: true,
+    activeTemplate: 'guide',
+    keywords: ['GUIDE'],
+    matchMode: 'exact', // 'exact', 'contains', 'any'
+    dmMessage: 'Hey {first_name}! Here is your free blueprint guide you requested: https://renderreply.com/guide.pdf Let me know if you have any questions!',
+    destinationLink: 'https://renderreply.com/guide.pdf',
+    commentReplies: [
+      'Just sent you the link in your DMs! Check your inbox.',
+      'Check your DMs! The complete guide is waiting for you.',
+      'Sent over to your messages! Let me know what you think.'
+    ],
+    publishTiming: 'immediate', // 'immediate' or 'schedule'
+    scheduleDate: '',
+    scheduleHour: 6,
+    scheduleMinute: 30,
+    scheduleAmPm: 'PM',
+    postedCount: 5,
+    scheduledCount: 2
+  };
 
+  function getDefaultScheduleDate() {
+    const d = new Date();
+    d.setDate(d.getDate() + 1);
+    return d.toISOString().split('T')[0];
+  }
 
+  reelsState.scheduleDate = getDefaultScheduleDate();
+
+  // 1. TOP 3-TAB WORKSPACE SWITCHER
+  window.switchReelsWorkspaceTab = function (tabName) {
+    if (!tabName) return;
+    reelsState.activeTab = tabName;
+    try {
+      localStorage.setItem('rr_active_reels_tab', tabName);
+    } catch (err) {}
+
+    var tabs = ['create', 'posted', 'scheduled'];
+    tabs.forEach(function (t) {
+      var btn = document.getElementById('tab-btn-reels-' + t);
+      var pane = document.getElementById('reels-pane-' + t);
+      if (btn) {
+        btn.classList.toggle('active', t === tabName);
+      }
+      if (pane) {
+        pane.classList.toggle('active', t === tabName);
+        pane.style.display = (t === tabName) ? 'block' : 'none';
+      }
+    });
+
+    if (tabName === 'create') {
+      window.updateSummaryCard();
+      window.updatePhonePreview();
+    }
+  };
+
+  // 2. 5-STEP WIZARD NAVIGATION
+  window.jumpToWizardStep = function (stepNum) {
+    if (stepNum < 0 || stepNum > 5) return;
+    reelsState.wizardStep = stepNum;
+
+    for (var i = 0; i <= 5; i++) {
+      var node = document.getElementById('wizard-node-' + i);
+      var panel = document.getElementById('wizard-panel-' + i);
+      if (node) {
+        node.classList.toggle('active', i === stepNum);
+        node.classList.toggle('completed', i < stepNum);
+        var circle = node.querySelector('.node-circle');
+        if (circle) {
+          if (i < stepNum) {
+            circle.innerHTML = '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>';
+          } else {
+            circle.textContent = i;
+          }
+        }
+      }
+      if (panel) {
+        panel.classList.toggle('active', i === stepNum);
+        panel.style.display = (i === stepNum) ? 'block' : 'none';
+      }
+      if (i < 5) {
+        var conn = document.getElementById('wizard-conn-' + i);
+        if (conn) conn.classList.toggle('completed', i < stepNum);
+      }
+    }
+
+    var btnBack = document.getElementById('btn-wizard-back');
+    var btnNext = document.getElementById('btn-wizard-next');
+    var stepText = document.getElementById('wizard-step-indicator-text');
+
+    if (btnBack) {
+      btnBack.style.visibility = (stepNum === 0) ? 'hidden' : 'visible';
+    }
+
+    if (stepText) {
+      stepText.textContent = 'Step ' + stepNum + ' of 5';
+    }
+
+    if (btnNext) {
+      if (stepNum === 5) {
+        btnNext.innerHTML = (reelsState.publishTiming === 'immediate')
+          ? '<span>Publish Content</span>'
+          : '<span>Confirm Schedule</span>';
+        btnNext.className = 'btn-wizard-primary btn-publish-action';
+      } else {
+        var stepLabels = [
+          'Next: Media',
+          'Next: Trigger & Details',
+          'Next: DM Automation',
+          'Next: Public Replies',
+          'Next: Review & Finalize'
+        ];
+        btnNext.innerHTML = '<span>' + stepLabels[stepNum] + '</span> <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>';
+        btnNext.className = 'btn-wizard-primary';
+      }
+    }
+
+    window.updateSummaryCard();
+    window.updatePhonePreview();
+  };
+
+  window.goNextWizardStep = function () {
+    if (reelsState.wizardStep === 5) {
+      window.executeReelPublishOrSchedule();
+    } else {
+      window.jumpToWizardStep(reelsState.wizardStep + 1);
+    }
+  };
+
+  window.goBackWizardStep = function () {
+    if (reelsState.wizardStep > 0) {
+      window.jumpToWizardStep(reelsState.wizardStep - 1);
+    }
+  };
+
+  // 3. STEP 0: FORMAT SELECTION
+  window.selectContentFormat = function (fmt) {
+    reelsState.format = fmt;
+    ['reel', 'post'].forEach(function (f) {
+      var card = document.getElementById('format-card-' + f);
+      if (card) card.classList.toggle('selected', f === fmt);
+    });
+
+    var formatTag = document.getElementById('summary-format-tag');
+    if (formatTag) {
+      var labels = { reel: '9:16 Reel', post: '1:1 / 4:5 Post' };
+      formatTag.textContent = labels[fmt] || 'Reel';
+    }
+
+    var specRatio = document.getElementById('uploaded-spec-ratio');
+    if (specRatio) {
+      specRatio.textContent = (fmt === 'reel') ? '9:16 Reel' : (reelsState.postAspectRatio || '1:1') + ' Post';
+    }
+
+    // Toggle format-specific controls
+    var postAspectBlock = document.getElementById('post-aspect-ratio-block');
+    var reelCoverBlock = document.getElementById('reel-cover-block');
+    var audioTrackBlock = document.getElementById('audio-track-field-block');
+    var shareFeedItem = document.getElementById('share-feed-grid-item');
+
+    if (postAspectBlock) postAspectBlock.style.display = (fmt === 'post') ? 'block' : 'none';
+    if (reelCoverBlock) reelCoverBlock.style.display = (fmt === 'reel') ? 'block' : 'none';
+    if (audioTrackBlock) audioTrackBlock.style.display = (fmt === 'reel') ? 'block' : 'none';
+    if (shareFeedItem) shareFeedItem.style.display = (fmt === 'reel') ? 'flex' : 'none';
+
+    window.updatePhonePreview();
+    if (typeof window.showToast === 'function') {
+      window.showToast('Format set to: ' + fmt.toUpperCase());
+    }
+  };
+
+  // POST ASPECT RATIO SWITCHER (1:1 vs 4:5)
+  window.setPostAspectRatio = function (ratio) {
+    reelsState.postAspectRatio = ratio;
+    ['1-1', '4-5'].forEach(function (r) {
+      var btn = document.getElementById('aspect-btn-' + r);
+      if (btn) btn.classList.toggle('active', (r === '1-1' && ratio === '1:1') || (r === '4-5' && ratio === '4:5'));
+    });
+    var specRatio = document.getElementById('uploaded-spec-ratio');
+    if (specRatio) {
+      specRatio.textContent = ratio + ' Post';
+    }
+    if (typeof window.showToast === 'function') {
+      window.showToast('Aspect ratio set to: ' + ratio);
+    }
+  };
+
+  // 4. STEP 1: MEDIA DROP & UPLOAD
+  window.triggerReelFilePicker = function () {
+    var input = document.getElementById('reel-file-picker');
+    if (input) input.click();
+  };
+
+  window.triggerReelCoverPicker = function () {
+    var input = document.getElementById('reel-cover-picker');
+    if (input) input.click();
+  };
+
+  window.handleReelDragOver = function (e) {
+    e.preventDefault();
+    var dropzone = document.getElementById('reel-upload-dropzone');
+    if (dropzone) dropzone.classList.add('dragover');
+  };
+
+  window.handleReelDragLeave = function (e) {
+    e.preventDefault();
+    var dropzone = document.getElementById('reel-upload-dropzone');
+    if (dropzone) dropzone.classList.remove('dragover');
+  };
+
+  window.handleReelDrop = function (e) {
+    e.preventDefault();
+    var dropzone = document.getElementById('reel-upload-dropzone');
+    if (dropzone) dropzone.classList.remove('dragover');
+    if (e.dataTransfer && e.dataTransfer.files && e.dataTransfer.files.length > 0) {
+      processUploadedFile(e.dataTransfer.files[0]);
+    }
+  };
+
+  window.handleReelUploadFile = function (e) {
+    if (e.target && e.target.files && e.target.files.length > 0) {
+      processUploadedFile(e.target.files[0]);
+    }
+  };
+
+  function processUploadedFile(file) {
+    reelsState.mediaFile = file;
+    var isVideo = file.type.startsWith('video');
+    reelsState.mediaType = isVideo ? 'video' : 'image';
+    var objectUrl = URL.createObjectURL(file);
+    reelsState.mediaUrl = objectUrl;
+    reelsState.coverUrl = objectUrl;
+
+    var emptyState = document.getElementById('dropzone-empty-state');
+    var metaCard = document.getElementById('uploaded-media-meta');
+    var nameEl = document.getElementById('uploaded-file-name');
+    var sizeEl = document.getElementById('uploaded-spec-size');
+    var thumbEl = document.getElementById('uploaded-thumb-img');
+
+    if (emptyState) emptyState.style.display = 'none';
+    if (metaCard) metaCard.style.display = 'flex';
+    if (nameEl) nameEl.textContent = file.name;
+    if (sizeEl) sizeEl.textContent = (file.size / (1024 * 1024)).toFixed(1) + ' MB';
+    if (thumbEl) thumbEl.src = objectUrl;
+
+    var coverImg = document.getElementById('cover-preview-image');
+    if (coverImg) coverImg.src = objectUrl;
+
+    window.updateSummaryCard();
+    window.updatePhonePreview();
+    if (typeof window.showToast === 'function') {
+      window.showToast('Uploaded "' + file.name + '" successfully');
+    }
+  }
+
+  window.loadSampleReelVideo = function () {
+    reelsState.mediaUrl = 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=800&q=80';
+    reelsState.coverUrl = 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=800&q=80';
+    reelsState.mediaType = 'image';
+
+    var emptyState = document.getElementById('dropzone-empty-state');
+    var metaCard = document.getElementById('uploaded-media-meta');
+    var nameEl = document.getElementById('uploaded-file-name');
+    var sizeEl = document.getElementById('uploaded-spec-size');
+    var thumbEl = document.getElementById('uploaded-thumb-img');
+
+    if (emptyState) emptyState.style.display = 'none';
+    if (metaCard) metaCard.style.display = 'flex';
+    if (nameEl) nameEl.textContent = 'viral_growth_blueprint.mp4';
+    if (sizeEl) sizeEl.textContent = '14.2 MB';
+    if (thumbEl) thumbEl.src = 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=800&q=80';
+
+    window.updateSummaryCard();
+    window.updatePhonePreview();
+    if (typeof window.showToast === 'function') {
+      window.showToast('Loaded sample viral media successfully!');
+    }
+  };
+
+  window.handleReelCoverFile = function (e) {
+    if (e.target && e.target.files && e.target.files.length > 0) {
+      var file = e.target.files[0];
+      var objectUrl = URL.createObjectURL(file);
+      reelsState.coverUrl = objectUrl;
+      var coverImg = document.getElementById('cover-preview-image');
+      if (coverImg) coverImg.src = objectUrl;
+      window.updateSummaryCard();
+      window.updatePhonePreview();
+      if (typeof window.showToast === 'function') {
+        window.showToast('Custom cover uploaded');
+      }
+    }
+  };
+
+  window.captureCurrentFrameAsCover = function () {
+    if (typeof window.showToast === 'function') {
+      window.showToast('Frame snapshot captured as reel cover');
+    }
+  };
+
+  // 5. CAPTIONS, EMOJIS, HASHTAGS & METADATA
+  window.handleCaptionInput = function (val) {
+    reelsState.caption = val;
+    var counter = document.getElementById('reel-caption-counter');
+    if (counter) counter.textContent = val.length + ' / 2,200';
+    window.updateSummaryCard();
+    window.updatePhonePreview();
+  };
+
+  window.insertCaptionEmoji = function (emoji) {
+    var input = document.getElementById('reel-caption-input');
+    if (input) {
+      input.value = (input.value || '') + emoji;
+      window.handleCaptionInput(input.value);
+      input.focus();
+    }
+  };
+
+  window.appendHashtag = function (tag) {
+    var input = document.getElementById('reel-caption-input');
+    if (input) {
+      input.value = (input.value ? input.value + ' ' : '') + tag;
+      window.handleCaptionInput(input.value);
+      input.focus();
+    }
+  };
+
+  window.handleAudioNameChange = function (val) {
+    reelsState.audioName = val || 'Original Audio - renderreply';
+    window.updatePhonePreview();
+  };
+
+  window.handleCollaboratorsInput = function (val) {
+    reelsState.collaborators = val;
+    window.updateSummaryCard();
+  };
+
+  window.handleLocationInput = function (val) {
+    reelsState.location = val;
+    window.updateSummaryCard();
+  };
+
+  window.setLocationPreset = function (city) {
+    var input = document.getElementById('reel-location-input');
+    if (input) {
+      input.value = city;
+      window.handleLocationInput(city);
+    }
+  };
+
+  window.handleCtaTitleInput = function (val) {
+    reelsState.ctaTitle = val || 'Access Link Now';
+    window.updateSummaryCard();
+  };
+
+  window.addTriggerKeywordDirect = function (kw) {
+    if (!reelsState.keywords.includes(kw)) {
+      reelsState.keywords.push(kw);
+      window.renderKeywordTags();
+      window.updateSummaryCard();
+      window.updatePhonePreview();
+    }
+  };
+
+  // 6. STEP 3: TEMPLATES (5 OFFICIAL PRESETS)
+  var TEMPLATES = {
+    link: {
+      keyword: 'LINK',
+      caption: 'Comment "LINK" below and my automation will send you the direct resource link instantly! 🚀 #reels #growth',
+      dm: 'Hey {first_name}! Here is the direct link you requested. Tap below to access:',
+      link: 'https://renderreply.com/resource',
+      replies: [
+        'Check your DM!',
+        'Sent to your inbox! ✨',
+        'Just messaged you the link! 🚀'
+      ]
+    },
+    discount: {
+      keyword: 'DISCOUNT',
+      caption: 'Special promo! Comment "DISCOUNT" below to claim your exclusive 20% discount coupon code! 🛍️ #sale #discount',
+      dm: 'Thanks for asking! Here is your exclusive 20% discount coupon code: SAVE20. Valid for the next 48 hours!',
+      link: 'https://renderreply.com/store/save20',
+      replies: [
+        'Promo code sent to your DMs! 🛍️',
+        'Check your messages for your discount! ✨',
+        'Coupon code delivered! 🎉'
+      ]
+    },
+    guide: {
+      keyword: 'GUIDE',
+      caption: 'Steal my exact 30-day viral growth blueprint! Comment "GUIDE" below and get the complete PDF sent straight to your DMs! #growth #reels #marketing',
+      dm: 'Hey there! Here is the free PDF Creator Growth Blueprint you wanted. Download it below:',
+      link: 'https://renderreply.com/growth-guide',
+      replies: [
+        'Just sent you the PDF in your DMs! 📩 Check your inbox.',
+        'Check your DMs! The complete guide is waiting for you.',
+        'Sent over to your messages! Let me know what you think.'
+      ]
+    },
+    call: {
+      keyword: 'CALL',
+      caption: 'Ready to scale your creator business? Comment "CALL" to book a 1-on-1 strategy call directly on my calendar! 📞 #creator #scaling',
+      dm: 'Hey! Let us connect directly. Choose a time slot that works best for you on my calendar:',
+      link: 'https://calendly.com/renderreply-demo',
+      replies: [
+        'Calendar link sent to your DMs! 📞',
+        'Check your inbox to pick your time slot! ✨',
+        'Sent! Excited to chat soon! 🚀'
+      ]
+    },
+    custom: {
+      keyword: 'PRICE',
+      caption: 'Comment "PRICE" below to view our full breakdown and features! #pricing #tools',
+      dm: 'Hey! Thanks for reaching out. Here are all the details and full pricing breakdown:',
+      link: 'https://renderreply.com/pricing',
+      replies: [
+        'Details sent to your DM!',
+        'Check your messages! ✨',
+        'Full pricing sent to your inbox 🚀'
+      ]
+    }
+  };
+
+  window.applyWizardTemplate = function (tplKey) {
+    var tpl = TEMPLATES[tplKey];
+    if (!tpl) return;
+    reelsState.activeTemplate = tplKey;
+    reelsState.keywords = [tpl.keyword];
+    reelsState.dmMessage = tpl.dm;
+    reelsState.destinationLink = tpl.link;
+    reelsState.commentReplies = tpl.replies.slice();
+
+    ['link', 'discount', 'guide', 'call', 'custom'].forEach(function (k) {
+      var pill = document.getElementById('tpl-pill-' + k);
+      if (pill) pill.classList.toggle('active', k === tplKey);
+    });
+
+    window.renderKeywordTags();
+
+    var captionInput = document.getElementById('reel-caption-input');
+    if (captionInput && !captionInput.value) {
+      captionInput.value = tpl.caption;
+      window.handleCaptionInput(tpl.caption);
+    }
+
+    var dmInput = document.getElementById('wizard-dm-message-input');
+    if (dmInput) dmInput.value = tpl.dm;
+
+    var linkInput = document.getElementById('wizard-dm-link-input');
+    if (linkInput) linkInput.value = tpl.link;
+
+    window.renderCommentRepliesList();
+    window.updateSummaryCard();
+    window.updatePhonePreview();
+
+    if (typeof window.showToast === 'function') {
+      window.showToast('Applied "' + tplKey.toUpperCase() + '" template');
+    }
+  };
+
+  window.renderKeywordTags = function () {
+    var container = document.getElementById('active-keyword-tags-list');
+    if (!container) return;
+    container.innerHTML = reelsState.keywords.map(function (kw) {
+      return '<span class="keyword-tag-pill"><span>' + kw + '</span><button type="button" class="btn-remove-tag" onclick="window.removeKeywordTag(\'' + kw + '\', event)">✕</button></span>';
+    }).join('');
+  };
+
+  window.handleKeywordTagKeydown = function (e) {
+    if (e.key === 'Enter' || e.key === ',') {
+      e.preventDefault();
+      var val = e.target.value.trim().toUpperCase().replace(/^#/, '');
+      if (val && !reelsState.keywords.includes(val)) {
+        reelsState.keywords.push(val);
+        e.target.value = '';
+        window.renderKeywordTags();
+        window.updateSummaryCard();
+        window.updatePhonePreview();
+      }
+    }
+  };
+
+  window.removeKeywordTag = function (tag, e) {
+    if (e) e.stopPropagation();
+    reelsState.keywords = reelsState.keywords.filter(function (k) { return k !== tag; });
+    if (reelsState.keywords.length === 0) {
+      reelsState.keywords = ['GUIDE'];
+    }
+    window.renderKeywordTags();
+    window.updateSummaryCard();
+    window.updatePhonePreview();
+  };
+
+  window.setKeywordMatchMode = function (mode) {
+    reelsState.matchMode = mode;
+    ['exact', 'contains', 'any'].forEach(function (m) {
+      var btn = document.getElementById('match-mode-' + m);
+      if (btn) btn.classList.toggle('active', m === mode);
+    });
+    window.updateSummaryCard();
+  };
+
+  // 7. STEP 4: DM VARIABLES & COMMENT REPLIES
+  window.insertDmVariable = function (tag) {
+    var textarea = document.getElementById('wizard-dm-message-input');
+    if (!textarea) return;
+    var start = textarea.selectionStart || 0;
+    var end = textarea.selectionEnd || 0;
+    var current = textarea.value || '';
+    textarea.value = current.substring(0, start) + tag + current.substring(end);
+    reelsState.dmMessage = textarea.value;
+    textarea.selectionStart = textarea.selectionEnd = start + tag.length;
+    textarea.focus();
+    window.updateSummaryCard();
+  };
+
+  window.handleDmMessageInput = function (val) {
+    reelsState.dmMessage = val;
+    window.updateSummaryCard();
+  };
+
+  window.handleDmLinkInput = function (val) {
+    reelsState.destinationLink = val;
+    window.updateSummaryCard();
+  };
+
+  window.renderCommentRepliesList = function () {
+    var list = document.getElementById('comment-replies-list');
+    if (!list) return;
+    list.innerHTML = reelsState.commentReplies.map(function (reply, idx) {
+      return '<div class="comment-reply-row"><span class="reply-num-badge">' + (idx + 1) + '</span><input type="text" class="form-input-modern reply-input" value="' + reply.replace(/"/g, '&quot;') + '" oninput="window.handleCommentReplyChange(' + idx + ', this.value)"><button type="button" class="btn-remove-reply" onclick="window.removeCommentReplyRow(this, ' + idx + ')">✕</button></div>';
+    }).join('');
+  };
+
+  window.handleCommentReplyChange = function (idx, val) {
+    if (reelsState.commentReplies[idx] !== undefined) {
+      reelsState.commentReplies[idx] = val;
+      window.updateSummaryCard();
+    }
+  };
+
+  window.addCommentReplyRow = function () {
+    reelsState.commentReplies.push('Thanks for checking this out! Sent to your DMs');
+    window.renderCommentRepliesList();
+    window.updateSummaryCard();
+  };
+
+  window.removeCommentReplyRow = function (btn, idx) {
+    if (reelsState.commentReplies.length <= 1) {
+      if (typeof window.showToast === 'function') {
+        window.showToast('At least 1 comment reply is required');
+      }
+      return;
+    }
+    if (idx !== undefined) {
+      reelsState.commentReplies.splice(idx, 1);
+    } else {
+      reelsState.commentReplies.pop();
+    }
+    window.renderCommentRepliesList();
+    window.updateSummaryCard();
+  };
+
+  // 8. STEP 5: SCHEDULING & DIGITAL TIME STEPPERS
+  window.setPublishTimingMode = function (mode) {
+    reelsState.publishTiming = mode;
+    var btnImm = document.getElementById('pub-mode-immediate');
+    var btnSched = document.getElementById('pub-mode-schedule');
+    var schedBox = document.getElementById('schedule-controls-box');
+
+    if (btnImm) btnImm.classList.toggle('active', mode === 'immediate');
+    if (btnSched) btnSched.classList.toggle('active', mode === 'schedule');
+    if (schedBox) schedBox.style.display = (mode === 'schedule') ? 'flex' : 'none';
+
+    var btnSubmit = document.getElementById('btn-wizard-next');
+    if (btnSubmit && reelsState.wizardStep === 5) {
+      btnSubmit.innerHTML = (mode === 'immediate')
+        ? '<span>Publish Reel Now</span>'
+        : '<span>Schedule Publication</span>';
+    }
+
+    window.validateScheduledDateTime();
+    window.updateSummaryCard();
+  };
+
+  window.stepScheduleHour = function (delta) {
+    var h = reelsState.scheduleHour + delta;
+    if (h > 12) h = 1;
+    if (h < 1) h = 12;
+    reelsState.scheduleHour = h;
+    var el = document.getElementById('stepper-hour-val');
+    if (el) el.textContent = (h < 10) ? '0' + h : h;
+    window.validateScheduledDateTime();
+    window.updateSummaryCard();
+  };
+
+  window.stepScheduleMinute = function (delta) {
+    var m = reelsState.scheduleMinute + delta;
+    if (m >= 60) m = 0;
+    if (m < 0) m = 55;
+    reelsState.scheduleMinute = m;
+    var el = document.getElementById('stepper-minute-val');
+    if (el) el.textContent = (m < 10) ? '0' + m : m;
+    window.validateScheduledDateTime();
+    window.updateSummaryCard();
+  };
+
+  window.setScheduleAmPm = function (val) {
+    reelsState.scheduleAmPm = val;
+    var btnPm = document.getElementById('stepper-btn-pm');
+    var btnAm = document.getElementById('stepper-btn-am');
+    if (btnPm) btnPm.classList.toggle('active', val === 'PM');
+    if (btnAm) btnAm.classList.toggle('active', val === 'AM');
+    window.validateScheduledDateTime();
+    window.updateSummaryCard();
+  };
+
+  window.handleScheduleDateChange = function () {
+    var input = document.getElementById('sched-date-picker-input');
+    if (input && input.value) {
+      reelsState.scheduleDate = input.value;
+      window.validateScheduledDateTime();
+      window.updateSummaryCard();
+    }
+  };
+
+  window.validateScheduledDateTime = function () {
+    if (reelsState.publishTiming !== 'schedule') return true;
+    var dateStr = reelsState.scheduleDate || getDefaultScheduleDate();
+    var hour = reelsState.scheduleHour;
+    if (reelsState.scheduleAmPm === 'PM' && hour < 12) hour += 12;
+    if (reelsState.scheduleAmPm === 'AM' && hour === 12) hour = 0;
+
+    var scheduledDate = new Date(dateStr + 'T' + (hour < 10 ? '0' + hour : hour) + ':' + (reelsState.scheduleMinute < 10 ? '0' + reelsState.scheduleMinute : reelsState.scheduleMinute) + ':00');
+    var now = new Date();
+    var isPast = scheduledDate <= now;
+
+    var alertEl = document.getElementById('past-time-alert');
+    if (alertEl) {
+      alertEl.style.display = isPast ? 'flex' : 'none';
+    }
+    return !isPast;
+  };
+
+  // 9. SUMMARY & PHONE PREVIEW SYNC
+  window.updateSummaryCard = function () {
+    var thumbImg = document.getElementById('summary-card-thumb');
+    if (thumbImg) thumbImg.src = reelsState.coverUrl || 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=800&q=80';
+
+    var timingVal = document.getElementById('summary-timing-val');
+    if (timingVal) {
+      if (reelsState.publishTiming === 'immediate') {
+        timingVal.textContent = 'Publish Immediately';
+      } else {
+        var m = (reelsState.scheduleMinute < 10) ? '0' + reelsState.scheduleMinute : reelsState.scheduleMinute;
+        var h = (reelsState.scheduleHour < 10) ? '0' + reelsState.scheduleHour : reelsState.scheduleHour;
+        timingVal.textContent = reelsState.scheduleDate + ' at ' + h + ':' + m + ' ' + reelsState.scheduleAmPm;
+      }
+    }
+
+    var captionVal = document.getElementById('summary-caption-val');
+    if (captionVal) captionVal.textContent = reelsState.caption || 'No caption set';
+
+    var triggerPill = document.getElementById('summary-trigger-pill');
+    if (triggerPill) triggerPill.textContent = reelsState.keywords.join(', ') || 'GUIDE';
+
+    var matchTag = document.getElementById('summary-match-tag');
+    if (matchTag) {
+      var labels = { exact: 'Exact Match', contains: 'Contains Word', any: 'Any Comment' };
+      matchTag.textContent = labels[reelsState.matchMode] || 'Exact Match';
+    }
+
+    var dmSnippet = document.getElementById('summary-dm-snippet');
+    if (dmSnippet) dmSnippet.textContent = '"' + reelsState.dmMessage + '"';
+
+    var replySnippet = document.getElementById('summary-reply-snippet');
+    if (replySnippet) {
+      replySnippet.textContent = (reelsState.commentReplies.length > 0)
+        ? '"' + reelsState.commentReplies[0] + '"'
+        : '"DM sent!"';
+    }
+  };
+
+  window.updatePhonePreview = function () {
+    var poster = document.getElementById('phone-reel-poster');
+    if (poster) poster.src = reelsState.coverUrl || 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=800&q=80';
+
+    var triggerPill = document.getElementById('phone-trigger-pill');
+    if (triggerPill) {
+      var kw = reelsState.keywords[0] || 'GUIDE';
+      triggerPill.innerHTML = '<span class="pill-dot"></span><span>Comment <strong>"' + kw + '"</strong> for instant DM</span>';
+    }
+
+    var captionEl = document.getElementById('phone-caption-preview');
+    if (captionEl) {
+      captionEl.textContent = reelsState.caption || 'Write a caption...';
+    }
+
+    var audioEl = document.getElementById('phone-audio-preview');
+    if (audioEl) {
+      audioEl.textContent = reelsState.audioName || 'Original Audio - renderreply';
+    }
+  };
+
+  // 10. PUBLISH & SCHEDULE ACTION EXECUTION
+  window.executeReelPublishOrSchedule = function () {
+    var isImmediate = reelsState.publishTiming === 'immediate';
+
+    if (!isImmediate) {
+      var valid = window.validateScheduledDateTime();
+      if (!valid) {
+        if (typeof window.showToast === 'function') {
+          window.showToast('Please select a future date and time for scheduling');
+        }
+        return;
+      }
+    }
+
+    var primaryKw = reelsState.keywords[0] || 'GUIDE';
+    var lines = (reelsState.caption || 'New High-Converting Reel').split(/\r?\n/);
+    var postTitle = (lines[0] || 'New High-Converting Reel').substring(0, 36) + '...';
+
+    if (isImmediate) {
+      reelsState.postedCount++;
+      var badge = document.getElementById('posted-reels-count-badge');
+      if (badge) badge.textContent = reelsState.postedCount;
+
+      var grid = document.getElementById('posted-content-grid');
+      if (grid) {
+        var newCard = document.createElement('div');
+        newCard.className = 'posted-card';
+        newCard.setAttribute('data-type', reelsState.format);
+        newCard.setAttribute('data-id', 'post-' + Date.now());
+        newCard.innerHTML = `
+          <div class="posted-card-top-row">
+            <div class="posted-card-thumb-box">
+              <img class="posted-card-thumb" src="${reelsState.coverUrl || 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=300&h=300&q=80'}" alt="Thumbnail">
+            </div>
+            <div class="posted-card-meta-col">
+              <div class="posted-badges-row">
+                <span class="posted-badge-type">${reelsState.format.toUpperCase()}</span>
+                <span class="posted-badge-trigger">
+                  <svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg>
+                  "${primaryKw}"
+                </span>
+                <button type="button" class="btn-card-more-menu" title="More options" onclick="window.openPostMoreOptions('post-${Date.now()}', event)">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="2.2"></circle><circle cx="19" cy="12" r="2.2"></circle><circle cx="5" cy="12" r="2.2"></circle></svg>
+                </button>
+              </div>
+              <h3 class="posted-card-title">${postTitle}</h3>
+              <span class="posted-card-date">Just now</span>
+            </div>
+          </div>
+
+          <div class="posted-metrics-grid">
+            <div class="posted-metric-col">
+              <span class="metric-label">VIEWS</span>
+              <span class="metric-val">1</span>
+            </div>
+            <div class="posted-metric-col">
+              <span class="metric-label">COMMENTS</span>
+              <span class="metric-val">0</span>
+            </div>
+            <div class="posted-metric-col">
+              <span class="metric-label">DMS SENT</span>
+              <span class="metric-val">0</span>
+            </div>
+            <div class="posted-metric-col">
+              <span class="metric-label">LEADS</span>
+              <span class="metric-val">0</span>
+            </div>
+          </div>
+
+          <div class="posted-bottom-status-row">
+            <div class="status-active-label">
+              <span class="active-green-dot"></span>
+              <span>Automation Active</span>
+            </div>
+            <button type="button" class="btn-view-rule" onclick="window.openReelsTestDmSimulator('${primaryKw}', '${reelsState.dmMessage.replace(/'/g, "\\'")}')">
+              <span>View Rule</span>
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"></polyline></svg>
+            </button>
+          </div>
+        `;
+        grid.insertBefore(newCard, grid.firstChild);
+      }
+
+      window.openPostMoreOptions = function(id, e) {
+        if (e) e.stopPropagation();
+        if (typeof window.showToast === 'function') {
+          window.showToast('Post options for #' + id);
+        }
+      };
+
+      if (typeof window.showToast === 'function') {
+        window.showToast('Reel published and Auto-DM automation is now LIVE!');
+      }
+      window.switchReelsWorkspaceTab('posted');
+
+    } else {
+      reelsState.scheduledCount++;
+      var schedBadge = document.getElementById('scheduled-reels-count-badge');
+      if (schedBadge) schedBadge.textContent = reelsState.scheduledCount;
+
+      var queue = document.getElementById('scheduled-queue-list');
+      if (queue) {
+        var newSched = document.createElement('div');
+        newSched.className = 'scheduled-queue-card';
+        var newId = 'sched-' + Date.now();
+        newSched.id = newId;
+        var m = (reelsState.scheduleMinute < 10) ? '0' + reelsState.scheduleMinute : reelsState.scheduleMinute;
+        var h = (reelsState.scheduleHour < 10) ? '0' + reelsState.scheduleHour : reelsState.scheduleHour;
+        newSched.innerHTML = `
+          <div class="sched-card-thumb-col">
+            <img src="${reelsState.coverUrl || 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=800&q=80'}" alt="Scheduled Thumb">
+            <span class="sched-format-badge">${reelsState.format === 'reel' ? 'Reel • 9:16' : 'Post • 1:1'}</span>
+          </div>
+          <div class="sched-card-main-col">
+            <div class="sched-time-badge-row">
+              <span class="sched-date-pill"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg> ${reelsState.scheduleDate}, ${h}:${m} ${reelsState.scheduleAmPm}</span>
+              <span class="sched-countdown-pill"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg> Upcoming</span>
+              <span class="sched-status-chip">Queued</span>
+            </div>
+            <h3 class="sched-post-title">${postTitle}</h3>
+            <p class="sched-post-caption">${reelsState.caption}</p>
+            <div class="sched-trigger-snippet-row">
+              <span class="trigger-label-small">Trigger:</span>
+              <span class="obsidian-trigger-pill">${primaryKw}</span>
+              <span class="dm-snippet-text">Auto DM: "${reelsState.dmMessage.substring(0, 40)}..."</span>
+            </div>
+          </div>
+          <div class="sched-card-actions-col">
+            <button type="button" class="btn-sched-action-post-now" onclick="window.publishScheduledItemNow('${newId}')">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg> <span>Publish Now</span>
+            </button>
+            <button type="button" class="btn-sched-action-edit" onclick="window.openEditScheduledModal('${newId}')">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"></path><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path></svg> <span>Edit</span>
+            </button>
+            <button type="button" class="btn-sched-action-cancel" onclick="window.cancelScheduledItem('${newId}')">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg> <span>Cancel</span>
+            </button>
+          </div>
+        `;
+        queue.insertBefore(newSched, queue.firstChild);
+      }
+
+      if (typeof window.showToast === 'function') {
+        window.showToast('Content scheduled successfully with automated triggers attached!');
+      }
+      window.switchReelsWorkspaceTab('scheduled');
+    }
+  };
+
+  // 11. TAB 2 & 3 ACTIONS
+  window.filterPostedContent = function (type, btn) {
+    document.querySelectorAll('.filter-pill').forEach(function (b) { b.classList.remove('active'); });
+    if (btn) btn.classList.add('active');
+    var cards = document.querySelectorAll('.posted-box-card, .posted-card');
+    cards.forEach(function (c) {
+      if (type === 'all' || c.getAttribute('data-type') === type) {
+        c.style.display = 'flex';
+      } else {
+        c.style.display = 'none';
+      }
+    });
+  };
+
+  window.togglePostAutomation = function (id, active) {
+    if (typeof window.showToast === 'function') {
+      window.showToast(active ? 'Auto-DM trigger activated' : 'Automation paused for this post');
+    }
+  };
+
+  window.openReelsTestDmSimulator = function (trigger, dm) {
+    var modal = document.getElementById('modal-reels-test-dm-backdrop');
+    if (modal) {
+      modal.classList.add('active');
+      modal.style.display = 'flex';
+    }
+    var triggerInput = document.getElementById('sim-comment-text');
+    if (triggerInput) {
+      triggerInput.value = 'Please send me ' + (trigger || 'GUIDE') + '! 🙌';
+    }
+    if (typeof window.showToast === 'function') {
+      window.showToast('Opening live simulation for trigger: ' + (trigger || 'GUIDE'));
+    }
+  };
+
+  window.runSimulatedReelComment = function () {
+    var input = document.getElementById('sim-comment-text');
+    var text = input ? input.value : 'GUIDE';
+    if (typeof window.showToast === 'function') {
+      window.showToast('Live DM dispatched to user in 0.16s!');
+    }
+  };
+
+  window.closeReelsModal = function (modalId) {
+    var modal = document.getElementById(modalId);
+    if (modal) {
+      modal.classList.remove('active');
+      modal.style.display = 'none';
+    }
+  };
+
+  window.publishScheduledItemNow = function (id) {
+    var item = document.getElementById(id);
+    if (item) {
+      item.remove();
+      reelsState.scheduledCount = Math.max(0, reelsState.scheduledCount - 1);
+      var schedBadge = document.getElementById('scheduled-reels-count-badge');
+      if (schedBadge) schedBadge.textContent = reelsState.scheduledCount;
+
+      reelsState.postedCount++;
+      var postBadge = document.getElementById('posted-reels-count-badge');
+      if (postBadge) postBadge.textContent = reelsState.postedCount;
+
+      if (typeof window.showToast === 'function') {
+        window.showToast('Scheduled reel published to feed immediately!');
+      }
+      window.switchReelsWorkspaceTab('posted');
+    }
+  };
+
+  window.cancelScheduledItem = function (id) {
+    var item = document.getElementById(id);
+    if (item) {
+      item.remove();
+      reelsState.scheduledCount = Math.max(0, reelsState.scheduledCount - 1);
+      var schedBadge = document.getElementById('scheduled-reels-count-badge');
+      if (schedBadge) schedBadge.textContent = reelsState.scheduledCount;
+      if (typeof window.showToast === 'function') {
+        window.showToast('Scheduled post cancelled');
+      }
+    }
+  };
+
+  window.openEditScheduledModal = function (id) {
+    if (typeof window.showToast === 'function') {
+      window.showToast('Opening scheduled content editor...');
+    }
+    window.switchReelsWorkspaceTab('create');
+    window.jumpToWizardStep(5);
+  };
+
+  // Attach direct DOM event listeners to the workspace tabs
+  function setupReelsTabListeners() {
+    var btnCreate = document.getElementById('tab-btn-reels-create');
+    var btnPosted = document.getElementById('tab-btn-reels-posted');
+    var btnScheduled = document.getElementById('tab-btn-reels-scheduled');
+
+    if (btnCreate) {
+      btnCreate.onclick = function () { window.switchReelsWorkspaceTab('create'); };
+    }
+    if (btnPosted) {
+      btnPosted.onclick = function () { window.switchReelsWorkspaceTab('posted'); };
+    }
+    if (btnScheduled) {
+      btnScheduled.onclick = function () { window.switchReelsWorkspaceTab('scheduled'); };
+    }
+  }
+
+  function initializeReelsWorkspace() {
+    setupReelsTabListeners();
+    var schedDateInput = document.getElementById('sched-date-picker-input');
+    if (schedDateInput) schedDateInput.value = reelsState.scheduleDate;
+    window.renderKeywordTags();
+    window.updateSummaryCard();
+    window.updatePhonePreview();
+
+    var savedReelsTab = 'create';
+    try {
+      savedReelsTab = localStorage.getItem('rr_active_reels_tab') || 'create';
+    } catch (e) {}
+    if (savedReelsTab) {
+      window.switchReelsWorkspaceTab(savedReelsTab);
+    }
+  }
+
+  // INITIALIZE ON DOM READY
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initializeReelsWorkspace);
+  } else {
+    initializeReelsWorkspace();
+  }
+
+})();
+
+// GLOBAL INSTANT TAB RESTORATION ENGINE
+(function() {
+  function applyActiveTabFromStorage() {
+    let savedTab = '';
+    try {
+      if (window.location.hash) {
+        savedTab = window.location.hash.replace(/^#/, '');
+      }
+      if (!savedTab) {
+        savedTab = localStorage.getItem('rr_active_tab');
+      }
+    } catch (e) {}
+
+    if (savedTab && savedTab !== 'dashboard' && typeof window.switchMainTab === 'function') {
+      window.switchMainTab(savedTab);
+    }
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', applyActiveTabFromStorage);
+  } else {
+    applyActiveTabFromStorage();
+  }
+  window.addEventListener('load', applyActiveTabFromStorage);
+})();
